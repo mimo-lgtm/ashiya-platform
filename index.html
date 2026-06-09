@@ -8,7 +8,7 @@
 body {
   font-family: Arial;
   margin: 20px;
-  background: #f5f5f5;
+  background: #f4f6f8;
 }
 
 h1 {
@@ -18,43 +18,61 @@ h1 {
 a {
   color: #1a73e8;
   text-decoration: none;
+  font-weight: bold;
 }
 
-.box {
-  background: white;
-  padding: 15px;
-  border-radius: 8px;
-  margin-bottom: 10px;
-}
-
-.grid {
+.container {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 15px;
 }
 
 .card {
-  background: #f8faff;
-  padding: 10px;
-  border-radius: 6px;
+  background: white;
+  padding: 12px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.section-title {
+  font-weight: bold;
+  margin-bottom: 8px;
 }
 
 .unit {
-  border: 1px solid #ddd;
+  background: #ffffff;
+  border-left: 5px solid #1a73e8;
   padding: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   border-radius: 6px;
-  background: #fafafa;
-}
-
-.title {
-  font-weight: bold;
-  color: #1a73e8;
 }
 
 .item {
   margin-left: 10px;
   cursor: pointer;
+  padding: 4px;
+}
+
+.item:hover {
+  background: #f0f7ff;
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  background: #e8f0fe;
+  color: #1a73e8;
+}
+
+.score {
+  float: right;
+  background: #e6f4ea;
+  color: #137333;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-size: 12px;
 }
 
 #detail {
@@ -62,6 +80,7 @@ a {
   background: white;
   padding: 12px;
   border-left: 5px solid #2196f3;
+  border-radius: 6px;
 }
 </style>
 </head>
@@ -71,40 +90,43 @@ a {
 <h1>市民政策ロジックツリー</h1>
 
 <div style="margin-bottom:15px;">
-  <a href="post.html">👉 市民提案はこちら（投稿）</a>
+  <a href="post.html">＋ 市民提案はこちら</a>
 </div>
 
-<div class="box">
-  <h3>政策マップ</h3>
-  <div id="map" class="grid"></div>
-</div>
+<div class="container">
 
-<div class="box">
-  <h3>政策ユニット</h3>
-  <div id="units"></div>
-</div>
+  <div class="card">
+    <div class="section-title">政策ユニット</div>
+    <div id="units"></div>
+  </div>
 
-<div class="box">
-  <h3>優先順位</h3>
-  <div id="rank"></div>
-</div>
+  <div class="card">
+    <div class="section-title">政策マップ</div>
+    <div id="map"></div>
+  </div>
 
-<div class="box">
-  <h3>詳細</h3>
-  <div id="detail">項目をクリックしてください</div>
+  <div class="card">
+    <div class="section-title">優先順位</div>
+    <div id="rank"></div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">詳細</div>
+    <div id="detail">クリックしてください</div>
+  </div>
+
 </div>
 
 <script>
 
 let posts = JSON.parse(localStorage.getItem("posts") || "[]");
 
-// ユニット分類
+// 分類
 function unit(t){
-
   if(t.includes("人口")||t.includes("学生")||t.includes("移住"))
     return "広域・人口戦略";
 
-  if(t.includes("図書館")||t.includes("教育"))
+  if(t.includes("図書館")||t.includes("教育")||t.includes("絵本"))
     return "教育・文化";
 
   if(t.includes("カフェ")||t.includes("交流"))
@@ -122,13 +144,14 @@ function unit(t){
 // スコア
 function score(t){
   let s = 50;
+  if(t.includes("人口")||t.includes("移住")) s += 25;
+  if(t.includes("図書館")) s += 15;
+  if(t.includes("カフェ")) s += 10;
   if(t.includes("駅前")) s += 10;
-  if(t.includes("人口")||t.includes("集客")) s += 20;
-  if(t.includes("カフェ")||t.includes("図書館")) s += 10;
   return Math.min(100,s);
 }
 
-// グループ化
+// ユニット化
 function group(){
   let map = {};
   posts.forEach(p=>{
@@ -139,36 +162,7 @@ function group(){
   return map;
 }
 
-// 政策マップ
-function renderMap(){
-  let map = group();
-
-  const cats = [
-    "広域・人口戦略",
-    "教育・文化",
-    "交流・滞在空間",
-    "産業・起業",
-    "都市環境",
-    "その他"
-  ];
-
-  let html = "";
-
-  cats.forEach(c=>{
-    let count = map[c] ? map[c].length : 0;
-
-    html += `
-      <div class="card">
-        ${c}<br>
-        <b>${count}</b>
-      </div>
-    `;
-  });
-
-  document.getElementById("map").innerHTML = html;
-}
-
-// ユニット表示
+// 表示
 function renderUnits(){
   let map = group();
   let html = "";
@@ -176,8 +170,8 @@ function renderUnits(){
   for(let u in map){
 
     html += `<div class="unit">
-      <div class="title">${u}（${map[u].length}件）</div>
-    `;
+      <span class="badge">${u}</span>
+      <div style="margin-top:6px;">`;
 
     map[u].forEach(p=>{
       html += `
@@ -187,10 +181,25 @@ function renderUnits(){
       `;
     });
 
-    html += `</div>`;
+    html += `</div></div>`;
   }
 
   document.getElementById("units").innerHTML = html;
+}
+
+// マップ
+function renderMap(){
+  let map = group();
+  let html = "";
+
+  for(let k in map){
+    html += `<div class="unit">
+      <span class="badge">${k}</span>
+      <span class="score">${map[k].length}件</span>
+    </div>`;
+  }
+
+  document.getElementById("map").innerHTML = html;
 }
 
 // ランキング
@@ -203,9 +212,10 @@ function renderRank(){
 
   ranked.slice(0,5).forEach((p,i)=>{
     html += `
-      <div class="card">
-        #${i+1} ${p.title}<br>
-        スコア：${score(p.title)}
+      <div class="unit">
+        <span class="badge">#${i+1}</span>
+        ${p.title}
+        <span class="score">${score(p.title)}</span>
       </div>
     `;
   });
@@ -219,13 +229,13 @@ function show(t,s){
 `■提案
 ${t}
 
-■要約
+■AI要約
 ${s}`;
 }
 
 function render(){
-  renderMap();
   renderUnits();
+  renderMap();
   renderRank();
 }
 
