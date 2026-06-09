@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<title>市民政策プラットフォーム</title>
+<title>駅前公共施設 市民対話プラットフォーム</title>
 
 <style>
 body {
@@ -20,15 +20,15 @@ header {
   font-weight: bold;
 }
 
-/* 全体レイアウト（左：説明＋投稿 / 右：ツリー） */
+/* レイアウト */
 .container {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 10px;
   padding: 10px;
 }
 
-/* 左側 */
+/* パネル */
 .panel {
   background: white;
   border-radius: 14px;
@@ -38,24 +38,54 @@ header {
   overflow-y: auto;
 }
 
-/* 説明ブロック */
+/* 説明 */
 .explain {
   background: #eef5ff;
-  padding: 12px;
+  padding: 14px;
   border-radius: 12px;
-  margin-bottom: 12px;
   font-size: 14px;
   line-height: 1.6;
+  margin-bottom: 12px;
 }
 
-/* 投稿エリア */
+/* ツリー */
+.node {
+  padding: 10px;
+  margin-bottom: 6px;
+  border-left: 5px solid #1a73e8;
+  background: #f9f9f9;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.node:hover {
+  background: #eef5ff;
+}
+
+/* 子項目 */
+.child {
+  margin-left: 16px;
+  padding: 8px;
+  background: #ffffff;
+  border-left: 3px solid #ccc;
+  display: none;
+  font-size: 13px;
+}
+
+/* 投稿 */
+.post {
+  background: #f4f6ff;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+/* 入力 */
 textarea {
   width: 100%;
   height: 90px;
   font-size: 16px;
   padding: 10px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
 }
 
 button {
@@ -66,37 +96,6 @@ button {
   color: white;
   border: none;
   border-radius: 10px;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #0f5bd3;
-}
-
-/* 投稿表示 */
-.post {
-  background: #f4f6ff;
-  margin-top: 10px;
-  padding: 10px;
-  border-radius: 10px;
-}
-
-/* 右側ツリー */
-.tree {
-  background: #ffffff;
-  padding: 14px;
-  border-radius: 14px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  font-size: 13px;
-  line-height: 1.6;
-  white-space: pre-wrap;
-  border-left: 5px solid #1a73e8;
-}
-
-.tree-title {
-  font-weight: bold;
-  margin-bottom: 8px;
-  color: #1a73e8;
 }
 </style>
 </head>
@@ -104,66 +103,55 @@ button:hover {
 <body>
 
 <header>
-市民政策プラットフォーム（β：投稿中心UI）
+駅前公共施設 市民対話プラットフォーム（β）
 </header>
 
 <div class="container">
 
-<!-- ■ 左：説明＋投稿（主役） -->
+<!-- ■ 左：説明＋投稿 -->
 <div class="panel">
 
 <div class="explain">
-<b>■ このプラットフォームについて</b><br><br>
+<b>■ このプラットフォームの使い方</b><br><br>
 
-あなたの意見は単なる投稿ではなく、<b>政策を作るための思考データ</b>になります。<br><br>
+このシステムは「意見を投稿する場所」ではなく、<b>市民の考えを深める対話型AI空間</b>です。<br><br>
 
-投稿するとAIが自動で：
-<ul>
-<li>要約します</li>
-<li>政策テーマに分類します</li>
-<li>問い返しを行い思考を深めます</li>
-</ul>
+まず左のテーマから、<b>関心のある項目を選んでください</b>。<br>
+その上で意見を入力すると、AIがあなたの考えを整理し、問い返しを行います。<br><br>
 
-まずは自由に入力してください。
+どんな意見でも構いません。AIがあなたの思考をサポートします。
 </div>
 
-<h3>■ あなたの意見を入力</h3>
+<h3>■ 意見入力（選択したテーマについて）</h3>
 
-<textarea id="input" placeholder="例：駅前に子どもと高齢者が安心して使える広場を作りたい"></textarea>
+<textarea id="input" placeholder="例：子どもと高齢者が安心して使える駅前施設にしたい"></textarea>
 
-<button onclick="addPost()">投稿してAIと対話する</button>
+<button onclick="addPost()">意見を投稿してAIと対話</button>
 
-<h3>■ あなたの投稿</h3>
+<h3>■ あなたの意見</h3>
 <div id="posts"></div>
 
 </div>
 
-<!-- ■ 右：ロジックツリー（補助） -->
+<!-- ■ 右：駅前公共施設ロジックツリー -->
 <div class="panel">
 
-<div class="tree-title">■ 政策ロジックツリー（全体構造）</div>
+<h3>■ 駅前公共施設の検討項目</h3>
 
-<div class="tree">
+<div class="node" onclick="toggle('a')">① 安全・安心設計</div>
+<div class="child" id="a">・子どもの安全動線<br>・夜間の防犯設計<br>・見守りシステム</div>
 
-【Vision】
-投資型都市経営：市民ウェルビーイングと知財集積
+<div class="node" onclick="toggle('b')">② 多世代交流空間</div>
+<div class="child" id="b">・カフェ・滞在空間<br>・高齢者と子どもの共存<br>・地域コミュニティ形成</div>
 
-■ 1. 価値向上
-  └ 教育・都市魅力
+<div class="node" onclick="toggle('c')">③ 教育・知的機能</div>
+<div class="child" id="c">・学習スペース<br>・デジタル図書機能<br>・EdTech連携</div>
 
-■ 2. 市民ウェルビーイング
-  └ 交流・学習
+<div class="node" onclick="toggle('d')">④ 収益・持続性</div>
+<div class="child" id="d">・チャレンジショップ<br>・民間連携運営<br>・ふるさと納税活用</div>
 
-■ 3. 財政持続性
-  └ 収益施設・寄付
-
-■ 4. 施設戦略性
-  └ 知の拠点・起業
-
-■ 5. ガバナンス
-  └ DAO・災害対応
-
-</div>
+<div class="node" onclick="toggle('e')">⑤ 都市戦略・ガバナンス</div>
+<div class="child" id="e">・災害拠点機能<br>・市民意思決定<br>・DAO型運営</div>
 
 </div>
 
@@ -173,13 +161,19 @@ button:hover {
 
 let posts = [];
 
-/* ■ 自動分類 */
+/* ■ 開閉 */
+function toggle(id){
+  let el = document.getElementById(id);
+  el.style.display = (el.style.display === "block") ? "none" : "block";
+}
+
+/* ■ 分類 */
 function classify(text){
-  if(text.includes("子ども")||text.includes("教育")) return "教育";
-  if(text.includes("公園")||text.includes("駅")) return "都市";
+  if(text.includes("子ども")||text.includes("安全")) return "安全・安心";
   if(text.includes("交流")||text.includes("カフェ")) return "交流";
-  if(text.includes("税")||text.includes("収益")) return "財政";
-  return "ガバナンス";
+  if(text.includes("教育")) return "教育";
+  if(text.includes("収益")||text.includes("運営")) return "持続性";
+  return "都市戦略";
 }
 
 /* ■ 投稿 */
@@ -199,7 +193,7 @@ function addPost(){
   render();
 }
 
-/* ■ 描画 */
+/* ■ 表示 */
 function render(){
 
   document.getElementById("posts").innerHTML =
@@ -216,19 +210,17 @@ function render(){
 
 /* ■ 擬似AI */
 function summarize(t){
-  if(t.includes("子ども")) return "安全性・子育て環境の改善要求";
-  if(t.includes("駅")) return "駅前空間の機能強化";
-  return "政策提案の初期アイデア";
+  if(t.includes("子ども")) return "安全性・動線設計の課題";
+  return "駅前施設に関する提案";
 }
 
 function question(t){
   if(t.includes("子ども")) return "どの時間帯の安全性が重要ですか？";
-  return "具体的な運用方法はどうしますか？";
+  return "具体的な利用方法はどうしますか？";
 }
 
 function viewpoint(t){
-  if(t.includes("子ども")) return "高齢者との共存設計の必要性";
-  return "公共空間の多機能化";
+  return "多世代共存の設計視点";
 }
 
 render();
