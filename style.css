@@ -1,0 +1,97 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #f5f6f8;
+}
+
+/* ヘッダー */
+header {
+  background: #1a73e8;
+  color: white;
+  padding: 14px 16px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* ロジックツリー */
+.tree {
+  background: white;
+  margin: 10px;
+  padding: 14px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+/* テーマ */
+.theme {
+  background: white;
+  margin: 10px;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 18px;
+}
+
+/* コンテナ */
+.container {
+  padding: 10px;
+}
+
+/* カード（思考単位） */
+.card {
+  background: white;
+  margin: 12px 0;
+  padding: 18px;
+  border-radius: 14px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+/* 市民投稿 */
+.user-post {
+  font-size: 18px;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+/* AIボックス */
+.ai-box {
+  background: #f0f4ff;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+/* 入力エリア */
+.post-area {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: white;
+  padding: 12px;
+  border-top: 1px solid #ddd;
+}
+
+textarea {
+  width: 95%;
+  height: 60px;
+  font-size: 18px;
+  padding: 10px;
+}
+
+button {
+  width: 98%;
+  margin-top: 8px;
+  padding: 12px;
+  font-size: 18px;
+  background: #1a73e8;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #0f5bd3;
+}
