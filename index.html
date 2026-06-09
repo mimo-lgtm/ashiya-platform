@@ -3,229 +3,134 @@
 <head>
 <meta charset="utf-8">
 <title>駅前公共施設 市民対話プラットフォーム</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  background: #f5f6f8;
-}
-
-/* ヘッダー */
-header {
-  background: linear-gradient(90deg, #1a73e8, #0f5bd3);
-  color: white;
-  padding: 14px;
-  font-size: 18px;
-  font-weight: bold;
-}
-
-/* レイアウト */
-.container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  padding: 10px;
-}
-
-/* パネル */
-.panel {
-  background: white;
-  border-radius: 14px;
-  padding: 14px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  height: 85vh;
-  overflow-y: auto;
-}
-
-/* 説明 */
-.explain {
-  background: #eef5ff;
-  padding: 14px;
-  border-radius: 12px;
-  font-size: 14px;
-  line-height: 1.6;
-  margin-bottom: 12px;
-}
-
-/* ツリー */
-.node {
-  padding: 10px;
-  margin-bottom: 6px;
-  border-left: 5px solid #1a73e8;
-  background: #f9f9f9;
-  cursor: pointer;
-  border-radius: 8px;
-}
-
-.node:hover {
-  background: #eef5ff;
-}
-
-/* 子項目 */
-.child {
-  margin-left: 16px;
-  padding: 8px;
-  background: #ffffff;
-  border-left: 3px solid #ccc;
-  display: none;
-  font-size: 13px;
-}
-
-/* 投稿 */
-.post {
-  background: #f4f6ff;
-  margin-top: 10px;
-  padding: 10px;
-  border-radius: 10px;
-}
-
-/* 入力 */
-textarea {
-  width: 100%;
-  height: 90px;
-  font-size: 16px;
-  padding: 10px;
-}
-
-button {
-  width: 100%;
-  padding: 12px;
-  margin-top: 8px;
-  background: #1a73e8;
-  color: white;
-  border: none;
-  border-radius: 10px;
-}
+body{font-family:Arial,sans-serif;margin:0;background:#f5f6f8}
+header{background:linear-gradient(90deg,#1a73e8,#0f5bd3);color:#fff;padding:16px;font-size:22px;font-weight:bold}
+.container{display:grid;grid-template-columns:1.2fr 1fr;gap:12px;padding:12px}
+.panel{background:#fff;border-radius:14px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,.08);height:85vh;overflow:auto}
+.explain{background:#eef5ff;padding:14px;border-radius:12px;line-height:1.7}
+.node{padding:10px;margin:6px 0;border-left:5px solid #1a73e8;background:#f9f9f9;border-radius:8px;cursor:pointer}
+.child{display:none;margin-left:15px;padding:8px;border-left:3px solid #ccc}
+.post{background:#f4f6ff;padding:12px;border-radius:10px;margin-top:10px}
+textarea{width:100%;height:100px;font-size:16px;padding:10px}
+button{width:100%;padding:12px;margin-top:8px;border:0;border-radius:10px;background:#1a73e8;color:#fff}
 </style>
 </head>
-
 <body>
-
-<header>
-駅前公共施設 市民対話プラットフォーム（β）
-</header>
+<header>駅前公共施設 市民対話プラットフォーム（β）</header>
 
 <div class="container">
 
-<!-- ■ 左：説明＋投稿 -->
 <div class="panel">
-
 <div class="explain">
-<b>■ このプラットフォームの使い方</b><br><br>
-
-このシステムは「意見を投稿する場所」ではなく、<b>市民の考えを深める対話型AI空間</b>です。<br><br>
-
-まず左のテーマから、<b>関心のある項目を選んでください</b>。<br>
-その上で意見を入力すると、AIがあなたの考えを整理し、問い返しを行います。<br><br>
-
-どんな意見でも構いません。AIがあなたの思考をサポートします。
+<h3>使い方</h3>
+右側の検討項目から関心のあるテーマを選び、駅前公共施設について自由に意見を投稿してください。<br>
+投稿された内容はAIが要約し、論点や追加視点を提示します。<br>
+さらに、市民の意見から新しい政策テーマを生成し、政策検討に活用します。
 </div>
 
-<h3>■ 意見入力（選択したテーマについて）</h3>
-
-<textarea id="input" placeholder="例：子どもと高齢者が安心して使える駅前施設にしたい"></textarea>
-
+<h3>意見入力</h3>
+<textarea id="input" placeholder="例：子どもと高齢者が安心して交流できるスペースがほしい"></textarea>
 <button onclick="addPost()">意見を投稿してAIと対話</button>
 
-<h3>■ あなたの意見</h3>
+<h3>投稿一覧</h3>
 <div id="posts"></div>
-
 </div>
 
-<!-- ■ 右：駅前公共施設ロジックツリー -->
 <div class="panel">
+<h3>駅前公共施設の検討項目</h3>
 
-<h3>■ 駅前公共施設の検討項目</h3>
+<div class="node" onclick="toggleNode('a')">① 安全・安心設計</div>
+<div id="a" class="child">・子どもの安全動線<br>・夜間防犯<br>・見守り機能</div>
 
-<div class="node" onclick="toggle('a')">① 安全・安心設計</div>
-<div class="child" id="a">・子どもの安全動線<br>・夜間の防犯設計<br>・見守りシステム</div>
+<div class="node" onclick="toggleNode('b')">② 多世代交流空間</div>
+<div id="b" class="child">・交流カフェ<br>・地域コミュニティ<br>・共生空間</div>
 
-<div class="node" onclick="toggle('b')">② 多世代交流空間</div>
-<div class="child" id="b">・カフェ・滞在空間<br>・高齢者と子どもの共存<br>・地域コミュニティ形成</div>
+<div class="node" onclick="toggleNode('c')">③ 教育・知的機能</div>
+<div id="c" class="child">・図書館機能<br>・学習スペース<br>・EdTech連携</div>
 
-<div class="node" onclick="toggle('c')">③ 教育・知的機能</div>
-<div class="child" id="c">・学習スペース<br>・デジタル図書機能<br>・EdTech連携</div>
+<div class="node" onclick="toggleNode('d')">④ 収益・持続性</div>
+<div id="d" class="child">・民間連携<br>・チャレンジショップ</div>
 
-<div class="node" onclick="toggle('d')">④ 収益・持続性</div>
-<div class="child" id="d">・チャレンジショップ<br>・民間連携運営<br>・ふるさと納税活用</div>
+<div class="node" onclick="toggleNode('e')">⑤ 都市戦略・ガバナンス</div>
+<div id="e" class="child">・災害対応<br>・市民参加</div>
 
-<div class="node" onclick="toggle('e')">⑤ 都市戦略・ガバナンス</div>
-<div class="child" id="e">・災害拠点機能<br>・市民意思決定<br>・DAO型運営</div>
-
+<hr>
+<h3>市民投稿から生成された政策テーマ</h3>
+<div id="generatedThemes"></div>
 </div>
 
 </div>
 
 <script>
+let posts=[
+{text:"子どもが安心して使える公共施設にしてほしい。見守り機能や安全な動線設計が必要。",tag:"安全・安心"},
+{text:"駅前にカフェと交流スペースを作り、多世代が自然に集まれる場所にしてほしい。",tag:"交流"},
+{text:"図書館機能を強化し、デジタル学習やEdTech企業との連携を進めてほしい。",tag:"教育"}
+];
 
-let posts = [];
-
-/* ■ 開閉 */
-function toggle(id){
-  let el = document.getElementById(id);
-  el.style.display = (el.style.display === "block") ? "none" : "block";
+function toggleNode(id){
+ const e=document.getElementById(id);
+ e.style.display=e.style.display==="block"?"none":"block";
 }
 
-/* ■ 分類 */
-function classify(text){
-  if(text.includes("子ども")||text.includes("安全")) return "安全・安心";
-  if(text.includes("交流")||text.includes("カフェ")) return "交流";
-  if(text.includes("教育")) return "教育";
-  if(text.includes("収益")||text.includes("運営")) return "持続性";
-  return "都市戦略";
+function classify(t){
+ if(t.includes("子ども")||t.includes("安全")) return "安全・安心";
+ if(t.includes("カフェ")||t.includes("交流")) return "交流";
+ if(t.includes("図書館")||t.includes("教育")) return "教育";
+ return "都市戦略";
 }
 
-/* ■ 投稿 */
-function addPost(){
-
-  let text = document.getElementById("input").value;
-  if(!text) return;
-
-  let p = {
-    text: text,
-    tag: classify(text)
-  };
-
-  posts.push(p);
-  document.getElementById("input").value = "";
-
-  render();
+function titleize(t){
+ if(t.includes("子ども")) return "子どもの安全動線";
+ if(t.includes("カフェ")) return "交流型カフェ空間";
+ if(t.includes("図書館")) return "教育・図書館機能強化";
+ if(t.includes("高齢者")) return "多世代共生空間";
+ return t.substring(0,18);
 }
 
-/* ■ 表示 */
-function render(){
-
-  document.getElementById("posts").innerHTML =
-    posts.map(p=>`
-      <div class="post">
-        <b>[${p.tag}]</b><br>
-        ${p.text}<br><br>
-        🧠 要約：${summarize(p.text)}<br>
-        💬 問い：${question(p.text)}<br>
-        🔍 視点：${viewpoint(p.text)}
-      </div>
-    `).join("");
-}
-
-/* ■ 擬似AI */
 function summarize(t){
-  if(t.includes("子ども")) return "安全性・動線設計の課題";
-  return "駅前施設に関する提案";
+ if(t.includes("子ども")) return "安全性向上に関する提案";
+ if(t.includes("カフェ")) return "交流促進機能の提案";
+ if(t.includes("図書館")) return "教育機能強化の提案";
+ return "駅前公共施設への提案";
 }
 
 function question(t){
-  if(t.includes("子ども")) return "どの時間帯の安全性が重要ですか？";
-  return "具体的な利用方法はどうしますか？";
+ if(t.includes("子ども")) return "どの時間帯の安全性を重視しますか？";
+ if(t.includes("カフェ")) return "どの世代の利用を想定しますか？";
+ return "具体的な運営案はありますか？";
 }
 
 function viewpoint(t){
-  return "多世代共存の設計視点";
+ if(t.includes("子ども")) return "高齢者との共存設計";
+ if(t.includes("カフェ")) return "地域コミュニティ形成";
+ return "施設全体最適";
 }
 
+function addPost(){
+ const text=document.getElementById('input').value.trim();
+ if(!text) return;
+ posts.unshift({text:text,tag:classify(text)});
+ document.getElementById('input').value='';
+ render();
+}
+
+function render(){
+ document.getElementById('posts').innerHTML=posts.map(p=>`
+ <div class="post">
+ <b>[${p.tag}]</b><br><br>
+ ${p.text}<br><br>
+ 🧠 要約：${summarize(p.text)}<br>
+ 💬 問い：${question(p.text)}<br>
+ 🔍 視点：${viewpoint(p.text)}
+ </div>`).join('');
+
+ const themes=[...new Set(posts.map(p=>titleize(p.text)))];
+ document.getElementById('generatedThemes').innerHTML=themes.map(t=>`<div class="node">${t}</div>`).join('');
+}
 render();
-
 </script>
-
 </body>
 </html>
