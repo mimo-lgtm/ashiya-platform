@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>市民提案（AI壁打ち）</title>
+<title>市民提案投稿</title>
 
 <style>
 body {
@@ -15,145 +15,74 @@ body {
   background: white;
   padding: 15px;
   border-radius: 8px;
-  margin-bottom: 10px;
 }
 
 textarea {
   width: 100%;
-  height: 90px;
+  height: 110px;
 }
 
 button {
-  padding: 10px 15px;
   margin-top: 10px;
+  padding: 10px;
 }
 
-.result {
-  background: #fff;
-  padding: 12px;
-  border-left: 5px solid #2196f3;
+#out {
   white-space: pre-wrap;
+  margin-top: 10px;
+  background: white;
+  padding: 10px;
+  border-left: 5px solid #2196f3;
 }
 </style>
 </head>
 
 <body>
 
-<h1>市民提案（AI壁打ち）</h1>
+<a href="index.html">← ロジックツリーへ戻る</a>
+
+<h1>市民提案</h1>
 
 <div class="box">
-  <h3>提案入力</h3>
-  <textarea id="input" placeholder="例：駅前に図書館とカフェを設置"></textarea>
-  <button onclick="run()">AI壁打ち</button>
+<textarea id="input" placeholder="例：駅前に図書館とカフェ"></textarea>
+<button onclick="submit()">投稿</button>
 </div>
 
-<div class="box">
-  <h3>AI分析結果</h3>
-  <div id="output">待機中</div>
-</div>
+<div id="out">待機中</div>
 
 <script>
 
-/* -------------------------
-   5分類
-------------------------- */
-function classify(text){
-
-  if(text.includes("カフェ") || text.includes("交流") || text.includes("滞在"))
-    return "交流・滞在空間";
-
-  if(text.includes("図書館") || text.includes("教育"))
-    return "学び・文化・教育";
-
-  if(text.includes("公園") || text.includes("緑"))
-    return "都市環境・景観・快適性";
-
-  if(text.includes("起業") || text.includes("商業"))
-    return "産業・起業・経済活動";
-
-  if(text.includes("人口") || text.includes("移住"))
-    return "広域価値・人口戦略";
-
-  return "交流・滞在空間";
+// 分類
+function classify(t){
+  if(t.includes("カフェ")||t.includes("交流")) return "交流・滞在空間";
+  if(t.includes("図書館")||t.includes("教育")) return "学び・文化・教育";
+  if(t.includes("公園")||t.includes("緑")) return "都市環境・景観";
+  if(t.includes("起業")) return "産業・起業";
+  if(t.includes("人口")||t.includes("移住")) return "広域戦略";
+  return "その他";
 }
 
-/* -------------------------
-   スコア
-------------------------- */
-function score(text){
+// 投稿
+function submit(){
 
-  let s = 50;
+  let t = document.getElementById("input").value;
+  if(!t) return;
 
-  if(text.includes("駅前")) s += 10;
-  if(text.includes("集客")) s += 10;
-  if(text.includes("図書館") || text.includes("カフェ")) s += 10;
+  let posts = JSON.parse(localStorage.getItem("posts") || "[]");
 
-  return Math.min(100, s);
-}
+  posts.push({
+    title: t,
+    summary: "AI要約（簡易）：都市価値・交流性向上の可能性あり",
+    category: classify(t)
+  });
 
-/* -------------------------
-   AI壁打ち（疑似生成）
-------------------------- */
-function run(){
+  localStorage.setItem("posts", JSON.stringify(posts));
 
-  let text = document.getElementById("input").value;
-  if(!text) return;
-
-  let category = classify(text);
-  let s = score(text);
-
-  let good = "";
-  let bad = "";
-  let effect = "";
-
-  if(category === "交流・滞在空間"){
-    good = "滞在時間増加・交流促進";
-    bad = "混雑・管理負担";
-    effect = "駅前活性化";
-  }
-
-  if(category === "学び・文化・教育"){
-    good = "教育環境向上";
-    bad = "維持コスト";
-    effect = "地域教育力向上";
-  }
-
-  if(category === "都市環境・景観・快適性"){
-    good = "景観改善";
-    bad = "維持管理コスト";
-    effect = "都市ブランド向上";
-  }
-
-  if(category === "産業・起業・経済活動"){
-    good = "経済活性化";
-    bad = "投資リスク";
-    effect = "雇用創出";
-  }
-
-  if(category === "広域価値・人口戦略"){
-    good = "人口流入促進";
-    bad = "長期施策必要";
-    effect = "都市競争力向上";
-  }
-
-  document.getElementById("output").innerText =
-`■提案
-${text}
+  document.getElementById("out").innerText =
+`投稿完了
 
 ■分類
-${category}
-
-■良い点
-${good}
-
-■改善点
-${bad}
-
-■期待効果
-${effect}
-
-■スコア
-${s}`;
+${classify(t)}`;
 }
 
 </script>

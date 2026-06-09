@@ -1,268 +1,220 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>駅前公共施設 市民政策プラットフォーム</title>
+<meta charset="utf-8">
+<title>市民政策ロジックツリー</title>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      background: #f5f5f5;
-    }
+<style>
+body {
+  font-family: Arial;
+  margin: 20px;
+  background: #f5f5f5;
+}
 
-    .box {
-      background: white;
-      padding: 15px;
-      margin-bottom: 10px;
-      border-radius: 8px;
-    }
+h1 {
+  margin-bottom: 10px;
+}
 
-    textarea {
-      width: 100%;
-      height: 120px;
-    }
+a {
+  color: #1a73e8;
+  text-decoration: none;
+}
 
-    button {
-      padding: 10px 20px;
-      margin-top: 10px;
-    }
+.box {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
 
-    #result, #report {
-      white-space: pre-wrap;
-      font-weight: bold;
-    }
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
 
-    .card {
-      background: #fff;
-      padding: 10px;
-      margin: 6px 0;
-      border-left: 6px solid #999;
-      border-radius: 5px;
-    }
+.card {
+  background: #f8faff;
+  padding: 10px;
+  border-radius: 6px;
+}
 
-    .title {
-      font-weight: bold;
-    }
+.category {
+  font-weight: bold;
+  margin-top: 10px;
+  color: #1a73e8;
+}
 
-    .meta {
-      font-size: 12px;
-      color: #666;
-    }
+.item {
+  margin-left: 12px;
+  cursor: pointer;
+}
 
-    .score {
-      font-weight: bold;
-      color: #c62828;
-    }
-
-    .map {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .map-item {
-      background: #fff;
-      padding: 10px;
-      border-radius: 8px;
-      min-width: 160px;
-      text-align: center;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-
-    .num {
-      font-size: 22px;
-      font-weight: bold;
-    }
-
-    .report-box {
-      background: #fff;
-      padding: 10px;
-      border-radius: 8px;
-      border-left: 6px solid #2e7d32;
-    }
-  </style>
+#detail {
+  white-space: pre-wrap;
+  background: white;
+  padding: 12px;
+  border-left: 5px solid #2196f3;
+}
+</style>
 </head>
 
 <body>
 
-<h1>駅前公共施設 市民政策プラットフォーム</h1>
-<a href="post.html">市民提案はこちら</a>
-<div class="box">
-  <h3>市民提案を入力</h3>
-  <textarea id="userInput"></textarea>
-  <br>
-  <button onclick="send()">AIに相談</button>
+<h1>市民政策ロジックツリー</h1>
+
+<div style="margin-bottom:15px;">
+  <a href="post.html">👉 市民提案はこちら（投稿）</a>
 </div>
 
+<!-- 政策マップ -->
 <div class="box">
-  <h3>AI回答</h3>
-  <div id="result">待機中</div>
+  <h3>政策マップ</h3>
+  <div id="map" class="grid"></div>
 </div>
 
-<div class="box">
-  <h3>政策マップ（統合ダッシュボード）</h3>
-  <div id="map" class="map"></div>
-</div>
-
+<!-- ランキング -->
 <div class="box">
   <h3>優先順位ランキング</h3>
-  <div id="ranking"></div>
+  <div id="rank"></div>
 </div>
 
+<!-- ツリー -->
 <div class="box">
-  <h3>政策レポート（自動生成）</h3>
-  <div id="report" class="report-box">未生成</div>
+  <h3>カテゴリツリー</h3>
+  <div id="tree"></div>
 </div>
 
+<!-- 詳細 -->
 <div class="box">
-  <h3>統合ログ</h3>
-  <div id="log"></div>
+  <h3>詳細</h3>
+  <div id="detail">項目をクリックしてください</div>
 </div>
 
 <script>
-let proposals = [];
 
-let categories = {
-  "教育・文化": 0,
-  "都市空間・公園": 0,
-  "交流・商業": 0,
-  "産業・起業支援": 0,
-  "地域経済・集客戦略": 0,
-  "広域交流・人口戦略": 0,
-  "政策構想": 0
-};
+let posts = JSON.parse(localStorage.getItem("posts") || "[]");
 
-let scored = [];
-
-function classify(text) {
-  if (text.includes("図書館") || text.includes("教育") || text.includes("学校")) return "教育・文化";
-  if (text.includes("公園") || text.includes("芝生") || text.includes("広場")) return "都市空間・公園";
-  if (text.includes("カフェ") || text.includes("商業") || text.includes("交流")) return "交流・商業";
-  if (text.includes("起業") || text.includes("スタートアップ") || text.includes("インキュベーション")) return "産業・起業支援";
-  if (text.includes("集客") || text.includes("観光") || text.includes("イベント")) return "地域経済・集客戦略";
-  if (text.includes("人口") || text.includes("流入") || text.includes("移住") || text.includes("他府県")) return "広域交流・人口戦略";
-  return "政策構想";
+// 分類
+function classify(t){
+  if(t.includes("カフェ")||t.includes("交流")) return "交流・滞在空間";
+  if(t.includes("図書館")||t.includes("教育")) return "学び・文化・教育";
+  if(t.includes("公園")||t.includes("緑")) return "都市環境・景観";
+  if(t.includes("起業")) return "産業・起業";
+  if(t.includes("人口")||t.includes("移住")) return "広域戦略";
+  return "その他";
 }
 
-function score(text, cat) {
+// スコア
+function score(t){
   let s = 50;
-  if (text.length > 40) s += 10;
-  if (text.includes("世界") || text.includes("未来")) s += 10;
-  if (cat === "広域交流・人口戦略") s += 20;
-  if (cat === "地域経済・集客戦略") s += 15;
-  return s;
+  if(t.includes("駅前")) s += 10;
+  if(t.includes("カフェ")||t.includes("図書館")) s += 10;
+  if(t.includes("人口")||t.includes("集客")) s += 20;
+  return Math.min(100,s);
 }
 
-function send() {
-  const input = document.getElementById("userInput").value;
-  if (!input) return;
-
-  proposals.push(input);
-
-  let cat = classify(input);
-  categories[cat]++;
-
-  let sc = score(input, cat);
-
-  scored.push({ text: input, category: cat, score: sc });
-
-  document.getElementById("result").innerText =
-`【AI統合分析】
-
-分類：${cat}
-重要度スコア：${sc}
-
-評価：
-・地域価値：高い
-・市民メリット：高い
-・実現可能性：中`;
-
-  updateAll();
-}
-
-function updateAll() {
-  updateMap();
-  updateRanking();
-  updateLog();
-  updateReport();
-}
-
-function updateMap() {
-  const map = document.getElementById("map");
-  map.innerHTML = "";
-
-  Object.keys(categories).forEach(k => {
-    map.innerHTML += `
-      <div class="map-item">
-        <div>${k}</div>
-        <div class="num">${categories[k]}</div>
-      </div>
-    `;
+// グループ化
+function group(){
+  let map = {};
+  posts.forEach(p=>{
+    let c = classify(p.title);
+    if(!map[c]) map[c]=[];
+    map[c].push(p);
   });
+  return map;
 }
 
-function updateRanking() {
-  const r = document.getElementById("ranking");
+// 政策マップ
+function renderMap(){
 
-  let sorted = [...scored].sort((a,b)=>b.score-a.score);
+  let map = group();
 
-  r.innerHTML = "";
+  const cats = [
+    "交流・滞在空間",
+    "学び・文化・教育",
+    "都市環境・景観",
+    "産業・起業",
+    "広域戦略"
+  ];
 
-  sorted.forEach((p,i)=>{
-    r.innerHTML += `
+  let html = "";
+
+  cats.forEach(c=>{
+    let count = map[c] ? map[c].length : 0;
+
+    html += `
       <div class="card">
-        <div class="title">#${i+1} ${p.category}</div>
-        <div>${p.text}</div>
-        <div class="score">重要度スコア：${p.score}</div>
+        ${c}<br>
+        <b>${count}</b>
       </div>
     `;
   });
+
+  document.getElementById("map").innerHTML = html;
 }
 
-function updateLog() {
-  const log = document.getElementById("log");
-  log.innerHTML = "";
+// ランキング
+function renderRank(){
 
-  proposals.forEach((p,i)=>{
-    log.innerHTML += `
+  let ranked = [...posts].sort((a,b)=>
+    score(b.title)-score(a.title)
+  );
+
+  let html = "";
+
+  ranked.slice(0,5).forEach((p,i)=>{
+    html += `
       <div class="card">
-        <div class="title">${classify(p)}</div>
-        <div>${p}</div>
-        <div class="meta">提案 ${i+1}</div>
+        #${i+1} ${p.title}<br>
+        スコア：${score(p.title)}
       </div>
     `;
   });
+
+  document.getElementById("rank").innerHTML = html;
 }
 
-function updateReport() {
-  const top = [...scored].sort((a,b)=>b.score-a.score)[0];
+// ツリー
+function renderTree(){
 
-  if (!top) return;
+  let map = group();
+  let html = "";
 
-  document.getElementById("report").innerText =
-`【政策レポート自動生成】
+  for(let c in map){
 
-■最重要提案
-${top.text}
+    html += `<div class="category">▶ ${c}</div>`;
 
-■分類
-${top.category}
+    map[c].forEach(p=>{
+      html += `
+        <div class="item" onclick="show('${p.title}','${p.summary}')">
+          ・${p.title}
+        </div>
+      `;
+    });
+  }
 
-■重要度
-${top.score}
-
-■行政評価（仮）
-・実現可能性：中
-・地域インパクト：高
-・優先度：高
-
-■総評
-本提案は「${top.category}」領域において、
-芦屋市の政策方向性に一定の整合性を持つと評価される。
-
-→ 優先的検討対象として扱うことが推奨される。`;
+  document.getElementById("tree").innerHTML = html;
 }
+
+// 詳細
+function show(t,s){
+  document.getElementById("detail").innerText =
+`■提案
+${t}
+
+■要約
+${s}`;
+}
+
+function render(){
+  renderMap();
+  renderRank();
+  renderTree();
+}
+
+render();
+
 </script>
 
 </body>
