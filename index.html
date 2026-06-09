@@ -1,250 +1,136 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
 <meta charset="utf-8">
-<title>市民政策ロジックツリー（完成版）</title>
+<title>市民政策プラットフォーム</title>
 
 <style>
 body {
-  font-family: Arial;
+  font-family: Arial, sans-serif;
   margin: 0;
-  background: #f4f6f8;
+  background: #f5f6f8;
 }
 
+/* ヘッダー */
 header {
   background: #1a73e8;
   color: white;
-  padding: 12px 16px;
+  padding: 14px 16px;
   font-size: 18px;
+  font-weight: bold;
 }
 
+/* テーマ */
+.theme {
+  padding: 14px;
+  font-size: 18px;
+  background: white;
+  border-bottom: 1px solid #eee;
+}
+
+/* カード */
 .container {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 10px;
   padding: 10px;
 }
 
 .card {
   background: white;
+  margin: 12px 0;
+  padding: 18px;
+  border-radius: 14px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+.user-post {
+  font-size: 18px;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+/* AIボックス */
+.ai-box {
+  background: #f0f4ff;
   padding: 10px;
   border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-  height: 85vh;
-  overflow-y: auto;
-}
-
-h3 {
-  margin-top: 0;
-  font-size: 14px;
-  color: #444;
-}
-
-a {
-  color: #1a73e8;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-/* ツリー */
-.unit {
-  border-left: 4px solid #1a73e8;
-  padding: 6px;
-  margin-bottom: 8px;
-  background: #fafafa;
-}
-
-.item {
-  margin-left: 10px;
-  cursor: pointer;
-  padding: 3px;
-}
-
-.item:hover {
-  background: #eef5ff;
-}
-
-/* スコア */
-.score {
-  float: right;
-  font-weight: bold;
-  color: #137333;
+  font-size: 16px;
 }
 
 /* 入力 */
-textarea {
+.post-area {
+  position: fixed;
+  bottom: 0;
   width: 100%;
-  height: 80px;
+  background: white;
+  padding: 12px;
+  border-top: 1px solid #ddd;
+}
+
+textarea {
+  width: 95%;
+  height: 60px;
+  font-size: 18px;
+  padding: 10px;
 }
 
 button {
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
+  width: 98%;
+  margin-top: 8px;
+  padding: 12px;
+  font-size: 18px;
   background: #1a73e8;
   color: white;
   border: none;
-  border-radius: 6px;
-  cursor: pointer;
+  border-radius: 10px;
 }
 
 button:hover {
   background: #0f5bd3;
 }
-
-#detail {
-  white-space: pre-wrap;
-  background: #f9f9f9;
-  padding: 8px;
-  border-left: 4px solid #1a73e8;
-}
-
 </style>
 </head>
 
 <body>
 
 <header>
-市民政策ロジックツリー（β完成UI）
+市民政策プラットフォーム（β：思考拡張版）
 </header>
 
+<div class="theme">
+🧠 今日のテーマ：駅前公共施設の未来
+</div>
+
+<!-- 思考カード -->
 <div class="container">
 
-  <!-- 左：ロジックツリー -->
   <div class="card">
-    <h3>ロジックツリー</h3>
-    <div id="tree"></div>
+    <div class="user-post">
+      子どもが安心して使える公共施設にしてほしい
+    </div>
+    <div class="ai-box">
+      🧠 要約：安全性の向上ニーズ<br>
+      💬 問い：どの時間帯を最優先にしますか？<br>
+      🔍 視点：高齢者との共存設計
+    </div>
   </div>
 
-  <!-- 中：投稿 -->
   <div class="card">
-    <h3>市民提案</h3>
-
-    <textarea id="input" placeholder="例：駅前に図書館とカフェ"></textarea>
-    <button onclick="post()">投稿</button>
-
-    <h3>詳細</h3>
-    <div id="detail">未選択</div>
-  </div>
-
-  <!-- 右：ランキング -->
-  <div class="card">
-    <h3>優先順位ランキング</h3>
-    <div id="rank"></div>
+    <div class="user-post">
+      夜でも使えるようにしてほしい
+    </div>
+    <div class="ai-box">
+      🧠 要約：夜間利用ニーズ<br>
+      💬 問い：防犯と利便性のバランスは？<br>
+      🔍 視点：地域活動との連動可能性
+    </div>
   </div>
 
 </div>
 
-<script>
-
-let posts = JSON.parse(localStorage.getItem("posts") || "[]");
-
-// 分類
-function classify(t){
-  if(t.includes("図書館")||t.includes("教育")) return "教育・文化";
-  if(t.includes("カフェ")||t.includes("交流")) return "交流・滞在空間";
-  if(t.includes("人口")||t.includes("移住")) return "広域人口戦略";
-  if(t.includes("起業")) return "産業・起業";
-  if(t.includes("公園")||t.includes("緑")) return "都市環境";
-  return "その他";
-}
-
-// スコア
-function score(t){
-  let s = 50;
-  if(t.includes("人口")) s += 30;
-  if(t.includes("図書館")) s += 20;
-  if(t.includes("駅前")) s += 10;
-  if(t.includes("カフェ")) s += 10;
-  return Math.min(100,s);
-}
-
-// 投稿
-function post(){
-  let text = document.getElementById("input").value;
-  if(!text) return;
-
-  let obj = {
-    title: text,
-    category: classify(text),
-    score: score(text)
-  };
-
-  posts.push(obj);
-  localStorage.setItem("posts", JSON.stringify(posts));
-
-  document.getElementById("input").value = "";
-  render();
-}
-
-// ツリー
-function renderTree(){
-  let map = {};
-
-  posts.forEach(p=>{
-    if(!map[p.category]) map[p.category]=[];
-    map[p.category].push(p);
-  });
-
-  let html = "";
-
-  for(let c in map){
-    html += `<div class="unit">
-      <b>${c}</b>
-      <span class="score">${map[c].length}</span>
-    `;
-
-    map[c].forEach(p=>{
-      html += `
-        <div class="item" onclick="show('${p.title}',${p.score})">
-          ・${p.title}
-        </div>
-      `;
-    });
-
-    html += `</div>`;
-  }
-
-  document.getElementById("tree").innerHTML = html;
-}
-
-// ランキング
-function renderRank(){
-  let sorted = [...posts].sort((a,b)=>b.score-a.score);
-
-  let html = "";
-
-  sorted.slice(0,5).forEach((p,i)=>{
-    html += `<div class="unit">
-      #${i+1} ${p.title}
-      <span class="score">${p.score}</span>
-    </div>`;
-  });
-
-  document.getElementById("rank").innerHTML = html;
-}
-
-// 詳細
-function show(title,score){
-  document.getElementById("detail").innerText =
-`■提案
-${title}
-
-■重要度
-${score}
-
-■状態
-AI分類済み（β版）`;
-}
-
-function render(){
-  renderTree();
-  renderRank();
-}
-
-render();
-
-</script>
+<!-- 投稿 -->
+<div class="post-area">
+  <textarea placeholder="あなたの考えを入力してください（投稿するとAIが対話を生成します）"></textarea>
+  <button onclick="alert('（デモ）AIが対話を生成します')">投稿してAIと対話</button>
+</div>
 
 </body>
 </html>
