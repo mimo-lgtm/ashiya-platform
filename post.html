@@ -19,7 +19,7 @@ body {
 
 textarea {
   width: 100%;
-  height: 110px;
+  height: 120px;
 }
 
 button {
@@ -39,7 +39,7 @@ button {
 
 <body>
 
-<a href="index.html">← ロジックツリーへ戻る</a>
+<a href="index.html">← 戻る</a>
 
 <h1>市民提案</h1>
 
@@ -52,17 +52,25 @@ button {
 
 <script>
 
-// 分類
-function classify(t){
-  if(t.includes("カフェ")||t.includes("交流")) return "交流・滞在空間";
-  if(t.includes("図書館")||t.includes("教育")) return "学び・文化・教育";
-  if(t.includes("公園")||t.includes("緑")) return "都市環境・景観";
-  if(t.includes("起業")) return "産業・起業";
-  if(t.includes("人口")||t.includes("移住")) return "広域戦略";
+function unit(t){
+  if(t.includes("人口")||t.includes("学生")||t.includes("移住"))
+    return "広域・人口戦略";
+
+  if(t.includes("図書館")||t.includes("教育"))
+    return "教育・文化";
+
+  if(t.includes("カフェ")||t.includes("交流"))
+    return "交流・滞在空間";
+
+  if(t.includes("起業"))
+    return "産業・起業";
+
+  if(t.includes("公園")||t.includes("緑"))
+    return "都市環境";
+
   return "その他";
 }
 
-// 投稿
 function submit(){
 
   let t = document.getElementById("input").value;
@@ -72,17 +80,15 @@ function submit(){
 
   posts.push({
     title: t,
-    summary: "AI要約（簡易）：都市価値・交流性向上の可能性あり",
-    category: classify(t)
+    summary: "AI要約（簡易）：都市価値・人口・交流の向上可能性あり",
+    category: unit(t)
   });
 
   localStorage.setItem("posts", JSON.stringify(posts));
 
   document.getElementById("out").innerText =
 `投稿完了
-
-■分類
-${classify(t)}`;
+分類：${unit(t)}`;
 }
 
 </script>
