@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<title>市民政策OS（APIレス版）</title>
+<title>市民政策プラットフォーム</title>
 
 <style>
 body {
@@ -20,69 +20,83 @@ header {
   font-weight: bold;
 }
 
-/* レイアウト */
+/* 全体レイアウト（左：説明＋投稿 / 右：ツリー） */
 .container {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 2fr 1fr;
   gap: 10px;
   padding: 10px;
 }
 
-/* パネル */
+/* 左側 */
 .panel {
   background: white;
   border-radius: 14px;
-  padding: 12px;
+  padding: 14px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   height: 85vh;
   overflow-y: auto;
 }
 
-/* ツリーノード */
-.node {
-  padding: 8px;
-  margin-bottom: 6px;
-  border-left: 5px solid #1a73e8;
-  background: #f9f9f9;
-  cursor: pointer;
-  border-radius: 6px;
-}
-
-.node:hover {
+/* 説明ブロック */
+.explain {
   background: #eef5ff;
+  padding: 12px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  line-height: 1.6;
 }
 
-/* 投稿 */
-.post {
-  background: #f4f6ff;
-  margin: 8px 0;
-  padding: 10px;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-/* スコア表示 */
-.badge {
-  font-size: 12px;
-  color: #555;
-}
-
-/* 入力 */
+/* 投稿エリア */
 textarea {
   width: 100%;
-  height: 80px;
+  height: 90px;
   font-size: 16px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
 }
 
 button {
   width: 100%;
-  padding: 10px;
-  margin-top: 6px;
+  padding: 12px;
+  margin-top: 8px;
   background: #1a73e8;
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
+}
+
+button:hover {
+  background: #0f5bd3;
+}
+
+/* 投稿表示 */
+.post {
+  background: #f4f6ff;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+/* 右側ツリー */
+.tree {
+  background: #ffffff;
+  padding: 14px;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  border-left: 5px solid #1a73e8;
+}
+
+.tree-title {
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #1a73e8;
 }
 </style>
 </head>
@@ -90,49 +104,66 @@ button {
 <body>
 
 <header>
-市民政策OS（APIレス・完全デモ版）
+市民政策プラットフォーム（β：投稿中心UI）
 </header>
 
 <div class="container">
 
-<!-- ■ 左：政策ツリー -->
+<!-- ■ 左：説明＋投稿（主役） -->
 <div class="panel">
-<h3>政策ツリー（クリックでフィルタ）</h3>
 
-<div class="node" onclick="filter('教育')">教育・文化</div>
-<div class="node" onclick="filter('都市')">都市・環境</div>
-<div class="node" onclick="filter('交流')">交流・ウェルビーイング</div>
-<div class="node" onclick="filter('財政')">財政・収益</div>
-<div class="node" onclick="filter('ガバナンス')">ガバナンス</div>
+<div class="explain">
+<b>■ このプラットフォームについて</b><br><br>
 
-<hr>
+あなたの意見は単なる投稿ではなく、<b>政策を作るための思考データ</b>になります。<br><br>
 
-<div class="node" onclick="generateAITree()">
-＋ AI風ツリー生成
+投稿するとAIが自動で：
+<ul>
+<li>要約します</li>
+<li>政策テーマに分類します</li>
+<li>問い返しを行い思考を深めます</li>
+</ul>
+
+まずは自由に入力してください。
 </div>
 
-<pre id="aiTree" style="font-size:12px;"></pre>
+<h3>■ あなたの意見を入力</h3>
 
-</div>
+<textarea id="input" placeholder="例：駅前に子どもと高齢者が安心して使える広場を作りたい"></textarea>
 
-<!-- ■ 中：市民投稿 -->
-<div class="panel">
-<h3>市民投稿</h3>
+<button onclick="addPost()">投稿してAIと対話する</button>
 
-<div id="filterLabel">全件表示</div>
-
-<textarea id="input" placeholder="例：駅前に図書館とカフェ"></textarea>
-<button onclick="addPost()">投稿</button>
-
-<div id="postList"></div>
+<h3>■ あなたの投稿</h3>
+<div id="posts"></div>
 
 </div>
 
-<!-- ■ 右：行政ダッシュボード -->
+<!-- ■ 右：ロジックツリー（補助） -->
 <div class="panel">
-<h3>行政ダッシュボード</h3>
 
-<div id="dashboard"></div>
+<div class="tree-title">■ 政策ロジックツリー（全体構造）</div>
+
+<div class="tree">
+
+【Vision】
+投資型都市経営：市民ウェルビーイングと知財集積
+
+■ 1. 価値向上
+  └ 教育・都市魅力
+
+■ 2. 市民ウェルビーイング
+  └ 交流・学習
+
+■ 3. 財政持続性
+  └ 収益施設・寄付
+
+■ 4. 施設戦略性
+  └ 知の拠点・起業
+
+■ 5. ガバナンス
+  └ DAO・災害対応
+
+</div>
 
 </div>
 
@@ -141,24 +172,14 @@ button {
 <script>
 
 let posts = [];
-let currentFilter = null;
 
-/* ■ 自動分類（APIなしAIの代替） */
+/* ■ 自動分類 */
 function classify(text){
-  if(text.includes("図書館")||text.includes("教育")) return "教育";
+  if(text.includes("子ども")||text.includes("教育")) return "教育";
   if(text.includes("公園")||text.includes("駅")) return "都市";
-  if(text.includes("カフェ")||text.includes("交流")) return "交流";
+  if(text.includes("交流")||text.includes("カフェ")) return "交流";
   if(text.includes("税")||text.includes("収益")) return "財政";
   return "ガバナンス";
-}
-
-/* ■ スコア（擬似政策優先度） */
-function score(text){
-  let s = 50;
-  if(text.includes("駅")) s += 10;
-  if(text.includes("人口")) s += 20;
-  if(text.includes("子ども")) s += 15;
-  return Math.min(100, s);
 }
 
 /* ■ 投稿 */
@@ -169,8 +190,7 @@ function addPost(){
 
   let p = {
     text: text,
-    tag: classify(text),
-    score: score(text)
+    tag: classify(text)
   };
 
   posts.push(p);
@@ -179,79 +199,36 @@ function addPost(){
   render();
 }
 
-/* ■ フィルタ（ツリークリック） */
-function filter(tag){
-  currentFilter = tag;
-  render();
-}
-
-/* ■ AI風ツリー生成（完全擬似） */
-function generateAITree(){
-
-  let base = [
-    "教育都市モデル強化",
-    "駅前再開発と滞留空間",
-    "高齢者×子ども共生設計",
-    "財政自立型施設モデル",
-    "市民DAO型意思決定"
-  ];
-
-  document.getElementById("aiTree").innerText =
-    "■ 自動生成ツリー（擬似AI）\n\n" +
-    base.map(b => "・" + b).join("\n");
-}
-
-/* ■ ダッシュボード */
-function renderDashboard(){
-
-  let stats = {};
-
-  posts.forEach(p=>{
-    stats[p.tag] = (stats[p.tag]||0)+1;
-  });
-
-  let html = "";
-
-  for(let k in stats){
-    html += `<div><b>${k}</b>：${stats[k]}件</div>`;
-  }
-
-  let avg = posts.length
-    ? Math.round(posts.reduce((a,b)=>a+b.score,0)/posts.length)
-    : 0;
-
-  html += `<hr><div>平均政策優先度：${avg}</div>`;
-
-  document.getElementById("dashboard").innerHTML = html;
-}
-
-/* ■ 投稿表示 */
-function renderPosts(){
-
-  let list = posts;
-
-  if(currentFilter){
-    list = posts.filter(p=>p.tag===currentFilter);
-    document.getElementById("filterLabel").innerText =
-      "フィルタ：" + currentFilter;
-  } else {
-    document.getElementById("filterLabel").innerText =
-      "全件表示";
-  }
-
-  document.getElementById("postList").innerHTML =
-    list.map(p=>
-      `<div class="post">
-        <div class="badge">[${p.tag}] score:${p.score}</div>
-        ${p.text}
-      </div>`
-    ).join("");
-}
-
-/* ■ 全体描画 */
+/* ■ 描画 */
 function render(){
-  renderPosts();
-  renderDashboard();
+
+  document.getElementById("posts").innerHTML =
+    posts.map(p=>`
+      <div class="post">
+        <b>[${p.tag}]</b><br>
+        ${p.text}<br><br>
+        🧠 要約：${summarize(p.text)}<br>
+        💬 問い：${question(p.text)}<br>
+        🔍 視点：${viewpoint(p.text)}
+      </div>
+    `).join("");
+}
+
+/* ■ 擬似AI */
+function summarize(t){
+  if(t.includes("子ども")) return "安全性・子育て環境の改善要求";
+  if(t.includes("駅")) return "駅前空間の機能強化";
+  return "政策提案の初期アイデア";
+}
+
+function question(t){
+  if(t.includes("子ども")) return "どの時間帯の安全性が重要ですか？";
+  return "具体的な運用方法はどうしますか？";
+}
+
+function viewpoint(t){
+  if(t.includes("子ども")) return "高齢者との共存設計の必要性";
+  return "公共空間の多機能化";
 }
 
 render();
