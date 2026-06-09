@@ -2,22 +2,13 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>市民政策ロジックツリー</title>
+<title>市民政策ロジックツリー（政策ユニット版）</title>
 
 <style>
 body {
   font-family: Arial;
   margin: 20px;
   background: #f5f5f5;
-}
-
-h1 {
-  margin-bottom: 10px;
-}
-
-a {
-  color: #1a73e8;
-  text-decoration: none;
 }
 
 .box {
@@ -27,26 +18,26 @@ a {
   margin-bottom: 10px;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.card {
-  background: #f8faff;
+.unit {
+  border: 1px solid #ddd;
+  background: #fafafa;
   padding: 10px;
   border-radius: 6px;
+  margin-bottom: 10px;
 }
 
-.category {
+.title {
   font-weight: bold;
-  margin-top: 10px;
   color: #1a73e8;
 }
 
+.small {
+  font-size: 12px;
+  color: #666;
+}
+
 .item {
-  margin-left: 12px;
+  margin-left: 10px;
   cursor: pointer;
 }
 
@@ -61,140 +52,87 @@ a {
 
 <body>
 
-<h1>市民政策ロジックツリー</h1>
+<h1>市民政策ロジックツリー（政策ユニット版）</h1>
 
 <div style="margin-bottom:15px;">
   <a href="post.html">👉 市民提案はこちら（投稿）</a>
 </div>
 
-<!-- 政策マップ -->
 <div class="box">
-  <h3>政策マップ</h3>
-  <div id="map" class="grid"></div>
+  <h3>政策ユニット（AI統合）</h3>
+  <div id="units"></div>
 </div>
 
-<!-- ランキング -->
-<div class="box">
-  <h3>優先順位ランキング</h3>
-  <div id="rank"></div>
-</div>
-
-<!-- ツリー -->
-<div class="box">
-  <h3>カテゴリツリー</h3>
-  <div id="tree"></div>
-</div>
-
-<!-- 詳細 -->
 <div class="box">
   <h3>詳細</h3>
-  <div id="detail">項目をクリックしてください</div>
+  <div id="detail">クリックしてください</div>
 </div>
 
 <script>
 
 let posts = JSON.parse(localStorage.getItem("posts") || "[]");
 
-// 分類
-function classify(t){
-  if(t.includes("カフェ")||t.includes("交流")) return "交流・滞在空間";
-  if(t.includes("図書館")||t.includes("教育")) return "学び・文化・教育";
-  if(t.includes("公園")||t.includes("緑")) return "都市環境・景観";
-  if(t.includes("起業")) return "産業・起業";
-  if(t.includes("人口")||t.includes("移住")) return "広域戦略";
-  return "その他";
+// 意味ベース統合キー（ここが重要）
+function unitKey(t){
+
+  if(t.includes("学生") || t.includes("若者") || t.includes("人口") || t.includes("移住"))
+    return "人口・定住戦略ユニット";
+
+  if(t.includes("図書館") || t.includes("教育"))
+    return "教育・文化ユニット";
+
+  if(t.includes("カフェ") || t.includes("交流") || t.includes("駅前"))
+    return "交流拠点ユニット";
+
+  if(t.includes("起業") || t.includes("スタートアップ"))
+    return "産業・起業ユニット";
+
+  if(t.includes("公園") || t.includes("緑"))
+    return "都市環境ユニット";
+
+  return "その他ユニット";
 }
 
-// スコア
-function score(t){
-  let s = 50;
-  if(t.includes("駅前")) s += 10;
-  if(t.includes("カフェ")||t.includes("図書館")) s += 10;
-  if(t.includes("人口")||t.includes("集客")) s += 20;
-  return Math.min(100,s);
-}
-
-// グループ化
+// ユニット化
 function group(){
   let map = {};
+
   posts.forEach(p=>{
-    let c = classify(p.title);
-    if(!map[c]) map[c]=[];
-    map[c].push(p);
+    let k = unitKey(p.title);
+
+    if(!map[k]) map[k] = [];
+    map[k].push(p);
   });
+
   return map;
 }
 
-// 政策マップ
-function renderMap(){
-
-  let map = group();
-
-  const cats = [
-    "交流・滞在空間",
-    "学び・文化・教育",
-    "都市環境・景観",
-    "産業・起業",
-    "広域戦略"
-  ];
-
-  let html = "";
-
-  cats.forEach(c=>{
-    let count = map[c] ? map[c].length : 0;
-
-    html += `
-      <div class="card">
-        ${c}<br>
-        <b>${count}</b>
-      </div>
-    `;
-  });
-
-  document.getElementById("map").innerHTML = html;
-}
-
-// ランキング
-function renderRank(){
-
-  let ranked = [...posts].sort((a,b)=>
-    score(b.title)-score(a.title)
-  );
-
-  let html = "";
-
-  ranked.slice(0,5).forEach((p,i)=>{
-    html += `
-      <div class="card">
-        #${i+1} ${p.title}<br>
-        スコア：${score(p.title)}
-      </div>
-    `;
-  });
-
-  document.getElementById("rank").innerHTML = html;
-}
-
-// ツリー
-function renderTree(){
+// 表示
+function render(){
 
   let map = group();
   let html = "";
 
-  for(let c in map){
+  for(let k in map){
 
-    html += `<div class="category">▶ ${c}</div>`;
+    html += `
+      <div class="unit">
+        <div class="title">${k}（${map[k].length}件）</div>
+        <div class="small">統合された政策候補</div>
+    `;
 
-    map[c].forEach(p=>{
+    map[k].forEach(p=>{
       html += `
         <div class="item" onclick="show('${p.title}','${p.summary}')">
           ・${p.title}
         </div>
       `;
     });
+
+    html += `</div>`;
   }
 
-  document.getElementById("tree").innerHTML = html;
+  document.getElementById("units").innerHTML = html;
 }
 
 // 詳細
@@ -203,14 +141,8 @@ function show(t,s){
 `■提案
 ${t}
 
-■要約
+■AI要約
 ${s}`;
-}
-
-function render(){
-  renderMap();
-  renderRank();
-  renderTree();
 }
 
 render();
