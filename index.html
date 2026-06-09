@@ -20,12 +20,25 @@ header {
   font-weight: bold;
 }
 
+/* ロジックツリー */
+.tree {
+  background: white;
+  margin: 10px;
+  padding: 14px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
 /* テーマ */
 .theme {
   padding: 14px;
   font-size: 18px;
   background: white;
-  border-bottom: 1px solid #eee;
+  margin: 10px;
+  border-radius: 12px;
 }
 
 /* カード */
@@ -92,8 +105,44 @@ button:hover {
 <body>
 
 <header>
-市民政策プラットフォーム（β：思考拡張版）
+市民政策プラットフォーム（β：ロジックツリー統合版）
 </header>
+
+<!-- ロジックツリー（ここが本体） -->
+<div class="tree">
+【Vision】
+コストセンターからプロフィットセンターへ：市民のウェルビーイングと知財の集積による投資型都市経営の実現
+
+├── 1. 芦屋市の価値向上（ブランド・移住促進）
+│     ├── 次世代教育ブランド
+│     │     └── 世界一の絵本図書館、EdTech企業連携
+│     └── 景観・都市魅力
+│           └── 公園芝生化、市民協働
+│
+├── 2. 市民ウェルビーイング
+│     ├── サードプレイス
+│     │     └── カフェ・交流空間
+│     └── 学習・リスキリング
+│           └── 共同研究・コワーキング
+│
+├── 3. 財政持続性
+│     ├── 施設収益化
+│     │     └── チャレンジショップ
+│     └── 寄付・ふるさと納税
+│           └── クラファン連動
+│
+├── 4. 施設の戦略性
+│     ├── 知の拠点化
+│     │     └── デジタルライブラリ
+│     └── 起業支援
+│           └── ピッチ・サンドボックス
+│
+└── 5. ガバナンス
+      ├── デュアルユース
+      │     └── 災害シミュレーション
+      └── DAO型自治
+            └── 投票・ルール形成
+</div>
 
 <div class="theme">
 🧠 今日のテーマ：駅前公共施設の未来
@@ -107,8 +156,8 @@ button:hover {
       子どもが安心して使える公共施設にしてほしい
     </div>
     <div class="ai-box">
-      🧠 要約：安全性の向上ニーズ<br>
-      💬 問い：どの時間帯を最優先にしますか？<br>
+      🧠 要約：安全性ニーズ<br>
+      💬 問い：どの時間帯を重視しますか？<br>
       🔍 視点：高齢者との共存設計
     </div>
   </div>
@@ -120,7 +169,7 @@ button:hover {
     <div class="ai-box">
       🧠 要約：夜間利用ニーズ<br>
       💬 問い：防犯と利便性のバランスは？<br>
-      🔍 視点：地域活動との連動可能性
+      🔍 視点：地域活動との連動
     </div>
   </div>
 
@@ -128,8 +177,8 @@ button:hover {
 
 <!-- 投稿 -->
 <div class="post-area">
-  <textarea placeholder="あなたの考えを入力してください（投稿するとAIが対話を生成します）"></textarea>
-  <button onclick="alert('（デモ）AIが対話を生成します')">投稿してAIと対話</button>
+  <textarea placeholder="あなたの考えを入力してください（AIが思考を深めます）"></textarea>
+  <button onclick="alert('デモ：AIが思考を生成')">投稿してAIと対話</button>
 </div>
 
 </body>
