@@ -2,121 +2,135 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>市民政策ロジックツリー（優先順位版）</title>
+<title>市民政策ロジックツリー（完成版）</title>
 
 <style>
 body {
   font-family: Arial;
-  margin: 20px;
+  margin: 0;
   background: #f4f6f8;
 }
 
-h1 {
-  margin-bottom: 10px;
-}
-
-a {
-  color: #1a73e8;
-  font-weight: bold;
+header {
+  background: #1a73e8;
+  color: white;
+  padding: 12px 16px;
+  font-size: 18px;
 }
 
 .container {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  padding: 10px;
 }
 
 .card {
   background: white;
-  padding: 12px;
+  padding: 10px;
   border-radius: 10px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  height: 85vh;
+  overflow-y: auto;
 }
 
-.badge {
-  display: inline-block;
-  padding: 3px 8px;
-  border-radius: 12px;
-  font-size: 12px;
-  background: #e8f0fe;
+h3 {
+  margin-top: 0;
+  font-size: 14px;
+  color: #444;
+}
+
+a {
   color: #1a73e8;
-}
-
-.score {
-  float: right;
+  text-decoration: none;
   font-weight: bold;
-  color: #137333;
 }
 
+/* ツリー */
 .unit {
-  margin-top: 8px;
-  padding: 8px;
   border-left: 4px solid #1a73e8;
+  padding: 6px;
+  margin-bottom: 8px;
   background: #fafafa;
-  border-radius: 6px;
 }
 
 .item {
+  margin-left: 10px;
   cursor: pointer;
-  margin-left: 8px;
-  padding: 4px;
+  padding: 3px;
 }
 
 .item:hover {
   background: #eef5ff;
 }
 
-.bar {
-  height: 6px;
-  background: #e0e0e0;
-  border-radius: 4px;
-  margin-top: 4px;
+/* スコア */
+.score {
+  float: right;
+  font-weight: bold;
+  color: #137333;
 }
 
-.bar > div {
-  height: 6px;
+/* 入力 */
+textarea {
+  width: 100%;
+  height: 80px;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
   background: #1a73e8;
-  border-radius: 4px;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #0f5bd3;
 }
 
 #detail {
   white-space: pre-wrap;
-  background: white;
-  padding: 12px;
-  border-left: 5px solid #2196f3;
-  border-radius: 6px;
+  background: #f9f9f9;
+  padding: 8px;
+  border-left: 4px solid #1a73e8;
 }
+
 </style>
 </head>
 
 <body>
 
-<h1>市民政策ロジックツリー（優先順位可視化）</h1>
-
-<div style="margin-bottom:10px;">
-  <a href="post.html">＋ 市民提案はこちら</a>
-</div>
+<header>
+市民政策ロジックツリー（β完成UI）
+</header>
 
 <div class="container">
 
+  <!-- 左：ロジックツリー -->
   <div class="card">
-    <div class="badge">政策ユニット</div>
-    <div id="units"></div>
+    <h3>ロジックツリー</h3>
+    <div id="tree"></div>
   </div>
 
+  <!-- 中：投稿 -->
   <div class="card">
-    <div class="badge">優先順位ランキング</div>
+    <h3>市民提案</h3>
+
+    <textarea id="input" placeholder="例：駅前に図書館とカフェ"></textarea>
+    <button onclick="post()">投稿</button>
+
+    <h3>詳細</h3>
+    <div id="detail">未選択</div>
+  </div>
+
+  <!-- 右：ランキング -->
+  <div class="card">
+    <h3>優先順位ランキング</h3>
     <div id="rank"></div>
-  </div>
-
-  <div class="card">
-    <div class="badge">政策マップ（可視化）</div>
-    <div id="map"></div>
-  </div>
-
-  <div class="card">
-    <div class="badge">詳細</div>
-    <div id="detail">項目をクリック</div>
   </div>
 
 </div>
@@ -126,123 +140,106 @@ a {
 let posts = JSON.parse(localStorage.getItem("posts") || "[]");
 
 // 分類
-function unit(t){
-  if(t.includes("人口")||t.includes("学生")||t.includes("移住"))
-    return "広域・人口戦略";
-
-  if(t.includes("図書館")||t.includes("教育")||t.includes("絵本"))
-    return "教育・文化";
-
-  if(t.includes("カフェ")||t.includes("交流"))
-    return "交流・滞在空間";
-
-  if(t.includes("起業"))
-    return "産業・起業";
-
-  if(t.includes("公園")||t.includes("緑"))
-    return "都市環境";
-
+function classify(t){
+  if(t.includes("図書館")||t.includes("教育")) return "教育・文化";
+  if(t.includes("カフェ")||t.includes("交流")) return "交流・滞在空間";
+  if(t.includes("人口")||t.includes("移住")) return "広域人口戦略";
+  if(t.includes("起業")) return "産業・起業";
+  if(t.includes("公園")||t.includes("緑")) return "都市環境";
   return "その他";
 }
 
-// スコア（重要度）
+// スコア
 function score(t){
   let s = 50;
   if(t.includes("人口")) s += 30;
-  if(t.includes("移住")) s += 20;
-  if(t.includes("図書館")) s += 15;
+  if(t.includes("図書館")) s += 20;
   if(t.includes("駅前")) s += 10;
   if(t.includes("カフェ")) s += 10;
   return Math.min(100,s);
 }
 
-// グループ
-function group(){
-  let map = {};
-  posts.forEach(p=>{
-    let u = unit(p.title);
-    if(!map[u]) map[u]=[];
-    map[u].push(p);
-  });
-  return map;
+// 投稿
+function post(){
+  let text = document.getElementById("input").value;
+  if(!text) return;
+
+  let obj = {
+    title: text,
+    category: classify(text),
+    score: score(text)
+  };
+
+  posts.push(obj);
+  localStorage.setItem("posts", JSON.stringify(posts));
+
+  document.getElementById("input").value = "";
+  render();
 }
 
-// ユニット表示
-function renderUnits(){
-  let map = group();
+// ツリー
+function renderTree(){
+  let map = {};
+
+  posts.forEach(p=>{
+    if(!map[p.category]) map[p.category]=[];
+    map[p.category].push(p);
+  });
+
   let html = "";
 
-  for(let u in map){
-
-    let avg = Math.round(
-      map[u].reduce((a,b)=>a+score(b.title),0)/map[u].length
-    );
-
+  for(let c in map){
     html += `<div class="unit">
-      <span class="badge">${u}</span>
-      <span class="score">${avg}</span>
-
-      <div class="bar"><div style="width:${avg}%"></div></div>
+      <b>${c}</b>
+      <span class="score">${map[c].length}</span>
     `;
 
-    map[u].forEach(p=>{
-      html += `<div class="item" onclick="show('${p.title}','${p.summary}')">
-        ・${p.title}
-      </div>`;
+    map[c].forEach(p=>{
+      html += `
+        <div class="item" onclick="show('${p.title}',${p.score})">
+          ・${p.title}
+        </div>
+      `;
     });
 
     html += `</div>`;
   }
 
-  document.getElementById("units").innerHTML = html;
+  document.getElementById("tree").innerHTML = html;
 }
 
 // ランキング
 function renderRank(){
-  let ranked = [...posts].sort((a,b)=>
-    score(b.title)-score(a.title)
-  );
+  let sorted = [...posts].sort((a,b)=>b.score-a.score);
 
   let html = "";
 
-  ranked.slice(0,5).forEach((p,i)=>{
+  sorted.slice(0,5).forEach((p,i)=>{
     html += `<div class="unit">
       #${i+1} ${p.title}
-      <span class="score">${score(p.title)}</span>
+      <span class="score">${p.score}</span>
     </div>`;
   });
 
   document.getElementById("rank").innerHTML = html;
 }
 
-// マップ
-function renderMap(){
-  let map = group();
-  let html = "";
-
-  for(let k in map){
-    html += `<div class="unit">
-      ${k}：${map[k].length}件
-    </div>`;
-  }
-
-  document.getElementById("map").innerHTML = html;
-}
-
 // 詳細
-function show(t,s){
+function show(title,score){
   document.getElementById("detail").innerText =
 `■提案
-${t}
+${title}
 
-■要約
-${s}`;
+■重要度
+${score}
+
+■状態
+AI分類済み（β版）`;
 }
 
 function render(){
-  renderUnits();
+  renderTree();
   renderRank();
-  renderMap();
 }
 
 render();
