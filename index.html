@@ -3,270 +3,77 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>駅前公共施設 市民意見統合プラットフォーム（完全版）</title>
+<title>市民AI共創OS（進化型）</title>
 
 <style>
-
-body{
-margin:0;
-font-family:"Yu Gothic","Hiragino Kaku Gothic ProN",sans-serif;
-background:#f4f6f8;
-color:#1b1f23;
-}
-
-/* ===== TOP NAV ===== */
-.topbar{
-background:#0a3a5a;
-color:white;
-padding:10px;
-display:flex;
-gap:8px;
-flex-wrap:wrap;
-}
-
-.topbar button{
-background:white;
-color:#0a3a5a;
-border:none;
-padding:8px 12px;
-border-radius:6px;
-font-weight:bold;
-cursor:pointer;
-}
-
-/* ===== LAYOUT ===== */
-.container{
-max-width:1100px;
-margin:auto;
-padding:16px;
-}
-
-.card{
-background:white;
-padding:16px;
-border-radius:12px;
-margin-bottom:12px;
-box-shadow:0 2px 10px rgba(0,0,0,0.06);
-}
-
+body{font-family:Yu Gothic;margin:0;background:#f4f6f8;}
+.top{background:#0a3a5a;color:white;padding:10px;display:flex;gap:8px;}
+.top button{padding:8px 12px;border:none;border-radius:6px;background:white;color:#0a3a5a;cursor:pointer;}
+.container{max-width:1000px;margin:auto;padding:16px;}
+.card{background:white;padding:16px;border-radius:12px;margin-bottom:12px;}
+.block{border-left:5px solid #0a3a5a;padding:12px;margin:8px 0;background:#f9fbfd;cursor:pointer;}
 .page{display:none;}
 .active{display:block;}
-
-.block{
-border-left:5px solid #0a3a5a;
-padding:12px;
-margin:10px 0;
-background:#f9fbfd;
-cursor:pointer;
-}
-
-.block:hover{background:#eef5ff;}
-
-textarea{
-width:100%;
-height:130px;
-padding:10px;
-border-radius:8px;
-border:1px solid #ccc;
-}
-
-.btn{
-background:#0a3a5a;
-color:white;
-border:none;
-padding:10px 14px;
-border-radius:8px;
-cursor:pointer;
-margin-top:10px;
-}
-
-.tag{
-display:inline-block;
-background:#0a3a5a;
-color:white;
-padding:3px 8px;
-border-radius:20px;
-font-size:12px;
-}
-
+textarea{width:100%;height:120px;}
+.btn{background:#0a3a5a;color:white;padding:10px;border:none;border-radius:8px;margin-top:10px;cursor:pointer;}
+.tag{background:#0a3a5a;color:white;padding:3px 8px;border-radius:20px;font-size:12px;display:inline-block;}
 .small{font-size:13px;color:#666;}
-
-.metric{
-font-size:26px;
-font-weight:bold;
-color:#0a3a5a;
-}
-
-hr{border:none;border-top:1px solid #eee;margin:12px 0;}
-
-.badge{
-padding:2px 6px;
-border-radius:6px;
-font-size:11px;
-margin-left:6px;
-}
-
-.ok{background:#d6f5dd;color:#1a6b2b;}
-.wait{background:#fff3cd;color:#8a6d1a;}
-
 </style>
 </head>
 
 <body>
 
-<!-- NAV -->
-<div class="topbar">
+<div class="top">
 <button onclick="go('intro')">はじめに</button>
-<button onclick="go('tree')">ロジックツリー</button>
-<button onclick="go('post')">意見投稿</button>
-<button onclick="go('analysis')">分析</button>
-<button onclick="go('flow')">変遷</button>
+<button onclick="go('tree')">ツリー</button>
+<button onclick="go('post')">投稿</button>
+<button onclick="go('ai')">AI統合</button>
 </div>
 
 <div class="container">
 
-<!-- ================= INTRO ================= -->
+<!-- INTRO -->
 <div id="intro" class="page active">
-
 <div class="card">
-
-<h2>駅前公共施設について、みんなで考える仕組み</h2>
-
+<h2>市民AI共創OS</h2>
 <p>
-これは単なるアンケートではありません。<br>
-市民の意見をAIが整理し、構造化し、「駅前の未来像」に変換していく仕組みです。
+あなたの意見がそのまま「駅前の構造」を変えていきます。
+AIがそれを整理し、都市の形に変換します。
 </p>
-
-<hr>
-
-<h3>この仕組みでできること（完全版）</h3>
-
-<div class="block">① 自由に意見を書く（途中でもOK）</div>
-<div class="block">② AIが要約・整理・問い返し（※API接続で強化）</div>
-<div class="block">③ ロジックツリーに自動分類</div>
-<div class="block">④ 同じ意見が統合されていく</div>
-<div class="block">⑤ 駅前の“考え方の変化”が見える</div>
-
-<hr>
-
-<button class="btn" onclick="go('tree')">
-ロジックツリーを見る
-</button>
-
+</div>
 </div>
 
-</div>
-
-<!-- ================= TREE ================= -->
+<!-- TREE -->
 <div id="tree" class="page">
-
 <div class="card">
-
-<h2>市民政策ロジックツリー（論点整理）</h2>
-
-<p class="small">
-気になる項目をクリックすると投稿できます
-</p>
-
-<hr>
-
-<div class="block" onclick="select('価値向上')">
-<b>1. 芦屋市の価値向上</b><br>
-教育ブランド / 景観 / 公園 / 協働
+<h2>ロジックツリー（動的）</h2>
+<div id="treeBox"></div>
+</div>
 </div>
 
-<div class="block" onclick="select('市民交流')">
-<b>2. 市民へのベネフィット</b><br>
-交流 / カフェ / 学習 / コワーキング
-</div>
-
-<div class="block" onclick="select('財政')">
-<b>3. 財政的持続可能性</b><br>
-収益化 / 寄付 / ふるさと納税
-</div>
-
-<div class="block" onclick="select('戦略性')">
-<b>4. 施設の戦略性</b><br>
-起業 / デジタル / 知の拠点
-</div>
-
-<div class="block" onclick="select('ガバナンス')">
-<b>5. 都市の強靭性</b><br>
-防災 / DAO / 自治
-</div>
-
-</div>
-
-</div>
-
-<!-- ================= POST ================= -->
+<!-- POST -->
 <div id="post" class="page">
-
 <div class="card">
-
-<h2>意見投稿（AI壁打ち対応）</h2>
-
-<div class="tag" id="topic">未選択</div>
-
-<textarea id="text" placeholder="自由に書いてください（途中の考えでもOK）"></textarea>
-
-<button class="btn" onclick="submit()">送信して整理する</button>
-
-<div id="result"></div>
-
+<h2>意見投稿</h2>
+<textarea id="text"></textarea>
+<button class="btn" onclick="submit()">送信</button>
+</div>
 </div>
 
-</div>
-
-<!-- ================= ANALYSIS ================= -->
-<div id="analysis" class="page">
-
+<!-- AI -->
+<div id="ai" class="page">
 <div class="card">
-
-<h2>分析（市民意見の統合）</h2>
-
-<div id="box"></div>
-
+<h2>AI統合結果</h2>
+<div id="aiBox"></div>
 </div>
-
-</div>
-
-<!-- ================= FLOW ================= -->
-<div id="flow" class="page">
-
-<div class="card">
-
-<h2>コンセプトの変遷</h2>
-
-<hr>
-
-<h3>① 初期</h3>
-<div class="block">駅前＝公共施設（行政サービス型）</div>
-
-<h3>② 市民意見後</h3>
-<div class="block">駅前＝交流・教育・起業・防災の複合拠点</div>
-
-<h3>③ 現在の再定義</h3>
-<div class="block">駅前＝都市価値を生み出す“市民共創装置”</div>
-
-<h3>④ 変化の理由</h3>
-<div class="block">
-・市民の交流ニーズの強さ<br>
-・教育と起業の接続性<br>
-・収益化の可能性<br>
-・防災拠点としての重要性
-</div>
-
-</div>
-
 </div>
 
 </div>
 
 <script>
 
-let current="";
-let posts=[];
+let posts = [];
+let clusters = {};
 
 /* navigation */
 function go(id){
@@ -275,49 +82,80 @@ document.getElementById(id).classList.add("active");
 render();
 }
 
-/* select */
-function select(t){
-current=t;
-document.getElementById("topic").innerText=t;
-go("post");
+/* ===== AI（ダミー or Gemini接続） ===== */
+async function analyze(text){
+
+const API_KEY = "YOUR_API_KEY_HERE";
+
+if(API_KEY==="YOUR_API_KEY_HERE"){
+return {
+tag: text.includes("教育") ? "教育" :
+text.includes("起業") ? "起業" :
+text.includes("交流") ? "交流" : "その他",
+summary: "（ダミー）市民意見として整理されました"
+};
 }
 
-/* submit */
-function submit(){
+const res = await fetch(
+"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key="+API_KEY,
+{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+contents:[{parts:[{text:"分類・要約:" + text}]}]
+})
+}
+);
 
-let t=document.getElementById("text").value;
-if(!t) return;
+const data = await res.json();
+let out = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
 
-posts.push({topic:current,text:t});
-
-document.getElementById("result").innerHTML=
-`<div class="card">送信完了（統合対象として記録）</div>`;
-
-go("analysis");
+return {tag:"AI分類",summary:out};
 }
 
-/* render */
+/* ===== 投稿 ===== */
+async function submit(){
+
+let text = document.getElementById("text").value;
+if(!text) return;
+
+let ai = await analyze(text);
+
+posts.push({text,ai});
+
+/* clustering */
+if(!clusters[ai.tag]) clusters[ai.tag]=[];
+clusters[ai.tag].push(text);
+
+go("ai");
+}
+
+/* ===== render ===== */
 function render(){
 
-let map={};
-
-posts.forEach(p=>{
-map[p.topic]=(map[p.topic]||0)+1;
-});
-
-let html="";
-
-for(let k in map){
-html+=`
-<div class="card">
-<div class="tag">${k}</div>
-<div class="metric">${map[k]}</div>
-<p class="small">統合済み投稿数</p>
+/* TREE */
+let treeHTML="";
+for(let k in clusters){
+treeHTML+=`
+<div class="block">
+<b>${k}</b><br>
+${clusters[k].length}件の意見
 </div>`;
 }
+document.getElementById("treeBox").innerHTML=
+treeHTML || "<p>まだデータなし</p>";
 
-document.getElementById("box").innerHTML=
-html || "<p>まだ投稿はありません</p>";
+/* AI */
+let aiHTML="";
+posts.slice(-5).forEach(p=>{
+aiHTML+=`
+<div class="card">
+<div class="tag">${p.ai.tag}</div>
+<p>${p.ai.summary}</p>
+</div>`;
+});
+document.getElementById("aiBox").innerHTML=aiHTML;
+
 }
 
 </script>
