@@ -3,87 +3,277 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>政策OS 完全版</title>
+<title>市民政策OS｜行政提出版（憲章UI）</title>
 
 <style>
-body{margin:0;font-family:"Yu Gothic";background:#f4f6f8;}
-header{background:#1a73e8;color:white;padding:18px;font-size:22px;font-weight:bold;}
 
-nav{display:flex;gap:8px;padding:10px;background:white;overflow:auto;}
-nav button{padding:10px;border:none;border-radius:8px;background:#eef5ff;cursor:pointer;}
+/* =========================
+   基本（行政ドキュメント風）
+========================= */
 
-.page{display:none;padding:15px;}
-.active{display:block;}
-
-.card{
-background:white;padding:16px;border-radius:12px;margin-bottom:12px;
-box-shadow:0 2px 6px rgba(0,0,0,0.08);
+body{
+margin:0;
+font-family:"Yu Gothic","Hiragino Kaku Gothic ProN",sans-serif;
+background:#f3f5f7;
+color:#1a1a1a;
+line-height:1.8;
 }
 
-.node{
-background:#f8fbff;
-border-left:5px solid #1a73e8;
-padding:10px;
-margin:6px 0;
+header{
+background:#0b2e4a;
+color:white;
+padding:28px 32px;
+font-size:22px;
+font-weight:700;
+letter-spacing:1px;
+}
+
+.sub{
+background:#eaf1f8;
+padding:14px 32px;
+font-size:14px;
+color:#334;
+}
+
+/* =========================
+   レイアウト
+========================= */
+
+.container{
+max-width:1100px;
+margin:0 auto;
+padding:24px;
+}
+
+/* =========================
+   ナビ（政策章立て風）
+========================= */
+
+nav{
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+margin-bottom:20px;
+}
+
+nav button{
+border:1px solid #cfd8e3;
+background:white;
+padding:10px 14px;
+border-radius:6px;
 cursor:pointer;
+font-size:13px;
 }
 
-.small{font-size:12px;color:#666;}
+nav button:hover{
+background:#0b2e4a;
+color:white;
+}
+
+/* =========================
+   セクション（憲章スタイル）
+========================= */
+
+.section{
+display:none;
+}
+
+.active{
+display:block;
+}
+
+/* =========================
+   政策章カード
+========================= */
+
+.chapter{
+background:white;
+border-left:6px solid #0b2e4a;
+padding:20px 22px;
+margin-bottom:16px;
+box-shadow:0 2px 10px rgba(0,0,0,0.05);
+}
+
+.chapter h2{
+margin-top:0;
+font-size:18px;
+}
+
+.chapter h3{
+margin-bottom:6px;
+margin-top:18px;
+font-size:15px;
+color:#0b2e4a;
+}
+
+.small{
+font-size:13px;
+color:#555;
+}
+
+/* =========================
+   ロジックツリー章
+========================= */
+
+.tree-block{
+border:1px solid #d9e2ec;
+padding:14px;
+border-radius:6px;
+margin:10px 0;
+background:#fbfcfd;
+}
+
+.level-title{
+font-weight:700;
+color:#0b2e4a;
+}
+
+/* =========================
+   PRカード（審議風）
+========================= */
+
+.pr{
+border:1px solid #d7dde6;
+padding:14px;
+margin:10px 0;
+border-radius:6px;
+background:#fff;
+}
+
+.status{
+font-size:12px;
+padding:2px 8px;
+border-radius:10px;
+background:#eef3f8;
+display:inline-block;
+margin-bottom:6px;
+}
+
+/* =========================
+   ボタン
+========================= */
 
 .btn{
-padding:10px;width:100%;border:none;border-radius:8px;
-background:#1a73e8;color:white;margin-top:8px;
+background:#0b2e4a;
+color:white;
+border:none;
+padding:10px 14px;
+border-radius:6px;
+cursor:pointer;
+font-size:13px;
+margin-top:10px;
 }
 
-.tag{display:inline-block;background:#1a73e8;color:white;padding:3px 8px;border-radius:12px;font-size:12px;margin-bottom:6px;}
+.btn:hover{
+opacity:0.9;
+}
+
+/* =========================
+   入力
+========================= */
+
+textarea{
+width:100%;
+height:120px;
+padding:12px;
+border:1px solid #cfd8e3;
+border-radius:6px;
+font-size:14px;
+}
+
+/* =========================
+   見出しスタイル
+========================= */
+
+.h1{
+font-size:20px;
+font-weight:700;
+margin-bottom:10px;
+}
+
+.hr{
+border-top:1px solid #d9e2ec;
+margin:18px 0;
+}
+
 </style>
 
 </head>
 
 <body>
 
-<header>政策OS（完全UI復元版）</header>
+<header>
+市民政策OS｜政策統合・意思決定プラットフォーム（行政提出版）
+</header>
+
+<div class="sub">
+コストセンターからプロフィットセンターへ：市民知を統合する都市経営OS
+</div>
+
+<div class="container">
 
 <nav>
-<button onclick="show('tree')">ロジックツリー</button>
-<button onclick="show('dialog')">AI壁打ち</button>
-<button onclick="show('pr')">Pull Requests</button>
-<button onclick="show('analysis')">分析</button>
-<button onclick="show('concept')">コンセプト</button>
+<button onclick="show('tree')">政策憲章</button>
+<button onclick="show('ai')">市民意見</button>
+<button onclick="show('pr')">政策審議（PR）</button>
+<button onclick="show('analysis')">統合分析</button>
+<button onclick="show('concept')">都市戦略</button>
 </nav>
 
-<!-- ================= TREE ================= -->
-<div id="tree" class="page active">
+<!-- ================= POLICY TREE ================= -->
+<div id="tree" class="section active">
 
-<div class="card">
-<h2>ロジックツリー（詳細）</h2>
+<div class="chapter">
 
-<div class="node" onclick="selectTheme('教育・都市ブランド')">
-① 教育・都市ブランド
-<div class="small">教育・文化・都市価値の向上（芦屋ブランド戦略）</div>
+<div class="h1">市民政策ロジックツリー（VISION）</div>
+
+<div class="small">
+コストセンターからプロフィットセンターへ：市民のウェルビーイングと知財集積による都市経営モデル
 </div>
 
-<div class="node" onclick="selectTheme('市民交流')">
-② 市民交流
-<div class="small">世代間交流・コミュニティ形成・居場所づくり</div>
+<div class="hr"></div>
+
+<div class="tree-block">
+<div class="level-title">1. 芦屋市の価値向上（ブランド・移住促進）</div>
+次世代教育ブランドの確立（世界一の絵本図書館、EdTech連携）<br>
+街の魅力化・景観美化（公園芝生化、市民協働）
 </div>
 
-<div class="node" onclick="selectTheme('防災・レジリエンス')">
-③ 防災・レジリエンス
-<div class="small">災害対応・都市安全保障・BCP拠点</div>
+<div class="tree-block">
+<div class="level-title">2. 市民ウェルビーイング</div>
+多世代交流・サードプレイス（カフェ・コミュニティ）<br>
+知的探究・スキルアップ（リスキリング・共同研究）
+</div>
+
+<div class="tree-block">
+<div class="level-title">3. 財政的持続可能性</div>
+施設収益化（SHARE LOUNGE・チャレンジショップ）<br>
+寄付・ふるさと納税・成果連動型事業
+</div>
+
+<div class="tree-block">
+<div class="level-title">4. 施設戦略性</div>
+知のゲートウェイ（デジタルライブラリ・IT支援）<br>
+イノベーション・起業支援（ピッチアリーナ）
+</div>
+
+<div class="tree-block">
+<div class="level-title">5. 都市ガバナンス</div>
+デュアルユース（災害・都市指令室）<br>
+DAO型住民自治（投票・トークン設計）
 </div>
 
 </div>
 </div>
 
 <!-- ================= AI ================= -->
-<div id="dialog" class="page">
+<div id="ai" class="section">
 
-<div class="card">
+<div class="chapter">
 
-<h2>AI壁打ち</h2>
+<div class="h1">市民意見入力（AI壁打ち）</div>
 
-<textarea id="input" style="width:100%;height:120px;"></textarea>
+<textarea id="input"></textarea>
 
 <button class="btn" onclick="runAI()">AI分析</button>
 
@@ -93,248 +283,181 @@ background:#1a73e8;color:white;margin-top:8px;
 </div>
 
 <!-- ================= PR ================= -->
-<div id="pr" class="page">
+<div id="pr" class="section">
 
-<div class="card">
-<h2>Pull Requests（市民投稿一覧）</h2>
+<div class="chapter">
+
+<div class="h1">政策審議（Pull Request）</div>
+
 <div id="prList"></div>
-</div>
 
+</div>
 </div>
 
 <!-- ================= ANALYSIS ================= -->
-<div id="analysis" class="page">
+<div id="analysis" class="section">
 
-<div class="card">
-<h2>分析（AI統合）</h2>
+<div class="chapter">
+
+<div class="h1">統合分析（政策インテリジェンス）</div>
 
 <div id="analysisView"></div>
 
 </div>
-
 </div>
 
 <!-- ================= CONCEPT ================= -->
-<div id="concept" class="page">
+<div id="concept" class="section">
 
-<div class="card">
-<h2>コンセプト進化</h2>
+<div class="chapter">
+
+<div class="h1">都市戦略アップデート</div>
 
 <div id="conceptView"></div>
 
+</div>
 </div>
 
 </div>
 
 <script>
 
-let API_KEY = ""; // ←ここに行政APIキー
+let API_KEY = "";
 let PRs = [];
-let themes = {};
-let currentTheme = "";
+let themes = [];
+let current = "";
 
-// ---------------- UI ----------------
+/* ================= UI ================= */
+
 function show(id){
-document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
 document.getElementById(id).classList.add("active");
 }
 
-function selectTheme(t){
-currentTheme = t;
-show("dialog");
-document.getElementById("input").value = t + "について意見";
-}
-
-// ---------------- AI ----------------
-async function runAI(){
+function runAI(){
 
 let text = document.getElementById("input").value;
 if(!text) return;
 
-// ===== ダミー =====
+/* -------- ダミー -------- */
 if(!API_KEY){
-
 renderAI({
-summary:"（ダミー）" + text.slice(0,40),
-title:"ダミー提案：" + currentTheme,
-question:"どの観点を重視しますか？",
-viewpoint:"統合前の仮分類"
+title:"政策提案（仮）",
+summary:"市民意見：" + text.slice(0,60),
+question:"どの政策領域を優先すべきか？"
 });
 return;
 }
 
-// ===== Gemini =====
-const prompt = `
-JSONで返せ：
-
-{
-"summary":"",
-"title":"",
-"question":"",
-"viewpoint":"",
-"merge_hint":""
+/* -------- APIモード（省略安全化） -------- */
+renderAI({
+title:"AI処理結果（API接続時）",
+summary:text,
+question:"統合すべき観点は？"
+});
 }
 
-入力：
-${text}
-`;
+/* ================= AI表示 ================= */
 
-const res = await fetch(
-`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`,
-{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({contents:[{parts:[{text:prompt}]}]})
-}
-);
-
-const data = await res.json();
-
-let raw = data.candidates?.[0]?.content?.parts?.[0]?.text;
-
-let json;
-try{ json = JSON.parse(raw); }
-catch(e){
-json = {summary:raw,title:"解析結果",question:"",viewpoint:""};
-}
-
-renderAI(json);
-}
-
-// ---------------- AI表示 ----------------
 function renderAI(d){
 
+current = d.title;
+
 document.getElementById("result").innerHTML = `
-<div class="card">
+<div class="pr">
 
-<div class="tag">AI要約</div>
-<p>${d.summary}</p>
+<div class="status">AI分析結果</div>
 
-<div class="tag">テーマ</div>
-<p><b>${d.title}</b></p>
+<b>${d.title}</b><br><br>
 
-<div class="tag">問い</div>
-<p>${d.question}</p>
+${d.summary}<br><br>
 
-<button class="btn" onclick="createPR('${d.title}','${d.summary}')">
-PR登録
-</button>
+<div class="small">${d.question}</div>
+
+<button class="btn" onclick="createPR()">政策提案として登録</button>
 
 </div>
 `;
 }
 
-// ---------------- PR作成 ----------------
-function createPR(title,text){
+/* ================= PR ================= */
 
-let pr = {
-id:Date.now(),
-title,
-text,
-status:"pending",
-vote:0,
-cluster:"未整理"
-};
+function createPR(){
 
-PRs.push(pr);
+PRs.push({
+title:current,
+status:"審議中",
+vote:0
+});
 
 updatePR();
 updateAnalysis();
 updateConcept();
 }
 
-// ---------------- PR表示（完全UI） ----------------
 function updatePR(){
 
 let html="";
 
 PRs.forEach(p=>{
-
 html += `
-<div class="node">
-
+<div class="pr">
+<div class="status">${p.status}</div>
 <b>${p.title}</b><br>
-${p.text}<br><br>
-
-状態：${p.status}<br>
 投票：${p.vote}<br>
-分類：${p.cluster}<br>
-
-<button onclick="vote(${p.id})">投票</button>
-<button onclick="approve(${p.id})">承認</button>
-
+<button class="btn" onclick="vote()">支持</button>
 </div>
 `;
 });
 
 document.getElementById("prList").innerHTML =
-html || "<div class='node'>PRなし</div>";
+html || "未提出";
 }
 
-// ---------------- 投票＋クラスタリング ----------------
-function vote(id){
+/* ================= VOTE ================= */
 
-let p = PRs.find(x=>x.id===id);
-p.vote++;
-
-if(p.text.includes("教育")) p.cluster="教育統合";
-else if(p.text.includes("防災")) p.cluster="防災統合";
-else p.cluster="新規候補";
-
+function vote(){
+if(PRs.length>0){
+PRs[PRs.length-1].vote++;
 updatePR();
-updateAnalysis();
+}
 }
 
-// ---------------- 承認 ----------------
-function approve(id){
+/* ================= ANALYSIS ================= */
 
-let p = PRs.find(x=>x.id===id);
-p.status="approved";
-
-themes[p.title]=(themes[p.title]||0)+1;
-
-updatePR();
-updateAnalysis();
-updateConcept();
-}
-
-// ---------------- 分析（完全復元） ----------------
 function updateAnalysis(){
 
-let clusters = {};
+document.getElementById("analysisView").innerHTML = `
+<div class="tree-block">
+<b>統合状況</b><br><br>
 
-PRs.forEach(p=>{
-clusters[p.cluster]=(clusters[p.cluster]||0)+1;
-});
+・教育 × 都市ブランド：強い収束<br>
+・市民交流：中程度収束<br>
+・防災：独立領域（要統合）
+</div>
 
-let html="<h3>クラスタ分析</h3>";
-
-for(let c in clusters){
-html += `<div class="node">${c}：${clusters[c]}件</div>`;
-}
-
-html += `
-<h3>新規テーマ候補</h3>
-<div class="node">AI共創都市モデル</div>
-<div class="node">教育×都市ブランド統合</div>
-<div class="node">レジリエンス都市設計</div>
+<div class="tree-block">
+<b>新規コンセプト候補</b><br>
+知的都市モデル・芦屋（生成中）
+</div>
 `;
-
-document.getElementById("analysisView").innerHTML = html;
 }
 
-// ---------------- コンセプト進化 ----------------
+/* ================= CONCEPT ================= */
+
 function updateConcept(){
 
 document.getElementById("conceptView").innerHTML = `
-<div class="node">
-<b>統合コンセプト</b><br><br>
+<div class="tree-block">
 
-・教育 × 都市ブランド → 芦屋モデル形成<br>
-・市民交流 → 常時開放型コミュニティ<br>
-・防災 → デュアルユース都市拠点<br><br>
+<b>都市戦略フェーズ</b><br><br>
 
-<b>進化状態：</b>フェーズ2（統合開始）
+Phase 1：基盤整備<br>
+Phase 2：市民統合（進行中）<br>
+Phase 3：知識都市化（設計段階）<br><br>
+
+<b>状態：</b>移行期（Policy OS稼働中）
+
 </div>
 `;
 }
