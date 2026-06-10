@@ -1,283 +1,61 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>駅前公共施設 市民意見プラットフォーム（統合完成版）</title>
-
-<style>
-
-body{
-margin:0;
-font-family:"Yu Gothic","Hiragino Kaku Gothic ProN",sans-serif;
-background:#f4f6f8;
-color:#1b1f23;
-}
-
-.topbar{
-background:#0a3a5a;
-color:white;
-padding:10px;
-display:flex;
-gap:8px;
-flex-wrap:wrap;
-}
-
-.topbar button{
-padding:8px 12px;
-border:none;
-border-radius:6px;
-cursor:pointer;
-font-weight:bold;
-background:white;
-color:#0a3a5a;
-}
-
-.container{
-max-width:1100px;
-margin:0 auto;
-padding:16px;
-}
-
-.card{
-background:white;
-border-radius:12px;
-padding:16px;
-margin-bottom:12px;
-box-shadow:0 3px 12px rgba(0,0,0,0.06);
-}
-
-.block{
-border-left:5px solid #0a3a5a;
-padding:12px;
-margin:8px 0;
-background:#f9fbfd;
-cursor:pointer;
-}
-
-.block:hover{background:#eef5ff;}
-
-textarea{
-width:100%;
-height:120px;
-padding:10px;
-border-radius:8px;
-border:1px solid #ccc;
-}
-
-.btn{
-background:#0a3a5a;
-color:white;
-border:none;
-padding:10px 14px;
-border-radius:8px;
-cursor:pointer;
-margin-top:10px;
-}
-
-.tag{
-display:inline-block;
-background:#0a3a5a;
-color:white;
-padding:3px 8px;
-border-radius:20px;
-font-size:12px;
-}
-
-.page{display:none;}
-.active{display:block;}
-
-.small{font-size:13px;color:#666;}
-
-.metric{
-font-size:26px;
-font-weight:bold;
-color:#0a3a5a;
-}
-
-hr{border:none;border-top:1px solid #eee;margin:12px 0;}
-
-</style>
-</head>
-
-<body>
-
-<!-- ナビ -->
-<div class="topbar">
-<button onclick="go('intro')">はじめに</button>
-<button onclick="go('tree')">ロジックツリー</button>
-<button onclick="go('post')">意見投稿</button>
-<button onclick="go('analysis')">分析</button>
-<button onclick="go('flow')">変遷</button>
-</div>
-
-<div class="container">
-
-<!-- ================= INTRO ================= -->
-<div id="intro" class="page active">
-
-<div class="card">
-
-<h2>駅前公共施設について、みんなで考える場所です</h2>
-
-<p>
-この仕組みはアンケートではありません。<br>
-市民の意見をAIが整理し、構造化し、全体像としてつなげていきます。
-</p>
-
-<hr>
-
-<h3>できること</h3>
-
-<ul>
-<li>自由に意見を書く</li>
-<li>AIが要約・整理（API接続で強化）</li>
-<li>ロジックツリーに分類</li>
-<li>意見の傾向を可視化</li>
-</ul>
-
-<hr>
-
-<button class="btn" onclick="go('tree')">ロジックツリーを見る</button>
-
-</div>
-
-</div>
-
 <!-- ================= TREE ================= -->
 <div id="tree" class="page">
 
 <div class="card">
 
-<h2>ロジックツリー（論点整理）</h2>
+<h2>市民政策ロジックツリー（Vision）</h2>
 
-<p class="small">気になる項目をクリックして投稿へ</p>
-
-<div class="block" onclick="select('価値向上')">① 駅前の価値向上</div>
-<div class="block" onclick="select('利用者')">② 利用者の考え方</div>
-<div class="block" onclick="select('財政')">③ 財政・運営</div>
-<div class="block" onclick="select('機能')">④ 施設の役割</div>
-<div class="block" onclick="select('未来')">⑤ 未来の駅前像</div>
-
-</div>
-
-</div>
-
-<!-- ================= POST ================= -->
-<div id="post" class="page">
-
-<div class="card">
-
-<h2>意見投稿</h2>
-
-<div class="tag" id="topic">未選択</div>
-
-<textarea id="text"></textarea>
-
-<button class="btn" onclick="submit()">AIで整理して投稿</button>
-
-<div id="result"></div>
-
-</div>
-
-</div>
-
-<!-- ================= ANALYSIS ================= -->
-<div id="analysis" class="page">
-
-<div class="card">
-
-<h2>分析（市民意見の集約）</h2>
-
-<div id="analysisBox"></div>
-
-</div>
-
-</div>
-
-<!-- ================= FLOW ================= -->
-<div id="flow" class="page">
-
-<div class="card">
-
-<h2>コンセプトの変遷</h2>
+<p class="small">
+コストセンターからプロフィットセンターへ：市民のウェルビーイングと知財の集積による投資型都市経営の実現
+</p>
 
 <hr>
 
-<h3>初期</h3>
-<div class="block">駅前＝公共施設（サービス提供型）</div>
+<div class="block" onclick="select('価値向上')">
+<b>1. 芦屋市の価値向上（ブランド・移住促進）</b>
+<br>
+次世代教育ブランドの確立<br>
+世界一の絵本図書館、EdTech企業連携<br>
+街の魅力化・景観美化<br>
+公園芝生化、市民協働
+</div>
 
-<h3>現在（市民意見反映後）</h3>
-<div class="block">駅前＝交流・教育・起業・防災の複合拠点</div>
+<div class="block" onclick="select('市民ベネフィット')">
+<b>2. 市民へのベネフィット（ウェルビーイング）</b>
+<br>
+多世代交流・サードプレイス<br>
+カフェ、コミュニティ運営<br>
+知的探究・スキルアップ<br>
+リスキリング、共同研究、コワーキング
+</div>
 
-<h3>進化後の解釈</h3>
-<div class="block">駅前＝都市価値を生み出す装置</div>
+<div class="block" onclick="select('財政')">
+<b>3. 財政的持続可能性</b>
+<br>
+施設の収益化<br>
+SHARE LOUNGE、チャレンジショップ<br>
+寄付・ふるさと納税<br>
+クラファン連動、成果連動型事業
+</div>
 
+<div class="block" onclick="select('戦略性')">
+<b>4. 施設の戦略性</b>
+<br>
+知のゲートウェイ化<br>
+デジタルライブラリ、ITサポート<br>
+イノベーション・起業支援<br>
+ピッチアリーナ、サンドボックス
+</div>
+
+<div class="block" onclick="select('ガバナンス')">
+<b>5. 都市の強靭性とガバナンス</b>
+<br>
+デュアルユース<br>
+災害シミュレーション、都市指令室<br>
+DAO型住民自治<br>
+投票、トークン設計
 </div>
 
 </div>
 
 </div>
-
-<script>
-
-let posts = [];
-let current = "";
-
-/* ナビ */
-function go(id){
-document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-document.getElementById(id).classList.add("active");
-render();
-}
-
-/* ツリー選択 */
-function select(t){
-current = t;
-document.getElementById("topic").innerText = t;
-go("post");
-}
-
-/* 投稿 */
-function submit(){
-
-let t = document.getElementById("text").value;
-if(!t) return;
-
-posts.push({topic:current,text:t});
-
-document.getElementById("result").innerHTML =
-`<div class="card">
-<div class="tag">${current}</div>
-<p>${t}</p>
-<p class="small">→ 分類されました</p>
-</div>`;
-}
-
-/* 分析 */
-function render(){
-
-let map={};
-
-posts.forEach(p=>{
-map[p.topic]=(map[p.topic]||0)+1;
-});
-
-let html="";
-
-for(let k in map){
-html+=`
-<div class="card">
-<div class="tag">${k}</div>
-<div class="metric">${map[k]}</div>
-</div>`;
-}
-
-document.getElementById("analysisBox").innerHTML =
-html || "<p>まだデータがありません</p>";
-}
-
-</script>
-
-</body>
-</html>
