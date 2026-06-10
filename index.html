@@ -1,4 +1,87 @@
-<!-- ================= TREE ================= -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>市民意見プラットフォーム</title>
+
+<style>
+
+body{
+margin:0;
+font-family:"Yu Gothic",sans-serif;
+background:#f4f6f8;
+}
+
+.topbar{
+background:#0a3a5a;
+padding:10px;
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+}
+
+.topbar button{
+background:white;
+color:#0a3a5a;
+border:none;
+padding:8px 12px;
+border-radius:6px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.container{
+max-width:1100px;
+margin:auto;
+padding:16px;
+}
+
+.card{
+background:white;
+padding:16px;
+border-radius:12px;
+margin-bottom:12px;
+box-shadow:0 2px 10px rgba(0,0,0,0.06);
+}
+
+.block{
+border-left:5px solid #0a3a5a;
+padding:12px;
+margin:10px 0;
+background:#f9fbfd;
+cursor:pointer;
+}
+
+.page{display:none;}
+.active{display:block;}
+
+.small{font-size:13px;color:#666;}
+
+</style>
+</head>
+
+<body>
+
+<div class="topbar">
+<button onclick="go('intro')">はじめに</button>
+<button onclick="go('tree')">ロジックツリー</button>
+<button onclick="go('post')">投稿</button>
+<button onclick="go('analysis')">分析</button>
+</div>
+
+<div class="container">
+
+<!-- INTRO -->
+<div id="intro" class="page active">
+<div class="card">
+<h2>市民意見プラットフォーム</h2>
+<p>駅前公共施設について自由に意見を出し、整理していく仕組みです。</p>
+<button onclick="go('tree')">ロジックツリーへ</button>
+</div>
+</div>
+
+<!-- TREE（ここが重要・完全表示保証） -->
 <div id="tree" class="page">
 
 <div class="card">
@@ -6,56 +89,102 @@
 <h2>市民政策ロジックツリー（Vision）</h2>
 
 <p class="small">
-コストセンターからプロフィットセンターへ：市民のウェルビーイングと知財の集積による投資型都市経営の実現
+コストセンターからプロフィットセンターへ
 </p>
 
 <hr>
 
 <div class="block" onclick="select('価値向上')">
-<b>1. 芦屋市の価値向上（ブランド・移住促進）</b>
-<br>
-次世代教育ブランドの確立<br>
-世界一の絵本図書館、EdTech企業連携<br>
-街の魅力化・景観美化<br>
-公園芝生化、市民協働
+<b>1. 芦屋市の価値向上</b><br>
+教育ブランド / 景観 / 公園 / 協働
 </div>
 
-<div class="block" onclick="select('市民ベネフィット')">
-<b>2. 市民へのベネフィット（ウェルビーイング）</b>
-<br>
-多世代交流・サードプレイス<br>
-カフェ、コミュニティ運営<br>
-知的探究・スキルアップ<br>
-リスキリング、共同研究、コワーキング
+<div class="block" onclick="select('ベネフィット')">
+<b>2. 市民へのベネフィット</b><br>
+交流 / カフェ / 学習 / コワーキング
 </div>
 
 <div class="block" onclick="select('財政')">
-<b>3. 財政的持続可能性</b>
-<br>
-施設の収益化<br>
-SHARE LOUNGE、チャレンジショップ<br>
-寄付・ふるさと納税<br>
-クラファン連動、成果連動型事業
+<b>3. 財政的持続可能性</b><br>
+収益化 / 寄付 / クラファン
 </div>
 
 <div class="block" onclick="select('戦略性')">
-<b>4. 施設の戦略性</b>
-<br>
-知のゲートウェイ化<br>
-デジタルライブラリ、ITサポート<br>
-イノベーション・起業支援<br>
-ピッチアリーナ、サンドボックス
+<b>4. 施設の戦略性</b><br>
+起業 / デジタル / ライブラリ
 </div>
 
 <div class="block" onclick="select('ガバナンス')">
-<b>5. 都市の強靭性とガバナンス</b>
-<br>
-デュアルユース<br>
-災害シミュレーション、都市指令室<br>
-DAO型住民自治<br>
-投票、トークン設計
+<b>5. 都市の強靭性</b><br>
+防災 / DAO / 住民自治
 </div>
 
 </div>
 
 </div>
+
+<!-- POST -->
+<div id="post" class="page">
+<div class="card">
+<h2>投稿</h2>
+<p id="topic">未選択</p>
+<textarea id="text"></textarea>
+<button onclick="submit()">送信</button>
+</div>
+</div>
+
+<!-- ANALYSIS -->
+<div id="analysis" class="page">
+<div class="card">
+<h2>分析</h2>
+<div id="box"></div>
+</div>
+</div>
+
+</div>
+
+<script>
+
+let current="";
+let posts=[];
+
+function go(id){
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+render();
+}
+
+function select(t){
+current=t;
+document.getElementById("topic").innerText=t;
+go("post");
+}
+
+function submit(){
+let t=document.getElementById("text").value;
+if(!t) return;
+
+posts.push({topic:current,text:t});
+go("analysis");
+}
+
+function render(){
+
+let map={};
+posts.forEach(p=>{
+map[p.topic]=(map[p.topic]||0)+1;
+});
+
+let html="";
+for(let k in map){
+html+=`<div class="card"><b>${k}</b><br>${map[k]}件</div>`;
+}
+
+document.getElementById("box").innerHTML=
+html||"まだ投稿なし";
+}
+
+</script>
+
+</body>
+</html>
