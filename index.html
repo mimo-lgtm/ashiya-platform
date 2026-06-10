@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>市民意見プラットフォーム</title>
+<title>駅前公共施設 市民意見プラットフォーム</title>
 
 <style>
 
@@ -32,7 +32,7 @@ cursor:pointer;
 }
 
 .container{
-max-width:1100px;
+max-width:1000px;
 margin:auto;
 padding:16px;
 }
@@ -56,6 +56,16 @@ cursor:pointer;
 .page{display:none;}
 .active{display:block;}
 
+.btn{
+background:#0a3a5a;
+color:white;
+border:none;
+padding:10px 14px;
+border-radius:8px;
+cursor:pointer;
+margin-top:10px;
+}
+
 .small{font-size:13px;color:#666;}
 
 </style>
@@ -63,82 +73,110 @@ cursor:pointer;
 
 <body>
 
+<!-- ナビ（最小・迷わない構造） -->
 <div class="topbar">
 <button onclick="go('intro')">はじめに</button>
-<button onclick="go('tree')">ロジックツリー</button>
-<button onclick="go('post')">投稿</button>
-<button onclick="go('analysis')">分析</button>
+<button onclick="go('tree')">論点を見る</button>
+<button onclick="go('post')">意見を書く</button>
+<button onclick="go('analysis')">整理を見る</button>
 </div>
 
 <div class="container">
 
-<!-- INTRO -->
+<!-- ================= INTRO ================= -->
 <div id="intro" class="page active">
-<div class="card">
-<h2>市民意見プラットフォーム</h2>
-<p>駅前公共施設について自由に意見を出し、整理していく仕組みです。</p>
-<button onclick="go('tree')">ロジックツリーへ</button>
-</div>
-</div>
-
-<!-- TREE（ここが重要・完全表示保証） -->
-<div id="tree" class="page">
 
 <div class="card">
 
-<h2>市民政策ロジックツリー（Vision）</h2>
+<h2>駅前公共施設について、あなたの意見を聞かせてください</h2>
 
-<p class="small">
-コストセンターからプロフィットセンターへ
+<p>
+これはアンケートではありません。<br>
+あなたの意見をもとに「駅前の未来の形」を整理していく仕組みです。
 </p>
 
 <hr>
 
-<div class="block" onclick="select('価値向上')">
-<b>1. 芦屋市の価値向上</b><br>
-教育ブランド / 景観 / 公園 / 協働
+<h3>この仕組みでできること</h3>
+
+<div class="block">✔ 思ったことをそのまま書ける</div>
+<div class="block">✔ AIが整理してわかりやすくする</div>
+<div class="block">✔ 意見が論点ごとにまとめられる</div>
+<div class="block">✔ 全体の考え方が見えるようになる</div>
+
+<hr>
+
+<button class="btn" onclick="go('tree')">
+まず論点（ロジックツリー）を見る
+</button>
+
 </div>
 
-<div class="block" onclick="select('ベネフィット')">
-<b>2. 市民へのベネフィット</b><br>
-交流 / カフェ / 学習 / コワーキング
+</div>
+
+<!-- ================= TREE ================= -->
+<div id="tree" class="page">
+
+<div class="card">
+
+<h2>論点整理（ロジックツリー）</h2>
+
+<p class="small">気になるところを押すと、そのまま意見を書けます</p>
+
+<div class="block" onclick="select('価値向上')">
+① 駅前の価値向上
+</div>
+
+<div class="block" onclick="select('市民交流')">
+② 市民の交流・暮らし
 </div>
 
 <div class="block" onclick="select('財政')">
-<b>3. 財政的持続可能性</b><br>
-収益化 / 寄付 / クラファン
+③ お金・運営の考え方
 </div>
 
-<div class="block" onclick="select('戦略性')">
-<b>4. 施設の戦略性</b><br>
-起業 / デジタル / ライブラリ
+<div class="block" onclick="select('施設機能')">
+④ 施設の役割
 </div>
 
-<div class="block" onclick="select('ガバナンス')">
-<b>5. 都市の強靭性</b><br>
-防災 / DAO / 住民自治
+<div class="block" onclick="select('未来像')">
+⑤ 駅前の未来像
 </div>
 
 </div>
 
 </div>
 
-<!-- POST -->
+<!-- ================= POST ================= -->
 <div id="post" class="page">
+
 <div class="card">
-<h2>投稿</h2>
+
+<h2>あなたの意見を書く</h2>
+
 <p id="topic">未選択</p>
+
 <textarea id="text"></textarea>
-<button onclick="submit()">送信</button>
-</div>
+
+<button class="btn" onclick="submit()">この内容を送る</button>
+
+<div id="result"></div>
+
 </div>
 
-<!-- ANALYSIS -->
-<div id="analysis" class="page">
-<div class="card">
-<h2>分析</h2>
-<div id="box"></div>
 </div>
+
+<!-- ================= ANALYSIS ================= -->
+<div id="analysis" class="page">
+
+<div class="card">
+
+<h2>整理された意見</h2>
+
+<div id="box"></div>
+
+</div>
+
 </div>
 
 </div>
@@ -148,40 +186,53 @@ cursor:pointer;
 let current="";
 let posts=[];
 
+/* navigation */
 function go(id){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
 document.getElementById(id).classList.add("active");
 render();
 }
 
+/* select tree */
 function select(t){
 current=t;
 document.getElementById("topic").innerText=t;
 go("post");
 }
 
+/* submit */
 function submit(){
 let t=document.getElementById("text").value;
 if(!t) return;
 
 posts.push({topic:current,text:t});
+
+document.getElementById("result").innerHTML=
+"<div class='card'>送信しました（仮整理）</div>";
+
 go("analysis");
 }
 
+/* render */
 function render(){
 
 let map={};
+
 posts.forEach(p=>{
 map[p.topic]=(map[p.topic]||0)+1;
 });
 
 let html="";
 for(let k in map){
-html+=`<div class="card"><b>${k}</b><br>${map[k]}件</div>`;
+html+=`
+<div class="card">
+<b>${k}</b><br>
+${map[k]}件の意見
+</div>`;
 }
 
 document.getElementById("box").innerHTML=
-html||"まだ投稿なし";
+html || "<p>まだ意見はありません</p>";
 }
 
 </script>
