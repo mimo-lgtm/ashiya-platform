@@ -3,17 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>駅前公共施設 市民対話プラットフォーム</title>
+<title>駅前公共施設 市民参加OS（デモ版）</title>
 
 <style>
 
 body{
 margin:0;
 font-family:"Yu Gothic","Hiragino Kaku Gothic ProN",sans-serif;
-background:#f5f7f9;
+background:#f4f6f8;
 color:#1b1f23;
 }
 
+/* 上部ナビ */
 .topbar{
 background:#0a3a5a;
 color:white;
@@ -30,6 +31,7 @@ border-radius:6px;
 cursor:pointer;
 }
 
+/* レイアウト */
 .container{
 max-width:1000px;
 margin:0 auto;
@@ -81,25 +83,25 @@ border-radius:12px;
 font-size:12px;
 }
 
+/* モード */
 .page{display:none;}
 .active{display:block;}
 
-.small{font-size:13px;color:#555;}
+.small{font-size:13px;color:#666;}
 
 </style>
-
 </head>
 
 <body>
 
-<!-- ■モード切替 -->
+<!-- ■ナビ -->
 <div class="topbar">
 
-<button onclick="showMode('guide')">はじめて</button>
-<button onclick="showMode('tree')">ロジックツリー</button>
-<button onclick="showMode('post')">自由投稿</button>
-<button onclick="showMode('analysis')">分析</button>
-<button onclick="showMode('overview')">全体像</button>
+<button onclick="mode('guide')">はじめに</button>
+<button onclick="mode('tree')">ロジックツリー</button>
+<button onclick="mode('post')">自由投稿</button>
+<button onclick="mode('analysis')">分析</button>
+<button onclick="mode('overview')">全体像</button>
 
 </div>
 
@@ -110,11 +112,11 @@ font-size:12px;
 
 <div class="card">
 
-<h2>駅前公共施設を一緒に考える場所です</h2>
+<h2>駅前公共施設を、みんなで考える場所です</h2>
 
 <p>
-ここは「意見を集めるだけの場所」ではありません。<br>
-あなたの考えをAIが整理し、他の意見とつなげていきます。
+ここは意見を集めるだけではなく、<br>
+あなたの考えをAIが整理し、構造化していく仕組みです。
 </p>
 
 <div class="card" style="background:#f9fbfd">
@@ -122,21 +124,21 @@ font-size:12px;
 <h3>できること</h3>
 
 <ul>
-<li>自由に意見を書けます</li>
-<li>AIが整理してわかりやすくします</li>
-<li>意見はテーマごとにまとまります</li>
-<li>ロジックツリーに反映されます</li>
+<li>自由に意見を書ける</li>
+<li>AIが要約・整理</li>
+<li>ロジックツリーに反映</li>
+<li>意見が分析される</li>
 </ul>
 
 </div>
 
-<h3>まず試す</h3>
+<h3>まずは試す</h3>
 
-<textarea id="guideInput" placeholder="思ったことをそのまま書いてください"></textarea>
+<textarea id="input"></textarea>
 
-<button class="btn" onclick="guideAI()">AIで整理する</button>
+<button class="btn" onclick="callAI()">AIで整理する</button>
 
-<div id="guideResult"></div>
+<div id="ai"></div>
 
 </div>
 
@@ -149,13 +151,11 @@ font-size:12px;
 
 <h2>ロジックツリー</h2>
 
-<p class="small">気になるテーマをクリック</p>
-
-<div class="block" onclick="selectTopic('価値向上')">① 駅前の価値向上</div>
-<div class="block" onclick="selectTopic('利用者')">② 誰のための施設か</div>
-<div class="block" onclick="selectTopic('お金')">③ お金の仕組み</div>
-<div class="block" onclick="selectTopic('役割')">④ 施設の役割</div>
-<div class="block" onclick="selectTopic('未来')">⑤ 未来の駅前</div>
+<div class="block" onclick="setTopic('価値')">駅前の価値向上</div>
+<div class="block" onclick="setTopic('利用者')">利用者の考え方</div>
+<div class="block" onclick="setTopic('財政')">財政と運営</div>
+<div class="block" onclick="setTopic('機能')">施設の機能</div>
+<div class="block" onclick="setTopic('未来')">未来の駅前</div>
 
 </div>
 
@@ -166,15 +166,15 @@ font-size:12px;
 
 <div class="card">
 
-<h2>自由投稿</h2>
+<h2>意見投稿</h2>
 
-<div id="selectedTopic" class="tag"></div>
+<div class="tag" id="topicLabel"></div>
 
-<textarea id="postInput"></textarea>
+<textarea id="postText"></textarea>
 
-<button class="btn" onclick="postAI()">AIで整理</button>
+<button class="btn" onclick="submitAI()">AIで整理して投稿</button>
 
-<div id="postResult"></div>
+<div id="result"></div>
 
 </div>
 
@@ -198,7 +198,7 @@ font-size:12px;
 
 <div class="card">
 
-<h2>全体像（市民意見の流れ）</h2>
+<h2>全体像</h2>
 
 <div id="overviewBox"></div>
 
@@ -210,133 +210,149 @@ font-size:12px;
 
 <script>
 
-/* ================= データ ================= */
+/* ===================== API KEY ===================== */
+// ★ここにGemini APIキーを入れるだけで動作
+const API_KEY = "YOUR_API_KEY_HERE";
+
+/* ===================== STATE ===================== */
 
 let posts = [];
-
 let currentTopic = "";
 
-/* ================= モード切替 ================= */
+/* ===================== MODE ===================== */
 
-function showMode(mode){
+function mode(m){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-document.getElementById(mode).classList.add("active");
-
-if(mode==="analysis") renderAnalysis();
-if(mode==="overview") renderOverview();
+document.getElementById(m).classList.add("active");
+render();
 }
 
-/* ================= ガイドAI ================= */
+/* ===================== AI CALL ===================== */
 
-function guideAI(){
+async function callAI(){
 
-let text = document.getElementById("guideInput").value;
+let text = document.getElementById("input").value;
 if(!text) return;
 
-document.getElementById("guideResult").innerHTML = `
-<div class="card">
+let res = await gemini(text);
 
-<div class="tag">AI整理</div>
-
-<p>${text}</p>
-
-<p><b>要約：</b>駅前をもっと使いやすくしたいという意見です。</p>
-
-<p><b>問い：</b>誰のための場所にしたいですか？</p>
-
-</div>
-`;
+document.getElementById("ai").innerHTML =
+renderAI(text,res);
 }
 
-/* ================= トピック選択 ================= */
+/* ===================== GEMINI ===================== */
 
-function selectTopic(t){
+async function gemini(text){
 
-currentTopic = t;
-
-document.getElementById("selectedTopic").innerText = t;
-
-showMode("post");
-}
-
-/* ================= 投稿 ================= */
-
-function postAI(){
-
-let text = document.getElementById("postInput").value;
-if(!text) return;
-
-let post = {
-topic: currentTopic,
-text: text
+if(API_KEY==="YOUR_API_KEY_HERE"){
+return {
+summary:"（APIキー未設定のためダミー出力）",
+question:"誰のための駅前にしたいですか？",
+tag:"未分類"
 };
-
-posts.push(post);
-
-document.getElementById("postResult").innerHTML = `
-<div class="card">
-
-<div class="tag">AI整理</div>
-
-<p>${text}</p>
-
-<p><b>分類：</b>${currentTopic}</p>
-
-<p><b>AIコメント：</b>この意見は今後ツリーに統合される可能性があります。</p>
-
-</div>
-`;
 }
 
-/* ================= 分析 ================= */
+const res = await fetch(
+"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + API_KEY,
+{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+contents:[{parts:[{text:
+"次の意見を要約し、タグ分類し、問い返しを作ってください:\n" + text
+}]}]
+})
+}
+);
 
-function renderAnalysis(){
+const data = await res.json();
 
-let map = {};
+let out = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
 
-posts.forEach(p=>{
-map[p.topic] = (map[p.topic]||0)+1;
+return {
+summary:out,
+question:"この意見の優先対象は誰ですか？",
+tag:"AI分類"
+};
+}
+
+/* ===================== POST ===================== */
+
+async function submitAI(){
+
+let text = document.getElementById("postText").value;
+if(!text) return;
+
+let ai = await gemini(text);
+
+posts.push({
+topic:currentTopic,
+text:text,
+ai:ai
 });
 
-let html = "";
-
-for(let k in map){
-html += `
+document.getElementById("result").innerHTML = `
 <div class="card">
-<div class="tag">${k}</div>
-<p>投稿数：${map[k]}</p>
+
+<div class="tag">${ai.tag}</div>
+
+<p>${ai.summary}</p>
+
+<p><b>問い：</b>${ai.question}</p>
+
+<p class="small">ロジックツリーに反映されます（デモ）</p>
+
 </div>
 `;
 }
 
-if(html===""){
-html = "<p>まだデータがありません</p>";
+/* ===================== SET TOPIC ===================== */
+
+function setTopic(t){
+currentTopic = t;
+document.getElementById("topicLabel").innerText = t;
+mode("post");
+}
+
+/* ===================== ANALYSIS ===================== */
+
+function render(){
+
+if(posts.length===0){
+document.getElementById("analysisBox").innerHTML =
+"<p>まだデータがありません</p>";
+document.getElementById("overviewBox").innerHTML =
+"<p>まだ投稿がありません</p>";
+return;
+}
+
+let map={};
+
+posts.forEach(p=>{
+map[p.topic]=(map[p.topic]||0)+1;
+});
+
+let html="";
+
+for(let k in map){
+html += `<div class="card"><b>${k}</b><br>投稿:${map[k]}</div>`;
 }
 
 document.getElementById("analysisBox").innerHTML = html;
-}
 
-/* ================= 全体像 ================= */
-
-function renderOverview(){
-
-let html = "";
-
-posts.forEach((p,i)=>{
-html += `
+document.getElementById("overviewBox").innerHTML =
+posts.map(p=>`
 <div class="card">
 <div class="tag">${p.topic}</div>
 <p>${p.text}</p>
+<p class="small">${p.ai.summary}</p>
 </div>
-`;
-});
-
-if(html===""){
-html = "<p>まだ投稿がありません</p>";
+`).join("");
 }
 
-document.getElementById("overviewBox").innerHTML = html;
-}
+/* ===================== UI ===================== */
+
+function render(){}
 
 </script>
 
