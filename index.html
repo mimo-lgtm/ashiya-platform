@@ -12,16 +12,14 @@ margin:0;
 font-family:"Yu Gothic","Hiragino Kaku Gothic ProN",sans-serif;
 background:#f5f7f9;
 color:#1b1f23;
-line-height:1.8;
 }
 
-/* 上部バー */
 .topbar{
 background:#0a3a5a;
 color:white;
-padding:10px 14px;
+padding:10px;
 display:flex;
-gap:10px;
+gap:8px;
 flex-wrap:wrap;
 }
 
@@ -30,17 +28,14 @@ padding:8px 12px;
 border:none;
 border-radius:6px;
 cursor:pointer;
-font-size:13px;
 }
 
-/* レイアウト */
 .container{
-max-width:900px;
+max-width:1000px;
 margin:0 auto;
 padding:16px;
 }
 
-/* カード */
 .card{
 background:white;
 border-radius:10px;
@@ -49,23 +44,24 @@ margin-bottom:12px;
 box-shadow:0 2px 10px rgba(0,0,0,0.06);
 }
 
-/* 論点ブロック */
 .block{
 border-left:5px solid #0a3a5a;
 padding:12px;
-margin:10px 0;
-background:#f9fbfd;
+margin:8px 0;
 cursor:pointer;
+background:#f9fbfd;
 }
 
-.block:hover{
-background:#eef5ff;
+.block:hover{background:#eef5ff;}
+
+textarea{
+width:100%;
+height:110px;
+padding:10px;
+border:1px solid #ccc;
+border-radius:6px;
 }
 
-/* 隠し */
-.hidden{display:none;}
-
-/* ボタン */
 .btn{
 background:#0a3a5a;
 color:white;
@@ -76,16 +72,6 @@ cursor:pointer;
 margin-top:10px;
 }
 
-/* 入力 */
-textarea{
-width:100%;
-height:110px;
-padding:10px;
-border-radius:6px;
-border:1px solid #ccd6e0;
-}
-
-/* タグ */
 .tag{
 display:inline-block;
 background:#0a3a5a;
@@ -93,8 +79,12 @@ color:white;
 padding:3px 8px;
 border-radius:12px;
 font-size:12px;
-margin-bottom:8px;
 }
+
+.page{display:none;}
+.active{display:block;}
+
+.small{font-size:13px;color:#555;}
 
 </style>
 
@@ -102,75 +92,117 @@ margin-bottom:8px;
 
 <body>
 
-<!-- ★上部コントロール -->
+<!-- ■モード切替 -->
 <div class="topbar">
 
-<button onclick="startFlow()">▶ スタート</button>
-<button onclick="resetFlow()">↺ リセット</button>
+<button onclick="showMode('guide')">はじめて</button>
+<button onclick="showMode('tree')">ロジックツリー</button>
+<button onclick="showMode('post')">自由投稿</button>
+<button onclick="showMode('analysis')">分析</button>
+<button onclick="showMode('overview')">全体像</button>
 
 </div>
 
 <div class="container">
 
-<!-- ================= STEP 1 ================= -->
-<div class="card" id="step1">
+<!-- ================= GUIDE ================= -->
+<div id="guide" class="page active">
 
-<h3>① 駅前公共施設について考えよう</h3>
+<div class="card">
+
+<h2>駅前公共施設を一緒に考える場所です</h2>
 
 <p>
-駅前公共施設をどうすればよいか、論点を見ながら一緒に考えます。
-気になるものを選んでください。
+ここは「意見を集めるだけの場所」ではありません。<br>
+あなたの考えをAIが整理し、他の意見とつなげていきます。
 </p>
 
-<div class="block" onclick="openTopic('value')">
-駅前の価値をどう高めるか
-</div>
+<div class="card" style="background:#f9fbfd">
 
-<div class="block" onclick="openTopic('people')">
-誰のための場所にするか
-</div>
+<h3>できること</h3>
 
-<div class="block" onclick="openTopic('money')">
-お金の仕組みをどうするか
-</div>
-
-<div class="block" onclick="openTopic('role')">
-どんな役割を持たせるか
-</div>
-
-<div class="block" onclick="openTopic('future')">
-これからの駅前の形
-</div>
+<ul>
+<li>自由に意見を書けます</li>
+<li>AIが整理してわかりやすくします</li>
+<li>意見はテーマごとにまとまります</li>
+<li>ロジックツリーに反映されます</li>
+</ul>
 
 </div>
 
-<!-- ================= STEP 2 ================= -->
-<div class="card hidden" id="step2">
+<h3>まず試す</h3>
 
-<h3>② この論点の説明</h3>
+<textarea id="guideInput" placeholder="思ったことをそのまま書いてください"></textarea>
 
-<div class="tag" id="topicTitle"></div>
+<button class="btn" onclick="guideAI()">AIで整理する</button>
 
-<p id="topicText"></p>
-
-<button class="btn" onclick="goToInput()">
-このテーマについて意見を書く
-</button>
+<div id="guideResult"></div>
 
 </div>
 
-<!-- ================= STEP 3 ================= -->
-<div class="card hidden" id="step3">
+</div>
 
-<h3>③ あなたの意見</h3>
+<!-- ================= TREE ================= -->
+<div id="tree" class="page">
 
-<div class="tag" id="selectedTopic"></div>
+<div class="card">
 
-<textarea id="input"></textarea>
+<h2>ロジックツリー</h2>
 
-<button class="btn" onclick="runAI()">AIで整理する</button>
+<p class="small">気になるテーマをクリック</p>
 
-<div id="aiResult"></div>
+<div class="block" onclick="selectTopic('価値向上')">① 駅前の価値向上</div>
+<div class="block" onclick="selectTopic('利用者')">② 誰のための施設か</div>
+<div class="block" onclick="selectTopic('お金')">③ お金の仕組み</div>
+<div class="block" onclick="selectTopic('役割')">④ 施設の役割</div>
+<div class="block" onclick="selectTopic('未来')">⑤ 未来の駅前</div>
+
+</div>
+
+</div>
+
+<!-- ================= POST ================= -->
+<div id="post" class="page">
+
+<div class="card">
+
+<h2>自由投稿</h2>
+
+<div id="selectedTopic" class="tag"></div>
+
+<textarea id="postInput"></textarea>
+
+<button class="btn" onclick="postAI()">AIで整理</button>
+
+<div id="postResult"></div>
+
+</div>
+
+</div>
+
+<!-- ================= ANALYSIS ================= -->
+<div id="analysis" class="page">
+
+<div class="card">
+
+<h2>分析</h2>
+
+<div id="analysisBox"></div>
+
+</div>
+
+</div>
+
+<!-- ================= OVERVIEW ================= -->
+<div id="overview" class="page">
+
+<div class="card">
+
+<h2>全体像（市民意見の流れ）</h2>
+
+<div id="overviewBox"></div>
+
+</div>
 
 </div>
 
@@ -178,92 +210,132 @@ margin-bottom:8px;
 
 <script>
 
-let current = "";
+/* ================= データ ================= */
 
-/* ===== 論点データ ===== */
-const topics = {
+let posts = [];
 
-value:{
-title:"駅前の価値",
-text:"駅前を単なる通過点ではなく、人が集まり体験が生まれる場所にするかどうかを考えます。"
-},
+let currentTopic = "";
 
-people:{
-title:"誰のため",
-text:"子ども・高齢者・学生・働く人など、誰にとって使いやすい場所にするかを考えます。"
-},
+/* ================= モード切替 ================= */
 
-money:{
-title:"お金の仕組み",
-text:"施設を維持するための収益や支援の仕組みをどうするかを考えます。"
-},
+function showMode(mode){
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+document.getElementById(mode).classList.add("active");
 
-role:{
-title:"役割",
-text:"交流・学び・防災・観光など、駅前の機能をどうするかを考えます。"
-},
-
-future:{
-title:"未来",
-text:"10年後の駅前のあるべき姿を考えます。"
+if(mode==="analysis") renderAnalysis();
+if(mode==="overview") renderOverview();
 }
 
-};
+/* ================= ガイドAI ================= */
 
-/* ===== スタート ===== */
-function startFlow(){
-document.getElementById("step1").scrollIntoView({behavior:"smooth"});
-}
+function guideAI(){
 
-/* ===== リセット ===== */
-function resetFlow(){
-location.reload();
-}
-
-/* ===== 論点クリック ===== */
-function openTopic(id){
-
-current = id;
-
-document.getElementById("topicTitle").innerText = topics[id].title;
-document.getElementById("topicText").innerText = topics[id].text;
-
-document.getElementById("step2").classList.remove("hidden");
-document.getElementById("step2").scrollIntoView({behavior:"smooth"});
-}
-
-/* ===== 投稿へ ===== */
-function goToInput(){
-
-document.getElementById("selectedTopic").innerText =
-topics[current].title;
-
-document.getElementById("step3").classList.remove("hidden");
-document.getElementById("step3").scrollIntoView({behavior:"smooth"});
-}
-
-/* ===== AI ===== */
-function runAI(){
-
-let text = document.getElementById("input").value;
+let text = document.getElementById("guideInput").value;
 if(!text) return;
 
-document.getElementById("aiResult").innerHTML = `
+document.getElementById("guideResult").innerHTML = `
 <div class="card">
 
 <div class="tag">AI整理</div>
 
-<p><b>あなたの意見：</b></p>
 <p>${text}</p>
 
-<hr>
+<p><b>要約：</b>駅前をもっと使いやすくしたいという意見です。</p>
 
-<p><b>AIの質問：</b>この意見は誰のための駅前ですか？</p>
-
-<p><b>AIの指摘：</b>もう少し具体化すると、他の人にも伝わりやすくなります。</p>
+<p><b>問い：</b>誰のための場所にしたいですか？</p>
 
 </div>
 `;
+}
+
+/* ================= トピック選択 ================= */
+
+function selectTopic(t){
+
+currentTopic = t;
+
+document.getElementById("selectedTopic").innerText = t;
+
+showMode("post");
+}
+
+/* ================= 投稿 ================= */
+
+function postAI(){
+
+let text = document.getElementById("postInput").value;
+if(!text) return;
+
+let post = {
+topic: currentTopic,
+text: text
+};
+
+posts.push(post);
+
+document.getElementById("postResult").innerHTML = `
+<div class="card">
+
+<div class="tag">AI整理</div>
+
+<p>${text}</p>
+
+<p><b>分類：</b>${currentTopic}</p>
+
+<p><b>AIコメント：</b>この意見は今後ツリーに統合される可能性があります。</p>
+
+</div>
+`;
+}
+
+/* ================= 分析 ================= */
+
+function renderAnalysis(){
+
+let map = {};
+
+posts.forEach(p=>{
+map[p.topic] = (map[p.topic]||0)+1;
+});
+
+let html = "";
+
+for(let k in map){
+html += `
+<div class="card">
+<div class="tag">${k}</div>
+<p>投稿数：${map[k]}</p>
+</div>
+`;
+}
+
+if(html===""){
+html = "<p>まだデータがありません</p>";
+}
+
+document.getElementById("analysisBox").innerHTML = html;
+}
+
+/* ================= 全体像 ================= */
+
+function renderOverview(){
+
+let html = "";
+
+posts.forEach((p,i)=>{
+html += `
+<div class="card">
+<div class="tag">${p.topic}</div>
+<p>${p.text}</p>
+</div>
+`;
+});
+
+if(html===""){
+html = "<p>まだ投稿がありません</p>";
+}
+
+document.getElementById("overviewBox").innerHTML = html;
 }
 
 </script>
