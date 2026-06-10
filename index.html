@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>駅前公共施設 市民対話プラットフォーム</title>
+<title>駅前公共施設 市民対話フロー</title>
 
 <style>
 
 body{
 margin:0;
 font-family:"Yu Gothic","Hiragino Kaku Gothic ProN",sans-serif;
-background:#f4f6f8;
+background:#f5f7f9;
 color:#1b1f23;
 line-height:1.8;
 }
@@ -18,69 +18,52 @@ line-height:1.8;
 header{
 background:#0a3a5a;
 color:white;
-padding:22px;
-font-size:20px;
+padding:18px 20px;
+font-size:18px;
 font-weight:700;
 }
 
 .sub{
 background:#eaf2f8;
-padding:12px 22px;
+padding:12px 20px;
 font-size:14px;
 }
 
-/* layout */
+/* container */
 
 .container{
-max-width:1000px;
+max-width:900px;
 margin:0 auto;
-padding:18px;
+padding:16px;
 }
-
-nav{
-display:flex;
-gap:8px;
-flex-wrap:wrap;
-margin-bottom:14px;
-}
-
-nav button{
-padding:10px 12px;
-border:1px solid #cfd8e3;
-background:white;
-border-radius:6px;
-cursor:pointer;
-font-size:13px;
-}
-
-/* pages */
-
-.page{display:none;}
-.active{display:block;}
 
 /* cards */
 
 .card{
 background:white;
-padding:18px;
 border-radius:10px;
+padding:16px;
+margin-bottom:12px;
 box-shadow:0 2px 10px rgba(0,0,0,0.06);
-margin-bottom:14px;
 }
 
-/* tree */
+/* flow blocks */
 
-.node{
-background:#f9fbfd;
+.block{
 border-left:5px solid #0a3a5a;
 padding:12px;
 margin:10px 0;
+background:#f9fbfd;
 cursor:pointer;
 }
 
-.node:hover{
+.block:hover{
 background:#eef5ff;
 }
+
+/* hidden sections */
+
+.hidden{display:none;}
 
 /* buttons */
 
@@ -94,15 +77,17 @@ cursor:pointer;
 margin-top:10px;
 }
 
+/* textarea */
+
 textarea{
 width:100%;
-height:120px;
-padding:12px;
-border:1px solid #cfd8e3;
+height:110px;
+padding:10px;
 border-radius:6px;
+border:1px solid #ccd6e0;
 }
 
-/* tags */
+/* tag */
 
 .tag{
 display:inline-block;
@@ -121,89 +106,70 @@ margin-bottom:8px;
 <body>
 
 <header>
-駅前公共施設 市民対話プラットフォーム
+駅前公共施設 市民対話プラットフォーム（迷子ゼロ版）
 </header>
 
 <div class="sub">
-駅前公共施設を、もっと良くするために。あなたの意見を聞かせてください。
-まだ考えがまとまっていなくても大丈夫です。AIと一緒に整理できます。
+駅前公共施設をどうすればよいか、一緒に考えましょう。
+考えがまとまっていなくても大丈夫です。AIが整理します。
 </div>
 
 <div class="container">
 
-<!-- ================= HOME ================= -->
-<div id="home" class="page active">
+<!-- ================= STEP 1 ================= -->
+<div class="card" id="step1">
 
-<div class="card">
+<h3>① まず論点を見てみましょう</h3>
 
-<h3>まずは論点を見てみましょう</h3>
-
-<p>
-駅前公共施設について、どんな論点があるのかを整理しています。
-気になる項目をクリックしてください。
-</p>
-
+<div class="block" onclick="openTopic('value')">
+駅前の価値をどう高めるか
 </div>
 
-<div class="card">
-
-<div class="node" onclick="openTopic('value')">
-① 駅前の価値をどう高めるか
+<div class="block" onclick="openTopic('people')">
+誰のための場所にするか
 </div>
 
-<div class="node" onclick="openTopic('benefit')">
-② だれのための場所にするか
+<div class="block" onclick="openTopic('money')">
+お金の仕組みをどうするか
 </div>
 
-<div class="node" onclick="openTopic('money')">
-③ お金の仕組みをどうするか
+<div class="block" onclick="openTopic('role')">
+どんな役割を持たせるか
 </div>
 
-<div class="node" onclick="openTopic('role')">
-④ どんな役割を持たせるか
-</div>
-
-<div class="node" onclick="openTopic('future')">
-⑤ これからの駅前の形
+<div class="block" onclick="openTopic('future')">
+これからの駅前の形
 </div>
 
 </div>
 
-</div>
+<!-- ================= STEP 2 ================= -->
+<div class="card hidden" id="step2">
 
-<!-- ================= TOPIC ================= -->
-<div id="topic" class="page">
+<h3>② 論点の説明</h3>
 
-<div class="card">
+<div class="tag" id="topicTitle"></div>
 
-<h3 id="topicTitle"></h3>
+<p id="topicText"></p>
 
-<div id="topicSummary"></div>
-
-<button class="btn" onclick="goToPost()">
+<button class="btn" onclick="goToInput()">
 このテーマについて意見を書く
 </button>
 
 </div>
 
-</div>
+<!-- ================= STEP 3 ================= -->
+<div class="card hidden" id="step3">
 
-<!-- ================= POST ================= -->
-<div id="post" class="page">
+<h3>③ あなたの意見</h3>
 
-<div class="card">
-
-<h3>あなたの意見を教えてください</h3>
-
-<div id="selectedTopic" class="tag"></div>
+<div class="tag" id="selectedTopic"></div>
 
 <textarea id="input"></textarea>
 
-<button class="btn" onclick="runAI()">AIと整理する</button>
+<button class="btn" onclick="runAI()">AIで整理する</button>
 
-<div id="result"></div>
-
-</div>
+<div id="aiResult"></div>
 
 </div>
 
@@ -211,88 +177,83 @@ margin-bottom:8px;
 
 <script>
 
-let currentTopic = "";
+let current = "";
 
-/* ================= TOPIC DATA ================= */
+/* ================= TOPICS ================= */
 
 const topics = {
 
 value:{
-title:"① 駅前の価値をどう高めるか",
-summary:"駅前を単なる通過点ではなく、魅力や体験が生まれる場所にするかどうかを考えるテーマです。"
+title:"駅前の価値",
+text:"駅前を単なる通過点ではなく、人が集まり体験が生まれる場所にするかどうかを考えるテーマです。"
 },
 
-benefit:{
-title:"② だれのための場所にするか",
-summary:"子ども・高齢者・学生・働く人など、どんな人にとって使いやすい場所にするかを考えるテーマです。"
+people:{
+title:"利用者",
+text:"子ども・高齢者・学生・働く人など、誰にとって使いやすい場所にするかを考えます。"
 },
 
 money:{
-title:"③ お金の仕組みをどうするか",
-summary:"公共施設を維持するための収益や支援の仕組みをどう作るかを考えるテーマです。"
+title:"お金",
+text:"施設を維持するための収益構造や支援の仕組みをどうするかを考えます。"
 },
 
 role:{
-title:"④ どんな役割を持たせるか",
-summary:"交流・学び・観光・防災など、駅前施設の機能をどう設計するかを考えるテーマです。"
+title:"役割",
+text:"交流・学び・防災・観光など、駅前の機能をどうするかを考えます。"
 },
 
 future:{
-title:"⑤ これからの駅前の形",
-summary:"10年後・20年後の駅前がどうあるべきかという長期的な視点のテーマです。"
+title:"未来",
+text:"10年後の駅前がどうあるべきかを考える長期テーマです。"
 }
 
 };
 
-/* ================= NAV ================= */
-
-function show(id){
-document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-document.getElementById(id).classList.add("active");
-}
-
-/* ================= TOPIC OPEN ================= */
+/* ================= STEP1 → STEP2 ================= */
 
 function openTopic(id){
 
-currentTopic = id;
+current = id;
 
 document.getElementById("topicTitle").innerText = topics[id].title;
-document.getElementById("topicSummary").innerText = topics[id].summary;
+document.getElementById("topicText").innerText = topics[id].text;
 
-show("topic");
+document.getElementById("step2").classList.remove("hidden");
+document.getElementById("step2").scrollIntoView({behavior:"smooth"});
 }
 
-/* ================= GO TO POST ================= */
+/* ================= STEP2 → STEP3 ================= */
 
-function goToPost(){
+function goToInput(){
 
 document.getElementById("selectedTopic").innerText =
-topics[currentTopic].title;
+topics[current].title;
 
-show("post");
+document.getElementById("step3").classList.remove("hidden");
+document.getElementById("step3").scrollIntoView({behavior:"smooth"});
 }
 
-/* ================= AI (simple mock) ================= */
+/* ================= AI ================= */
 
 function runAI(){
 
 let text = document.getElementById("input").value;
 if(!text) return;
 
-document.getElementById("result").innerHTML = `
+document.getElementById("aiResult").innerHTML = `
 <div class="card">
 
-<div class="tag">AIの整理</div>
+<div class="tag">AI整理</div>
 
-<p>あなたの意見：</p>
+<p><b>あなたの意見：</b></p>
 <p>${text}</p>
 
 <hr>
 
-<p><b>AIの質問：</b>この意見は、誰のための駅前に一番近いですか？</p>
+<p><b>AIの質問：</b>この考えは誰に一番メリットがありますか？</p>
 
-<p><b>AIの指摘：</b>もう少し具体的にすると、他の人にも伝わりやすくなります。</p>
+<p><b>AIの指摘：</b>もう少し具体化すると、他の人にも伝わりやすくなります。</p>
 
 </div>
 `;
