@@ -3,57 +3,82 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>政策OS プロトタイプ</title>
+<title>政策OS 完全版</title>
 
 <style>
-body{font-family:"Yu Gothic";margin:0;background:#f4f6f8;}
+body{margin:0;font-family:"Yu Gothic";background:#f4f6f8;}
 header{background:#1a73e8;color:white;padding:18px;font-size:22px;font-weight:bold;}
-nav{display:flex;gap:10px;padding:10px;background:white;}
+
+nav{display:flex;gap:8px;padding:10px;background:white;overflow:auto;}
 nav button{padding:10px;border:none;border-radius:8px;background:#eef5ff;cursor:pointer;}
+
 .page{display:none;padding:15px;}
 .active{display:block;}
-.card{background:white;padding:16px;border-radius:12px;margin-bottom:12px;}
-.node{padding:10px;border-left:5px solid #1a73e8;background:#f8fbff;margin:6px 0;}
-.btn{padding:10px;width:100%;background:#1a73e8;color:white;border:none;border-radius:8px;margin-top:8px;}
+
+.card{
+background:white;padding:16px;border-radius:12px;margin-bottom:12px;
+box-shadow:0 2px 6px rgba(0,0,0,0.08);
+}
+
+.node{
+background:#f8fbff;
+border-left:5px solid #1a73e8;
+padding:10px;
+margin:6px 0;
+cursor:pointer;
+}
+
+.small{font-size:12px;color:#666;}
+
+.btn{
+padding:10px;width:100%;border:none;border-radius:8px;
+background:#1a73e8;color:white;margin-top:8px;
+}
+
+.tag{display:inline-block;background:#1a73e8;color:white;padding:3px 8px;border-radius:12px;font-size:12px;margin-bottom:6px;}
 </style>
+
 </head>
 
 <body>
 
-<header>
-政策OS（市民参加型AI統合プラットフォーム）
-</header>
+<header>政策OS（完全UI復元版）</header>
 
 <nav>
-<button onclick="show('home')">HOME</button>
 <button onclick="show('tree')">ロジックツリー</button>
 <button onclick="show('dialog')">AI壁打ち</button>
 <button onclick="show('pr')">Pull Requests</button>
-<button onclick="show('dashboard')">分析</button>
+<button onclick="show('analysis')">分析</button>
+<button onclick="show('concept')">コンセプト</button>
 </nav>
 
-<!-- HOME -->
-<div id="home" class="page active">
+<!-- ================= TREE ================= -->
+<div id="tree" class="page active">
+
 <div class="card">
-<h2>市民の声を政策へ変換</h2>
-<p>AIと連動した政策統合OS</p>
+<h2>ロジックツリー（詳細）</h2>
+
+<div class="node" onclick="selectTheme('教育・都市ブランド')">
+① 教育・都市ブランド
+<div class="small">教育・文化・都市価値の向上（芦屋ブランド戦略）</div>
+</div>
+
+<div class="node" onclick="selectTheme('市民交流')">
+② 市民交流
+<div class="small">世代間交流・コミュニティ形成・居場所づくり</div>
+</div>
+
+<div class="node" onclick="selectTheme('防災・レジリエンス')">
+③ 防災・レジリエンス
+<div class="small">災害対応・都市安全保障・BCP拠点</div>
+</div>
+
 </div>
 </div>
 
-<!-- TREE -->
-<div id="tree" class="page">
-<div class="card">
-<h2>ロジックツリー</h2>
-
-<div class="node" onclick="selectTheme('教育・都市ブランド')">① 教育・都市ブランド</div>
-<div class="node" onclick="selectTheme('市民交流')">② 市民交流</div>
-<div class="node" onclick="selectTheme('都市防災')">③ 都市防災</div>
-
-</div>
-</div>
-
-<!-- AI -->
+<!-- ================= AI ================= -->
 <div id="dialog" class="page">
+
 <div class="card">
 
 <h2>AI壁打ち</h2>
@@ -67,35 +92,48 @@ nav button{padding:10px;border:none;border-radius:8px;background:#eef5ff;cursor:
 </div>
 </div>
 
-<!-- PR -->
+<!-- ================= PR ================= -->
 <div id="pr" class="page">
+
 <div class="card">
-<h2>Pull Requests（市民投稿）</h2>
+<h2>Pull Requests（市民投稿一覧）</h2>
 <div id="prList"></div>
 </div>
+
 </div>
 
-<!-- DASHBOARD -->
-<div id="dashboard" class="page">
+<!-- ================= ANALYSIS ================= -->
+<div id="analysis" class="page">
+
 <div class="card">
-<h2>分析・統合コンセプト</h2>
+<h2>分析（AI統合）</h2>
 
-<div id="concept"></div>
-
-<div id="report"></div>
+<div id="analysisView"></div>
 
 </div>
+
+</div>
+
+<!-- ================= CONCEPT ================= -->
+<div id="concept" class="page">
+
+<div class="card">
+<h2>コンセプト進化</h2>
+
+<div id="conceptView"></div>
+
+</div>
+
 </div>
 
 <script>
 
-let API_KEY = "あなたの行政APIキー"; // ←行政キー入れるとAI化
+let API_KEY = ""; // ←ここに行政APIキー
 let PRs = [];
 let themes = {};
-
 let currentTheme = "";
 
-// -------------------- UI --------------------
+// ---------------- UI ----------------
 function show(id){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
 document.getElementById(id).classList.add("active");
@@ -107,38 +145,34 @@ show("dialog");
 document.getElementById("input").value = t + "について意見";
 }
 
-// -------------------- AI CORE --------------------
+// ---------------- AI ----------------
 async function runAI(){
 
 let text = document.getElementById("input").value;
 if(!text) return;
 
-// ========== ダミーAI ==========
+// ===== ダミー =====
 if(!API_KEY){
 
-let result = {
-summary:"（ダミー要約）" + text.slice(0,30),
-title:"ダミー政策：" + currentTheme,
+renderAI({
+summary:"（ダミー）" + text.slice(0,40),
+title:"ダミー提案：" + currentTheme,
 question:"どの観点を重視しますか？",
-viewpoint:"統合には追加議論が必要",
-category:currentTheme
-};
-
-return renderAI(result);
+viewpoint:"統合前の仮分類"
+});
+return;
 }
 
-// ========== Gemini AI ==========
+// ===== Gemini =====
 const prompt = `
-あなたは自治体AI。
-JSONで返す：
+JSONで返せ：
 
 {
 "summary":"",
 "title":"",
 "question":"",
 "viewpoint":"",
-"category":"",
-"merge_suggestion":""
+"merge_hint":""
 }
 
 入力：
@@ -161,27 +195,36 @@ let raw = data.candidates?.[0]?.content?.parts?.[0]?.text;
 let json;
 try{ json = JSON.parse(raw); }
 catch(e){
-json = {summary:raw,title:"解析結果",question:"",viewpoint:"",category:""};
+json = {summary:raw,title:"解析結果",question:"",viewpoint:""};
 }
 
 renderAI(json);
 }
 
-// -------------------- AI結果 --------------------
-function renderAI(json){
+// ---------------- AI表示 ----------------
+function renderAI(d){
 
 document.getElementById("result").innerHTML = `
 <div class="card">
-<b>${json.title}</b>
-<p>${json.summary}</p>
 
-<button onclick="createPR('${json.title}','${json.summary}')"
-class="btn">PR登録</button>
+<div class="tag">AI要約</div>
+<p>${d.summary}</p>
+
+<div class="tag">テーマ</div>
+<p><b>${d.title}</b></p>
+
+<div class="tag">問い</div>
+<p>${d.question}</p>
+
+<button class="btn" onclick="createPR('${d.title}','${d.summary}')">
+PR登録
+</button>
+
 </div>
 `;
 }
 
-// -------------------- PR SYSTEM --------------------
+// ---------------- PR作成 ----------------
 function createPR(title,text){
 
 let pr = {
@@ -196,92 +239,103 @@ cluster:"未整理"
 PRs.push(pr);
 
 updatePR();
-updateDashboard();
+updateAnalysis();
+updateConcept();
 }
 
+// ---------------- PR表示（完全UI） ----------------
 function updatePR(){
 
 let html="";
 
 PRs.forEach(p=>{
+
 html += `
 <div class="node">
+
 <b>${p.title}</b><br>
 ${p.text}<br><br>
 
-状態:${p.status} / 投票:${p.vote}<br>
-分類:${p.cluster}<br>
+状態：${p.status}<br>
+投票：${p.vote}<br>
+分類：${p.cluster}<br>
 
 <button onclick="vote(${p.id})">投票</button>
 <button onclick="approve(${p.id})">承認</button>
+
 </div>
 `;
 });
 
 document.getElementById("prList").innerHTML =
-html || "PRなし";
+html || "<div class='node'>PRなし</div>";
 }
 
-// -------------------- 投票 --------------------
+// ---------------- 投票＋クラスタリング ----------------
 function vote(id){
 
 let p = PRs.find(x=>x.id===id);
 p.vote++;
 
-autoCluster(p);
+if(p.text.includes("教育")) p.cluster="教育統合";
+else if(p.text.includes("防災")) p.cluster="防災統合";
+else p.cluster="新規候補";
 
 updatePR();
-updateDashboard();
+updateAnalysis();
 }
 
-// -------------------- 自動統合 --------------------
-function autoCluster(pr){
-
-if(pr.text.includes("教育") || pr.text.includes("子ども")){
-pr.cluster = "教育系統合";
-}
-else if(pr.text.includes("防災")){
-pr.cluster = "防災系統合";
-}
-else{
-pr.cluster = "新規候補";
-}
-}
-
-// -------------------- 承認 --------------------
+// ---------------- 承認 ----------------
 function approve(id){
 
 let p = PRs.find(x=>x.id===id);
-p.status = "approved";
+p.status="approved";
 
-themes[p.title] = (themes[p.title]||0)+1;
+themes[p.title]=(themes[p.title]||0)+1;
 
 updatePR();
-updateDashboard();
+updateAnalysis();
+updateConcept();
 }
 
-// -------------------- ダッシュボード --------------------
-function updateDashboard(){
+// ---------------- 分析（完全復元） ----------------
+function updateAnalysis(){
 
-// コンセプト進化
-let concept = `
-<b>統合コンセプト（AI生成）</b><br><br>
-・教育×都市ブランドの統合強化<br>
-・市民交流の拡張<br>
-・未整理領域の増加 → 新カテゴリ生成フェーズ
+let clusters = {};
+
+PRs.forEach(p=>{
+clusters[p.cluster]=(clusters[p.cluster]||0)+1;
+});
+
+let html="<h3>クラスタ分析</h3>";
+
+for(let c in clusters){
+html += `<div class="node">${c}：${clusters[c]}件</div>`;
+}
+
+html += `
+<h3>新規テーマ候補</h3>
+<div class="node">AI共創都市モデル</div>
+<div class="node">教育×都市ブランド統合</div>
+<div class="node">レジリエンス都市設計</div>
 `;
 
-document.getElementById("concept").innerHTML = concept;
+document.getElementById("analysisView").innerHTML = html;
+}
 
-// レポート生成
-let total = Object.values(themes).reduce((a,b)=>a+b,0);
+// ---------------- コンセプト進化 ----------------
+function updateConcept(){
 
-document.getElementById("report").innerHTML = `
-<hr>
-<b>行政レポート</b><br>
-総PR数：${PRs.length}<br>
-承認数：${total}<br>
-未処理：${PRs.filter(p=>p.status==="pending").length}
+document.getElementById("conceptView").innerHTML = `
+<div class="node">
+<b>統合コンセプト</b><br><br>
+
+・教育 × 都市ブランド → 芦屋モデル形成<br>
+・市民交流 → 常時開放型コミュニティ<br>
+・防災 → デュアルユース都市拠点<br><br>
+
+<b>進化状態：</b>フェーズ2（統合開始）
+</div>
 `;
 }
 
