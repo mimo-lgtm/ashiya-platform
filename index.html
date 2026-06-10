@@ -2,40 +2,22 @@
 <html lang="ja">
 
 <head>
-
 <meta charset="utf-8">
-
-<meta name="viewport"
-content="width=device-width,initial-scale=1">
-
-<title>
-
-駅前公共施設 市民対話プラットフォーム v4
-
-</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>駅前公共施設 市民対話プラットフォーム v4</title>
 
 <style>
-
-*{
-box-sizing:border-box;
-}
+*{box-sizing:border-box;}
 
 body{
 margin:0;
-font-family:
-"Yu Gothic",
-sans-serif;
+font-family:"Yu Gothic",sans-serif;
 background:#f4f6f8;
 color:#222;
 }
 
 header{
-background:
-linear-gradient(
-90deg,
-#1a73e8,
-#0f5bd3
-);
+background:linear-gradient(90deg,#1a73e8,#0f5bd3);
 color:white;
 padding:20px;
 font-size:28px;
@@ -55,8 +37,7 @@ gap:10px;
 padding:10px;
 background:white;
 overflow:auto;
-box-shadow:
-0 2px 8px rgba(0,0,0,.08);
+box-shadow:0 2px 8px rgba(0,0,0,.08);
 }
 
 nav button{
@@ -69,30 +50,18 @@ cursor:pointer;
 white-space:nowrap;
 }
 
-.page{
-display:none;
-padding:15px;
-}
-
-.active{
-display:block;
-}
+.page{display:none;padding:15px;}
+.active{display:block;}
 
 .card{
 background:white;
 padding:18px;
 border-radius:14px;
 margin-bottom:14px;
-box-shadow:
-0 2px 8px rgba(0,0,0,.06);
+box-shadow:0 2px 8px rgba(0,0,0,.06);
 }
 
-.hero{
-font-size:20px;
-font-weight:bold;
-line-height:1.7;
-margin-bottom:15px;
-}
+.hero{font-size:20px;font-weight:bold;line-height:1.7;margin-bottom:15px;}
 
 .btn{
 width:100%;
@@ -113,11 +82,6 @@ background:#f8fbff;
 border-left:6px solid #1a73e8;
 border-radius:10px;
 cursor:pointer;
-transition:.2s;
-}
-
-.node:hover{
-background:#eef5ff;
 }
 
 .child{
@@ -160,25 +124,6 @@ font-size:32px;
 font-weight:bold;
 color:#1a73e8;
 }
-
-.thread{
-border-left:4px solid #1a73e8;
-padding-left:12px;
-margin-top:15px;
-}
-
-@media(max-width:768px){
-
-header{
-font-size:22px;
-}
-
-.hero{
-font-size:18px;
-}
-
-}
-
 </style>
 
 </head>
@@ -186,1006 +131,225 @@ font-size:18px;
 <body>
 
 <header>
-
 駅前公共施設 市民対話プラットフォーム
-
 </header>
 
 <div class="subheader">
-
-市民の声をAIとの対話によって整理し、
-政策テーマへ変換する実証プラットフォーム
-
+市民の声をAIとの対話によって整理し、政策テーマへ変換する実証プラットフォーム
 </div>
 
 <nav>
-
-<button onclick="showPage('home')">
-入口
-</button>
-
-<button onclick="showPage('tree')">
-ロジックツリー
-</button>
-
-<button onclick="showPage('dialog')">
-AI壁打ち
-</button>
-
-<button onclick="showPage('dashboard')">
-政策テーマ
-</button>
-
+<button onclick="showPage('home')">入口</button>
+<button onclick="showPage('tree')">ロジックツリー</button>
+<button onclick="showPage('dialog')">AI壁打ち</button>
+<button onclick="showPage('dashboard')">政策テーマ</button>
 </nav>
 
-<div id="home"
-class="page active">
-
+<!-- HOME -->
+<div id="home" class="page active">
 <div class="card">
-
 <div class="hero">
-
-あなたの意見を、
-単なる投稿ではなく
-政策アイデアへ育てます。
-
+あなたの意見を政策アイデアへ育てます
 </div>
-
-<p>
-
-まずロジックツリーから
-興味のあるテーマを選んでください。
-
-AIがあなたの考えを整理し、
-
-・要約
-
-・政策タイトル化
-
-・問い返し
-
-・追加視点の提示
-
-を行います。
-
-</p>
-
-<button
-class="btn"
-onclick="showPage('tree')">
-
+<button class="btn" onclick="showPage('tree')">
 ロジックツリーを見る
-
 </button>
-
+</div>
 </div>
 
-</div>
-
-<div id="tree"
-class="page">
-
+<!-- TREE -->
+<div id="tree" class="page">
 <div class="card">
 
-<h2>
+<h2>ロジックツリー</h2>
 
-駅前公共施設 ロジックツリー
-
-</h2>
-
-<p>
-
-関心のあるテーマをクリックしてください。
-
-投稿画面へ移動します。
-
-</p>
-
-<div class="node"
-onclick="toggle('a');selectTheme('芦屋市の価値向上')">
-
+<div class="node" onclick="toggle('a');selectTheme('芦屋市の価値向上')">
 ① 芦屋市の価値向上
-
 </div>
+<div id="a" class="child">教育・景観・ブランド</div>
 
-<div id="a"
-class="child">
-
-<b>次世代教育ブランドの確立</b>
-
-<br><br>
-
-・世界一の絵本図書館
-
-<br>
-
-・EdTech企業連携
-
-<br>
-
-・国際教育交流
-
-<br><br>
-
-<b>街の魅力化・景観美化</b>
-
-<br><br>
-
-・公園芝生化
-
-<br>
-
-・市民ボランティア協働
-
-</div>
-
-<div class="node"
-onclick="toggle('b');selectTheme('市民へのベネフィット')">
-
+<div class="node" onclick="toggle('b');selectTheme('市民へのベネフィット')">
 ② 市民へのベネフィット
-
 </div>
+<div id="b" class="child">交流・学習・福祉</div>
 
-<div id="b"
-class="child">
-
-<b>多世代交流・サードプレイス</b>
-
-<br><br>
-
-・カフェ
-
-<br>
-
-・地域コミュニティ
-
-<br>
-
-・高齢者交流
-
-<br><br>
-
-<b>知的探究・スキルアップ</b>
-
-<br><br>
-
-・共同研究
-
-<br>
-
-・コワーキング
-
-<br>
-
-・社会人リスキリング
-
-</div>
-
-<div class="node"
-onclick="toggle('c');selectTheme('財政的持続可能性')">
-
+<div class="node" onclick="toggle('c');selectTheme('財政的持続可能性')">
 ③ 財政的持続可能性
-
 </div>
+<div id="c" class="child">収益化・ふるさと納税</div>
 
-<div id="c"
-class="child">
-
-<b>収益化モデル</b>
-
-<br><br>
-
-・SHARE LOUNGE
-
-<br>
-
-・チャレンジショップ
-
-<br>
-
-・企業協賛
-
-<br><br>
-
-<b>資金調達</b>
-
-<br><br>
-
-・ふるさと納税
-
-<br>
-
-・クラウドファンディング
-
-</div>
-
-<div class="node"
-onclick="toggle('d');selectTheme('施設の戦略性')">
-
-④ 施設の戦略性
-
-</div>
-
-<div id="d"
-class="child">
-
-<b>知のゲートウェイ</b>
-
-<br><br>
-
-・デジタルライブラリ
-
-<br>
-
-・超高速通信
-
-<br>
-
-・ITサポート
-
-<br><br>
-
-<b>起業支援</b>
-
-<br><br>
-
-・ピッチアリーナ
-
-<br>
-
-・若手起業家育成
-
-</div>
-
-<div class="node"
-onclick="toggle('e');selectTheme('都市の強靭性とガバナンス')">
-
-⑤ 都市の強靭性とガバナンス
-
-</div>
-
-<div id="e"
-class="child">
-
-<b>平時・有事のデュアルユース</b>
-
-<br><br>
-
-・災害指令室
-
-<br>
-
-・都市シミュレーション
-
-<br>
-
-・避難拠点
-
-<br><br>
-
-<b>市民主権</b>
-
-<br><br>
-
-・DAO型運営
-
-<br>
-
-・市民投票
-
-</div>
-
-<button
-class="btn"
-onclick="showPage('dialog')">
-
-テーマについて意見を投稿する
-
+<button class="btn" onclick="showPage('dialog')">
+意見を投稿
 </button>
 
 </div>
-
 </div>
 
-<div id="dialog"
-class="page">
-
+<!-- DIALOG -->
+<div id="dialog" class="page">
 <div class="card">
 
-<h2>
+<h2>AI壁打ち</h2>
 
-AI壁打ち
+<textarea id="input"></textarea>
 
-</h2>
+<button class="btn" onclick="runAI()">AIと対話</button>
 
-<p>
-
-あなたの意見を入力してください。
-
-AIが要約・タイトル生成・問い返しを行います。
-
-</p>
-
-<textarea
-id="input"
-placeholder="例：芦屋市の魅力を最大限に生かす斬新な機能を持った施設。これにより子育て世代の移住や学生交流が促進され、世界から注目される施設になってほしい。">
-
-</textarea>
-
-<button
-class="btn"
-onclick="runAI()">
-
-AIと対話する
-
-</button>
-
-<div id="result">
+<div id="result"></div>
 
 </div>
-
 </div>
 
-</div>
-
-<div id="dashboard"
-class="page">
-
+<!-- DASHBOARD -->
+<div id="dashboard" class="page">
 <div class="card">
 
-<h2>
+<h2>政策テーマ一覧</h2>
 
-政策テーマ一覧
+<div id="themeList"></div>
 
-</h2>
-
-<p>
-
-市民投稿から生成された政策テーマ
-
-</p>
-
-<div id="themeList">
-
-<div class="node">
-
-まだ投稿はありません
+<h3>投稿数</h3>
+<div class="metric" id="postCount">0</div>
 
 </div>
-
-</div>
-
-</div>
-
-<div class="card">
-
-<h3>
-
-投稿分析
-
-</h3>
-
-<p>
-
-総投稿数
-
-</p>
-
-<div
-class="metric"
-id="postCount">
-
-0
-
-</div>
-
-<hr>
-
-<h3>
-
-人気政策テーマ
-
-</h3>
-
-<div id="ranking">
-
-<div class="node">
-まだ集計されていません
-</div>
-
-</div>
-
-<hr>
-
-<h3>
-
-AIが発見した新規テーマ候補
-
-</h3>
-
-<div id="newThemes">
-
-<div class="node">
-投稿が増えると表示されます
-</div>
-
-</div>
-
-</div>
-
 </div>
 
 <script>
 
 let themes = {};
-let selectedTheme = "";
 let currentTitle = "";
+let selectedTheme = "";
 
-function showPage(id){
+// ★★★ Gemini AI連動 ★★★
+async function runAI(){
 
-document
-.querySelectorAll(".page")
-.forEach(
-p=>p.classList.remove("active")
+let text = document.getElementById("input").value.trim();
+if(text==="") return;
+
+// ★ここに行政APIキーを入れる
+const API_KEY = "YOUR_API_KEY_HERE";
+
+const prompt = `
+あなたは自治体向け政策AIです。
+以下をJSONで出力：
+
+{
+"summary":"",
+"title":"",
+"question":"",
+"viewpoint":"",
+"category":""
+}
+
+入力：
+${text}
+`;
+
+try{
+
+const res = await fetch(
+`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`,
+{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+contents:[{parts:[{text:prompt}]}]
+})
+}
 );
 
-document
-.getElementById(id)
-.classList.add("active");
+const data = await res.json();
 
+let raw = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+let json;
+try{ json = JSON.parse(raw); }
+catch(e){
+json = {
+summary: raw,
+title:"解析結果",
+question:"",
+viewpoint:"",
+category:""
+};
+}
+
+currentTitle = json.title;
+
+document.getElementById("result").innerHTML = `
+<div class="post">
+
+<div class="tag">AI要約</div>
+<p>${json.summary}</p>
+
+<div class="tag">政策テーマ</div>
+<p><b>${json.title}</b></p>
+
+<div class="tag">問い返し</div>
+<p>${json.question}</p>
+
+<div class="tag">追加視点</div>
+<p>${json.viewpoint}</p>
+
+<button class="btn" onclick="approveIdea()">
+登録する
+</button>
+
+</div>
+`;
+
+}catch(e){
+document.getElementById("result").innerHTML = `<div class="post">エラー:${e.message}</div>`;
+}
+
+}
+
+// 登録
+function approveIdea(){
+
+if(!themes[currentTitle]) themes[currentTitle]=0;
+themes[currentTitle]++;
+
+updateDashboard();
+
+alert("登録完了：" + currentTitle);
+}
+
+// ダッシュボード更新
+function updateDashboard(){
+
+let html="";
+let total=0;
+
+for(let t in themes){
+total += themes[t];
+html += `<div class="node">${t} : ${themes[t]}件</div>`;
+}
+
+document.getElementById("themeList").innerHTML =
+html || "<div class='node'>まだ投稿なし</div>";
+
+document.getElementById("postCount").innerText = total;
+}
+
+// UI
+function showPage(id){
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+document.getElementById(id).classList.add("active");
 }
 
 function toggle(id){
-
-let el =
-document.getElementById(id);
-
-if(el.style.display==="block"){
-
-el.style.display="none";
-
-}else{
-
-el.style.display="block";
-
+let el=document.getElementById(id);
+el.style.display = el.style.display==="block"?"none":"block";
 }
 
-}
-
-function selectTheme(theme){
-
-selectedTheme = theme;
-
+function selectTheme(t){
+selectedTheme=t;
 showPage("dialog");
-
-document
-.getElementById("input")
-.value =
-theme + "について意見を書いてください";
-
+document.getElementById("input").value=t+"について意見";
 }
-
-function runAI(){
-
-let text =
-document
-.getElementById("input")
-.value
-.trim();
-
-if(text==="") return;
-
-let title = "";
-let summary = "";
-let question = "";
-let viewpoint = "";
-let category = "";
-
-if(
-text.includes("子ども") ||
-text.includes("子育て")
-){
-
-category="子育て";
-
-title="子育て支援型公共施設";
-
-summary=
-"子どもの成長と保護者支援を重視した提案です。施設を子育て世代の定住促進と地域交流の拠点として活用する考え方です。";
-
-question=
-"最も重視するのは、安全性・学習支援・遊び場・保護者交流のどれですか？";
-
-viewpoint=
-"子育て支援施設としてだけでなく、移住促進政策として整理できる可能性があります。";
-
-}
-else if(
-text.includes("学生") ||
-text.includes("研究")
-){
-
-category="学生交流";
-
-title="学生共創ハブ";
-
-summary=
-"学生同士や地域との交流を促進し、新たな知的活動や共同研究を生み出す提案です。";
-
-question=
-"大学連携・企業連携・起業支援・国際交流のどれを重視しますか？";
-
-viewpoint=
-"単なる学習スペースではなく、若者定着戦略として整理できます。";
-
-}
-else if(
-text.includes("高齢者")
-){
-
-category="高齢者";
-
-title="多世代共生交流拠点";
-
-summary=
-"高齢者が孤立せず地域社会と関わり続けるための交流空間を目指す提案です。";
-
-question=
-"交流・健康増進・学習・見守りのどれを重視しますか？";
-
-viewpoint=
-"福祉政策だけでなく、コミュニティ形成政策としても位置付けられます。";
-
-}
-else if(
-text.includes("起業") ||
-text.includes("ベンチャー")
-){
-
-category="起業";
-
-title="イノベーション創出拠点";
-
-summary=
-"若手起業家や新しい挑戦を支援し、地域経済を活性化する提案です。";
-
-question=
-"起業支援・投資家連携・学生起業・社会課題解決のどれを重視しますか？";
-
-viewpoint=
-"施設運営の収益化とも連動する可能性があります。";
-
-}
-else if(
-text.includes("図書館") ||
-text.includes("絵本")
-){
-
-category="教育";
-
-title="世界一の絵本ライブラリー";
-
-summary=
-"教育ブランドの象徴となる施設を整備し、国内外から人を呼び込む提案です。";
-
-question=
-"子ども向け・国際交流・デジタル化・教育研究のどれを重視しますか？";
-
-viewpoint=
-"図書館整備ではなく都市ブランド戦略として整理できます。";
-
-}
-else if(
-text.includes("防災") ||
-text.includes("災害")
-){
-
-category="防災";
-
-title="都市レジリエンス拠点";
-
-summary=
-"平時と有事の両方で機能する防災・情報拠点を目指す提案です。";
-
-question=
-"避難機能・情報発信・都市シミュレーション・備蓄機能のどれを重視しますか？";
-
-viewpoint=
-"公共施設と都市防災政策を統合する考え方です。";
-
-}
-else if(
-text.includes("移住") ||
-text.includes("世界") ||
-text.includes("ブランド")
-){
-
-category="都市戦略";
-
-title="芦屋ブランド向上拠点";
-
-summary=
-"芦屋の魅力を活用し、子育て世代や学生を惹きつける都市戦略型施設の提案です。施設を都市価値向上のエンジンとして位置付けています。";
-
-question=
-"移住促進・学生交流・起業支援・国際発信のどれを最優先にしますか？";
-
-viewpoint=
-"施設整備ではなく都市ブランド戦略として整理できます。";
-
-}
-else{
-
-category="総合";
-
-title="駅前公共施設改革";
-
-summary=
-"駅前公共施設の価値向上を目指す提案です。";
-
-question=
-"最も重視する利用者層は誰ですか？";
-
-viewpoint=
-"複数政策分野にまたがる可能性があります。";
-
-}
-
-currentTitle = title;
-
-document.getElementById("result").innerHTML =
-
-`
-
-<div class="post">
-
-<div class="tag">
-
-AI要約
-
-</div>
-
-<p>
-
-${summary}
-
-</p>
-
-<div class="tag">
-
-政策テーマ
-
-</div>
-
-<p>
-
-<b>
-
-${title}
-
-</b>
-
-</p>
-
-<div class="tag">
-
-AI問い返し
-
-</div>
-
-<p>
-
-${question}
-
-</p>
-
-<div class="tag">
-
-AI追加視点
-
-</div>
-
-<p>
-
-${viewpoint}
-
-</p>
-
-<hr>
-
-<h3>
-
-AIの質問に回答する
-
-</h3>
-
-<textarea
-id="followup"
-placeholder="AIの問いに対する回答を入力してください">
-
-</textarea>
-
-<button
-class="btn"
-onclick="continueDiscussion()">
-
-回答する
-
-</button>
-
-<button
-class="btn"
-onclick="approveIdea()">
-
-この内容で登録する
-
-</button>
-
-</div>
-
-`;
-
-}
-
-function continueDiscussion(){
-
-let answer =
-document.getElementById("followup").value;
-
-if(answer==="") return;
-
-document.getElementById("result").innerHTML +=
-
-`
-
-<div class="thread">
-
-<div class="tag">
-
-市民回答
-
-</div>
-
-<p>
-
-${answer}
-
-</p>
-
-<div class="tag">
-
-AI再整理
-
-</div>
-
-<p>
-
-この回答は
-
-<b>
-
-${currentTitle}
-
-</b>
-
-という政策テーマの補強意見として整理されました。
-
-新しい投稿ではなく、
-同一テーマ内の議論として蓄積されます。
-
-</p>
-
-</div>
-
-`;
-
-}
-
-function approveIdea(){
-
-if(!themes[currentTitle]){
-
-themes[currentTitle] = 1;
-
-}else{
-
-themes[currentTitle]++;
-
-}
-
-updateDashboard();
-
-document.getElementById("result").innerHTML +=
-
-`
-
-<div class="post">
-
-<h3>
-
-登録完了
-
-</h3>
-
-<p>
-
-あなたの投稿は
-
-<b>
-
-${currentTitle}
-
-</b>
-
-として登録されました。
-
-</p>
-
-<p>
-
-政策テーマ一覧から確認できます。
-
-</p>
-
-<button
-class="btn"
-onclick="showPage('dashboard')">
-
-自分の投稿を見る
-
-</button>
-
-</div>
-
-`;
-
-}
-
-function updateDashboard(){
-
-let total = 0;
-
-let html = "";
-
-let ranking = [];
-
-for(let title in themes){
-
-total += themes[title];
-
-ranking.push({
-title:title,
-count:themes[title]
-});
-
-html +=
-
-`
-
-<div class="node">
-
-<b>
-
-${title}
-
-</b>
-
-<br><br>
-
-関連投稿：
-
-${themes[title]}件
-
-</div>
-
-`;
-
-}
-
-if(html===""){
-
-html =
-
-`
-
-<div class="node">
-
-まだ投稿はありません
-
-</div>
-
-`;
-
-}
-
-ranking.sort(
-(a,b)=>b.count-a.count
-);
-
-let rankHtml = "";
-
-ranking.forEach((r,i)=>{
-
-rankHtml +=
-
-`
-
-<div class="node">
-
-#${i+1}
-
-${r.title}
-
-<br><br>
-
-${r.count}件
-
-</div>
-
-`;
-
-});
-
-if(rankHtml===""){
-
-rankHtml =
-
-`
-
-<div class="node">
-
-まだ集計されていません
-
-</div>
-
-`;
-
-}
-
-document
-.getElementById("themeList")
-.innerHTML = html;
-
-document
-.getElementById("ranking")
-.innerHTML = rankHtml;
-
-document
-.getElementById("postCount")
-.innerText = total;
-
-document
-.getElementById("newThemes")
-.innerHTML =
-
-`
-
-<div class="node">
-
-国際教育交流拠点
-
-</div>
-
-<div class="node">
-
-世界一の絵本ライブラリー
-
-</div>
-
-<div class="node">
-
-AI共創公共施設
-
-</div>
-
-`;
-
-}
-
-updateDashboard();
 
 </script>
 
 </body>
-
 </html>
