@@ -3,160 +3,96 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>市民政策OS｜行政提出版（政策憲章UI）</title>
+<title>駅前公共施設 市民対話プラットフォーム</title>
 
 <style>
-
-/* =========================
-   全体（行政文書トーン）
-========================= */
 
 body{
 margin:0;
 font-family:"Yu Gothic","Hiragino Kaku Gothic ProN",sans-serif;
 background:#f4f6f8;
 color:#1b1f23;
-line-height:1.9;
+line-height:1.8;
 }
 
 header{
-background:#0a2a43;
+background:#0a3a5a;
 color:white;
-padding:28px 36px;
-font-size:22px;
+padding:22px;
+font-size:20px;
 font-weight:700;
 }
 
-.subheader{
-background:#e9f1f8;
-padding:14px 36px;
+.sub{
+background:#eaf2f8;
+padding:12px 22px;
 font-size:14px;
-color:#334;
 }
 
-/* =========================
-   コンテナ
-========================= */
+/* layout */
 
 .container{
-max-width:1100px;
+max-width:1000px;
 margin:0 auto;
-padding:24px;
+padding:18px;
 }
-
-/* =========================
-   ナビ（政策章）
-========================= */
 
 nav{
 display:flex;
-flex-wrap:wrap;
 gap:8px;
-margin-bottom:18px;
+flex-wrap:wrap;
+margin-bottom:14px;
 }
 
 nav button{
+padding:10px 12px;
 border:1px solid #cfd8e3;
-background:#fff;
-padding:10px 14px;
+background:white;
 border-radius:6px;
 cursor:pointer;
 font-size:13px;
 }
 
-nav button:hover{
-background:#0a2a43;
-color:white;
-}
+/* pages */
 
-/* =========================
-   セクション
-========================= */
-
-.section{display:none;}
+.page{display:none;}
 .active{display:block;}
 
-/* =========================
-   政策章カード
-========================= */
+/* cards */
 
-.chapter{
+.card{
 background:white;
-border-left:6px solid #0a2a43;
-padding:22px;
-margin-bottom:16px;
-box-shadow:0 2px 10px rgba(0,0,0,0.06);
-}
-
-.chapter h1{
-font-size:20px;
-margin:0 0 10px 0;
-}
-
-.chapter h2{
-font-size:16px;
-margin-top:18px;
-color:#0a2a43;
-}
-
-.small{
-font-size:13px;
-color:#555;
-}
-
-/* =========================
-   ロジックツリー（完全復元）
-========================= */
-
-.tree{
-background:#fbfcfd;
-border:1px solid #d8e0ea;
-padding:14px;
-border-radius:6px;
-margin:10px 0;
-}
-
-/* =========================
-   PR（政策提案）
-========================= */
-
-.pr{
-background:#fff;
-border:1px solid #d6dde6;
-padding:14px;
-margin:10px 0;
-border-radius:6px;
-}
-
-.status{
-display:inline-block;
-font-size:12px;
-padding:2px 8px;
-background:#eef3f8;
+padding:18px;
 border-radius:10px;
-margin-bottom:6px;
+box-shadow:0 2px 10px rgba(0,0,0,0.06);
+margin-bottom:14px;
 }
 
-/* =========================
-   ボタン
-========================= */
+/* tree */
+
+.node{
+background:#f9fbfd;
+border-left:5px solid #0a3a5a;
+padding:12px;
+margin:10px 0;
+cursor:pointer;
+}
+
+.node:hover{
+background:#eef5ff;
+}
+
+/* buttons */
 
 .btn{
-background:#0a2a43;
+background:#0a3a5a;
 color:white;
 border:none;
 padding:10px 14px;
 border-radius:6px;
 cursor:pointer;
-font-size:13px;
 margin-top:10px;
 }
-
-.btn:hover{opacity:0.9;}
-
-/* =========================
-   入力
-========================= */
 
 textarea{
 width:100%;
@@ -164,7 +100,18 @@ height:120px;
 padding:12px;
 border:1px solid #cfd8e3;
 border-radius:6px;
-font-size:14px;
+}
+
+/* tags */
+
+.tag{
+display:inline-block;
+background:#0a3a5a;
+color:white;
+padding:3px 8px;
+border-radius:12px;
+font-size:12px;
+margin-bottom:8px;
 }
 
 </style>
@@ -174,225 +121,181 @@ font-size:14px;
 <body>
 
 <header>
-市民政策OS（行政提出版）｜Policy Charter System
+駅前公共施設 市民対話プラットフォーム
 </header>
 
-<div class="subheader">
-コストセンターからプロフィットセンターへ：市民知の統合による投資型都市経営モデル
+<div class="sub">
+駅前公共施設を、もっと良くするために。あなたの意見を聞かせてください。
+まだ考えがまとまっていなくても大丈夫です。AIと一緒に整理できます。
 </div>
 
 <div class="container">
 
-<nav>
-<button onclick="show('vision')">政策憲章</button>
-<button onclick="show('tree')">ロジックツリー</button>
-<button onclick="show('ai')">市民意見</button>
-<button onclick="show('pr')">政策審議</button>
-<button onclick="show('analysis')">統合分析</button>
-<button onclick="show('concept')">都市戦略</button>
-</nav>
+<!-- ================= HOME ================= -->
+<div id="home" class="page active">
 
-<!-- ================= VISION ================= -->
-<div id="vision" class="section active">
+<div class="card">
 
-<div class="chapter">
+<h3>まずは論点を見てみましょう</h3>
 
-<h1>政策ビジョン</h1>
+<p>
+駅前公共施設について、どんな論点があるのかを整理しています。
+気になる項目をクリックしてください。
+</p>
 
-<div class="small">
-本システムは、市民の意見を構造化し、政策として統合・意思決定可能な形へ変換する都市OSである。
+</div>
+
+<div class="card">
+
+<div class="node" onclick="openTopic('value')">
+① 駅前の価値をどう高めるか
+</div>
+
+<div class="node" onclick="openTopic('benefit')">
+② だれのための場所にするか
+</div>
+
+<div class="node" onclick="openTopic('money')">
+③ お金の仕組みをどうするか
+</div>
+
+<div class="node" onclick="openTopic('role')">
+④ どんな役割を持たせるか
+</div>
+
+<div class="node" onclick="openTopic('future')">
+⑤ これからの駅前の形
 </div>
 
 </div>
+
 </div>
 
-<!-- ================= TREE（完全復元） ================= -->
-<div id="tree" class="section">
+<!-- ================= TOPIC ================= -->
+<div id="topic" class="page">
 
-<div class="chapter">
+<div class="card">
 
-<h1>市民政策ロジックツリー（VISION）</h1>
+<h3 id="topicTitle"></h3>
 
-<div class="small">
-コストセンターからプロフィットセンターへ：市民ウェルビーイングと知財集積による都市経営
-</div>
+<div id="topicSummary"></div>
 
-<div class="tree">
-<b>1. 芦屋市の価値向上（ブランド・移住促進）</b><br>
-次世代教育ブランド（絵本図書館・EdTech連携）<br>
-街の魅力化・景観美化（公園芝生化・市民協働）
-</div>
+<button class="btn" onclick="goToPost()">
+このテーマについて意見を書く
+</button>
 
-<div class="tree">
-<b>2. 市民へのベネフィット（ウェルビーイング）</b><br>
-多世代交流・サードプレイス（カフェ・コミュニティ）<br>
-知的探究・スキルアップ（リスキリング・研究）
-</div>
-
-<div class="tree">
-<b>3. 財政的持続可能性</b><br>
-施設収益化（SHARE LOUNGE・チャレンジショップ）<br>
-ふるさと納税・成果連動型事業
-</div>
-
-<div class="tree">
-<b>4. 施設の戦略性</b><br>
-知のゲートウェイ（デジタル・IT支援）<br>
-起業支援（ピッチアリーナ）
-</div>
-
-<div class="tree">
-<b>5. 都市の強靭性とガバナンス</b><br>
-デュアルユース（災害・都市指令）<br>
-DAO型自治（投票・トークン設計）
 </div>
 
 </div>
-</div>
 
-<!-- ================= AI ================= -->
-<div id="ai" class="section">
+<!-- ================= POST ================= -->
+<div id="post" class="page">
 
-<div class="chapter">
+<div class="card">
 
-<h1>市民意見（AI壁打ち）</h1>
+<h3>あなたの意見を教えてください</h3>
+
+<div id="selectedTopic" class="tag"></div>
 
 <textarea id="input"></textarea>
 
-<button class="btn" onclick="runAI()">AI分析</button>
+<button class="btn" onclick="runAI()">AIと整理する</button>
 
 <div id="result"></div>
 
 </div>
-</div>
 
-<!-- ================= PR ================= -->
-<div id="pr" class="section">
-
-<div class="chapter">
-
-<h1>政策審議（Pull Request）</h1>
-
-<div id="prList"></div>
-
-</div>
-</div>
-
-<!-- ================= ANALYSIS ================= -->
-<div id="analysis" class="section">
-
-<div class="chapter">
-
-<h1>統合分析（政策インテリジェンス）</h1>
-
-<div class="tree">
-<b>統合状況</b><br><br>
-
-・教育×都市ブランド：強い収束<br>
-・市民交流：中程度収束<br>
-・財政：収益化モデル形成中<br>
-・防災：独立領域（統合待ち）
-</div>
-
-<div class="tree">
-<b>新規コンセプト</b><br>
-知的都市モデル・芦屋（形成中）
-</div>
-
-</div>
-</div>
-
-<!-- ================= CONCEPT ================= -->
-<div id="concept" class="section">
-
-<div class="chapter">
-
-<h1>都市戦略アップデート</h1>
-
-<div class="tree">
-Phase 1：基盤整備<br>
-Phase 2：市民統合（進行中）<br>
-Phase 3：知識都市化（構想段階）<br><br>
-
-<b>状態：</b>政策OS稼働中（移行期）
-</div>
-
-</div>
 </div>
 
 </div>
 
 <script>
 
-let API_KEY = "";
-let PRs = [];
-let current = "";
+let currentTopic = "";
+
+/* ================= TOPIC DATA ================= */
+
+const topics = {
+
+value:{
+title:"① 駅前の価値をどう高めるか",
+summary:"駅前を単なる通過点ではなく、魅力や体験が生まれる場所にするかどうかを考えるテーマです。"
+},
+
+benefit:{
+title:"② だれのための場所にするか",
+summary:"子ども・高齢者・学生・働く人など、どんな人にとって使いやすい場所にするかを考えるテーマです。"
+},
+
+money:{
+title:"③ お金の仕組みをどうするか",
+summary:"公共施設を維持するための収益や支援の仕組みをどう作るかを考えるテーマです。"
+},
+
+role:{
+title:"④ どんな役割を持たせるか",
+summary:"交流・学び・観光・防災など、駅前施設の機能をどう設計するかを考えるテーマです。"
+},
+
+future:{
+title:"⑤ これからの駅前の形",
+summary:"10年後・20年後の駅前がどうあるべきかという長期的な視点のテーマです。"
+}
+
+};
+
+/* ================= NAV ================= */
 
 function show(id){
-document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
 document.getElementById(id).classList.add("active");
 }
 
-/* ================= AI ================= */
+/* ================= TOPIC OPEN ================= */
+
+function openTopic(id){
+
+currentTopic = id;
+
+document.getElementById("topicTitle").innerText = topics[id].title;
+document.getElementById("topicSummary").innerText = topics[id].summary;
+
+show("topic");
+}
+
+/* ================= GO TO POST ================= */
+
+function goToPost(){
+
+document.getElementById("selectedTopic").innerText =
+topics[currentTopic].title;
+
+show("post");
+}
+
+/* ================= AI (simple mock) ================= */
 
 function runAI(){
 
 let text = document.getElementById("input").value;
 if(!text) return;
 
-if(!API_KEY){
-
 document.getElementById("result").innerHTML = `
-<div class="pr">
-<div class="status">AI分析（仮）</div>
-${text}
-<br><br>
-<button class="btn" onclick="createPR()">政策提案として登録</button>
+<div class="card">
+
+<div class="tag">AIの整理</div>
+
+<p>あなたの意見：</p>
+<p>${text}</p>
+
+<hr>
+
+<p><b>AIの質問：</b>この意見は、誰のための駅前に一番近いですか？</p>
+
+<p><b>AIの指摘：</b>もう少し具体的にすると、他の人にも伝わりやすくなります。</p>
+
 </div>
 `;
-
-return;
-}
-
-document.getElementById("result").innerHTML = `
-<div class="pr">
-<div class="status">AI分析結果</div>
-${text}
-<br><br>
-<button class="btn" onclick="createPR()">政策提案として登録</button>
-</div>
-`;
-}
-
-/* ================= PR ================= */
-
-function createPR(){
-
-PRs.push({
-title:"市民提案",
-status:"審議中"
-});
-
-updatePR();
-}
-
-/* ================= PR表示 ================= */
-
-function updatePR(){
-
-let html="";
-
-PRs.forEach(p=>{
-html += `
-<div class="pr">
-<div class="status">${p.status}</div>
-<b>${p.title}</b>
-</div>
-`;
-});
-
-document.getElementById("prList").innerHTML =
-html || "未提出";
 }
 
 </script>
