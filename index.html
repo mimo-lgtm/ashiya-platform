@@ -1,260 +1,156 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>駅前公共施設 市民対話プラットフォーム v4</title>
+<title>政策OS プロトタイプ</title>
 
 <style>
-*{box-sizing:border-box;}
-
-body{
-margin:0;
-font-family:"Yu Gothic",sans-serif;
-background:#f4f6f8;
-color:#222;
-}
-
-header{
-background:linear-gradient(90deg,#1a73e8,#0f5bd3);
-color:white;
-padding:20px;
-font-size:28px;
-font-weight:bold;
-}
-
-.subheader{
-padding:12px 20px;
-background:#eef5ff;
-font-size:15px;
-line-height:1.8;
-}
-
-nav{
-display:flex;
-gap:10px;
-padding:10px;
-background:white;
-overflow:auto;
-box-shadow:0 2px 8px rgba(0,0,0,.08);
-}
-
-nav button{
-padding:12px 16px;
-border:none;
-border-radius:10px;
-background:#eef5ff;
-font-weight:bold;
-cursor:pointer;
-white-space:nowrap;
-}
-
+body{font-family:"Yu Gothic";margin:0;background:#f4f6f8;}
+header{background:#1a73e8;color:white;padding:18px;font-size:22px;font-weight:bold;}
+nav{display:flex;gap:10px;padding:10px;background:white;}
+nav button{padding:10px;border:none;border-radius:8px;background:#eef5ff;cursor:pointer;}
 .page{display:none;padding:15px;}
 .active{display:block;}
-
-.card{
-background:white;
-padding:18px;
-border-radius:14px;
-margin-bottom:14px;
-box-shadow:0 2px 8px rgba(0,0,0,.06);
-}
-
-.hero{font-size:20px;font-weight:bold;line-height:1.7;margin-bottom:15px;}
-
-.btn{
-width:100%;
-padding:14px;
-border:none;
-border-radius:10px;
-background:#1a73e8;
-color:white;
-cursor:pointer;
-font-size:16px;
-margin-top:10px;
-}
-
-.node{
-padding:14px;
-margin:10px 0;
-background:#f8fbff;
-border-left:6px solid #1a73e8;
-border-radius:10px;
-cursor:pointer;
-}
-
-.child{
-display:none;
-margin-left:20px;
-padding:12px;
-background:white;
-border-left:3px solid #ccc;
-line-height:1.8;
-}
-
-textarea{
-width:100%;
-height:180px;
-padding:14px;
-font-size:16px;
-border-radius:10px;
-border:1px solid #ccc;
-}
-
-.post{
-background:#f5f8ff;
-padding:15px;
-border-radius:10px;
-margin-top:12px;
-}
-
-.tag{
-display:inline-block;
-background:#1a73e8;
-color:white;
-padding:4px 10px;
-border-radius:20px;
-font-size:12px;
-margin-bottom:10px;
-}
-
-.metric{
-font-size:32px;
-font-weight:bold;
-color:#1a73e8;
-}
+.card{background:white;padding:16px;border-radius:12px;margin-bottom:12px;}
+.node{padding:10px;border-left:5px solid #1a73e8;background:#f8fbff;margin:6px 0;}
+.btn{padding:10px;width:100%;background:#1a73e8;color:white;border:none;border-radius:8px;margin-top:8px;}
 </style>
-
 </head>
 
 <body>
 
 <header>
-駅前公共施設 市民対話プラットフォーム
+政策OS（市民参加型AI統合プラットフォーム）
 </header>
 
-<div class="subheader">
-市民の声をAIとの対話によって整理し、政策テーマへ変換する実証プラットフォーム
-</div>
-
 <nav>
-<button onclick="showPage('home')">入口</button>
-<button onclick="showPage('tree')">ロジックツリー</button>
-<button onclick="showPage('dialog')">AI壁打ち</button>
-<button onclick="showPage('dashboard')">政策テーマ</button>
+<button onclick="show('home')">HOME</button>
+<button onclick="show('tree')">ロジックツリー</button>
+<button onclick="show('dialog')">AI壁打ち</button>
+<button onclick="show('pr')">Pull Requests</button>
+<button onclick="show('dashboard')">分析</button>
 </nav>
 
 <!-- HOME -->
 <div id="home" class="page active">
 <div class="card">
-<div class="hero">
-あなたの意見を政策アイデアへ育てます
-</div>
-<button class="btn" onclick="showPage('tree')">
-ロジックツリーを見る
-</button>
+<h2>市民の声を政策へ変換</h2>
+<p>AIと連動した政策統合OS</p>
 </div>
 </div>
 
 <!-- TREE -->
 <div id="tree" class="page">
 <div class="card">
-
 <h2>ロジックツリー</h2>
 
-<div class="node" onclick="toggle('a');selectTheme('芦屋市の価値向上')">
-① 芦屋市の価値向上
-</div>
-<div id="a" class="child">教育・景観・ブランド</div>
-
-<div class="node" onclick="toggle('b');selectTheme('市民へのベネフィット')">
-② 市民へのベネフィット
-</div>
-<div id="b" class="child">交流・学習・福祉</div>
-
-<div class="node" onclick="toggle('c');selectTheme('財政的持続可能性')">
-③ 財政的持続可能性
-</div>
-<div id="c" class="child">収益化・ふるさと納税</div>
-
-<button class="btn" onclick="showPage('dialog')">
-意見を投稿
-</button>
+<div class="node" onclick="selectTheme('教育・都市ブランド')">① 教育・都市ブランド</div>
+<div class="node" onclick="selectTheme('市民交流')">② 市民交流</div>
+<div class="node" onclick="selectTheme('都市防災')">③ 都市防災</div>
 
 </div>
 </div>
 
-<!-- DIALOG -->
+<!-- AI -->
 <div id="dialog" class="page">
 <div class="card">
 
 <h2>AI壁打ち</h2>
 
-<textarea id="input"></textarea>
+<textarea id="input" style="width:100%;height:120px;"></textarea>
 
-<button class="btn" onclick="runAI()">AIと対話</button>
+<button class="btn" onclick="runAI()">AI分析</button>
 
 <div id="result"></div>
 
 </div>
 </div>
 
+<!-- PR -->
+<div id="pr" class="page">
+<div class="card">
+<h2>Pull Requests（市民投稿）</h2>
+<div id="prList"></div>
+</div>
+</div>
+
 <!-- DASHBOARD -->
 <div id="dashboard" class="page">
 <div class="card">
+<h2>分析・統合コンセプト</h2>
 
-<h2>政策テーマ一覧</h2>
+<div id="concept"></div>
 
-<div id="themeList"></div>
-
-<h3>投稿数</h3>
-<div class="metric" id="postCount">0</div>
+<div id="report"></div>
 
 </div>
 </div>
 
 <script>
 
+let API_KEY = "あなたの行政APIキー"; // ←行政キー入れるとAI化
+let PRs = [];
 let themes = {};
-let currentTitle = "";
-let selectedTheme = "";
 
-// ★★★ Gemini AI連動 ★★★
+let currentTheme = "";
+
+// -------------------- UI --------------------
+function show(id){
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+}
+
+function selectTheme(t){
+currentTheme = t;
+show("dialog");
+document.getElementById("input").value = t + "について意見";
+}
+
+// -------------------- AI CORE --------------------
 async function runAI(){
 
-let text = document.getElementById("input").value.trim();
-if(text==="") return;
+let text = document.getElementById("input").value;
+if(!text) return;
 
-// ★ここに行政APIキーを入れる
-const API_KEY = "YOUR_API_KEY_HERE";
+// ========== ダミーAI ==========
+if(!API_KEY){
 
+let result = {
+summary:"（ダミー要約）" + text.slice(0,30),
+title:"ダミー政策：" + currentTheme,
+question:"どの観点を重視しますか？",
+viewpoint:"統合には追加議論が必要",
+category:currentTheme
+};
+
+return renderAI(result);
+}
+
+// ========== Gemini AI ==========
 const prompt = `
-あなたは自治体向け政策AIです。
-以下をJSONで出力：
+あなたは自治体AI。
+JSONで返す：
 
 {
 "summary":"",
 "title":"",
 "question":"",
 "viewpoint":"",
-"category":""
+"category":"",
+"merge_suggestion":""
 }
 
 入力：
 ${text}
 `;
 
-try{
-
 const res = await fetch(
 `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`,
 {
 method:"POST",
 headers:{"Content-Type":"application/json"},
-body:JSON.stringify({
-contents:[{parts:[{text:prompt}]}]
-})
+body:JSON.stringify({contents:[{parts:[{text:prompt}]}]})
 }
 );
 
@@ -265,88 +161,128 @@ let raw = data.candidates?.[0]?.content?.parts?.[0]?.text;
 let json;
 try{ json = JSON.parse(raw); }
 catch(e){
-json = {
-summary: raw,
-title:"解析結果",
-question:"",
-viewpoint:"",
-category:""
-};
+json = {summary:raw,title:"解析結果",question:"",viewpoint:"",category:""};
 }
 
-currentTitle = json.title;
+renderAI(json);
+}
+
+// -------------------- AI結果 --------------------
+function renderAI(json){
 
 document.getElementById("result").innerHTML = `
-<div class="post">
-
-<div class="tag">AI要約</div>
+<div class="card">
+<b>${json.title}</b>
 <p>${json.summary}</p>
 
-<div class="tag">政策テーマ</div>
-<p><b>${json.title}</b></p>
-
-<div class="tag">問い返し</div>
-<p>${json.question}</p>
-
-<div class="tag">追加視点</div>
-<p>${json.viewpoint}</p>
-
-<button class="btn" onclick="approveIdea()">
-登録する
-</button>
-
+<button onclick="createPR('${json.title}','${json.summary}')"
+class="btn">PR登録</button>
 </div>
 `;
-
-}catch(e){
-document.getElementById("result").innerHTML = `<div class="post">エラー:${e.message}</div>`;
 }
 
-}
+// -------------------- PR SYSTEM --------------------
+function createPR(title,text){
 
-// 登録
-function approveIdea(){
+let pr = {
+id:Date.now(),
+title,
+text,
+status:"pending",
+vote:0,
+cluster:"未整理"
+};
 
-if(!themes[currentTitle]) themes[currentTitle]=0;
-themes[currentTitle]++;
+PRs.push(pr);
 
+updatePR();
 updateDashboard();
-
-alert("登録完了：" + currentTitle);
 }
 
-// ダッシュボード更新
-function updateDashboard(){
+function updatePR(){
 
 let html="";
-let total=0;
 
-for(let t in themes){
-total += themes[t];
-html += `<div class="node">${t} : ${themes[t]}件</div>`;
+PRs.forEach(p=>{
+html += `
+<div class="node">
+<b>${p.title}</b><br>
+${p.text}<br><br>
+
+状態:${p.status} / 投票:${p.vote}<br>
+分類:${p.cluster}<br>
+
+<button onclick="vote(${p.id})">投票</button>
+<button onclick="approve(${p.id})">承認</button>
+</div>
+`;
+});
+
+document.getElementById("prList").innerHTML =
+html || "PRなし";
 }
 
-document.getElementById("themeList").innerHTML =
-html || "<div class='node'>まだ投稿なし</div>";
+// -------------------- 投票 --------------------
+function vote(id){
 
-document.getElementById("postCount").innerText = total;
+let p = PRs.find(x=>x.id===id);
+p.vote++;
+
+autoCluster(p);
+
+updatePR();
+updateDashboard();
 }
 
-// UI
-function showPage(id){
-document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-document.getElementById(id).classList.add("active");
+// -------------------- 自動統合 --------------------
+function autoCluster(pr){
+
+if(pr.text.includes("教育") || pr.text.includes("子ども")){
+pr.cluster = "教育系統合";
+}
+else if(pr.text.includes("防災")){
+pr.cluster = "防災系統合";
+}
+else{
+pr.cluster = "新規候補";
+}
 }
 
-function toggle(id){
-let el=document.getElementById(id);
-el.style.display = el.style.display==="block"?"none":"block";
+// -------------------- 承認 --------------------
+function approve(id){
+
+let p = PRs.find(x=>x.id===id);
+p.status = "approved";
+
+themes[p.title] = (themes[p.title]||0)+1;
+
+updatePR();
+updateDashboard();
 }
 
-function selectTheme(t){
-selectedTheme=t;
-showPage("dialog");
-document.getElementById("input").value=t+"について意見";
+// -------------------- ダッシュボード --------------------
+function updateDashboard(){
+
+// コンセプト進化
+let concept = `
+<b>統合コンセプト（AI生成）</b><br><br>
+・教育×都市ブランドの統合強化<br>
+・市民交流の拡張<br>
+・未整理領域の増加 → 新カテゴリ生成フェーズ
+`;
+
+document.getElementById("concept").innerHTML = concept;
+
+// レポート生成
+let total = Object.values(themes).reduce((a,b)=>a+b,0);
+
+document.getElementById("report").innerHTML = `
+<hr>
+<b>行政レポート</b><br>
+総PR数：${PRs.length}<br>
+承認数：${total}<br>
+未処理：${PRs.filter(p=>p.status==="pending").length}
+`;
 }
 
 </script>
