@@ -3,18 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>駅前公共施設 市民参加OS（デモ版）</title>
+<title>駅前公共施設 市民意見プラットフォーム（統合版）</title>
 
 <style>
 
 body{
 margin:0;
 font-family:"Yu Gothic","Hiragino Kaku Gothic ProN",sans-serif;
-background:#f4f6f8;
+background:#f3f5f7;
 color:#1b1f23;
 }
 
-/* 上部ナビ */
+/* ===== ナビ ===== */
 .topbar{
 background:#0a3a5a;
 color:white;
@@ -29,21 +29,22 @@ padding:8px 12px;
 border:none;
 border-radius:6px;
 cursor:pointer;
+font-weight:bold;
 }
 
-/* レイアウト */
+/* ===== レイアウト ===== */
 .container{
-max-width:1000px;
+max-width:1100px;
 margin:0 auto;
 padding:16px;
 }
 
 .card{
 background:white;
-border-radius:10px;
+border-radius:12px;
 padding:16px;
 margin-bottom:12px;
-box-shadow:0 2px 10px rgba(0,0,0,0.06);
+box-shadow:0 3px 12px rgba(0,0,0,0.06);
 }
 
 .block{
@@ -52,16 +53,27 @@ padding:12px;
 margin:8px 0;
 cursor:pointer;
 background:#f9fbfd;
+transition:.2s;
 }
 
 .block:hover{background:#eef5ff;}
 
+.tag{
+display:inline-block;
+background:#0a3a5a;
+color:white;
+padding:3px 8px;
+border-radius:20px;
+font-size:12px;
+margin-bottom:6px;
+}
+
 textarea{
 width:100%;
-height:110px;
+height:120px;
 padding:10px;
+border-radius:8px;
 border:1px solid #ccc;
-border-radius:6px;
 }
 
 .btn{
@@ -69,76 +81,83 @@ background:#0a3a5a;
 color:white;
 border:none;
 padding:10px 14px;
-border-radius:6px;
+border-radius:8px;
 cursor:pointer;
 margin-top:10px;
 }
 
-.tag{
-display:inline-block;
-background:#0a3a5a;
-color:white;
-padding:3px 8px;
-border-radius:12px;
-font-size:12px;
-}
+.small{font-size:13px;color:#666;}
 
-/* モード */
 .page{display:none;}
 .active{display:block;}
 
-.small{font-size:13px;color:#666;}
+.metric{
+font-size:28px;
+font-weight:bold;
+color:#0a3a5a;
+}
+
+hr{border:none;border-top:1px solid #eee;margin:12px 0;}
+
+.badge{
+display:inline-block;
+padding:2px 6px;
+border-radius:6px;
+font-size:11px;
+margin-left:6px;
+}
+
+.ok{background:#d6f5dd;color:#1a6b2b;}
+.wait{background:#fff3cd;color:#8a6d1a;}
 
 </style>
 </head>
 
 <body>
 
-<!-- ■ナビ -->
+<!-- ================= NAV ================= -->
 <div class="topbar">
-
-<button onclick="mode('guide')">はじめに</button>
-<button onclick="mode('tree')">ロジックツリー</button>
-<button onclick="mode('post')">自由投稿</button>
-<button onclick="mode('analysis')">分析</button>
-<button onclick="mode('overview')">全体像</button>
-
+<button onclick="go('home')">はじめに</button>
+<button onclick="go('tree')">ロジックツリー</button>
+<button onclick="go('post')">意見投稿</button>
+<button onclick="go('analysis')">分析</button>
+<button onclick="go('overview')">全体像</button>
 </div>
 
 <div class="container">
 
-<!-- ================= GUIDE ================= -->
-<div id="guide" class="page active">
+<!-- ================= HOME ================= -->
+<div id="home" class="page active">
 
 <div class="card">
 
-<h2>駅前公共施設を、みんなで考える場所です</h2>
+<h2>駅前公共施設について、あなたの意見を聞かせてください</h2>
 
 <p>
-ここは意見を集めるだけではなく、<br>
-あなたの考えをAIが整理し、構造化していく仕組みです。
+この仕組みは単なるアンケートではありません。<br>
+市民の意見をAIが整理し、構造化し、全体像としてつなげていきます。
 </p>
 
-<div class="card" style="background:#f9fbfd">
+<hr>
 
-<h3>できること</h3>
-
+<h3>このシステムでできること</h3>
 <ul>
-<li>自由に意見を書ける</li>
-<li>AIが要約・整理</li>
-<li>ロジックツリーに反映</li>
-<li>意見が分析される</li>
+<li>自由な意見投稿</li>
+<li>AIによる要約・整理（API接続時）</li>
+<li>ロジックツリーへの分類</li>
+<li>意見の統合・分析</li>
+<li>全体コンセプトの変化表示</li>
 </ul>
 
-</div>
+<hr>
 
-<h3>まずは試す</h3>
+<h3>まず試してください</h3>
 
-<textarea id="input"></textarea>
+<textarea id="input" placeholder="例：駅前をもっと交流の場にしたい。子どもと高齢者が自然に集まる空間がいい。"></textarea>
 
-<button class="btn" onclick="callAI()">AIで整理する</button>
+<button class="btn" onclick="previewAI()">AIで整理（デモ）</button>
 
-<div id="ai"></div>
+<div id="preview"></div>
 
 </div>
 
@@ -149,13 +168,29 @@ font-size:12px;
 
 <div class="card">
 
-<h2>ロジックツリー</h2>
+<h2>ロジックツリー（市民の論点構造）</h2>
 
-<div class="block" onclick="setTopic('価値')">駅前の価値向上</div>
-<div class="block" onclick="setTopic('利用者')">利用者の考え方</div>
-<div class="block" onclick="setTopic('財政')">財政と運営</div>
-<div class="block" onclick="setTopic('機能')">施設の機能</div>
-<div class="block" onclick="setTopic('未来')">未来の駅前</div>
+<p class="small">クリックして意見投稿へ</p>
+
+<div class="block" onclick="select('価値向上')">
+駅前の価値向上 <span class="badge ok" id="b1">0</span>
+</div>
+
+<div class="block" onclick="select('利用者')">
+利用者の考え方 <span class="badge wait" id="b2">未整理</span>
+</div>
+
+<div class="block" onclick="select('財政')">
+財政・運営 <span class="badge wait" id="b3">未整理</span>
+</div>
+
+<div class="block" onclick="select('機能')">
+施設の役割 <span class="badge wait" id="b4">未整理</span>
+</div>
+
+<div class="block" onclick="select('未来')">
+未来の駅前像 <span class="badge wait" id="b5">未整理</span>
+</div>
 
 </div>
 
@@ -168,13 +203,13 @@ font-size:12px;
 
 <h2>意見投稿</h2>
 
-<div class="tag" id="topicLabel"></div>
+<div class="tag" id="topic">未選択</div>
 
 <textarea id="postText"></textarea>
 
-<button class="btn" onclick="submitAI()">AIで整理して投稿</button>
+<button class="btn" onclick="submit()">投稿（AI整理）</button>
 
-<div id="result"></div>
+<div id="postResult"></div>
 
 </div>
 
@@ -185,7 +220,7 @@ font-size:12px;
 
 <div class="card">
 
-<h2>分析</h2>
+<h2>分析（統合ビュー）</h2>
 
 <div id="analysisBox"></div>
 
@@ -198,7 +233,7 @@ font-size:12px;
 
 <div class="card">
 
-<h2>全体像</h2>
+<h2>全体像（コンセプト進化）</h2>
 
 <div id="overviewBox"></div>
 
@@ -210,56 +245,40 @@ font-size:12px;
 
 <script>
 
-/* ===================== API KEY ===================== */
-// ★ここにGemini APIキーを入れるだけで動作
+/* ================= API ================= */
 const API_KEY = "YOUR_API_KEY_HERE";
 
-/* ===================== STATE ===================== */
-
+/* ================= STATE ================= */
 let posts = [];
-let currentTopic = "";
+let current = "";
 
-/* ===================== MODE ===================== */
-
-function mode(m){
+/* ================= NAV ================= */
+function go(id){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-document.getElementById(m).classList.add("active");
+document.getElementById(id).classList.add("active");
 render();
 }
 
-/* ===================== AI CALL ===================== */
-
-async function callAI(){
-
-let text = document.getElementById("input").value;
-if(!text) return;
-
-let res = await gemini(text);
-
-document.getElementById("ai").innerHTML =
-renderAI(text,res);
-}
-
-/* ===================== GEMINI ===================== */
-
-async function gemini(text){
+/* ================= AI（ダミー＋実接続） ================= */
+async function callAI(text){
 
 if(API_KEY==="YOUR_API_KEY_HERE"){
 return {
-summary:"（APIキー未設定のためダミー出力）",
-question:"誰のための駅前にしたいですか？",
-tag:"未分類"
+summary:"（ダミー）この意見は駅前の活用に関する提案です",
+tag:"未分類",
+question:"誰のための空間にしますか？",
+status:"demo"
 };
 }
 
 const res = await fetch(
-"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + API_KEY,
+"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key="+API_KEY,
 {
 method:"POST",
 headers:{"Content-Type":"application/json"},
 body:JSON.stringify({
 contents:[{parts:[{text:
-"次の意見を要約し、タグ分類し、問い返しを作ってください:\n" + text
+"次を要約・分類・問い返し生成:\n"+text
 }]}]
 })
 }
@@ -271,27 +290,21 @@ let out = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
 
 return {
 summary:out,
+tag:"AI分類",
 question:"この意見の優先対象は誰ですか？",
-tag:"AI分類"
+status:"ai"
 };
 }
 
-/* ===================== POST ===================== */
+/* ================= PREVIEW ================= */
+async function previewAI(){
 
-async function submitAI(){
+let t = document.getElementById("input").value;
+if(!t) return;
 
-let text = document.getElementById("postText").value;
-if(!text) return;
+let ai = await callAI(t);
 
-let ai = await gemini(text);
-
-posts.push({
-topic:currentTopic,
-text:text,
-ai:ai
-});
-
-document.getElementById("result").innerHTML = `
+document.getElementById("preview").innerHTML = `
 <div class="card">
 
 <div class="tag">${ai.tag}</div>
@@ -300,46 +313,72 @@ document.getElementById("result").innerHTML = `
 
 <p><b>問い：</b>${ai.question}</p>
 
-<p class="small">ロジックツリーに反映されます（デモ）</p>
+<p class="small">ロジックツリーに統合されます</p>
 
 </div>
 `;
 }
 
-/* ===================== SET TOPIC ===================== */
-
-function setTopic(t){
-currentTopic = t;
-document.getElementById("topicLabel").innerText = t;
-mode("post");
+/* ================= SELECT ================= */
+function select(t){
+current = t;
+document.getElementById("topic").innerText = t;
+go("post");
 }
 
-/* ===================== ANALYSIS ===================== */
+/* ================= SUBMIT ================= */
+async function submit(){
 
+let t = document.getElementById("postText").value;
+if(!t) return;
+
+let ai = await callAI(t);
+
+posts.push({
+topic:current,
+text:t,
+ai:ai
+});
+
+document.getElementById("postResult").innerHTML = `
+<div class="card">
+
+<div class="tag">${ai.tag}</div>
+
+<p>${ai.summary}</p>
+
+<p class="small">→ ${current} に統合候補として登録</p>
+
+</div>
+`;
+}
+
+/* ================= RENDER ================= */
 function render(){
 
-if(posts.length===0){
-document.getElementById("analysisBox").innerHTML =
-"<p>まだデータがありません</p>";
-document.getElementById("overviewBox").innerHTML =
-"<p>まだ投稿がありません</p>";
-return;
-}
-
-let map={};
-
+/* ---- tree badges ---- */
+let map = {};
 posts.forEach(p=>{
 map[p.topic]=(map[p.topic]||0)+1;
 });
 
-let html="";
+document.getElementById("b1").innerText = map["価値向上"]||0;
 
+/* ---- analysis ---- */
+let a="";
 for(let k in map){
-html += `<div class="card"><b>${k}</b><br>投稿:${map[k]}</div>`;
+a+=`
+<div class="card">
+<div class="tag">${k}</div>
+<div class="metric">${map[k]}</div>
+<p class="small">統合候補</p>
+</div>`;
 }
 
-document.getElementById("analysisBox").innerHTML = html;
+document.getElementById("analysisBox").innerHTML =
+a || "<p>まだデータなし</p>";
 
+/* ---- overview ---- */
 document.getElementById("overviewBox").innerHTML =
 posts.map(p=>`
 <div class="card">
@@ -347,12 +386,8 @@ posts.map(p=>`
 <p>${p.text}</p>
 <p class="small">${p.ai.summary}</p>
 </div>
-`).join("");
+`).join("") || "<p>まだ投稿なし</p>";
 }
-
-/* ===================== UI ===================== */
-
-function render(){}
 
 </script>
 
