@@ -4,20 +4,49 @@
 <meta charset="utf-8">
 <title>市民対話AIプラットフォーム</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
 
-<!-- イントロ -->
+<!-- イントロ（導線設計版） -->
 <div id="introScreen" class="intro">
+
   <h1>🏛 市民対話AIプラットフォーム</h1>
-  <p>
-    駅前公共施設のあり方について、市民の意見をAIが構造化し、
-    政策として可視化する実証デモです。
+
+  <p class="introLead">
+    市民の声をAIとの対話によって整理し、<br>
+    政策テーマへと変換する実証プラットフォームです。
   </p>
-  <button id="startBtn">デモを開始</button>
+
+  <div class="introText">
+
+    <p>
+      あなたの意見を、そのまま政策アイデアへ育てていきます。
+      意見は整理されていなくても問題ありません。
+      AIエージェントが対話を通じてロジカルな提案へと再構築します。
+    </p>
+
+    <p>
+      まずは、他の市民の意見が集まっている<br>
+      「ロジックツリー」を見てみましょう。
+    </p>
+
+    <p>
+      その中から関心のあるテーマや提案を選び、<br>
+      あなた自身の意見を投稿してください。
+    </p>
+
+    <p>
+      投稿はとても簡単です。思いついたままで構いません。
+    </p>
+
+  </div>
+
+  <button id="startBtn" class="primaryBtn">
+    ロジックツリーを見る
+  </button>
+
 </div>
 
 <!-- 上部ナビ -->
@@ -48,8 +77,8 @@
     <div id="posts"></div>
 
     <div class="inputBox">
-      <textarea id="input" placeholder="市民意見を入力"></textarea>
-      <button id="btn">AI解析</button>
+      <textarea id="input" placeholder="あなたの意見を入力（未整理でOK）"></textarea>
+      <button id="btn">AI分析</button>
     </div>
   </main>
 
@@ -67,6 +96,5 @@
 </div>
 
 <script src="./app.js"></script>
-
 </body>
 </html>

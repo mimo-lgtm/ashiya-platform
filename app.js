@@ -16,49 +16,52 @@ startBtn.addEventListener("click", () => {
   intro.style.display = "none";
 });
 
-/* ===== ナビスクロール ===== */
+/* ===== ナビ ===== */
 function scrollToSection(id) {
-  const el =
-    document.getElementById(id + "Section") ||
-    document.getElementById(id);
-
+  const el = document.getElementById(id + "Section");
   if (el) el.scrollIntoView({ behavior: "smooth" });
 }
 
 /* ===== ツリー ===== */
 const treeState = {
-  "安全・安心設計": 0,
-  "多世代交流空間": 0,
-  "教育・知的機能": 0,
-  "収益・持続性": 0,
-  "都市戦略": 0
+  "芦屋市の価値向上": 0,
+  "市民ベネフィット": 0,
+  "財政持続性": 0,
+  "施設戦略": 0,
+  "都市ガバナンス": 0
 };
 
 function renderTree() {
   treeView.innerHTML = Object.entries(treeState)
-    .map(([k, v]) => `<div>${k}：${v}</div>`)
+    .map(([k,v]) => `<div>${k}：${v}</div>`)
     .join("");
 }
 
 /* ===== 投稿 ===== */
 function addPost(text, ai) {
   const div = document.createElement("div");
-  div.innerHTML = `
-    <b>${text}</b><br>
-    <small>${ai.category} / ${ai.impact}</small>
-  `;
+  div.innerHTML = `<b>${text}</b><br><small>${ai.category} / ${ai.impact}</small>`;
   posts.prepend(div);
 }
 
 /* ===== ツリー更新 ===== */
+function normalizeCategory(cat) {
+  if (!cat) return "市民ベネフィット";
+  if (cat.includes("価値")) return "芦屋市の価値向上";
+  if (cat.includes("ベネ")) return "市民ベネフィット";
+  if (cat.includes("財政")) return "財政持続性";
+  if (cat.includes("施設")) return "施設戦略";
+  if (cat.includes("ガバナンス")) return "都市ガバナンス";
+  return "市民ベネフィット";
+}
+
 function updateTree(category) {
-  if (treeState[category] !== undefined) {
-    treeState[category]++;
-  }
+  const key = normalizeCategory(category);
+  if (treeState[key] !== undefined) treeState[key]++;
   renderTree();
 }
 
-/* ===== LLM（GROQ） ===== */
+/* ===== GROQ ===== */
 async function callLLM(text) {
   const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
     method: "POST",
@@ -72,11 +75,10 @@ async function callLLM(text) {
         {
           role: "system",
           content: `
-あなたは行政政策AI。
 必ずJSONのみ返す：
 
 {
-  "category": "安全・安心設計|多世代交流空間|教育・知的機能|収益・持続性|都市戦略",
+  "category": "価値向上|市民ベネフィット|財政持続性|施設戦略|都市ガバナンス",
   "intent": "",
   "summary": "",
   "impact": "low|mid|high",
@@ -92,10 +94,13 @@ async function callLLM(text) {
 
   const data = await res.json();
 
-  const raw = data.choices[0].message.content;
-  const cleaned = raw.replace(/```json|```/g, "").trim();
+  let raw = data.choices?.[0]?.message?.content || "";
+  raw = raw.replace(/```json|```/g, "").trim();
 
-  return JSON.parse(cleaned);
+  const match = raw.match(/\{[\s\S]*\}/);
+  if (!match) throw new Error("JSON parse failed");
+
+  return JSON.parse(match[0]);
 }
 
 /* ===== 政策 ===== */
@@ -128,7 +133,6 @@ btn.addEventListener("click", async () => {
 
     aiPanel.innerHTML = `
       <div><b>分類:</b> ${ai.category}</div>
-      <div><b>意図:</b> ${ai.intent}</div>
       <div><b>要約:</b> ${ai.summary}</div>
       <div><b>影響:</b> ${ai.impact}</div>
     `;
@@ -136,8 +140,8 @@ btn.addEventListener("click", async () => {
     generatePolicy(ai);
 
   } catch (e) {
-    aiPanel.innerHTML = "解析エラー";
     console.error(e);
+    aiPanel.innerHTML = "解析エラー（LLM応答異常）";
   }
 
   input.value = "";
