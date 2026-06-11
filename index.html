@@ -14,25 +14,25 @@
 
   <h1>🏛 市民対話AIプラットフォーム</h1>
 
-  <p>
-    市民の意見をAIとの対話によって整理し、政策テーマへ変換する実証プラットフォームです。
+  <p class="lead">
+    市民の声をAIとの対話によって整理し、政策テーマへ変換する実証プラットフォームです。
   </p>
 
   <p>
-    あなたの意見を政策アイデアへ育てます。未整理のままで構いません。
-    AIが対話を通じて構造化します。
+    あなたの意見は未整理のままで構いません。  
+    AIが対話を通じて政策提案へと再構築します。
   </p>
 
   <p>
-    まずはロジックツリーで他の市民の意見を確認してください。
-    気になる提案を選び、自分の意見を投稿できます。
+    まずはロジックツリーで他の市民の意見を確認してください。  
+    興味のあるテーマを見つけたら、自分の意見を投稿できます。
   </p>
 
   <button id="startBtn">ロジックツリーを見る</button>
 
 </div>
 
-<!-- 上部 -->
+<!-- 上部バー -->
 <header class="topbar">
   <div>🏛 市民対話AI</div>
   <div class="status">LIVE DEMO</div>
@@ -40,27 +40,60 @@
 
 <div class="layout">
 
+  <!-- 左：ロジックツリー（固定表示） -->
   <aside class="panel tree">
+
     <h3>政策ロジックツリー</h3>
-    <div id="treeView"></div>
+
+    <div id="treeView">
+
+      <b>市民政策ロジックツリー（Vision）</b><br><br>
+
+      コストセンターからプロフィットセンターへ<br>
+      市民のウェルビーイングと知財による都市経営<br><br>
+
+      <b>① 芦屋市の価値向上</b><br>
+      教育ブランド・景観・公園・都市魅力<br><br>
+
+      <b>② 市民ベネフィット</b><br>
+      多世代交流・学び・コミュニティ<br><br>
+
+      <b>③ 財政持続性</b><br>
+      収益施設・寄付・チャレンジショップ<br><br>
+
+      <b>④ 施設戦略</b><br>
+      知の拠点・起業支援・デジタル化<br><br>
+
+      <b>⑤ 都市ガバナンス</b><br>
+      DAO・災害対応・市民自治
+
+    </div>
+
   </aside>
 
+  <!-- 中央：投稿 -->
   <main class="panel center">
+
     <h3>市民投稿</h3>
+
     <div id="posts"></div>
 
     <div class="inputBox">
-      <textarea id="input"></textarea>
+      <textarea id="input" placeholder="あなたの意見を入力（未整理OK）"></textarea>
       <button id="btn">AI解析</button>
     </div>
+
   </main>
 
+  <!-- 右：AI -->
   <aside class="panel ai">
+
     <h3>AI分析</h3>
-    <div id="aiPanel"></div>
+    <div id="aiPanel">待機中</div>
 
     <h3>政策ドラフト</h3>
     <div id="policyPanel"></div>
+
   </aside>
 
 </div>

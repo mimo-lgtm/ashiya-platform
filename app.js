@@ -1,24 +1,23 @@
 const GROQ_API_KEY = "YOUR_GROQ_API_KEY";
 
-/* ===== DOM安全取得（重要） ===== */
+/* ===== DOM安全取得 ===== */
 const btn = document.getElementById("btn");
 const input = document.getElementById("input");
 const posts = document.getElementById("posts");
 const aiPanel = document.getElementById("aiPanel");
 const policyPanel = document.getElementById("policyPanel");
-const treeView = document.getElementById("treeView");
 
 const intro = document.getElementById("introScreen");
 const startBtn = document.getElementById("startBtn");
 
-/* ===== イントロ安全制御 ===== */
-if (startBtn && intro) {
+/* ===== イントロ ===== */
+if (startBtn) {
   startBtn.addEventListener("click", () => {
-    intro.style.display = "none";
+    if (intro) intro.style.display = "none";
   });
 }
 
-/* ===== ツリー ===== */
+/* ===== ツリー状態 ===== */
 const treeState = {
   "芦屋市の価値向上": 0,
   "市民ベネフィット": 0,
@@ -27,24 +26,19 @@ const treeState = {
   "都市ガバナンス": 0
 };
 
-function renderTree() {
-  if (!treeView) return;
-
-  treeView.innerHTML = Object.entries(treeState)
-    .map(([k,v]) => `<div>${k}：${v}</div>`)
-    .join("");
-}
-
-/* ===== 投稿 ===== */
+/* ===== 投稿表示 ===== */
 function addPost(text, ai) {
   if (!posts) return;
 
   const div = document.createElement("div");
-  div.innerHTML = `<b>${text}</b><br><small>${ai.category}</small>`;
+  div.innerHTML = `
+    <b>${text}</b><br>
+    <small>${ai.category} / ${ai.impact}</small>
+  `;
   posts.prepend(div);
 }
 
-/* ===== 正規化 ===== */
+/* ===== カテゴリ正規化 ===== */
 function normalizeCategory(cat) {
   if (!cat) return "市民ベネフィット";
   if (cat.includes("価値")) return "芦屋市の価値向上";
@@ -55,14 +49,16 @@ function normalizeCategory(cat) {
   return "市民ベネフィット";
 }
 
+/* ===== ツリー更新 ===== */
 function updateTree(category) {
   const key = normalizeCategory(category);
   if (treeState[key] !== undefined) treeState[key]++;
-  renderTree();
 }
 
-/* ===== GROQ（完全防御版） ===== */
+/* ===== AI呼び出し（完全耐性版） ===== */
 async function callLLM(text) {
+  const safeText = (text || "").slice(0, 800);
+
   const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
     method: "POST",
     headers: {
@@ -75,7 +71,7 @@ async function callLLM(text) {
         {
           role: "system",
           content: `
-必ずJSONのみ：
+必ずJSONのみ返す：
 
 {
   "category": "価値向上|市民ベネフィット|財政持続性|施設戦略|都市ガバナンス",
@@ -86,7 +82,7 @@ async function callLLM(text) {
 }
 `
         },
-        { role: "user", content: text }
+        { role: "user", content: safeText }
       ],
       temperature: 0.2
     })
@@ -96,20 +92,17 @@ async function callLLM(text) {
 
   let raw = data?.choices?.[0]?.message?.content || "";
 
-  // 🔥 防御1
   raw = raw.replace(/```json|```/g, "").trim();
 
-  // 🔥 防御2（最重要）
   const match = raw.match(/\{[\s\S]*\}/);
-
   if (!match) {
-    throw new Error("No JSON returned");
+    throw new Error("Invalid AI response");
   }
 
   return JSON.parse(match[0]);
 }
 
-/* ===== 政策 ===== */
+/* ===== 政策生成 ===== */
 function generatePolicy(ai) {
   if (!policyPanel) return;
 
@@ -151,12 +144,9 @@ if (btn) {
 
     } catch (e) {
       console.error(e);
-      aiPanel.innerHTML = "解析エラー（AI応答不正）";
+      aiPanel.innerHTML = "解析エラー（AI応答異常）";
     }
 
     input.value = "";
   });
 }
-
-/* 初期描画 */
-renderTree();
