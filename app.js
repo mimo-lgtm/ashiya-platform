@@ -1,56 +1,37 @@
-const GROQ_API_KEY = "YOUR_GROQ_API_KEY";
+const GROQ_API_KEY = window.GROQ_API_KEY;
 
-/* =====================
-   DOM
-===================== */
+/* ================= DOM ================= */
 const btn = document.getElementById("btn");
 const input = document.getElementById("input");
 const posts = document.getElementById("posts");
 const aiPanel = document.getElementById("aiPanel");
 const policyPanel = document.getElementById("policyPanel");
-
 const intro = document.getElementById("introScreen");
 const startBtn = document.getElementById("startBtn");
 
-/* =====================
-   イントロ
-===================== */
+/* ================= 追加①（ここ！最初に入れる） ================= */
+console.log("GROQ KEY:", GROQ_API_KEY);
+
+/* ================= イントロ ================= */
 if (startBtn && intro) {
   startBtn.onclick = () => {
     intro.style.display = "none";
   };
 }
 
-/* =====================
-   投稿表示
-===================== */
+/* ================= 投稿 ================= */
 function addPost(text, ai) {
   if (!posts) return;
 
   const div = document.createElement("div");
   div.innerHTML = `
     <b>${text}</b><br>
-    <small>${ai.category || "未分類"} / ${ai.impact || ""}</small>
+    <small>${ai.category || "未分類"}</small>
   `;
   posts.prepend(div);
 }
 
-/* =====================
-   カテゴリ正規化
-===================== */
-function normalize(cat) {
-  if (!cat) return "市民ベネフィット";
-  if (cat.includes("価値")) return "芦屋市の価値向上";
-  if (cat.includes("ベネ")) return "市民ベネフィット";
-  if (cat.includes("財政")) return "財政持続性";
-  if (cat.includes("施設")) return "施設戦略";
-  if (cat.includes("ガバナンス")) return "都市ガバナンス";
-  return "市民ベネフィット";
-}
-
-/* =====================
-   AI呼び出し（安定版）
-===================== */
+/* ================= AI ================= */
 async function callLLM(text) {
 
   const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
@@ -60,27 +41,24 @@ async function callLLM(text) {
       "Authorization": `Bearer ${GROQ_API_KEY}`
     },
     body: JSON.stringify({
-      model: "llama-3.1-70b-versatile",
-
-      // JSON強制（重要）
-      response_format: { type: "json_object" },
+      model: "llama3-70b-8192",
 
       messages: [
         {
           role: "system",
           content: `
-あなたは行政政策AIです。
+あなたは行政AIです。
 
-必ず以下のJSONを返してください（省略禁止）：
+必ずJSONだけ返してください：
 
 {
-  "category": "市民ベネフィット | 芦屋市の価値向上 | 財政持続性 | 施設戦略 | 都市ガバナンス",
-  "summary": "必ず短く要約",
+  "category": "市民ベネフィット",
+  "summary": "短く要約",
   "impact": "low|mid|high",
-  "policy_suggestion": "必ず具体的な政策案を書く"
+  "policy_suggestion": "具体的な政策案"
 }
 
-絶対に文章は禁止。JSONのみ。
+余計な文章禁止
 `
         },
         {
@@ -92,30 +70,27 @@ async function callLLM(text) {
     })
   });
 
-  const data = await res.json();
+  /* ================= 追加②（ここ！レスポンス確認） ================= */
+  const rawText = await res.text();
+  console.log("RAW RESPONSE:", rawText);
+
+  let data;
+  try {
+    data = JSON.parse(rawText);
+  } catch (e) {
+    throw new Error("JSON parse failed");
+  }
+
   const content = data?.choices?.[0]?.message?.content;
 
   if (!content) {
-    throw new Error("No response");
+    throw new Error("No AI content");
   }
 
-  try {
-    return JSON.parse(content);
-  } catch (e) {
-    console.log("JSON parse failed:", content);
-
-    return {
-      category: "市民ベネフィット",
-      summary: text.slice(0, 30),
-      impact: "mid",
-      policy_suggestion: "AI解析に失敗したため自動生成できませんでした"
-    };
-  }
+  return JSON.parse(content);
 }
 
-/* =====================
-   政策表示
-===================== */
+/* ================= 政策表示 ================= */
 function renderPolicy(ai) {
   if (!policyPanel) return;
 
@@ -123,18 +98,16 @@ function renderPolicy(ai) {
     <div style="white-space:pre-line">
 【政策ドラフト】
 
-■分類: ${ai.category || ""}
-■要約: ${ai.summary || ""}
+■分類: ${ai.category}
+■要約: ${ai.summary}
 
 ■提案:
-${ai.policy_suggestion || "（生成中）"}
+${ai.policy_suggestion}
     </div>
   `;
 }
 
-/* =====================
-   実行
-===================== */
+/* ================= 実行 ================= */
 if (btn) {
   btn.onclick = async () => {
 
@@ -158,7 +131,7 @@ if (btn) {
 
     } catch (e) {
       console.error(e);
-      aiPanel.innerHTML = "解析エラー（AI応答異常）";
+      aiPanel.innerHTML = "解析エラー（原因ログ確認）";
     }
 
     input.value = "";
