@@ -1,6 +1,8 @@
 const GROQ_API_KEY = "YOUR_GROQ_API_KEY";
 
-/* ===== DOM ===== */
+/* =====================
+   DOM
+===================== */
 const btn = document.getElementById("btn");
 const input = document.getElementById("input");
 const posts = document.getElementById("posts");
@@ -10,34 +12,32 @@ const policyPanel = document.getElementById("policyPanel");
 const intro = document.getElementById("introScreen");
 const startBtn = document.getElementById("startBtn");
 
-/* ===== イントロ ===== */
+/* =====================
+   イントロ
+===================== */
 if (startBtn && intro) {
   startBtn.onclick = () => {
     intro.style.display = "none";
   };
 }
 
-/* ===== 投稿 ===== */
+/* =====================
+   投稿表示
+===================== */
 function addPost(text, ai) {
   if (!posts) return;
 
   const div = document.createElement("div");
   div.innerHTML = `
     <b>${text}</b><br>
-    <small>${ai.category}</small>
+    <small>${ai.category || "未分類"} / ${ai.impact || ""}</small>
   `;
   posts.prepend(div);
 }
 
-/* ===== ツリー ===== */
-const treeState = {
-  "芦屋市の価値向上": 0,
-  "市民ベネフィット": 0,
-  "財政持続性": 0,
-  "施設戦略": 0,
-  "都市ガバナンス": 0
-};
-
+/* =====================
+   カテゴリ正規化
+===================== */
 function normalize(cat) {
   if (!cat) return "市民ベネフィット";
   if (cat.includes("価値")) return "芦屋市の価値向上";
@@ -48,12 +48,9 @@ function normalize(cat) {
   return "市民ベネフィット";
 }
 
-function updateTree(category) {
-  const key = normalize(category);
-  if (treeState[key] !== undefined) treeState[key]++;
-}
-
-/* ===== AI（完全安定版） ===== */
+/* =====================
+   AI呼び出し（安定版）
+===================== */
 async function callLLM(text) {
 
   const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
@@ -65,7 +62,7 @@ async function callLLM(text) {
     body: JSON.stringify({
       model: "llama-3.1-70b-versatile",
 
-      // 🔥 JSON強制
+      // JSON強制（重要）
       response_format: { type: "json_object" },
 
       messages: [
@@ -74,16 +71,16 @@ async function callLLM(text) {
           content: `
 あなたは行政政策AIです。
 
-必ず以下のJSONだけを返してください：
+必ず以下のJSONを返してください（省略禁止）：
 
 {
-  "category": "芦屋市の価値向上 | 市民ベネフィット | 財政持続性 | 施設戦略 | 都市ガバナンス",
-  "summary": "短い要約",
+  "category": "市民ベネフィット | 芦屋市の価値向上 | 財政持続性 | 施設戦略 | 都市ガバナンス",
+  "summary": "必ず短く要約",
   "impact": "low|mid|high",
-  "policy_suggestion": "具体的政策提案"
+  "policy_suggestion": "必ず具体的な政策案を書く"
 }
 
-余計な文章は禁止
+絶対に文章は禁止。JSONのみ。
 `
         },
         {
@@ -96,17 +93,29 @@ async function callLLM(text) {
   });
 
   const data = await res.json();
-
   const content = data?.choices?.[0]?.message?.content;
 
   if (!content) {
-    throw new Error("No AI response");
+    throw new Error("No response");
   }
 
-  return JSON.parse(content);
+  try {
+    return JSON.parse(content);
+  } catch (e) {
+    console.log("JSON parse failed:", content);
+
+    return {
+      category: "市民ベネフィット",
+      summary: text.slice(0, 30),
+      impact: "mid",
+      policy_suggestion: "AI解析に失敗したため自動生成できませんでした"
+    };
+  }
 }
 
-/* ===== 政策表示 ===== */
+/* =====================
+   政策表示
+===================== */
 function renderPolicy(ai) {
   if (!policyPanel) return;
 
@@ -114,16 +123,18 @@ function renderPolicy(ai) {
     <div style="white-space:pre-line">
 【政策ドラフト】
 
-■分類: ${ai.category}
-■要約: ${ai.summary}
+■分類: ${ai.category || ""}
+■要約: ${ai.summary || ""}
 
 ■提案:
-${ai.policy_suggestion}
+${ai.policy_suggestion || "（生成中）"}
     </div>
   `;
 }
 
-/* ===== 実行 ===== */
+/* =====================
+   実行
+===================== */
 if (btn) {
   btn.onclick = async () => {
 
@@ -136,7 +147,6 @@ if (btn) {
       const ai = await callLLM(text);
 
       addPost(text, ai);
-      updateTree(ai.category);
 
       aiPanel.innerHTML = `
         <div><b>分類:</b> ${ai.category}</div>
@@ -148,7 +158,7 @@ if (btn) {
 
     } catch (e) {
       console.error(e);
-      aiPanel.innerHTML = "解析エラー（AI応答失敗）";
+      aiPanel.innerHTML = "解析エラー（AI応答異常）";
     }
 
     input.value = "";
