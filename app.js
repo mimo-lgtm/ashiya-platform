@@ -1,3 +1,4 @@
+alert("APP FILE LOADED");
 alert("APP JS RUNNING");
 console.log("APP START");
 
