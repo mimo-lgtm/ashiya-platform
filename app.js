@@ -1,5 +1,6 @@
 alert("APP FILE LOADED");
 alert("APP JS RUNNING");
+
 console.log("APP START");
 
 if (!window.CONFIG) {
@@ -12,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const btn = document.getElementById("btn");
 
   if (!btn) {
-    alert("btnが見つからない（HTML側を確認）");
+    alert("btnが見つからない");
     return;
   }
 
@@ -66,7 +67,7 @@ function render() {
   const el = document.getElementById("posts");
 
   if (!el) {
-    alert("postsが見つからない（HTML確認）");
+    alert("postsが見つからない");
     return;
   }
 
