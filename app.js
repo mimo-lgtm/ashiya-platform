@@ -71,7 +71,7 @@ function render() {
   }
 
   postsDiv.innerHTML = html;
-
+alert(postsDiv.innerHTML);
   alert("RENDER OK");
 }
 
