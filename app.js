@@ -1,5 +1,4 @@
-console.log("APP LOADED");
-alert("app.js動いてる");
+alert("app.js読み込み成功");
 let posts = [];
 let filterTag = null;
 
