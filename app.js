@@ -95,10 +95,12 @@ async function addPost() {
 
   } catch (e) {
 
+    alert(e.message);
+
     post.ai = "AI接続エラー: " + e.message;
 
     render();
-  }
+}
 }
 
 function render() {
