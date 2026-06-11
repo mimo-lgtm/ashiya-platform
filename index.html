@@ -2,51 +2,65 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<title>市民対話AIプラットフォーム</title>
+<title>ashiya platform</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <link rel="stylesheet" href="./css/style.css">
-<link rel="stylesheet" href="./thought%20ui.css">
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
 
-<header>市民対話AIプラットフォーム（FINAL SYSTEM）</header>
+<header>
+駅前公共施設 市民対話プラットフォーム
+</header>
 
 <div class="container">
 
-<div class="panel">
-<h3>意見入力</h3>
+<!-- ロジックツリー -->
+<div class="tree">
+① 安全・安心設計
+・子どもの安全動線
+・夜間防犯
+・見守り機能
 
-<textarea id="input"></textarea>
+② 多世代交流空間
+・交流カフェ
+・地域コミュニティ
+
+③ 教育・知的機能
+・図書館機能
+・学習スペース
+
+④ 収益・持続性
+・民間連携
+・チャレンジショップ
+
+⑤ 都市戦略
+・災害対応
+・市民参加
+</div>
+
+<!-- テーマ -->
+<div class="theme">
+市民対話AIプラットフォーム
+</div>
+
+<!-- 投稿エリア -->
+<div id="posts"></div>
+
+</div>
+
+<!-- 入力固定エリア -->
+<div class="post-area">
+
+<textarea id="input" placeholder="意見を入力"></textarea>
 <button onclick="addPost()">AI分析</button>
 
-<div id="posts"></div>
 </div>
 
-<div class="panel">
-<h3>政策ツリー</h3>
-
-<div class="theme" onclick="filter('安全')">安全</div>
-<div class="theme" onclick="filter('交流')">交流</div>
-<div class="theme" onclick="filter('教育')">教育</div>
-<div class="theme" onclick="filter('収益')">収益</div>
-<div class="theme" onclick="filter('都市')">都市</div>
-
-<button onclick="reset()">ALL</button>
-
-<hr>
-
-<h3>生成テーマ</h3>
-<div id="themes"></div>
-
-</div>
-
-</div>
-
-<script src="js/config.js"></script>
-<script src="js/app.js"></script>
+<script src="./js/config.js"></script>
+<script src="./js/app.js"></script>
 
 </body>
 </html>
