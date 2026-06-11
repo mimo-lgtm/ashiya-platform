@@ -5,144 +5,152 @@ const btn = document.getElementById("btn");
 const input = document.getElementById("input");
 const posts = document.getElementById("posts");
 const aiPanel = document.getElementById("aiPanel");
-const policyPanel = document.getElementById("policyPanel");
-const intro = document.getElementById("introScreen");
-const startBtn = document.getElementById("startBtn");
+const treePanel = document.querySelector(".tree");
 
-/* ================= イントロ ================= */
-if (startBtn && intro) {
-  startBtn.onclick = () => {
-    intro.style.display = "none";
-  };
-}
+/* ================= ロジックツリー（初期状態） ================= */
+let logicTree = {
+  "芦屋市の価値向上": [],
+  "市民ベネフィット": [],
+  "財政持続性": [],
+  "施設戦略": [],
+  "都市ガバナンス": []
+};
 
-/* ================= 投稿 ================= */
-function addPost(text, ai) {
-  if (!posts) return;
-
+/* ================= 投稿表示 ================= */
+function addPost(text) {
   const div = document.createElement("div");
-  div.innerHTML = `
-    <b>${text}</b><br>
-    <small>${ai.category || "未分類"} / ${ai.impact || ""}</small>
-  `;
+  div.innerHTML = `<b>${text}</b>`;
   posts.prepend(div);
 }
 
-/* ================= AI呼び出し ================= */
-async function callLLM(text) {
+/* ================= ツリー描画 ================= */
+function renderTree() {
+  if (!treePanel) return;
 
-  const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-if (!res.ok) {
-  const err = await res.text();
-  console.error("GROQ ERROR:", err);
-  throw new Error("Groq API error");
-}
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${GROQ_API_KEY}`
-    },
-    body: JSON.stringify({
-      model: "llama3-70b-8192",
+  let html = `市民政策ロジックツリー（Vision）
 
-      messages: [
-        {
-          role: "system",
-          content: `
-あなたは行政政策AIです。
+コストセンターからプロフィットセンターへ
 
-必ず次のJSONだけ返してください：
+`;
 
-{
-  "category": "市民ベネフィット | 芦屋市の価値向上 | 財政持続性 | 施設戦略 | 都市ガバナンス",
-  "summary": "短く要約",
-  "impact": "low|mid|high",
-  "policy_suggestion": "必ず具体的な政策案を書く"
-}
-
-・説明禁止
-・JSON以外禁止
-`
-        },
-        {
-          role: "user",
-          content: (text || "").slice(0, 800)
-        }
-      ],
-      temperature: 0.2
-    })
+  Object.keys(logicTree).forEach(key => {
+    html += `\n${key}\n`;
+    logicTree[key].forEach(item => {
+      html += `・${item}\n`;
+    });
   });
 
-  /* ===== レスポンス処理（安全版） ===== */
-  const data = await res.json();
+  treePanel.innerText = html;
+}
 
-  const content = data?.choices?.[0]?.message?.content;
+/* ================= 分類ロジック（簡易AI） ================= */
+function classify(text) {
 
-  if (!content) {
-    console.error("No content:", data);
-    throw new Error("AI response empty");
+  if (text.includes("教育") || text.includes("図書館")) return "芦屋市の価値向上";
+  if (text.includes("交流") || text.includes("カフェ")) return "市民ベネフィット";
+  if (text.includes("収益") || text.includes("ふるさと")) return "財政持続性";
+  if (text.includes("施設")) return "施設戦略";
+  if (text.includes("防災") || text.includes("自治")) return "都市ガバナンス";
+
+  return "市民ベネフィット";
+}
+
+/* ================= 投稿→ツリー統合 ================= */
+function integrateToTree(text) {
+
+  const category = classify(text);
+
+  if (!logicTree[category]) {
+    logicTree[category] = [];
   }
 
-  console.log("RAW AI:", content);
+  logicTree[category].push(text);
+
+  renderTree();
+}
+
+/* ================= AI（失敗しても動く設計） ================= */
+async function callLLM(text) {
 
   try {
+    const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${GROQ_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: "llama3-70b-8192",
+        messages: [
+          {
+            role: "system",
+            content: `
+あなたは行政AI。
+JSONで返す：
+{
+ "category": "...",
+ "summary": "...",
+ "policy": "..."
+}
+`
+          },
+          {
+            role: "user",
+            content: text
+          }
+        ],
+        temperature: 0.2
+      })
+    });
+
+    if (!res.ok) throw new Error("API ERROR");
+
+    const data = await res.json();
+    const content = data?.choices?.[0]?.message?.content;
+
+    if (!content) throw new Error("NO CONTENT");
+
     return JSON.parse(content);
+
   } catch (e) {
-    console.error("JSON parse failed:", content);
+    console.log("AI fallback mode");
 
     return {
-      category: "市民ベネフィット",
-      summary: text.slice(0, 30),
-      impact: "mid",
-      policy_suggestion: "（AI応答解析に失敗しました）"
+      category: classify(text),
+      summary: text,
+      policy: "自動生成（簡易）"
     };
   }
 }
 
-/* ================= 表示 ================= */
-function renderPolicy(ai) {
-  if (!policyPanel) return;
+/* ================= UI更新 ================= */
+function renderAI(ai) {
 
-  policyPanel.innerHTML = `
-    <div style="white-space:pre-line">
-【政策ドラフト】
-
-■分類: ${ai.category || ""}
-■要約: ${ai.summary || ""}
-
-■提案:
-${ai.policy_suggestion || ""}
+  aiPanel.innerHTML = `
+    <div>
+      <div><b>分類:</b> ${ai.category}</div>
+      <div><b>要約:</b> ${ai.summary}</div>
+      <div><b>政策:</b> ${ai.policy}</div>
     </div>
   `;
 }
 
 /* ================= 実行 ================= */
-if (btn) {
-  btn.onclick = async () => {
+btn.onclick = async () => {
 
-    const text = input?.value?.trim();
-    if (!text) return;
+  const text = input.value.trim();
+  if (!text) return;
 
-    aiPanel.innerHTML = "分析中...";
+  addPost(text);
 
-    try {
-      const ai = await callLLM(text);
+  const ai = await callLLM(text);
 
-      addPost(text, ai);
+  renderAI(ai);
 
-      aiPanel.innerHTML = `
-        <div><b>分類:</b> ${ai.category}</div>
-        <div><b>要約:</b> ${ai.summary}</div>
-        <div><b>影響:</b> ${ai.impact}</div>
-      `;
+  integrateToTree(text);
 
-      renderPolicy(ai);
+  input.value = "";
+};
 
-    } catch (e) {
-      console.error(e);
-      aiPanel.innerHTML = "解析エラー（AI応答失敗）";
-    }
-
-    input.value = "";
-  };
-}
+/* ================= 初期描画 ================= */
+renderTree();
