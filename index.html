@@ -2,67 +2,48 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<title>ashiya platform</title>
+<title>市民対話AIプラットフォーム</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <link rel="stylesheet" href="./style.css">
-<link rel="stylesheet" href="./thought-ui.css">
 </head>
 
 <body>
 
-<h1>TEST OK</h1>
-
-<header>
-駅前公共施設 市民対話プラットフォーム
+<header class="topbar">
+  <div>🏛 市民対話AIプラットフォーム</div>
+  <div class="status">LIVE DEMO</div>
 </header>
 
-<div class="container">
+<div class="layout">
 
-<!-- ロジックツリー -->
-<div class="tree">
-① 安全・安心設計
-・子どもの安全動線
-・夜間防犯
-・見守り機能
+  <!-- 左：ツリー -->
+  <aside class="panel tree">
+    <h3>政策ロジックツリー</h3>
+    <div id="treeView"></div>
+  </aside>
 
-② 多世代交流空間
-・交流カフェ
-・地域コミュニティ
+  <!-- 中央：投稿 -->
+  <main class="panel center">
+    <h3>市民投稿</h3>
+    <div id="posts"></div>
 
-③ 教育・知的機能
-・図書館機能
-・学習スペース
+    <div class="inputBox">
+      <textarea id="input" placeholder="市民意見を入力"></textarea>
+      <button id="btn">AI解析</button>
+    </div>
+  </main>
 
-④ 収益・持続性
-・民間連携
-・チャレンジショップ
+  <!-- 右：AI -->
+  <aside class="panel ai">
+    <h3>AI分析</h3>
+    <div id="aiPanel">待機中</div>
 
-⑤ 都市戦略
-・災害対応
-・市民参加
-</div>
-
-<!-- テーマ -->
-<div class="theme">
-市民対話AIプラットフォーム
-</div>
-
-<!-- 投稿エリア -->
-<div id="posts"></div>
+    <h3>政策ドラフト</h3>
+    <div id="policyPanel"></div>
+  </aside>
 
 </div>
 
-<!-- 入力エリア -->
-<div class="post-area">
-<textarea id="input" placeholder="意見を入力"></textarea>
-<button id="btn">AI分析</button>
-</div>
-
-
-
-<script src="./JS/config.js"></script>
 <script src="./app.js"></script>
-
 </body>
 </html>

@@ -1,132 +1,129 @@
-let posts = [];
+const GROQ_API_KEY = "YOUR_GROQ_API_KEY";
 
-document.addEventListener("DOMContentLoaded", () => {
+const btn = document.getElementById("btn");
+const input = document.getElementById("input");
+const posts = document.getElementById("posts");
+const aiPanel = document.getElementById("aiPanel");
+const policyPanel = document.getElementById("policyPanel");
+const treeView = document.getElementById("treeView");
 
-  const btn = document.getElementById("btn");
+// ツリー状態
+const treeState = {
+  "安全・安心設計": 0,
+  "多世代交流空間": 0,
+  "教育・知的機能": 0,
+  "収益・持続性": 0,
+  "都市戦略": 0
+};
 
-  if (!btn) {
-    alert("ボタンが見つかりません");
-    return;
-  }
-
-  btn.addEventListener("click", addPost);
-
-});
-
-async function askAI(text) {
-
-  if (!window.CONFIG) {
-    throw new Error("CONFIGがありません");
-  }
-
-  if (!window.CONFIG.GROQ_API_KEY) {
-    throw new Error("APIキーがありません");
-  }
-
-  const response = await fetch(
-    "https://api.groq.com/openai/v1/chat/completions",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + window.CONFIG.GROQ_API_KEY
-      },
-      body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
-        messages: [
-          {
-            role: "user",
-            content: `
-あなたは公共政策アドバイザーです。
-
-以下の市民意見について
-
-1. 要約
-2. AIからの問いかけ
-3. 追加視点
-
-を出力してください。
-
-市民意見:
-${text}
-`
-          }
-        ],
-        temperature: 0.7
-      })
-    }
-  );
-
-  const data = await response.json();
-
-  if (!data.choices) {
-    throw new Error(JSON.stringify(data));
-  }
-
-  return data.choices[0].message.content;
+// 表示更新
+function renderTree() {
+  treeView.innerHTML = Object.entries(treeState)
+    .map(([k,v]) => `<div>${k}：${v}</div>`)
+    .join("");
 }
 
-async function addPost() {
+// 投稿追加
+function addPost(text, ai) {
+  const div = document.createElement("div");
+  div.innerHTML = `
+    <b>${text}</b><br>
+    <small>${ai.category} / ${ai.impact}</small>
+  `;
+  posts.prepend(div);
+}
 
-  const input = document.getElementById("input");
+// ツリー反映
+function updateTree(category) {
+  if (treeState[category] !== undefined) {
+    treeState[category]++;
+  }
+  renderTree();
+}
 
+// ⭐ GROQ LLM
+async function callLLM(text) {
+  const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${GROQ_API_KEY}`
+    },
+    body: JSON.stringify({
+      model: "llama-3.1-70b-versatile",
+      messages: [
+        {
+          role: "system",
+          content: `
+あなたは行政政策AI。
+必ずJSONのみ返す：
+
+{
+  "category": "安全・安心設計|多世代交流空間|教育・知的機能|収益・持続性|都市戦略",
+  "intent": "",
+  "summary": "",
+  "impact": "low|mid|high",
+  "policy_suggestion": ""
+}
+`
+        },
+        { role: "user", content: text }
+      ],
+      temperature: 0.2
+    })
+  });
+
+  const data = await res.json();
+
+  const raw = data.choices[0].message.content;
+  const cleaned = raw.replace(/```json|```/g, "").trim();
+
+  return JSON.parse(cleaned);
+}
+
+// 政策生成
+function generatePolicy(ai) {
+  policyPanel.innerHTML = `
+    <div style="white-space:pre-line">
+【政策ドラフト】
+
+■分類: ${ai.category}
+■要約: ${ai.summary}
+
+■提案:
+${ai.policy_suggestion}
+    </div>
+  `;
+}
+
+// 実行
+btn.addEventListener("click", async () => {
   const text = input.value.trim();
-
   if (!text) return;
 
-  input.value = "";
-
-  const post = {
-    text: text,
-    ai: "分析中..."
-  };
-
-  posts.unshift(post);
-
-  render();
+  aiPanel.innerHTML = "分析中...";
 
   try {
+    const ai = await callLLM(text);
 
-    const result = await askAI(text);
+    addPost(text, ai);
+    updateTree(ai.category);
 
-    post.ai = result;
+    aiPanel.innerHTML = `
+      <div><b>分類:</b> ${ai.category}</div>
+      <div><b>意図:</b> ${ai.intent}</div>
+      <div><b>要約:</b> ${ai.summary}</div>
+      <div><b>影響:</b> ${ai.impact}</div>
+    `;
 
-    render();
+    generatePolicy(ai);
 
   } catch (e) {
-
-    alert(e.message);
-
-    post.ai = "AI接続エラー: " + e.message;
-
-    render();
-}
-}
-
-function render() {
-
-  const postsDiv = document.getElementById("posts");
-
-  let html = "";
-
-  for (let i = 0; i < posts.length; i++) {
-
-    html += `
-      <div class="card">
-
-        <div class="user-post">
-          <strong>市民意見</strong><br>
-          ${posts[i].text}
-        </div>
-
-        <div class="ai-box">
-          <strong>AI分析</strong><br><br>
-          ${posts[i].ai.replace(/\n/g, "<br>")}
-        </div>
-
-      </div>
-    `;
+    aiPanel.innerHTML = "解析エラー";
+    console.error(e);
   }
 
-  postsDiv.innerHTML = html;
-}
+  input.value = "";
+});
+
+renderTree();
