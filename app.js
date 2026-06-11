@@ -32,6 +32,11 @@ function addPost(text, ai) {
 async function callLLM(text) {
 
   const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+if (!res.ok) {
+  const err = await res.text();
+  console.error("GROQ ERROR:", err);
+  throw new Error("Groq API error");
+}
     method: "POST",
     headers: {
       "Content-Type": "application/json",
