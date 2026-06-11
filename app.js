@@ -1,3 +1,4 @@
+alert("app.js動いてる");
 let posts = [];
 let filterTag = null;
 
