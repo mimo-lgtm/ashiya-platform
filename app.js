@@ -118,17 +118,21 @@ function render() {
   for (let i = 0; i < posts.length; i++) {
 
     html += `
-      <div style="border:1px solid #ccc;padding:10px;margin:10px 0;background:#fff;">
-        <div><strong>市民意見</strong></div>
-        <div>${posts[i].text}</div>
+      <div class="card">
 
-        <hr>
+        <div class="user-post">
+          ${posts[i].text}
+        </div>
 
-        <div><strong>AI分析</strong></div>
-        <div style="white-space:pre-wrap;">${posts[i].ai}</div>
+        <div class="ai-box">
+          ${posts[i].ai.replace(/\n/g,"<br>")}
+        </div>
+
       </div>
     `;
   }
 
+  postsDiv.innerHTML = html;
+}
   postsDiv.innerHTML = html;
 }
