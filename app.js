@@ -106,10 +106,21 @@ function render(){
 const list = posts.filter(p => !filterTag || p.tag.includes(filterTag));
 
 document.getElementById("posts").innerHTML =
-list.map((p,i)=>{
+posts.map(p => `
+<div class="card">
 
-const idx = posts.indexOf(p);
+  <div class="user-post">
+    ${p.text}
+  </div>
 
+  ${p.open ? `
+  <div class="ai-box">
+    <pre style="white-space:pre-wrap">${p.ai}</pre>
+  </div>
+  ` : ""}
+
+</div>
+`).join("");
 return `
 <div class="post" onclick="toggle(${idx})">
 
