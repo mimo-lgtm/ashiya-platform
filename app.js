@@ -1,153 +1,77 @@
-alert("app.js読み込み成功");
+console.log("APP LOADED");
+
 let posts = [];
-let filterTag = null;
 
-// ---------------- API ----------------
-async function askAI(text){
+async function addPost() {
+  const input = document.getElementById("input");
+  const text = input.value.trim();
+  if (!text) return;
 
-const res = await fetch("https://api.groq.com/openai/v1/chat/completions",{
-method:"POST",
-headers:{
-"Content-Type":"application/json",
-"Authorization":"Bearer " + CONFIG.GROQ_API_KEY
-},
-body:JSON.stringify({
-model:"llama-3.3-70b-versatile",
-messages:[{
-role:"user",
-content:`
-あなたは自治体政策AIです。
+  input.value = "";
 
-必ず以下形式：
+  // 先に仮表示（即UI改善）
+  const post = {
+    text: text,
+    ai: "分析中..."
+  };
 
+  posts.unshift(post);
+  render();
+
+  try {
+    const result = await askGroq(text);
+    post.ai = result;
+    render();
+  } catch (e) {
+    post.ai = "AI接続エラー（ローカル表示）";
+    render();
+  }
+}
+
+async function askGroq(text) {
+
+  const prompt = `
+あなたは公共施設計画アドバイザーです。
+
+以下の市民意見について
+1. 要約
+2. AIからの問いかけ
+3. 追加視点
+4. 分類タグ
+
+市民意見:
+${text}
+
+出力形式:
 要約:
 質問:
 視点:
 分類:
-
-分類は必ず：
-安全 / 交流 / 教育 / 収益 / 都市
-
-市民意見:
-${text}
-`
-}],
-temperature:0.5
-})
-});
-
-const data = await res.json();
-
-if(!data.choices?.[0]?.message?.content){
-throw new Error("AI応答エラー");
-}
-
-return data.choices[0].message.content;
-}
-
-// ---------------- POST ----------------
-async function addPost(){
-
-const text = document.getElementById("input").value.trim();
-if(!text) return;
-
-document.getElementById("input").value="";
-
-posts.unshift({
-text,
-ai:"分析中...",
-summary:"",
-question:"",
-view:"",
-tag:"",
-open:false
-});
-
-render();
-
-try{
-
-const res = await askAI(text);
-
-const get = (k)=> (res.match(new RegExp(k+"[:：]\\s*(.*)"))||[])[1] || "";
-
-posts[0].summary = get("要約");
-posts[0].question = get("質問");
-posts[0].view = get("視点");
-posts[0].tag = get("分類") || "その他";
-posts[0].ai = res;
-
-}catch(e){
-posts[0].ai = "AIエラー: " + e.message;
-posts[0].tag = "未分類";
-}
-
-render();
-}
-
-// ---------------- UI ----------------
-function toggle(i){
-posts[i].open = !posts[i].open;
-render();
-}
-
-function filter(tag){
-filterTag = tag;
-render();
-}
-
-function reset(){
-filterTag = null;
-render();
-}
-
-// ---------------- RENDER ----------------
-function render(){
-
-const list = posts.filter(p => !filterTag || p.tag.includes(filterTag));
-
-document.getElementById("posts").innerHTML =
-posts.map(p => `
-<div class="card">
-
-  <div class="user-post">
-    ${p.text}
-  </div>
-
-  ${p.open ? `
-  <div class="ai-box">
-    <pre style="white-space:pre-wrap">${p.ai}</pre>
-  </div>
-  ` : ""}
-
-</div>
-`).join("");
-return `
-<div class="post" onclick="toggle(${idx})">
-
-<div><b>${p.tag}</b></div>
-<div>${p.text}</div>
-
-${p.open ? `
-<div class="aiBox">
-<pre style="white-space:pre-wrap">${p.ai}</pre>
-</div>
-` : ``}
-
-</div>
 `;
-}).join("");
 
-// themes
-const freq = {};
-posts.forEach(p=>{
-freq[p.tag]=(freq[p.tag]||0)+1;
-});
+  const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + CONFIG.GROQ_API_KEY
+    },
+    body: JSON.stringify({
+      model: "llama-3.3-70b-versatile",
+      messages: [{ role: "user", content: prompt }],
+      temperature: 0.7
+    })
+  });
 
-document.getElementById("themes").innerHTML =
-Object.entries(freq)
-.map(([k,v])=>`<div class="theme">${k}（${v}）</div>`)
-.join("");
+  const data = await res.json();
+  return data.choices[0].message.content;
 }
 
-render();
+function render() {
+  document.getElementById("posts").innerHTML =
+    posts.map(p => `
+      <div class="card">
+        <div class="user-post">${p.text}</div>
+        <div class="ai-box" style="white-space:pre-wrap">${p.ai}</div>
+      </div>
+    `).join("");
+}
