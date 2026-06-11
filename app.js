@@ -74,15 +74,19 @@ async function addPost() {
 
   try {
 
+alert("GROQ呼び出し開始");
+
     const result = await askAI(text);
 
     post.ai = result;
 
     render();
+alert("GROQ応答受信");
 
   } catch (e) {
 
-    post.ai = "AI接続エラー";
+   post.ai = "AI接続エラー: " + e.message;
+alert("ERROR: " + e.message);
 
     render();
   }
