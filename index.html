@@ -4,26 +4,46 @@
 <meta charset="utf-8">
 <title>市民対話AIプラットフォーム</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
 
+<!-- イントロ -->
+<div id="introScreen" class="intro">
+  <h1>🏛 市民対話AIプラットフォーム</h1>
+  <p>
+    駅前公共施設のあり方について、市民の意見をAIが構造化し、
+    政策として可視化する実証デモです。
+  </p>
+  <button id="startBtn">デモを開始</button>
+</div>
+
+<!-- 上部ナビ -->
 <header class="topbar">
-  <div>🏛 市民対話AIプラットフォーム</div>
+  <div>🏛 市民対話AI</div>
+
+  <div class="nav">
+    <button onclick="scrollToSection('tree')">ロジックツリー</button>
+    <button onclick="scrollToSection('center')">議論</button>
+    <button onclick="scrollToSection('ai')">AI分析</button>
+    <button onclick="scrollToSection('policy')">政策案</button>
+  </div>
+
   <div class="status">LIVE DEMO</div>
 </header>
 
 <div class="layout">
 
   <!-- 左：ツリー -->
-  <aside class="panel tree">
+  <aside class="panel tree" id="treeSection">
     <h3>政策ロジックツリー</h3>
     <div id="treeView"></div>
   </aside>
 
   <!-- 中央：投稿 -->
-  <main class="panel center">
+  <main class="panel center" id="centerSection">
     <h3>市民投稿</h3>
     <div id="posts"></div>
 
@@ -34,16 +54,19 @@
   </main>
 
   <!-- 右：AI -->
-  <aside class="panel ai">
+  <aside class="panel ai" id="aiSection">
+
     <h3>AI分析</h3>
     <div id="aiPanel">待機中</div>
 
     <h3>政策ドラフト</h3>
     <div id="policyPanel"></div>
+
   </aside>
 
 </div>
 
 <script src="./app.js"></script>
+
 </body>
 </html>

@@ -1,5 +1,6 @@
 const GROQ_API_KEY = "YOUR_GROQ_API_KEY";
 
+/* ===== DOM ===== */
 const btn = document.getElementById("btn");
 const input = document.getElementById("input");
 const posts = document.getElementById("posts");
@@ -7,7 +8,24 @@ const aiPanel = document.getElementById("aiPanel");
 const policyPanel = document.getElementById("policyPanel");
 const treeView = document.getElementById("treeView");
 
-// ツリー状態
+const intro = document.getElementById("introScreen");
+const startBtn = document.getElementById("startBtn");
+
+/* ===== イントロ制御 ===== */
+startBtn.addEventListener("click", () => {
+  intro.style.display = "none";
+});
+
+/* ===== ナビスクロール ===== */
+function scrollToSection(id) {
+  const el =
+    document.getElementById(id + "Section") ||
+    document.getElementById(id);
+
+  if (el) el.scrollIntoView({ behavior: "smooth" });
+}
+
+/* ===== ツリー ===== */
 const treeState = {
   "安全・安心設計": 0,
   "多世代交流空間": 0,
@@ -16,14 +34,13 @@ const treeState = {
   "都市戦略": 0
 };
 
-// 表示更新
 function renderTree() {
   treeView.innerHTML = Object.entries(treeState)
-    .map(([k,v]) => `<div>${k}：${v}</div>`)
+    .map(([k, v]) => `<div>${k}：${v}</div>`)
     .join("");
 }
 
-// 投稿追加
+/* ===== 投稿 ===== */
 function addPost(text, ai) {
   const div = document.createElement("div");
   div.innerHTML = `
@@ -33,7 +50,7 @@ function addPost(text, ai) {
   posts.prepend(div);
 }
 
-// ツリー反映
+/* ===== ツリー更新 ===== */
 function updateTree(category) {
   if (treeState[category] !== undefined) {
     treeState[category]++;
@@ -41,7 +58,7 @@ function updateTree(category) {
   renderTree();
 }
 
-// ⭐ GROQ LLM
+/* ===== LLM（GROQ） ===== */
 async function callLLM(text) {
   const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
     method: "POST",
@@ -81,7 +98,7 @@ async function callLLM(text) {
   return JSON.parse(cleaned);
 }
 
-// 政策生成
+/* ===== 政策 ===== */
 function generatePolicy(ai) {
   policyPanel.innerHTML = `
     <div style="white-space:pre-line">
@@ -96,7 +113,7 @@ ${ai.policy_suggestion}
   `;
 }
 
-// 実行
+/* ===== 実行 ===== */
 btn.addEventListener("click", async () => {
   const text = input.value.trim();
   if (!text) return;

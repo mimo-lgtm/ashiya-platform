@@ -4,24 +4,63 @@ body {
   background: #f2f4f7;
 }
 
+/* ===== イントロ ===== */
+.intro {
+  position: fixed;
+  inset: 0;
+  background: #0f172a;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  z-index: 999;
+  padding: 20px;
+}
+
+.intro button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* ===== 上部バー ===== */
 .topbar {
   background: #0f172a;
   color: white;
   padding: 12px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+}
+
+.nav button {
+  margin: 0 4px;
+  padding: 6px 10px;
+  background: #1f2937;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.nav button:hover {
+  background: #334155;
 }
 
 .status {
   color: #4ade80;
 }
 
+/* ===== レイアウト ===== */
 .layout {
   display: grid;
   grid-template-columns: 260px 1fr 320px;
   height: calc(100vh - 50px);
 }
 
+/* ===== パネル ===== */
 .panel {
   padding: 12px;
   overflow: auto;
@@ -41,6 +80,7 @@ body {
   border-left: 1px solid #ddd;
 }
 
+/* ===== 投稿 ===== */
 #posts div {
   background: white;
   padding: 8px;
@@ -48,6 +88,7 @@ body {
   border-radius: 6px;
 }
 
+/* ===== 入力 ===== */
 .inputBox {
   display: flex;
   gap: 6px;
