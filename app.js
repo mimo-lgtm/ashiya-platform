@@ -1,5 +1,4 @@
-alert("JS IS LOADED");
-console.log("APP LOADED");
+alert("JS LOADED");
 
 let posts = [];
 
