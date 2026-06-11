@@ -9,92 +9,63 @@
 
 <body>
 
-<!-- イントロ（導線設計版） -->
+<!-- イントロ -->
 <div id="introScreen" class="intro">
 
   <h1>🏛 市民対話AIプラットフォーム</h1>
 
-  <p class="introLead">
-    市民の声をAIとの対話によって整理し、<br>
-    政策テーマへと変換する実証プラットフォームです。
+  <p>
+    市民の意見をAIとの対話によって整理し、政策テーマへ変換する実証プラットフォームです。
   </p>
 
-  <div class="introText">
+  <p>
+    あなたの意見を政策アイデアへ育てます。未整理のままで構いません。
+    AIが対話を通じて構造化します。
+  </p>
 
-    <p>
-      あなたの意見を、そのまま政策アイデアへ育てていきます。
-      意見は整理されていなくても問題ありません。
-      AIエージェントが対話を通じてロジカルな提案へと再構築します。
-    </p>
+  <p>
+    まずはロジックツリーで他の市民の意見を確認してください。
+    気になる提案を選び、自分の意見を投稿できます。
+  </p>
 
-    <p>
-      まずは、他の市民の意見が集まっている<br>
-      「ロジックツリー」を見てみましょう。
-    </p>
-
-    <p>
-      その中から関心のあるテーマや提案を選び、<br>
-      あなた自身の意見を投稿してください。
-    </p>
-
-    <p>
-      投稿はとても簡単です。思いついたままで構いません。
-    </p>
-
-  </div>
-
-  <button id="startBtn" class="primaryBtn">
-    ロジックツリーを見る
-  </button>
+  <button id="startBtn">ロジックツリーを見る</button>
 
 </div>
 
-<!-- 上部ナビ -->
+<!-- 上部 -->
 <header class="topbar">
   <div>🏛 市民対話AI</div>
-
-  <div class="nav">
-    <button onclick="scrollToSection('tree')">ロジックツリー</button>
-    <button onclick="scrollToSection('center')">議論</button>
-    <button onclick="scrollToSection('ai')">AI分析</button>
-    <button onclick="scrollToSection('policy')">政策案</button>
-  </div>
-
   <div class="status">LIVE DEMO</div>
 </header>
 
 <div class="layout">
 
-  <!-- 左：ツリー -->
-  <aside class="panel tree" id="treeSection">
+  <aside class="panel tree">
     <h3>政策ロジックツリー</h3>
     <div id="treeView"></div>
   </aside>
 
-  <!-- 中央：投稿 -->
-  <main class="panel center" id="centerSection">
+  <main class="panel center">
     <h3>市民投稿</h3>
     <div id="posts"></div>
 
     <div class="inputBox">
-      <textarea id="input" placeholder="あなたの意見を入力（未整理でOK）"></textarea>
-      <button id="btn">AI分析</button>
+      <textarea id="input"></textarea>
+      <button id="btn">AI解析</button>
     </div>
   </main>
 
-  <!-- 右：AI -->
-  <aside class="panel ai" id="aiSection">
-
+  <aside class="panel ai">
     <h3>AI分析</h3>
-    <div id="aiPanel">待機中</div>
+    <div id="aiPanel"></div>
 
     <h3>政策ドラフト</h3>
     <div id="policyPanel"></div>
-
   </aside>
 
 </div>
 
 <script src="./app.js"></script>
+
 </body>
 </html>

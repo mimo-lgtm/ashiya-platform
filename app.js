@@ -1,6 +1,6 @@
 const GROQ_API_KEY = "YOUR_GROQ_API_KEY";
 
-/* ===== DOM ===== */
+/* ===== DOM安全取得（重要） ===== */
 const btn = document.getElementById("btn");
 const input = document.getElementById("input");
 const posts = document.getElementById("posts");
@@ -11,15 +11,11 @@ const treeView = document.getElementById("treeView");
 const intro = document.getElementById("introScreen");
 const startBtn = document.getElementById("startBtn");
 
-/* ===== イントロ制御 ===== */
-startBtn.addEventListener("click", () => {
-  intro.style.display = "none";
-});
-
-/* ===== ナビ ===== */
-function scrollToSection(id) {
-  const el = document.getElementById(id + "Section");
-  if (el) el.scrollIntoView({ behavior: "smooth" });
+/* ===== イントロ安全制御 ===== */
+if (startBtn && intro) {
+  startBtn.addEventListener("click", () => {
+    intro.style.display = "none";
+  });
 }
 
 /* ===== ツリー ===== */
@@ -32,6 +28,8 @@ const treeState = {
 };
 
 function renderTree() {
+  if (!treeView) return;
+
   treeView.innerHTML = Object.entries(treeState)
     .map(([k,v]) => `<div>${k}：${v}</div>`)
     .join("");
@@ -39,12 +37,14 @@ function renderTree() {
 
 /* ===== 投稿 ===== */
 function addPost(text, ai) {
+  if (!posts) return;
+
   const div = document.createElement("div");
-  div.innerHTML = `<b>${text}</b><br><small>${ai.category} / ${ai.impact}</small>`;
+  div.innerHTML = `<b>${text}</b><br><small>${ai.category}</small>`;
   posts.prepend(div);
 }
 
-/* ===== ツリー更新 ===== */
+/* ===== 正規化 ===== */
 function normalizeCategory(cat) {
   if (!cat) return "市民ベネフィット";
   if (cat.includes("価値")) return "芦屋市の価値向上";
@@ -61,7 +61,7 @@ function updateTree(category) {
   renderTree();
 }
 
-/* ===== GROQ ===== */
+/* ===== GROQ（完全防御版） ===== */
 async function callLLM(text) {
   const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
     method: "POST",
@@ -75,7 +75,7 @@ async function callLLM(text) {
         {
           role: "system",
           content: `
-必ずJSONのみ返す：
+必ずJSONのみ：
 
 {
   "category": "価値向上|市民ベネフィット|財政持続性|施設戦略|都市ガバナンス",
@@ -94,17 +94,25 @@ async function callLLM(text) {
 
   const data = await res.json();
 
-  let raw = data.choices?.[0]?.message?.content || "";
+  let raw = data?.choices?.[0]?.message?.content || "";
+
+  // 🔥 防御1
   raw = raw.replace(/```json|```/g, "").trim();
 
+  // 🔥 防御2（最重要）
   const match = raw.match(/\{[\s\S]*\}/);
-  if (!match) throw new Error("JSON parse failed");
+
+  if (!match) {
+    throw new Error("No JSON returned");
+  }
 
   return JSON.parse(match[0]);
 }
 
 /* ===== 政策 ===== */
 function generatePolicy(ai) {
+  if (!policyPanel) return;
+
   policyPanel.innerHTML = `
     <div style="white-space:pre-line">
 【政策ドラフト】
@@ -119,32 +127,36 @@ ${ai.policy_suggestion}
 }
 
 /* ===== 実行 ===== */
-btn.addEventListener("click", async () => {
-  const text = input.value.trim();
-  if (!text) return;
+if (btn) {
+  btn.addEventListener("click", async () => {
 
-  aiPanel.innerHTML = "分析中...";
+    const text = input?.value?.trim();
+    if (!text) return;
 
-  try {
-    const ai = await callLLM(text);
+    aiPanel.innerHTML = "分析中...";
 
-    addPost(text, ai);
-    updateTree(ai.category);
+    try {
+      const ai = await callLLM(text);
 
-    aiPanel.innerHTML = `
-      <div><b>分類:</b> ${ai.category}</div>
-      <div><b>要約:</b> ${ai.summary}</div>
-      <div><b>影響:</b> ${ai.impact}</div>
-    `;
+      addPost(text, ai);
+      updateTree(ai.category);
 
-    generatePolicy(ai);
+      aiPanel.innerHTML = `
+        <div><b>分類:</b> ${ai.category}</div>
+        <div><b>要約:</b> ${ai.summary}</div>
+        <div><b>影響:</b> ${ai.impact}</div>
+      `;
 
-  } catch (e) {
-    console.error(e);
-    aiPanel.innerHTML = "解析エラー（LLM応答異常）";
-  }
+      generatePolicy(ai);
 
-  input.value = "";
-});
+    } catch (e) {
+      console.error(e);
+      aiPanel.innerHTML = "解析エラー（AI応答不正）";
+    }
 
+    input.value = "";
+  });
+}
+
+/* 初期描画 */
 renderTree();
