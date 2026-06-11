@@ -10,23 +10,18 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   btn.addEventListener("click", addPost);
+
 });
 
 async function askAI(text) {
-
-  alert("STEP1 CONFIG確認");
 
   if (!window.CONFIG) {
     throw new Error("CONFIGがありません");
   }
 
-  alert("STEP2 APIKEY確認");
-
   if (!window.CONFIG.GROQ_API_KEY) {
     throw new Error("APIキーがありません");
   }
-
-  alert("STEP3 Groq接続開始");
 
   const response = await fetch(
     "https://api.groq.com/openai/v1/chat/completions",
@@ -42,6 +37,8 @@ async function askAI(text) {
           {
             role: "user",
             content: `
+あなたは公共政策アドバイザーです。
+
 以下の市民意見について
 
 1. 要約
@@ -54,16 +51,13 @@ async function askAI(text) {
 ${text}
 `
           }
-        ]
+        ],
+        temperature: 0.7
       })
     }
   );
 
-  alert("STEP4 HTTP応答受信");
-
   const data = await response.json();
-
-  alert("STEP5 JSON受信");
 
   if (!data.choices) {
     throw new Error(JSON.stringify(data));
@@ -101,8 +95,6 @@ async function addPost() {
 
   } catch (e) {
 
-    alert("ERROR=" + e.message);
-
     post.ai = "AI接続エラー: " + e.message;
 
     render();
@@ -121,18 +113,18 @@ function render() {
       <div class="card">
 
         <div class="user-post">
+          <strong>市民意見</strong><br>
           ${posts[i].text}
         </div>
 
         <div class="ai-box">
-          ${posts[i].ai.replace(/\n/g,"<br>")}
+          <strong>AI分析</strong><br><br>
+          ${posts[i].ai.replace(/\n/g, "<br>")}
         </div>
 
       </div>
     `;
   }
 
-  postsDiv.innerHTML = html;
-}
   postsDiv.innerHTML = html;
 }
