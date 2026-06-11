@@ -9,92 +9,41 @@
 
 <body>
 
-<!-- イントロ -->
-<div id="introScreen" class="intro">
-
-  <h1>🏛 市民対話AIプラットフォーム</h1>
-
-  <p class="lead">
-    市民の声をAIとの対話によって整理し、政策テーマへ変換する実証プラットフォームです。
-  </p>
+<!-- イントロ画面 -->
+<div id="introScreen" style="padding:20px;">
+  <h1>市民対話AIプラットフォーム</h1>
 
   <p>
-    あなたの意見は未整理のままで構いません。  
-    AIが対話を通じて政策提案へと再構築します。
-  </p>
+  市民の意見をAIとの対話によって整理し、政策テーマへ変換する実証プラットフォームです。<br><br>
 
-  <p>
-    まずはロジックツリーで他の市民の意見を確認してください。  
-    興味のあるテーマを見つけたら、自分の意見を投稿できます。
+  まずはロジックツリーで他の市民の意見を見てみましょう。<br>
+  その中から興味のある意見を選び、自分の意見を投稿できます。<br><br>
+
+  意見は整理されていなくても問題ありません。AIが構造化します。
   </p>
 
   <button id="startBtn">ロジックツリーを見る</button>
-
 </div>
 
-<!-- 上部バー -->
-<header class="topbar">
-  <div>🏛 市民対話AI</div>
-  <div class="status">LIVE DEMO</div>
-</header>
+<!-- メイン画面 -->
+<div id="mainScreen" style="display:none;">
 
-<div class="layout">
+  <header>
+    駅前公共施設 市民対話プラットフォーム
+  </header>
 
-  <!-- 左：ロジックツリー（固定表示） -->
-  <aside class="panel tree">
+  <div class="container">
 
-    <h3>政策ロジックツリー</h3>
-
-    <div id="treeView">
-
-      <b>市民政策ロジックツリー（Vision）</b><br><br>
-
-      コストセンターからプロフィットセンターへ<br>
-      市民のウェルビーイングと知財による都市経営<br><br>
-
-      <b>① 芦屋市の価値向上</b><br>
-      教育ブランド・景観・公園・都市魅力<br><br>
-
-      <b>② 市民ベネフィット</b><br>
-      多世代交流・学び・コミュニティ<br><br>
-
-      <b>③ 財政持続性</b><br>
-      収益施設・寄付・チャレンジショップ<br><br>
-
-      <b>④ 施設戦略</b><br>
-      知の拠点・起業支援・デジタル化<br><br>
-
-      <b>⑤ 都市ガバナンス</b><br>
-      DAO・災害対応・市民自治
-
-    </div>
-
-  </aside>
-
-  <!-- 中央：投稿 -->
-  <main class="panel center">
-
-    <h3>市民投稿</h3>
+    <div class="tree"></div>
 
     <div id="posts"></div>
 
-    <div class="inputBox">
-      <textarea id="input" placeholder="あなたの意見を入力（未整理OK）"></textarea>
-      <button id="btn">AI解析</button>
-    </div>
+  </div>
 
-  </main>
-
-  <!-- 右：AI -->
-  <aside class="panel ai">
-
-    <h3>AI分析</h3>
-    <div id="aiPanel">待機中</div>
-
-    <h3>政策ドラフト</h3>
-    <div id="policyPanel"></div>
-
-  </aside>
+  <div class="post-area">
+    <textarea id="input" placeholder="意見を入力"></textarea>
+    <button id="btn">投稿</button>
+  </div>
 
 </div>
 

@@ -1,5 +1,9 @@
-const input = document.getElementById("input");
+const startBtn = document.getElementById("startBtn");
+const introScreen = document.getElementById("introScreen");
+const mainScreen = document.getElementById("mainScreen");
+
 const btn = document.getElementById("btn");
+const input = document.getElementById("input");
 const posts = document.getElementById("posts");
 const treePanel = document.querySelector(".tree");
 
@@ -12,7 +16,14 @@ let tree = {
   "都市ガバナンス": []
 };
 
-/* ================= 分類（安定版） ================= */
+/* ================= 画面切替 ================= */
+startBtn.onclick = () => {
+  introScreen.style.display = "none";
+  mainScreen.style.display = "block";
+  renderTree();
+};
+
+/* ================= 分類 ================= */
 function classify(text) {
 
   if (text.includes("教育") || text.includes("図書館") || text.includes("学習")) {
@@ -23,15 +34,15 @@ function classify(text) {
     return "市民ベネフィット";
   }
 
-  if (text.includes("収益") || text.includes("ふるさと納税") || text.includes("クラファン")) {
+  if (text.includes("収益") || text.includes("ふるさと")) {
     return "財政持続性";
   }
 
-  if (text.includes("施設") || text.includes("拠点")) {
+  if (text.includes("施設")) {
     return "施設戦略";
   }
 
-  if (text.includes("防災") || text.includes("自治") || text.includes("投票")) {
+  if (text.includes("防災") || text.includes("自治")) {
     return "都市ガバナンス";
   }
 
@@ -42,15 +53,12 @@ function classify(text) {
 function addPost(text, category) {
 
   const div = document.createElement("div");
-  div.innerHTML = `
-    <b>${text}</b><br>
-    <small>${category}</small>
-  `;
+  div.innerHTML = `<b>${text}</b><br><small>${category}</small>`;
 
   posts.prepend(div);
 }
 
-/* ================= ツリー更新 ================= */
+/* ================= ツリー描画 ================= */
 function renderTree() {
 
   let html = `
@@ -92,6 +100,3 @@ btn.onclick = () => {
 
   input.value = "";
 };
-
-/* ================= 初期表示 ================= */
-renderTree();
