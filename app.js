@@ -9,9 +9,6 @@ const policyPanel = document.getElementById("policyPanel");
 const intro = document.getElementById("introScreen");
 const startBtn = document.getElementById("startBtn");
 
-/* ================= 追加①（ここ！最初に入れる） ================= */
-console.log("GROQ KEY:", GROQ_API_KEY);
-
 /* ================= イントロ ================= */
 if (startBtn && intro) {
   startBtn.onclick = () => {
@@ -26,12 +23,12 @@ function addPost(text, ai) {
   const div = document.createElement("div");
   div.innerHTML = `
     <b>${text}</b><br>
-    <small>${ai.category || "未分類"}</small>
+    <small>${ai.category || "未分類"} / ${ai.impact || ""}</small>
   `;
   posts.prepend(div);
 }
 
-/* ================= AI ================= */
+/* ================= AI呼び出し ================= */
 async function callLLM(text) {
 
   const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
@@ -47,18 +44,19 @@ async function callLLM(text) {
         {
           role: "system",
           content: `
-あなたは行政AIです。
+あなたは行政政策AIです。
 
-必ずJSONだけ返してください：
+必ず次のJSONだけ返してください：
 
 {
-  "category": "市民ベネフィット",
+  "category": "市民ベネフィット | 芦屋市の価値向上 | 財政持続性 | 施設戦略 | 都市ガバナンス",
   "summary": "短く要約",
   "impact": "low|mid|high",
-  "policy_suggestion": "具体的な政策案"
+  "policy_suggestion": "必ず具体的な政策案を書く"
 }
 
-余計な文章禁止
+・説明禁止
+・JSON以外禁止
 `
         },
         {
@@ -70,27 +68,33 @@ async function callLLM(text) {
     })
   });
 
-  /* ================= 追加②（ここ！レスポンス確認） ================= */
-  const rawText = await res.text();
-  console.log("RAW RESPONSE:", rawText);
-
-  let data;
-  try {
-    data = JSON.parse(rawText);
-  } catch (e) {
-    throw new Error("JSON parse failed");
-  }
+  /* ===== レスポンス処理（安全版） ===== */
+  const data = await res.json();
 
   const content = data?.choices?.[0]?.message?.content;
 
   if (!content) {
-    throw new Error("No AI content");
+    console.error("No content:", data);
+    throw new Error("AI response empty");
   }
 
-  return JSON.parse(content);
+  console.log("RAW AI:", content);
+
+  try {
+    return JSON.parse(content);
+  } catch (e) {
+    console.error("JSON parse failed:", content);
+
+    return {
+      category: "市民ベネフィット",
+      summary: text.slice(0, 30),
+      impact: "mid",
+      policy_suggestion: "（AI応答解析に失敗しました）"
+    };
+  }
 }
 
-/* ================= 政策表示 ================= */
+/* ================= 表示 ================= */
 function renderPolicy(ai) {
   if (!policyPanel) return;
 
@@ -98,11 +102,11 @@ function renderPolicy(ai) {
     <div style="white-space:pre-line">
 【政策ドラフト】
 
-■分類: ${ai.category}
-■要約: ${ai.summary}
+■分類: ${ai.category || ""}
+■要約: ${ai.summary || ""}
 
 ■提案:
-${ai.policy_suggestion}
+${ai.policy_suggestion || ""}
     </div>
   `;
 }
@@ -131,7 +135,7 @@ if (btn) {
 
     } catch (e) {
       console.error(e);
-      aiPanel.innerHTML = "解析エラー（原因ログ確認）";
+      aiPanel.innerHTML = "解析エラー（AI応答失敗）";
     }
 
     input.value = "";
