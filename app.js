@@ -1,3 +1,4 @@
+alert("APP JS RUNNING");
 console.log("APP START");
 
 if (!window.CONFIG) {
@@ -7,7 +8,14 @@ if (!window.CONFIG) {
 document.addEventListener("DOMContentLoaded", () => {
   console.log("DOM READY");
 
-  document.getElementById("btn").onclick = addPost;
+  const btn = document.getElementById("btn");
+
+  if (!btn) {
+    alert("btnが見つからない（HTML側を確認）");
+    return;
+  }
+
+  btn.onclick = addPost;
 });
 
 let posts = [];
@@ -36,7 +44,11 @@ async function addPost() {
 
   input.value = "";
 
-  posts.unshift({ text: text, ai: "分析中..." });
+  posts.unshift({
+    text: text,
+    ai: "分析中..."
+  });
+
   render();
 
   try {
@@ -51,6 +63,11 @@ async function addPost() {
 
 function render() {
   const el = document.getElementById("posts");
+
+  if (!el) {
+    alert("postsが見つからない（HTML確認）");
+    return;
+  }
 
   el.innerHTML = posts.map(p => `
     <div class="card">
