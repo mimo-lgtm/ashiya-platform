@@ -6,15 +6,16 @@ const input = document.getElementById("input");
 const posts = document.getElementById("posts");
 const aiPanel = document.getElementById("aiPanel");
 const policyPanel = document.getElementById("policyPanel");
+
 const intro = document.getElementById("introScreen");
 const startBtn = document.getElementById("startBtn");
 
 /* ===== イントロ ===== */
 if (startBtn && intro) {
-  startBtn.onclick = () => intro.style.display = "none";
+  startBtn.onclick = () => {
+    intro.style.display = "none";
+  };
 }
-
-/* ===== ロジックツリーは固定なので何もしない ===== */
 
 /* ===== 投稿 ===== */
 function addPost(text, ai) {
@@ -28,7 +29,15 @@ function addPost(text, ai) {
   posts.prepend(div);
 }
 
-/* ===== カテゴリ ===== */
+/* ===== ツリー ===== */
+const treeState = {
+  "芦屋市の価値向上": 0,
+  "市民ベネフィット": 0,
+  "財政持続性": 0,
+  "施設戦略": 0,
+  "都市ガバナンス": 0
+};
+
 function normalize(cat) {
   if (!cat) return "市民ベネフィット";
   if (cat.includes("価値")) return "芦屋市の価値向上";
@@ -39,67 +48,65 @@ function normalize(cat) {
   return "市民ベネフィット";
 }
 
-/* ===== AI（完全防御版） ===== */
+function updateTree(category) {
+  const key = normalize(category);
+  if (treeState[key] !== undefined) treeState[key]++;
+}
+
+/* ===== AI（完全安定版） ===== */
 async function callLLM(text) {
-  try {
-    const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${GROQ_API_KEY}`
-      },
-      body: JSON.stringify({
-        model: "llama-3.1-70b-versatile",
-        messages: [
-          {
-            role: "system",
-            content: `
-必ずJSONだけ返す：
+
+  const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${GROQ_API_KEY}`
+    },
+    body: JSON.stringify({
+      model: "llama-3.1-70b-versatile",
+
+      // 🔥 JSON強制
+      response_format: { type: "json_object" },
+
+      messages: [
+        {
+          role: "system",
+          content: `
+あなたは行政政策AIです。
+
+必ず以下のJSONだけを返してください：
+
 {
-  "category": "価値向上|市民ベネフィット|財政持続性|施設戦略|都市ガバナンス",
-  "summary": "",
+  "category": "芦屋市の価値向上 | 市民ベネフィット | 財政持続性 | 施設戦略 | 都市ガバナンス",
+  "summary": "短い要約",
   "impact": "low|mid|high",
-  "policy_suggestion": ""
+  "policy_suggestion": "具体的政策提案"
 }
+
+余計な文章は禁止
 `
-          },
-          { role: "user", content: (text || "").slice(0, 800) }
-        ],
-        temperature: 0.2
-      })
-    });
+        },
+        {
+          role: "user",
+          content: (text || "").slice(0, 800)
+        }
+      ],
+      temperature: 0.2
+    })
+  });
 
-    const data = await res.json();
-    let raw = data?.choices?.[0]?.message?.content || "";
+  const data = await res.json();
 
-    console.log("RAW AI:", raw); // ← デバッグ重要
+  const content = data?.choices?.[0]?.message?.content;
 
-    // JSON抽出
-    const match = raw.match(/\{[\s\S]*\}/);
-
-    if (!match) {
-      return fallback(text);
-    }
-
-    return JSON.parse(match[0]);
-
-  } catch (e) {
-    console.log("AI ERROR:", e);
-    return fallback(text);
+  if (!content) {
+    throw new Error("No AI response");
   }
+
+  return JSON.parse(content);
 }
 
-/* ===== フォールバック（絶対停止防止） ===== */
-function fallback(text) {
-  return {
-    category: "市民ベネフィット",
-    summary: text.slice(0, 30),
-    impact: "mid",
-    policy_suggestion: "AI解析失敗（自動補完）"
-  };
-}
-
-/* ===== 政策 ===== */
+/* ===== 政策表示 ===== */
 function renderPolicy(ai) {
   if (!policyPanel) return;
 
@@ -125,17 +132,24 @@ if (btn) {
 
     aiPanel.innerHTML = "分析中...";
 
-    const ai = await callLLM(text);
+    try {
+      const ai = await callLLM(text);
 
-    addPost(text, ai);
+      addPost(text, ai);
+      updateTree(ai.category);
 
-    aiPanel.innerHTML = `
-      <div><b>分類:</b> ${ai.category}</div>
-      <div><b>要約:</b> ${ai.summary}</div>
-      <div><b>影響:</b> ${ai.impact}</div>
-    `;
+      aiPanel.innerHTML = `
+        <div><b>分類:</b> ${ai.category}</div>
+        <div><b>要約:</b> ${ai.summary}</div>
+        <div><b>影響:</b> ${ai.impact}</div>
+      `;
 
-    renderPolicy(ai);
+      renderPolicy(ai);
+
+    } catch (e) {
+      console.error(e);
+      aiPanel.innerHTML = "解析エラー（AI応答失敗）";
+    }
 
     input.value = "";
   };
