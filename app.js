@@ -11,13 +11,12 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  alert("BUTTON CONNECTED");
-
   btn.addEventListener("click", addPost);
 
+  alert("BUTTON CONNECTED");
 });
 
-async function addPost() {
+function addPost() {
 
   alert("ADDPOST START");
 
@@ -35,31 +34,43 @@ async function addPost() {
     return;
   }
 
-  input.value = "";
-
   posts.unshift({
     text: text,
     ai: "表示テスト成功"
   });
+
+  input.value = "";
 
   render();
 }
 
 function render() {
 
-  const el = document.getElementById("posts");
+  const postsDiv = document.getElementById("posts");
 
-  if (!el) {
-    alert("postsがない");
+  if (!postsDiv) {
+    alert("postsが見つからない");
     return;
   }
 
-  el.innerHTML = posts.map(p => `
-    <div class="card">
-      <div class="user-post">${p.text}</div>
-      <div class="ai-box">${p.ai}</div>
-    </div>
-  `).join("");
+  let html = "";
+
+  for (let i = 0; i < posts.length; i++) {
+
+    html += `
+      <div style="border:1px solid #ccc;padding:10px;margin:10px 0;">
+        <div><strong>市民意見</strong></div>
+        <div>${posts[i].text}</div>
+
+        <hr>
+
+        <div><strong>AI分析</strong></div>
+        <div>${posts[i].ai}</div>
+      </div>
+    `;
+  }
+
+  postsDiv.innerHTML = html;
 
   alert("RENDER OK");
 }
