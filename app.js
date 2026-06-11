@@ -16,25 +16,25 @@ let tree = {
   "都市ガバナンス": []
 };
 
-/* ================= 画面切替 ================= */
+/* ================= 画面遷移 ================= */
 startBtn.onclick = () => {
   introScreen.style.display = "none";
   mainScreen.style.display = "block";
   renderTree();
 };
 
-/* ================= 分類 ================= */
+/* ================= ルール分類（AIなし） ================= */
 function classify(text) {
 
-  if (text.includes("教育") || text.includes("図書館") || text.includes("学習")) {
+  if (text.includes("教育") || text.includes("図書館")) {
     return "芦屋市の価値向上";
   }
 
-  if (text.includes("交流") || text.includes("カフェ") || text.includes("コミュニティ")) {
+  if (text.includes("交流") || text.includes("カフェ")) {
     return "市民ベネフィット";
   }
 
-  if (text.includes("収益") || text.includes("ふるさと")) {
+  if (text.includes("収益") || text.includes("寄付")) {
     return "財政持続性";
   }
 
@@ -53,7 +53,10 @@ function classify(text) {
 function addPost(text, category) {
 
   const div = document.createElement("div");
-  div.innerHTML = `<b>${text}</b><br><small>${category}</small>`;
+  div.innerHTML = `
+    <b>${text}</b><br>
+    <small>${category}</small>
+  `;
 
   posts.prepend(div);
 }
@@ -100,3 +103,6 @@ btn.onclick = () => {
 
   input.value = "";
 };
+
+/* ================= 初期表示 ================= */
+renderTree();
