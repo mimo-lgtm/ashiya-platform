@@ -1,5 +1,11 @@
 alert("APP JS LOADED");
 
+if (!window.CONFIG) {
+  alert("CONFIGが読み込まれていません");
+}
+
+console.log("APP LOADED");
+
 let posts = [];
 
 async function addPost() {
