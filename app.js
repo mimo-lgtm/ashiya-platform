@@ -62,6 +62,7 @@ ${text}
   alert("STEP4 HTTP応答受信");
 
   const data = await response.json();
+alert(JSON.stringify(data));
 
   alert("STEP5 JSON受信");
 
