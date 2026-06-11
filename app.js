@@ -5,15 +5,28 @@ document.addEventListener("DOMContentLoaded", () => {
   const btn = document.getElementById("btn");
 
   if (!btn) {
-    alert("ボタンが見つからない");
+    alert("ボタンが見つかりません");
     return;
   }
 
   btn.addEventListener("click", addPost);
-
 });
 
 async function askAI(text) {
+
+  alert("STEP1 CONFIG確認");
+
+  if (!window.CONFIG) {
+    throw new Error("CONFIGがありません");
+  }
+
+  alert("STEP2 APIKEY確認");
+
+  if (!window.CONFIG.GROQ_API_KEY) {
+    throw new Error("APIキーがありません");
+  }
+
+  alert("STEP3 Groq接続開始");
 
   const response = await fetch(
     "https://api.groq.com/openai/v1/chat/completions",
@@ -29,8 +42,6 @@ async function askAI(text) {
           {
             role: "user",
             content: `
-あなたは公共政策アドバイザーです。
-
 以下の市民意見について
 
 1. 要約
@@ -48,7 +59,15 @@ ${text}
     }
   );
 
+  alert("STEP4 HTTP応答受信");
+
   const data = await response.json();
+
+  alert("STEP5 JSON受信");
+
+  if (!data.choices) {
+    throw new Error(JSON.stringify(data));
+  }
 
   return data.choices[0].message.content;
 }
@@ -74,19 +93,17 @@ async function addPost() {
 
   try {
 
-alert("GROQ呼び出し開始");
-
     const result = await askAI(text);
 
     post.ai = result;
 
     render();
-alert("GROQ応答受信");
 
   } catch (e) {
 
-   post.ai = "AI接続エラー: " + e.message;
-alert("ERROR: " + e.message);
+    alert("ERROR=" + e.message);
+
+    post.ai = "AI接続エラー: " + e.message;
 
     render();
   }
