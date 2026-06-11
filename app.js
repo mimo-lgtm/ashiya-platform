@@ -44,3 +44,4 @@ function render() {
     </div>
   `).join("");
 }
+alert("APP END");
