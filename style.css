@@ -1,112 +1,55 @@
 body {
   margin: 0;
   font-family: sans-serif;
-  background: #f2f4f7;
+  background: #f5f5f5;
 }
 
-/* ===== イントロ ===== */
-.intro {
-  position: fixed;
-  inset: 0;
-  background: #0f172a;
+/* header */
+.header {
+  background: #2c3e50;
   color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 40px;
-  z-index: 999;
-}
-
-.introLead {
-  font-size: 18px;
+  padding: 15px;
   font-weight: bold;
-  margin-bottom: 20px;
 }
 
-.introText {
-  max-width: 720px;
-  font-size: 14px;
-  line-height: 1.8;
-  opacity: 0.9;
-}
-
-.primaryBtn {
-  margin-top: 25px;
-  padding: 12px 22px;
-  font-size: 16px;
-  background: #4ade80;
-  border: none;
-  cursor: pointer;
-  border-radius: 6px;
-}
-
-/* ===== 上部バー ===== */
-.topbar {
-  background: #0f172a;
-  color: white;
-  padding: 12px;
+/* container */
+.container {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  gap: 20px;
+  padding: 20px;
 }
 
-.nav button {
-  margin: 0 4px;
-  padding: 6px 10px;
-  background: #1f2937;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-.status {
-  color: #4ade80;
-}
-
-/* ===== レイアウト ===== */
-.layout {
-  display: grid;
-  grid-template-columns: 260px 1fr 320px;
-  height: calc(100vh - 50px);
-}
-
-.panel {
-  padding: 12px;
-  overflow: auto;
-}
-
+/* ロジックツリー */
 .tree {
+  width: 40%;
   background: white;
-  border-right: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 10px;
+  white-space: pre-line;
+  min-height: 400px;
 }
 
-.center {
-  background: #fafafa;
-}
-
-.ai {
+/* 投稿一覧 */
+.posts {
+  width: 60%;
   background: white;
-  border-left: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 10px;
+  min-height: 400px;
 }
 
-/* 投稿 */
-#posts div {
-  background: white;
-  padding: 8px;
-  margin-bottom: 8px;
-  border-radius: 6px;
-}
-
-/* 入力 */
-.inputBox {
+/* 投稿エリア */
+.post-area {
   display: flex;
-  gap: 6px;
-  margin-top: 10px;
+  gap: 10px;
+  padding: 20px;
 }
 
 textarea {
   flex: 1;
   height: 60px;
+}
+
+button {
+  width: 120px;
 }
