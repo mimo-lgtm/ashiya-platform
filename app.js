@@ -1,43 +1,34 @@
 const GROQ_API_KEY = "YOUR_GROQ_API_KEY";
 
-/* ===== DOM（安全） ===== */
+/* ===== DOM ===== */
 const btn = document.getElementById("btn");
 const input = document.getElementById("input");
 const posts = document.getElementById("posts");
 const aiPanel = document.getElementById("aiPanel");
 const policyPanel = document.getElementById("policyPanel");
-
-/* ===== ツリー（固定） ===== */
-const treeView = document.getElementById("treeView");
-
-/* ===== イントロ（存在チェック） ===== */
 const intro = document.getElementById("introScreen");
 const startBtn = document.getElementById("startBtn");
 
+/* ===== イントロ ===== */
 if (startBtn && intro) {
-  startBtn.onclick = () => {
-    intro.style.display = "none";
-  };
+  startBtn.onclick = () => intro.style.display = "none";
 }
 
-/* ===== ロジックツリーは必ず描画（固定なのでJS不要でもOK） ===== */
-if (treeView) {
-  treeView.innerHTML = treeView.innerHTML || "ロジックツリー表示中";
-}
+/* ===== ロジックツリーは固定なので何もしない ===== */
 
-/* ===== 投稿表示 ===== */
+/* ===== 投稿 ===== */
 function addPost(text, ai) {
   if (!posts) return;
 
   const div = document.createElement("div");
   div.innerHTML = `
     <b>${text}</b><br>
-    <small>${ai?.category || "未分類"}</small>
+    <small>${ai.category}</small>
   `;
   posts.prepend(div);
 }
 
-/* ===== カテゴリ安全化 ===== */
+/* ===== カテゴリ ===== */
 function normalize(cat) {
   if (!cat) return "市民ベネフィット";
   if (cat.includes("価値")) return "芦屋市の価値向上";
@@ -48,7 +39,7 @@ function normalize(cat) {
   return "市民ベネフィット";
 }
 
-/* ===== LLM（完全防御版） ===== */
+/* ===== AI（完全防御版） ===== */
 async function callLLM(text) {
   try {
     const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
@@ -63,11 +54,9 @@ async function callLLM(text) {
           {
             role: "system",
             content: `
-必ずJSONのみ返す：
-
+必ずJSONだけ返す：
 {
   "category": "価値向上|市民ベネフィット|財政持続性|施設戦略|都市ガバナンス",
-  "intent": "",
   "summary": "",
   "impact": "low|mid|high",
   "policy_suggestion": ""
@@ -81,32 +70,32 @@ async function callLLM(text) {
     });
 
     const data = await res.json();
-
     let raw = data?.choices?.[0]?.message?.content || "";
 
-    // 🔥 JSON抽出（最重要）
+    console.log("RAW AI:", raw); // ← デバッグ重要
+
+    // JSON抽出
     const match = raw.match(/\{[\s\S]*\}/);
 
     if (!match) {
-      return fallbackAI(text);
+      return fallback(text);
     }
 
     return JSON.parse(match[0]);
 
   } catch (e) {
-    console.log("LLM error:", e);
-    return fallbackAI(text);
+    console.log("AI ERROR:", e);
+    return fallback(text);
   }
 }
 
-/* ===== フォールバック（絶対に死なない） ===== */
-function fallbackAI(text) {
+/* ===== フォールバック（絶対停止防止） ===== */
+function fallback(text) {
   return {
     category: "市民ベネフィット",
-    intent: "自動分類（フォールバック）",
     summary: text.slice(0, 30),
     impact: "mid",
-    policy_suggestion: "AI解析に失敗したため簡易分類"
+    policy_suggestion: "AI解析失敗（自動補完）"
   };
 }
 
