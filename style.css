@@ -37,23 +37,18 @@ padding:15px 30px;
 background:
 linear-gradient(
 90deg,
-#2563eb,
-#0ea5e9,
-#14b8a6,
-#22c55e,
-#eab308,
-#f97316,
-#ef4444,
-#a855f7
+#2563eb 0%,
+#06b6d4 20%,
+#10b981 40%,
+#84cc16 60%,
+#f59e0b 80%,
+#8b5cf6 100%
 );
 
 box-shadow:
 0 6px 18px rgba(0,0,0,.18);
 }
 
-box-shadow:
-0 4px 12px rgba(0,0,0,.15);
-}
 
 .logo{
 
