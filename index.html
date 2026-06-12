@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<title>市民政策AI（安定UI最終版）</title>
+<title>市民政策AIプラットフォーム（駅前公共施設の在り方に関して市民との対話）</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
@@ -16,23 +16,10 @@ color:#222;
 header{
 background:linear-gradient(90deg,#1a73e8,#0f5bd3);
 color:#fff;
-padding:18px;
-font-size:22px;
-font-weight:bold;
-}
-
-/* 重要：display制御を完全JSに統一 */
-.page{
-display:none;
-padding:15px;
-}
-
-.card{
-background:#fff;
 padding:16px;
-border-radius:12px;
-margin-bottom:12px;
-box-shadow:0 2px 8px rgba(0,0,0,.06);
+font-size:18px;
+font-weight:bold;
+line-height:1.4;
 }
 
 nav{
@@ -46,13 +33,33 @@ top:0;
 }
 
 nav button{
-padding:10px 12px;
+padding:10px;
 border:none;
 border-radius:8px;
 background:#eef5ff;
 font-weight:bold;
 cursor:pointer;
 white-space:nowrap;
+}
+
+.page{display:none;padding:15px;}
+.active{display:block;}
+
+.layout{
+display:flex;
+gap:12px;
+}
+
+.left,.right{
+flex:1;
+}
+
+.card{
+background:#fff;
+padding:14px;
+border-radius:12px;
+margin-bottom:12px;
+box-shadow:0 2px 8px rgba(0,0,0,.06);
 }
 
 .node{
@@ -68,9 +75,6 @@ textarea{
 width:100%;
 height:120px;
 padding:10px;
-font-size:14px;
-border-radius:8px;
-border:1px solid #ccc;
 }
 
 button.action{
@@ -80,9 +84,11 @@ background:#1a73e8;
 color:#fff;
 border:none;
 border-radius:8px;
-margin-top:10px;
 cursor:pointer;
+margin-top:8px;
 }
+
+.small{font-size:13px;line-height:1.6;}
 
 .tag{
 display:inline-block;
@@ -92,43 +98,55 @@ padding:3px 8px;
 border-radius:20px;
 font-size:12px;
 }
-
 </style>
 </head>
 
 <body>
 
-<header>市民政策AIプラットフォーム（安定最終版）</header>
+<header>
+市民政策AIプラットフォーム（駅前公共施設の在り方に関して市民との対話）
+</header>
 
 <nav>
 <button onclick="show('intro')">イントロ</button>
 <button onclick="show('tree')">ロジックツリー</button>
 <button onclick="show('post')">投稿</button>
 <button onclick="show('analysis')">分析</button>
+<button onclick="show('rules')">マージルール</button>
 <button onclick="show('merge')">統合</button>
 </nav>
 
 <!-- ================= INTRO ================= -->
-<div id="intro" class="page">
+<div id="intro" class="page active">
+
+<div class="layout">
+
+<!-- LEFT -->
+<div class="left">
+
 <div class="card">
+<b>まずは他の市民の意見を見てください</b><br><br>
 
-<h2>市民の意見を政策に変換するAIプラットフォーム</h2>
+その中から興味のある意見を選び、投稿できます。<br>
+既存にない場合は「その他」で自由に投稿できます。<br><br>
 
-<p>
-このシステムは、市民の思いつきレベルの意見を
-AIが構造化し、政策へ変換する実証プロジェクトです。
-</p>
+それではロジックツリーを見てください。
+</div>
 
-<hr>
+<div class="card">
+<button class="action" onclick="show('tree')">
+ロジックツリーを見る
+</button>
+</div>
 
-<div class="card">🧠 思いつき投稿 → OK（専門知識不要）</div>
-<div class="card">🤖 AIが自動で要約・構造化</div>
-<div class="card">🔍 政策化プロセスを可視化</div>
-<div class="card">🌳 ロジックツリーで構造表示</div>
-<div class="card">📊 分析・傾向の可視化</div>
-<div class="card">🔄 政策統合プロセス公開</div>
-
-<hr>
+<div class="card small">
+✔ 思いつき投稿 → OK（専門知識不要）<br>
+✔ AIが要約・構造化<br>
+✔ 政策化プロセス可視化<br>
+✔ ロジックツリー表示<br>
+✔ 分析機能<br>
+✔ 統合プロセス公開
+</div>
 
 <div class="card">
 <b>4ステップ</b><br><br>
@@ -141,43 +159,80 @@ AIが構造化し、政策へ変換する実証プロジェクトです。
 ④ 政策化
 </div>
 
-<button class="action" onclick="show('tree')">
-ロジックツリーを見る
-</button>
+</div>
+
+<!-- RIGHT (4コマ + ステップ) -->
+<div class="right">
+
+<div class="card">
+<b>4コマイメージ（簡易）</b><br><br>
+
+① 市民が投稿<br>
+② AIが整理<br>
+③ ツリーに統合<br>
+④ 政策になる
+</div>
+
+<div class="card">
+<b>システムの特徴</b><br><br>
+・意見が政策に変換される<br>
+・プロセスが全て可視化<br>
+・統合ルールも公開<br>
+</div>
+
+</div>
 
 </div>
 </div>
 
 <!-- ================= TREE ================= -->
 <div id="tree" class="page">
+
 <div class="card">
+<h3>市民政策ロジックツリー（Vision）</h3>
 
-<h3>ロジックツリー</h3>
+<p class="small">
+コストセンターからプロフィットセンターへ：市民のウェルビーイングと知財の集積による投資型都市経営の実現
+</p>
 
-<div class="node" onclick="selectTheme('価値向上')">① 価値向上</div>
-<div class="node" onclick="selectTheme('市民ベネフィット')">② 市民ベネフィット</div>
-<div class="node" onclick="selectTheme('財政')">③ 財政</div>
-<div class="node" onclick="selectTheme('施設')">④ 施設</div>
-<div class="node" onclick="selectTheme('ガバナンス')">⑤ ガバナンス</div>
+<div class="node" onclick="goPost('価値向上')">
+1. 芦屋市の価値向上
+</div>
+
+<div class="node" onclick="goPost('ベネフィット')">
+2. 市民ベネフィット
+</div>
+
+<div class="node" onclick="goPost('財政')">
+3. 財政持続性
+</div>
+
+<div class="node" onclick="goPost('施設')">
+4. 施設戦略
+</div>
+
+<div class="node" onclick="goPost('ガバナンス')">
+5. ガバナンス
+</div>
 
 </div>
 </div>
 
 <!-- ================= POST ================= -->
 <div id="post" class="page">
+
 <div class="card">
+<h3>投稿 + AI対話</h3>
 
-<h3>投稿</h3>
-
-<div id="selected"></div>
+<div id="themeBox"></div>
 
 <textarea id="input"></textarea>
 
-<button class="action" onclick="runAI()">AI分析</button>
+<button class="action" onclick="runAI()">AI要約生成</button>
 
-<div id="out"></div>
-
+<div id="result"></div>
 </div>
+
 </div>
 
 <!-- ================= ANALYSIS ================= -->
@@ -188,10 +243,25 @@ AIが構造化し、政策へ変換する実証プロジェクトです。
 </div>
 </div>
 
+<!-- ================= RULES ================= -->
+<div id="rules" class="page">
+<div class="card">
+<h3>マージ・統合ルール</h3>
+
+<p class="small">
+・AIが統合権限を持つ<br>
+・人間はルール設計のみ可能<br>
+・意見は衝突時にスコアリングされる<br>
+・重要度・公共性・整合性で統合される<br>
+</p>
+
+</div>
+</div>
+
 <!-- ================= MERGE ================= -->
 <div id="merge" class="page">
 <div class="card">
-<h3>統合</h3>
+<h3>統合ビュー（政策変遷）</h3>
 <div id="mergeBox"></div>
 </div>
 </div>
@@ -201,118 +271,101 @@ AIが構造化し、政策へ変換する実証プロジェクトです。
 let posts = [];
 let currentTheme = "";
 
-/* =========================
-   ★ 超重要：初期表示固定
-========================= */
-window.addEventListener("DOMContentLoaded", () => {
-  show("intro");
-});
-
-/* =========================
-   ページ制御（完全固定）
-========================= */
+/* ================= PAGE ================= */
 function show(id){
-
-// 全消し
-document.querySelectorAll(".page").forEach(p=>{
-  p.style.display = "none";
-});
-
-// 表示
-const target = document.getElementById(id);
-if(target){
-  target.style.display = "block";
-}
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+document.getElementById(id).classList.add("active");
 }
 
-/* =========================
-   テーマ選択
-========================= */
-function selectTheme(t){
-currentTheme = t;
-document.getElementById("selected").innerHTML =
-`<div class="tag">選択中：${t}</div>`;
+/* ================= TREE → POST ================= */
+function goPost(theme){
+currentTheme = theme;
+document.getElementById("themeBox").innerHTML =
+`<div class="tag">${theme}</div>`;
 show("post");
 }
 
-/* =========================
-   ダミーAI（安定版）
-========================= */
-function simpleAI(text){
-
-return {
-category: text.includes("子ども") ? "子育て" :
-text.includes("教育") ? "教育" :
-text.includes("防災") ? "防災" : "総合",
-
-title: text.slice(0,20),
-summary: "AIが構造化した要約",
-question: "この施策の優先順位は？",
-viewpoint: "複数政策との統合可能性あり"
-};
-}
-
-/* =========================
-   投稿
-========================= */
+/* ================= AI ================= */
 function runAI(){
 
-let text = document.getElementById("input").value.trim();
+let text = document.getElementById("input").value;
 if(!text) return;
 
-let ai = simpleAI(text);
+let title = text.slice(0,10);
+let summary = text.slice(0,200);
 
-posts.unshift({text,...ai});
+posts.unshift({
+title,
+summary,
+theme: currentTheme
+});
 
-document.getElementById("input").value="";
-
-renderAll();
-
-document.getElementById("out").innerHTML=`
+document.getElementById("result").innerHTML = `
 <div class="card">
-<div class="tag">${ai.category}</div>
-<h3>${ai.title}</h3>
-<p>${ai.summary}</p>
-<p>${ai.question}</p>
-<p>${ai.viewpoint}</p>
-</div>`;
+<div class="tag">${title}</div>
+<p>${summary}</p>
+
+<br>
+<b>この内容でよいですか？</b><br><br>
+
+<button onclick="fix()">a. それでよい</button>
+<button onclick="edit()">b. 修正</button>
+</div>
+`;
 }
 
-/* =========================
-   分析
-========================= */
-function renderAnalysis(){
+/* ================= FIX ================= */
+function fix(){
 
-let map={};
+document.getElementById("result").innerHTML += `
+<div class="card">
+✔ 投稿が確定しました<br><br>
+
+この意見は<br>
+・ロジックツリー<br>
+・Pull Request<br><br>
+に反映されます
+
+<br><br>
+<button onclick="show('tree')">ロジックツリーへ</button>
+<button onclick="show('merge')">PRを見る</button>
+</div>
+`;
+
+render();
+}
+
+/* ================= EDIT ================= */
+function edit(){
+
+document.getElementById("result").innerHTML += `
+<div class="card">
+修正内容を入力してください<br><br>
+<textarea></textarea>
+</div>
+`;
+}
+
+/* ================= ANALYSIS ================= */
+function render(){
+
+let map = {};
 posts.forEach(p=>{
-map[p.category]=(map[p.category]||0)+1;
+map[p.theme]=(map[p.theme]||0)+1;
 });
 
 document.getElementById("analysisBox").innerHTML =
 Object.entries(map).map(([k,v])=>
 `<div class="card">${k}：${v}件</div>`
 ).join("") || "なし";
-}
 
-/* =========================
-   統合
-========================= */
-function renderMerge(){
-
-if(posts.length===0){
-document.getElementById("mergeBox").innerHTML="なし";
-return;
-}
-
-document.getElementById("mergeBox").innerHTML=`
+document.getElementById("mergeBox").innerHTML =
+posts.map(p=>`
 <div class="card">
-${posts.map(p=>p.summary).join("<br><br>")}
-</div>`;
-}
-
-function renderAll(){
-renderAnalysis();
-renderMerge();
+<b>${p.title}</b><br>
+${p.summary}
+</div>
+`).join("") || "なし";
 }
 
 </script>
