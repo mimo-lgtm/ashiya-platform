@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>市民政策AIプラットフォーム（駅前公共施設の在り方に関して市民との対話）</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<script>
+window.GROQ_API_KEY="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";
+</script>
+
+<link rel="stylesheet" href="./style.css">
+<link rel="stylesheet" href="./thought-ui.css">
+</head>
+
+<body>
+
+<header>
+市民政策AIプラットフォーム（駅前公共施設の在り方に関して市民との対話）
+</header>
+
+<nav>
+<button onclick="showPage('intro')">イントロ</button>
+<button onclick="showPage('tree')">ロジックツリー</button>
+<button onclick="showPage('post')">AI壁打ち</button>
+<button onclick="showPage('analysis')">分析</button>
+<button onclick="showPage('pr')">統合・PR</button>
+</nav>
+
+<!-- ================= INTRO ================= -->
+<div id="intro" class="page active">
+<div class="card">
+
+<h2>このプラットフォームについて</h2>
+
+<p>
+これは、市民が駅前公共施設のあり方について自由に意見を書き込める対話プラットフォームです。<br><br>
+
+従来の行政意見提出はハードルが高く、
+「言っていいのか分からない」「他人の意見が見えない」
+という課題がありました。<br><br>
+
+この仕組みはそれを解決します。
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>特徴</h3>
+
+思いつき投稿OK（専門知識不要）<br>
+🤖 AIが自動で要約・構造化<br>
+🔍 政策化プロセスを可視化<br>
+🌳 ロジックツリーで構造表示<br>
+📊 投稿傾向の分析<br>
+🔄 政策統合プロセス公開
+
+</div>
+
+<div class="card">
+
+<h3>流れ</h3>
+
+① 市民意見 → 投稿<br>
+② AI構造化 → 要約<br>
+③ ロジックツリー統合<br>
+④ 政策化・反映
+
+</div>
+
+<button class="btn" onclick="showPage('tree')">
+ロジックツリーを見る
+</button>
+
+</div>
+
+<!-- ================= TREE ================= -->
+<div id="tree" class="page">
+<div class="card">
+<h2>市民政策ロジックツリー（Vision）</h2>
+
+<p>
+コストセンターからプロフィットセンターへ：市民のウェルビーイングと知財の集積による投資型都市経営の実現
+</p>
+</div>
+
+<div id="treeBox"></div>
+</div>
+
+<!-- ================= POST ================= -->
+<div id="post" class="page">
+<div class="card">
+
+<textarea id="input" placeholder="意見を入力"></textarea>
+
+<button class="btn" onclick="runAI()">AI壁打ち（Groq）</button>
+
+<div id="result"></div>
+
+</div>
+</div>
+
+<!-- ================= ANALYSIS ================= -->
+<div id="analysis" class="page">
+<div class="card">
+<h2>分析</h2>
+<div id="analysisBox"></div>
+</div>
+</div>
+
+<!-- ================= PR ================= -->
+<div id="pr" class="page">
+<div class="card">
+<h2>統合・PR（Pull Request）</h2>
+<div id="prBox"></div>
+</div>
+</div>
+
+<script src="./js/config.js"></script>
+<script src="./js/app.js"></script>
+
+</body>
+</html>
