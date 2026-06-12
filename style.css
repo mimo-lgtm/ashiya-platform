@@ -1,0 +1,13 @@
+body{font-family:sans-serif;margin:0;background:#f6f8fb}
+.hero{padding:40px;text-align:center;color:white;background:linear-gradient(135deg,#4F8EF7,#43C59E,#8B6EF5)}
+.nav{display:flex;gap:10px;justify-content:center;padding:15px;flex-wrap:wrap;background:white}
+.nav button{padding:10px 16px;border:none;border-radius:10px;cursor:pointer}
+.page{display:none;padding:25px}
+.page.active{display:block}
+.comic-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px}
+.comic,.card{background:white;padding:15px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.comic img{width:100%;height:180px;object-fit:cover;background:#ddd}
+.tree ul{list-style:none}
+.tree li{margin:8px 0}
+textarea{width:100%;min-height:180px}
+.timeline{background:white;padding:20px;border-radius:12px}
