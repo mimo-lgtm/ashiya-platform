@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<title>市民対話AIプラットフォーム（完成版）</title>
+<title>市民政策AIプラットフォーム（行政提出版）</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
@@ -12,18 +12,9 @@ background:linear-gradient(90deg,#1a73e8,#0f5bd3);
 color:#fff;padding:18px;font-size:22px;font-weight:bold;
 }
 
-.sub{
-background:#eef5ff;
-padding:12px 16px;
-font-size:14px;
-line-height:1.6;
-}
-
 nav{
-display:flex;gap:8px;
-padding:10px;
-background:#fff;
-overflow:auto;
+display:flex;gap:8px;padding:10px;background:#fff;overflow:auto;
+position:sticky;top:0;
 }
 
 nav button{
@@ -31,8 +22,8 @@ padding:10px 12px;
 border:none;
 border-radius:8px;
 background:#eef5ff;
-cursor:pointer;
 font-weight:bold;
+cursor:pointer;
 }
 
 .page{display:none;padding:15px;}
@@ -51,16 +42,8 @@ padding:12px;
 margin:6px 0;
 border-left:5px solid #1a73e8;
 background:#f8fbff;
-cursor:pointer;
 border-radius:8px;
-}
-
-.child{
-display:none;
-margin-left:15px;
-padding:8px;
-background:#fff;
-border-left:3px solid #ccc;
+cursor:pointer;
 }
 
 textarea{
@@ -73,11 +56,11 @@ font-size:14px;
 button.action{
 width:100%;
 padding:12px;
-margin-top:8px;
-border:none;
 background:#1a73e8;
 color:#fff;
+border:none;
 border-radius:8px;
+margin-top:8px;
 cursor:pointer;
 }
 
@@ -89,25 +72,22 @@ padding:3px 8px;
 border-radius:20px;
 font-size:12px;
 }
-
-.metric{
-font-size:26px;
-font-weight:bold;
-color:#1a73e8;
-}
 </style>
+
+<script>
+window.GROQ_API_KEY = "gsk_xxxxx"; // ←ここだけ設定
+</script>
+
 </head>
 
 <body>
 
-<header>駅前公共施設 市民対話AIプラットフォーム</header>
-
-<div class="sub">
-市民の意見をAIが整理し、政策テーマへ変換する実証プラットフォーム
-</div>
+<header>
+駅前公共施設 市民政策AIプラットフォーム（行政提出版）
+</header>
 
 <nav>
-<button onclick="show('home')">入口</button>
+<button onclick="show('intro')">イントロ</button>
 <button onclick="show('tree')">ロジックツリー</button>
 <button onclick="show('post')">投稿</button>
 <button onclick="show('analysis')">分析</button>
@@ -115,12 +95,15 @@ color:#1a73e8;
 <button onclick="show('merge')">統合</button>
 </nav>
 
-<!-- HOME -->
-<div id="home" class="page active">
+<!-- INTRO -->
+<div id="intro" class="page active">
 <div class="card">
-<h2>あなたの意見を政策へ変換します</h2>
-<p>ロジックツリーからテーマを選び投稿してください。</p>
-<button class="action" onclick="show('tree')">開始</button>
+<h2>市民意見 → 政策生成システム</h2>
+<p>
+市民の意見をAIが構造化し、
+政策テーマ・統合案へ変換する実証プラットフォームです。
+</p>
+<button class="action" onclick="show('tree')">ロジックツリーへ</button>
 </div>
 </div>
 
@@ -130,9 +113,9 @@ color:#1a73e8;
 
 <h3>市民政策ロジックツリー</h3>
 
-<div class="node" onclick="selectTheme('価値向上')">① 芦屋市の価値向上</div>
+<div class="node" onclick="selectTheme('価値向上')">① 価値向上</div>
 <div class="node" onclick="selectTheme('市民ベネフィット')">② 市民ベネフィット</div>
-<div class="node" onclick="selectTheme('財政')">③ 財政持続性</div>
+<div class="node" onclick="selectTheme('財政')">③ 財政</div>
 <div class="node" onclick="selectTheme('施設')">④ 施設戦略</div>
 <div class="node" onclick="selectTheme('ガバナンス')">⑤ ガバナンス</div>
 
@@ -143,17 +126,15 @@ color:#1a73e8;
 <div id="post" class="page">
 <div class="card">
 
-<h3>投稿＋AI分析</h3>
+<h3>市民投稿</h3>
 
 <div id="selected"></div>
 
 <textarea id="input"></textarea>
 
-<button class="action" onclick="addPost()">投稿</button>
+<button class="action" onclick="runAI()">AI分析（Groq）</button>
 
-<div id="result"></div>
-
-<div id="postList"></div>
+<div id="out"></div>
 
 </div>
 </div>
@@ -161,7 +142,7 @@ color:#1a73e8;
 <!-- ANALYSIS -->
 <div id="analysis" class="page">
 <div class="card">
-<h3>分析（投稿連動）</h3>
+<h3>分析ダッシュボード</h3>
 <div id="analysisBox"></div>
 </div>
 </div>
@@ -177,21 +158,18 @@ color:#1a73e8;
 <!-- MERGE -->
 <div id="merge" class="page">
 <div class="card">
-<h3>統合（政策ドラフト生成）</h3>
+<h3>政策統合（ドラフト生成）</h3>
 <div id="mergeBox"></div>
 </div>
 </div>
 
 <script>
 
-/* =========================
-   状態管理（完全連動）
-========================= */
 let posts = [];
 let currentTheme = "";
 
 /* =========================
-   画面切替
+   画面制御
 ========================= */
 function show(id){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
@@ -203,7 +181,7 @@ if(id==="merge") renderMerge();
 }
 
 /* =========================
-   テーマ選択 → 投稿へ
+   テーマ選択
 ========================= */
 function selectTheme(t){
 currentTheme = t;
@@ -213,73 +191,77 @@ show("post");
 }
 
 /* =========================
-   投稿 + AI処理
+   Groq API
 ========================= */
-function addPost(){
+async function callGroq(text){
+
+const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+method:"POST",
+headers:{
+"Content-Type":"application/json",
+"Authorization":"Bearer " + window.GROQ_API_KEY
+},
+body:JSON.stringify({
+model:"llama-3.1-70b-versatile",
+messages:[
+{
+role:"system",
+content:`あなたは日本の行政政策AI。
+必ずJSONで返す：
+{
+"category":"",
+"summary":"",
+"question":"",
+"viewpoint":"",
+"title":""
+}`
+},
+{role:"user",content:text}
+],
+temperature:0.3
+})
+});
+
+const data = await res.json();
+return JSON.parse(data.choices[0].message.content);
+}
+
+/* =========================
+   投稿 + AI
+========================= */
+async function runAI(){
 
 let text = document.getElementById("input").value.trim();
 if(!text) return;
 
+document.getElementById("out").innerHTML="AI解析中...";
+
+let ai = await callGroq(text);
+
 let post = {
 text,
-theme: currentTheme || "未分類",
-category: classify(text),
-summary: summarize(text),
-question: question(text),
-viewpoint: viewpoint(text)
+theme: currentTheme,
+...ai
 };
 
 posts.unshift(post);
+
 document.getElementById("input").value="";
 
-/* 全更新 */
-renderPosts();
-renderAnalysis();
-renderPR();
+renderAll();
+
+document.getElementById("out").innerHTML=
+`<div class="card">
+<div class="tag">${ai.category}</div>
+<h3>${ai.title}</h3>
+<p>${ai.summary}</p>
+<p>${ai.question}</p>
+<p>${ai.viewpoint}</p>
+</div>`;
 }
 
 /* =========================
-   AIロジック（軽量v3統合）
-========================= */
-function classify(t){
-if(t.includes("子ども")) return "子育て";
-if(t.includes("教育")) return "教育";
-if(t.includes("起業")) return "産業";
-if(t.includes("防災")) return "防災";
-return "総合";
-}
-
-function summarize(t){
-return t.length>40 ? t.slice(0,40)+"..." : t;
-}
-
-function question(t){
-return "この政策の優先順位は何ですか？";
-}
-
-function viewpoint(t){
-return "都市ブランド戦略として再整理可能";
-}
-
-/* =========================
-   投稿表示（連動核）
-========================= */
-function renderPosts(){
-
-let html = posts.map(p=>`
-<div class="card">
-<div class="tag">${p.theme} / ${p.category}</div>
-<p>${p.text}</p>
-<p>要約：${p.summary}</p>
-</div>
-`).join("");
-
-document.getElementById("postList").innerHTML =
-html || "投稿なし";
-}
-
-/* =========================
-   分析（完全連動）
+   分析
 ========================= */
 function renderAnalysis(){
 
@@ -291,48 +273,48 @@ map[p.category]=(map[p.category]||0)+1;
 document.getElementById("analysisBox").innerHTML =
 Object.entries(map).map(([k,v])=>
 `<div class="card">${k}：${v}件</div>`
-).join("") || "データなし";
+).join("") || "なし";
 }
 
 /* =========================
-   PR（統合候補）
+   PR
 ========================= */
 function renderPR(){
 
 document.getElementById("prBox").innerHTML =
 posts.map(p=>`
 <div class="card">
-<b>${p.theme}</b><br>
+<b>${p.title}</b><br>
 ${p.summary}
 </div>
-`).join("") || "PRなし";
+`).join("") || "なし";
 }
 
 /* =========================
-   統合（政策ドラフト）
+   統合
 ========================= */
 function renderMerge(){
 
 if(posts.length===0){
-document.getElementById("mergeBox").innerHTML="投稿なし";
+document.getElementById("mergeBox").innerHTML="なし";
 return;
 }
 
-let merged = posts.map(p=>p.text).join(" ");
+let merged = posts.map(p=>p.summary).join(" ");
 
 document.getElementById("mergeBox").innerHTML=`
 <div class="card">
-<h4>政策ドラフト</h4>
-<p>
-${currentTheme} を中心に市民意見を統合し政策化します。
-</p>
-<p>${merged.slice(0,200)}...</p>
-</div>
-`;
+<h3>政策ドラフト</h3>
+<p>${merged}</p>
+</div>`;
 }
 
-/* 初期描画 */
-renderPosts();
+/* 全更新 */
+function renderAll(){
+renderAnalysis();
+renderPR();
+renderMerge();
+}
 
 </script>
 
