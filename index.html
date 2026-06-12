@@ -2,222 +2,98 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<title>市民政策AIプラットフォーム</title>
+<title>市民政策AIプラットフォーム（行政最終版）</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-body{
-margin:0;
-font-family:"Yu Gothic",sans-serif;
-background:#f4f6f8;
-}
+body{margin:0;font-family:Yu Gothic;background:#f4f6f8}
+header{background:#1a73e8;color:#fff;padding:14px;font-weight:bold}
 
-header{
-background:linear-gradient(90deg,#1a73e8,#0f5bd3);
-color:#fff;
-padding:16px;
-font-size:18px;
-font-weight:bold;
-}
+nav{display:flex;gap:8px;padding:10px;background:#fff;position:sticky;top:0}
+nav button{padding:10px;border:none;background:#eef5ff;border-radius:8px;font-weight:bold;cursor:pointer}
 
-nav{
-display:flex;
-gap:8px;
-padding:10px;
-background:#fff;
-overflow:auto;
-position:sticky;
-top:0;
-}
+.page{display:none;padding:14px}
+.active{display:block}
 
-nav button{
-padding:10px;
-border:none;
-border-radius:8px;
-background:#eef5ff;
-font-weight:bold;
-cursor:pointer;
-}
+.card{background:#fff;padding:12px;border-radius:10px;margin-bottom:10px;box-shadow:0 2px 6px rgba(0,0,0,.08)}
 
-.page{display:none;padding:15px;}
-.active{display:block;}
+.node{padding:10px;border-left:4px solid #1a73e8;background:#f7fbff;margin:6px 0;cursor:pointer}
 
-.layout{
-display:flex;
-gap:12px;
-}
+textarea{width:100%;height:120px;font-size:15px;padding:10px}
 
-.left,.right{flex:1;}
+button.action{width:100%;padding:12px;background:#1a73e8;color:#fff;border:none;border-radius:8px;margin-top:8px}
 
-.card{
-background:#fff;
-padding:14px;
-border-radius:12px;
-margin-bottom:12px;
-box-shadow:0 2px 8px rgba(0,0,0,.06);
-}
+.tag{background:#1a73e8;color:#fff;padding:4px 8px;border-radius:20px;font-size:12px}
 
-.node{
-padding:12px;
-margin:8px 0;
-border-left:5px solid #1a73e8;
-background:#f8fbff;
-border-radius:8px;
-cursor:pointer;
-}
-
-.small{font-size:13px;line-height:1.6;}
-
-.tag{
-display:inline-block;
-background:#1a73e8;
-color:#fff;
-padding:3px 8px;
-border-radius:20px;
-font-size:12px;
-}
-
-textarea{
-width:100%;
-height:120px;
-}
+.small{font-size:13px;color:#444}
 </style>
 </head>
 
 <body>
 
-<header>
-市民政策AIプラットフォーム
-</header>
+<header>市民政策AIプラットフォーム（Groq行政版・最終形）</header>
 
 <nav>
 <button onclick="show('intro')">イントロ</button>
 <button onclick="show('tree')">ロジックツリー</button>
 <button onclick="show('post')">投稿</button>
+<button onclick="show('pr')">PR履歴</button>
 <button onclick="show('analysis')">分析</button>
-<button onclick="show('merge')">統合</button>
+<button onclick="show('rules')">統合ルール</button>
 </nav>
 
 <!-- ================= INTRO ================= -->
 <div id="intro" class="page active">
+<div class="card">
 
-<div class="layout">
+<h2>市民政策OS</h2>
 
-<!-- LEFT -->
-<div class="left">
+<p class="small">
+これは市民が自由に駅前公共施設の意見を投稿し、AIが構造化・政策化するプラットフォームです。
+</p>
 
 <div class="card">
-<b>このプラットフォームについて</b><br><br>
-
-これは、市民が駅前公共施設に関して自由に意見を書き込める対話型プラットフォームです。<br><br>
-
-従来は行政に意見を出すことは高いハードルがありました。<br>
-「こんな意見を出していいのか」「他の人はどう思うのか」<br>
-そうした不安を解消するための仕組みです。
+✔ 思いつき投稿OK（専門知識不要）<br>
+✔ AIが要約・構造化・分類<br>
+✔ ロジックツリーに自動反映<br>
+✔ PRとして全履歴を保存<br>
+✔ 統合プロセスを透明化
 </div>
 
-<div class="card">
-<b>このプラットフォームの特徴</b><br><br>
-
-・市民の意見をそのまま受け取る<br>
-・AIが自動で整理・要約・構造化<br>
-・ロジックツリーとして全体像を可視化<br>
-・意見の流れと統合プロセスを公開
-</div>
-
-<div class="card">
-<b>使い方</b><br><br>
-
-まずはロジックツリーを見てください。<br>
-気になるテーマを選び、そのまま意見を投稿できます。<br>
-既存にない場合は自由投稿も可能です。
-</div>
-
-<button class="tag" onclick="show('tree')">
-ロジックツリーを見る
-</button>
-
-</div>
-
-<!-- RIGHT -->
-<div class="right">
-
-<div class="card">
-<b>4コマイラスト（概念）</b><br><br>
-
-① 市民が意見を書く<br>
-② AIが整理する<br>
-③ ロジックツリーに反映<br>
-④ 政策になる
-</div>
-
-<div class="card">
-<b>4ステップ</b><br><br>
-
-① 市民意見<br>
-↓<br>
-② AI構造化<br>
-↓<br>
-③ ロジックツリー統合<br>
-↓<br>
-④ 政策化
-</div>
-
-</div>
+<button class="action" onclick="show('tree')">ロジックツリーを見る</button>
 
 </div>
 </div>
 
 <!-- ================= TREE ================= -->
 <div id="tree" class="page">
-
 <div class="card">
-<h3>市民政策ロジックツリー（Vision）</h3>
-
-<p class="small">
-コストセンターからプロフィットセンターへ：市民のウェルビーイングと知財の集積による投資型都市経営の実現
-</p>
-
-<!-- 大分類 -->
-<div class="node" onclick="goPost('価値向上')">
-① 芦屋市の価値向上
-</div>
-
-<div class="node" onclick="goPost('ベネフィット')">
-② 市民へのベネフィット
-</div>
-
-<div class="node" onclick="goPost('財政')">
-③ 財政的持続可能性
-</div>
-
-<div class="node" onclick="goPost('施設')">
-④ 施設の戦略性
-</div>
-
-<div class="node" onclick="goPost('ガバナンス')">
-⑤ 都市の強靭性とガバナンス
-</div>
-
+<h3>ロジックツリー（自動生成）</h3>
+<div id="treeBox"></div>
 </div>
 </div>
 
 <!-- ================= POST ================= -->
 <div id="post" class="page">
-
 <div class="card">
-<h3>投稿</h3>
 
-<div id="themeBox"></div>
+<div id="context"></div>
 
-<textarea id="input"></textarea>
+<textarea id="input" placeholder="市民意見を入力"></textarea>
 
-<button onclick="runAI()">AI要約</button>
+<button class="action" onclick="runAI()">AI解析（Groq）</button>
 
 <div id="result"></div>
 
 </div>
+</div>
 
+<!-- ================= PR ================= -->
+<div id="pr" class="page">
+<div class="card">
+<h3>Pull Request（全履歴）</h3>
+<div id="prBox"></div>
+</div>
 </div>
 
 <!-- ================= ANALYSIS ================= -->
@@ -228,91 +104,153 @@ height:120px;
 </div>
 </div>
 
-<!-- ================= MERGE ================= -->
-<div id="merge" class="page">
+<!-- ================= RULES ================= -->
+<div id="rules" class="page">
 <div class="card">
-<h3>統合ビュー</h3>
-<div id="mergeBox"></div>
+<h3>統合ルール（行政ガバナンス）</h3>
+
+<div class="card">
+✔ AIが統合を実行（人間は承認ルールのみ設定）<br>
+✔ 重要度・重複・影響度でマージ判断<br>
+✔ 政策はバージョン管理される（v0.1→v0.2→v1.0）<br>
+✔ すべての変更はPRとして記録
+</div>
+
 </div>
 </div>
 
 <script>
 
+/* ================= STATE ================= */
 let posts = [];
-let currentTheme = "";
+let tree = {};
+let pr = [];
 
+/* ================= NAV ================= */
 function show(id){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
 document.getElementById(id).classList.add("active");
+
+if(id==="tree") renderTree();
+if(id==="pr") renderPR();
+if(id==="analysis") renderAnalysis();
 }
 
-function goPost(theme){
-currentTheme = theme;
-document.getElementById("themeBox").innerHTML =
-`<div class="tag">${theme}</div>`;
-show("post");
+/* ================= GROQ ================= */
+async function callGroq(text){
+
+const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+method:"POST",
+headers:{
+"Content-Type":"application/json",
+"Authorization":"Bearer "+window.GROQ_API_KEY
+},
+body:JSON.stringify({
+model:"llama-3.1-70b-versatile",
+messages:[
+{
+role:"system",
+content:
+"あなたは行政政策AI。必ずJSONで返す：title(10字),summary(200字),category"
+},
+{role:"user",content:text}
+]
+})
+});
+
+const data = await res.json();
+
+try{
+return JSON.parse(data.choices[0].message.content);
+}catch(e){
+return {
+title:"解析結果",
+summary:data.choices[0].message.content,
+category:"未分類"
+};
+}
 }
 
-function runAI(){
+/* ================= TREE ================= */
+function addTree(cat, item){
+if(!tree[cat]) tree[cat]=[];
+tree[cat].push(item);
+}
 
-let text = document.getElementById("input").value;
+function renderTree(){
+
+let html="";
+
+for(let k in tree){
+html += `<div class="card"><b>${k}</b>`;
+tree[k].forEach(t=>{
+html += `<div class="node">${t.title || t}</div>`;
+});
+html += `</div>`;
+}
+
+document.getElementById("treeBox").innerHTML =
+html || "データなし";
+}
+
+/* ================= PR ================= */
+function renderPR(){
+
+document.getElementById("prBox").innerHTML =
+pr.map(p=>`
+<div class="card">
+<div class="tag">${p.category}</div>
+<b>${p.title}</b><br>
+${p.summary}
+</div>
+`).join("") || "なし";
+}
+
+/* ================= ANALYSIS ================= */
+function renderAnalysis(){
+
+let map={};
+pr.forEach(p=>{
+map[p.category]=(map[p.category]||0)+1;
+});
+
+document.getElementById("analysisBox").innerHTML =
+Object.entries(map).map(([k,v])=>
+`<div class="card">${k}：${v}</div>`
+).join("") || "なし";
+}
+
+/* ================= FLOW ================= */
+async function runAI(){
+
+let text=document.getElementById("input").value;
 if(!text) return;
 
-let title = text.slice(0,10);
-let summary = text.slice(0,200);
-
-posts.unshift({title,summary,theme:currentTheme});
+let ai = await callGroq(text);
 
 document.getElementById("result").innerHTML = `
 <div class="card">
-<div class="tag">${title}</div>
-<p>${summary}</p>
+<div class="tag">${ai.category}</div>
+<h3>${ai.title}</h3>
+<p>${ai.summary}</p>
 
-<br>
-<b>この内容でよいですか？</b><br><br>
-
-<button onclick="fix()">a. それでよい</button>
-<button onclick="edit()">b. 修正</button>
+<button class="action" onclick="confirmPost('${ai.title}','${ai.summary}','${ai.category}')">
+確定して反映
+</button>
 </div>
 `;
 }
 
-function fix(){
+function confirmPost(title,summary,category){
 
-document.getElementById("result").innerHTML += `
-<div class="card">
-✔ 確定しました<br><br>
+let obj={title,summary,category};
 
-・ロジックツリー反映予定<br>
-・PR反映予定<br><br>
+pr.unshift(obj);
+addTree(category,obj);
 
-<button onclick="show('tree')">ツリーへ</button>
-<button onclick="show('merge')">統合へ</button>
-</div>
-`;
+alert("PR・ツリーに反映されました");
 
-render();
-}
-
-function edit(){
-document.getElementById("result").innerHTML += `
-<div class="card">
-修正内容を入力<br><textarea></textarea>
-</div>
-`;
-}
-
-function render(){
-
-document.getElementById("analysisBox").innerHTML =
-posts.length + "件の投稿";
-
-document.getElementById("mergeBox").innerHTML =
-posts.map(p=>`
-<div class="card">
-<b>${p.title}</b><br>${p.summary}
-</div>
-`).join("") || "なし";
+show("tree");
 }
 
 </script>
