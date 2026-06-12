@@ -4,7 +4,6 @@
 <meta charset="utf-8">
 <title>市民対話プラットフォーム</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <link rel="stylesheet" href="./style.css">
 </head>
 
@@ -12,23 +11,19 @@
 
 <!-- イントロ -->
 <div id="introScreen" style="padding:20px;">
-
-  <h1>市民対話プラットフォーム</h1>
+  <h1>市民対話AIプラットフォーム</h1>
 
   <p>
-    市民の意見を整理し、政策テーマとして可視化する実証システムです。<br><br>
+    市民の意見を整理し、政策テーマへ変換する実証プラットフォームです。<br><br>
 
-    ロジックツリーから他の市民の意見を確認し、<br>
-    自由に意見を投稿してください。<br><br>
-
-    AIなしでも構造化された議論ができます。
+    まずロジックツリーで他の市民意見を確認してください。<br>
+    その後、自分の意見を投稿できます。
   </p>
 
   <button id="startBtn">ロジックツリーを見る</button>
-
 </div>
 
-<!-- メイン画面 -->
+<!-- メイン -->
 <div id="mainScreen" style="display:none;">
 
   <header class="header">
@@ -37,15 +32,12 @@
 
   <div class="container">
 
-    <!-- ロジックツリー -->
-    <div class="tree" id="treePanel"></div>
+    <div class="tree"></div>
 
-    <!-- 投稿一覧 -->
-    <div class="posts" id="posts"></div>
+    <div class="posts"></div>
 
   </div>
 
-  <!-- 入力 -->
   <div class="post-area">
     <textarea id="input" placeholder="意見を入力"></textarea>
     <button id="btn">投稿</button>

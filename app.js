@@ -4,7 +4,7 @@ const mainScreen = document.getElementById("mainScreen");
 
 const btn = document.getElementById("btn");
 const input = document.getElementById("input");
-const posts = document.getElementById("posts");
+const posts = document.querySelector(".posts");
 const treePanel = document.querySelector(".tree");
 
 /* ================= ロジックツリー ================= */
@@ -23,18 +23,18 @@ startBtn.onclick = () => {
   renderTree();
 };
 
-/* ================= ルール分類（AIなし） ================= */
+/* ================= 分類（安定ルール） ================= */
 function classify(text) {
 
-  if (text.includes("教育") || text.includes("図書館")) {
+  if (text.includes("教育") || text.includes("図書館") || text.includes("学習")) {
     return "芦屋市の価値向上";
   }
 
-  if (text.includes("交流") || text.includes("カフェ")) {
+  if (text.includes("交流") || text.includes("カフェ") || text.includes("コミュニティ")) {
     return "市民ベネフィット";
   }
 
-  if (text.includes("収益") || text.includes("寄付")) {
+  if (text.includes("収益") || text.includes("ふるさと納税")) {
     return "財政持続性";
   }
 
