@@ -1,7 +1,9 @@
 let pr = [];
 let tree = {};
 
-/* ===== PAGE ===== */
+/* =========================
+   ページ切替（UIはそのまま維持）
+========================= */
 function show(id){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
 document.getElementById(id).classList.add("active");
@@ -11,7 +13,9 @@ if(id==="pr") renderPR();
 if(id==="analysis") renderAnalysis();
 }
 
-/* ===== INIT TREE ===== */
+/* =========================
+   ロジックツリー初期化（固定）
+========================= */
 function initTree(){
 tree = {
 "芦屋市の価値向上":[
@@ -37,7 +41,9 @@ tree = {
 };
 }
 
-/* ===== TREE RENDER ===== */
+/* =========================
+   ツリー描画（崩さない）
+========================= */
 function renderTree(){
 
 if(Object.keys(tree).length===0){
@@ -59,7 +65,9 @@ html += `</div>`;
 document.getElementById("treeBox").innerHTML = html;
 }
 
-/* ===== GROQ ===== */
+/* =========================
+   ★ GROQ接続（完全修正版）
+========================= */
 async function callGroq(text){
 
 try{
@@ -74,10 +82,15 @@ model:"llama-3.1-70b-versatile",
 messages:[
 {
 role:"system",
-content:`必ずJSONのみで返す：
-title(10字以内)
-summary(200〜300字)
-category`
+content:`
+必ずJSONのみ返す。
+形式:
+{
+"title":"10字以内",
+"summary":"200〜300字",
+"category":"分類"
+}
+説明は禁止。`
 },
 {role:"user",content:text}
 ]
@@ -85,36 +98,37 @@ category`
 });
 
 const data = await res.json();
-let raw = data.choices?.[0]?.message?.content || "";
-
-/* JSON安全処理 */
-try{
-return JSON.parse(raw);
-}catch(e){
-return {
-title:"AI要約",
-summary:raw,
-category:"未分類"
-};
-}
+return data.choices?.[0]?.message?.content || "";
 
 }catch(e){
-return {
-title:"通信エラー",
-summary:text,
-category:"未分類"
-};
+return null;
 }
 }
 
-/* ===== AI RUN ===== */
+/* =========================
+   AI壁打ち（ここが本体）
+========================= */
 async function runAI(){
 
 let text = document.getElementById("input").value;
 if(!text) return;
 
-let ai = await callGroq(text);
+let raw = await callGroq(text);
 
+/* ★ここが重要：壊れても必ず表示 */
+let ai;
+
+try{
+ai = JSON.parse(raw);
+}catch(e){
+ai = {
+title:"AI要約",
+summary: raw || text,
+category:"未分類"
+};
+}
+
+/* UI表示（既存構造維持） */
 document.getElementById("result").innerHTML = `
 <div class="card">
 <h3>${ai.title}</h3>
@@ -122,44 +136,50 @@ document.getElementById("result").innerHTML = `
 <div class="tag">${ai.category}</div>
 
 <button class="btn" onclick="commit('${ai.title}','${ai.summary}','${ai.category}')">
-確定投稿
+この内容で登録
 </button>
 </div>
 `;
 }
 
-/* ===== COMMIT ===== */
+/* =========================
+   投稿確定
+========================= */
 function commit(title,summary,category){
 
 if(!category) category="未分類";
 
 let obj = {title,summary,category};
-
 pr.unshift(obj);
 
+/* ツリーにも反映 */
 if(!tree[category]){
 tree[category]=[];
 }
-
 tree[category].push(title);
 
-show("tree");
-renderAll();
+renderTree();
+renderPR();
+renderAnalysis();
 }
 
-/* ===== PR ===== */
+/* =========================
+   PR表示
+========================= */
 function renderPR(){
 document.getElementById("prBox").innerHTML =
 pr.map(p=>`
 <div class="card">
 <div class="tag">${p.category}</div>
-<b>${p.title}</b><br>
+<b>${p.title}</b><br><br>
 ${p.summary}
 </div>
-`).join("") || "なし";
+`).join("") || "まだ投稿なし";
 }
 
-/* ===== ANALYSIS ===== */
+/* =========================
+   分析表示
+========================= */
 function renderAnalysis(){
 
 let map={};
@@ -170,17 +190,13 @@ map[p.category]=(map[p.category]||0)+1;
 
 document.getElementById("analysisBox").innerHTML =
 Object.entries(map).map(([k,v])=>`
-<div class="card">${k}：${v}</div>
-`).join("") || "なし";
+<div class="card">${k}：${v}件</div>
+`).join("") || "まだデータなし";
 }
 
-/* ===== INIT ===== */
-function renderAll(){
-renderPR();
-renderAnalysis();
-}
-
-/* ★初期化保証 */
+/* =========================
+   初期化（必須）
+========================= */
 window.onload = function(){
 initTree();
 renderTree();
