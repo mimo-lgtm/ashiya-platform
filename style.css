@@ -1,93 +1,449 @@
-body{font-family:sans-serif;margin:0;background:#f6f8fb}
-.hero{padding:40px;text-align:center;color:white;background:linear-gradient(135deg,#4F8EF7,#43C59E,#8B6EF5)}
-.nav{display:flex;gap:10px;justify-content:center;padding:15px;flex-wrap:wrap;background:white}
-.nav button{padding:10px 16px;border:none;border-radius:10px;cursor:pointer}
-.page{display:none;padding:25px}
-.page.active{display:block}
-.comic-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px}
-.comic,.card{background:white;padding:15px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-.comic img{width:100%;height:180px;object-fit:cover;background:#ddd}
-.tree ul{list-style:none}
-.tree li{margin:8px 0}
-textarea{width:100%;min-height:180px}
-.timeline{background:white;padding:20px;border-radius:12px}
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:
+"Yu Gothic",
+"Meiryo",
+sans-serif;
+
+background:
+linear-gradient(
+135deg,
+#f5f8ff,
+#f8fff8,
+#fffaf0
+);
+
+color:#333;
+min-height:100vh;
+}
+
+.topbar{
+
+position:sticky;
+top:0;
+z-index:999;
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+padding:15px 30px;
+
+background:
+linear-gradient(
+90deg,
+#4F8EF7,
+#43C59E,
+#8B6EF5
+);
+
+box-shadow:
+0 4px 12px rgba(0,0,0,.15);
+}
+
+.logo{
+
+font-size:24px;
+font-weight:bold;
+color:white;
+}
+
+nav{
+
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+
+nav button{
+
+border:none;
+cursor:pointer;
+
+padding:10px 16px;
+
+border-radius:10px;
+
+background:white;
+
+font-weight:bold;
+
+transition:.2s;
+}
+
+nav button:hover{
+
+transform:translateY(-2px);
+
+box-shadow:
+0 4px 10px rgba(0,0,0,.15);
+}
+
+.page{
+
+display:none;
+
+padding:40px 20px;
+
+animation:fade .3s ease;
+}
+
+.page.active{
+
+display:block;
+}
+
+@keyframes fade{
+
+from{
+opacity:0;
+}
+
+to{
+opacity:1;
+}
+}
+
 .hero-comic{
-    max-width:1400px;
-    margin:20px auto;
-    text-align:center;
+
+text-align:center;
+margin-bottom:30px;
 }
 
 .hero-comic img{
-    width:95%;
-    max-width:1400px;
-    height:auto;
-    border-radius:20px;
-    box-shadow:0 10px 35px rgba(0,0,0,0.15);
+
+width:70%;
+max-width:900px;
+
+border-radius:20px;
+
+box-shadow:
+0 12px 30px rgba(0,0,0,.18);
 }
-.intro-message{
-    max-width:900px;
-    margin:30px auto;
-    background:#ffffff;
-    padding:25px;
-    border-radius:16px;
-    line-height:1.8;
-    font-size:18px;
-    box-shadow:0 4px 15px rgba(0,0,0,0.08);
+
+.welcome-card{
+
+max-width:1000px;
+
+margin:auto;
+
+padding:35px;
+
+background:white;
+
+border-radius:24px;
+
+box-shadow:
+0 8px 20px rgba(0,0,0,.08);
+
+text-align:center;
 }
-.hero-comic{
-    max-width:1200px;
-    margin:20px auto;
-    text-align:center;
+
+.welcome-card h1{
+
+margin-bottom:20px;
+
+font-size:40px;
 }
+
+.welcome-card p{
+
+margin-bottom:18px;
+
+line-height:1.9;
+
+font-size:18px;
+}
+
+.cta-buttons{
+
+display:flex;
+justify-content:center;
+flex-wrap:wrap;
+gap:15px;
+
+margin-top:25px;
+}
+
+.cta-buttons button{
+
+border:none;
+
+cursor:pointer;
+
+padding:18px 28px;
+
+font-size:18px;
+font-weight:bold;
+
+border-radius:14px;
+
+color:white;
+
+background:
+linear-gradient(
+135deg,
+#4F8EF7,
+#43C59E,
+#8B6EF5
+);
+
+transition:.2s;
+}
+
+.cta-buttons button:hover{
+
+transform:translateY(-3px);
+
+box-shadow:
+0 8px 18px rgba(0,0,0,.15);
+}
+
+h1{
+
+text-align:center;
+
+margin-bottom:30px;
+
+font-size:40px;
+}
+
+.tree-root{
+
+width:320px;
+
+margin:20px auto;
+
+padding:20px;
+
+text-align:center;
+
+font-size:28px;
+font-weight:bold;
+
+border-radius:20px;
+
+background:
+linear-gradient(
+135deg,
+#43C59E,
+#4F8EF7
+);
+
+color:white;
+}
+
+.tree-row{
+
+display:flex;
+justify-content:center;
+gap:20px;
+
+flex-wrap:wrap;
+
+margin-top:40px;
+}
+
+.tree-node{
+
+width:220px;
+
+padding:20px;
+
+border-radius:18px;
+
+background:white;
+
+text-align:center;
+
+font-weight:bold;
+
+box-shadow:
+0 6px 16px rgba(0,0,0,.1);
+}
+
+.placeholder-card{
+
+max-width:1000px;
+
+margin:40px auto;
+
+padding:30px;
+
+background:white;
+
+border-radius:20px;
+
+line-height:1.8;
+
+box-shadow:
+0 6px 16px rgba(0,0,0,.08);
+}
+
+.assistant-layout{
+
+display:grid;
+
+grid-template-columns:
+1fr 1fr;
+
+gap:25px;
+}
+
+.assistant-card{
+
+background:white;
+
+padding:25px;
+
+border-radius:20px;
+
+box-shadow:
+0 6px 16px rgba(0,0,0,.08);
+}
+
+.assistant-card h2{
+
+margin-bottom:20px;
+}
+
+textarea{
+
+width:100%;
+height:260px;
+
+padding:15px;
+
+border-radius:12px;
+
+border:1px solid #ccc;
+
+font-size:16px;
+
+resize:none;
+}
+
+.primary-btn{
+
+margin-top:15px;
+
+border:none;
+
+cursor:pointer;
+
+padding:16px 24px;
+
+border-radius:12px;
+
+font-size:18px;
+font-weight:bold;
+
+color:white;
+
+background:
+linear-gradient(
+135deg,
+#4F8EF7,
+#43C59E
+);
+}
+
+.result-box{
+
+min-height:260px;
+
+padding:20px;
+
+border-radius:12px;
+
+background:#f7f8fa;
+
+line-height:2;
+}
+
+.metric-grid{
+
+display:grid;
+
+grid-template-columns:
+repeat(auto-fit,minmax(220px,1fr));
+
+gap:20px;
+
+margin-bottom:30px;
+}
+
+.metric-card{
+
+padding:30px;
+
+text-align:center;
+
+background:white;
+
+border-radius:18px;
+
+font-weight:bold;
+
+box-shadow:
+0 6px 16px rgba(0,0,0,.08);
+}
+
+.timeline{
+
+display:flex;
+
+justify-content:center;
+
+gap:40px;
+
+flex-wrap:wrap;
+}
+
+.timeline-item{
+
+width:220px;
+
+padding:30px;
+
+text-align:center;
+
+background:white;
+
+border-radius:20px;
+
+font-weight:bold;
+
+line-height:2;
+
+box-shadow:
+0 6px 16px rgba(0,0,0,.08);
+}
+
+@media(max-width:900px){
 
 .hero-comic img{
-    width:70%;
-    max-width:900px;
-    height:auto;
-    border-radius:20px;
-    box-shadow:0 10px 35px rgba(0,0,0,0.15);
+
+width:95%;
 }
 
-.intro-message{
-    max-width:900px;
-    margin:30px auto;
-    background:#ffffff;
-    padding:30px;
-    border-radius:20px;
-    line-height:1.9;
-    font-size:18px;
-    box-shadow:0 4px 15px rgba(0,0,0,0.08);
+.assistant-layout{
+
+grid-template-columns:1fr;
 }
 
-.intro-message h2{
-    text-align:center;
-    margin-bottom:20px;
+.welcome-card h1{
+
+font-size:30px;
 }
 
-.intro-buttons{
-    margin-top:30px;
-    text-align:center;
-}
+h1{
 
-.intro-buttons button{
-    margin:10px;
-    padding:16px 28px;
-    font-size:18px;
-    font-weight:bold;
-    border:none;
-    border-radius:14px;
-    cursor:pointer;
-    color:white;
-    background:linear-gradient(
-        135deg,
-        #4F8EF7,
-        #43C59E,
-        #8B6EF5
-    );
-    box-shadow:0 6px 18px rgba(0,0,0,0.15);
-    transition:0.2s;
+font-size:30px;
 }
-
-.intro-buttons button:hover{
-    transform:translateY(-3px);
 }

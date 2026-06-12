@@ -1,114 +1,278 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>市民政策AIプラットフォーム</title>
+
 <link rel="stylesheet" href="style.css">
+
 </head>
 <body>
 
-<header class="hero">
-  <h1>市民政策AIプラットフォーム</h1>
-  <p>駅前公共施設の未来を、市民とAIで共創する</p>
+<header class="topbar">
+
+<div class="logo">
+🏛 市民政策AIプラットフォーム
+</div>
+
+<nav>
+
+<button onclick="showPage('intro')">ホーム</button>
+
+<button onclick="showPage('tree')">ロジックツリー</button>
+
+<button onclick="showPage('assistant')">AI政策アシスタント</button>
+
+<button onclick="showPage('analysis')">分析・統合</button>
+
+<button onclick="showPage('vision')">ビジョン変遷</button>
+
+</nav>
+
 </header>
 
-<nav class="nav">
-  <button data-page="intro">イントロ</button>
-  <button data-page="tree">ロジックツリー</button>
-  <button data-page="assistant">AI政策アシスタント</button>
-  <button data-page="analysis">分析・PR</button>
-  <button data-page="vision">ビジョン変遷</button>
-</nav>
+<main>
 
 <section id="intro" class="page active">
 
-  <div class="hero-comic">
-    <img src="images/comic-all.png" alt="市民政策AIプラットフォーム">
-  </div>
+<div class="hero-comic">
 
-  <div class="intro-message">
+<img src="images/comic-all.png"
+alt="市民政策AIプラットフォーム">
 
-    <h2>市民とAIが共創する政策形成プロセス</h2>
+</div>
 
-    <p>
-      あなたのアイデアはAIによって整理・統合され、
-      市民政策ロジックツリーへ反映されます。
-    </p>
+<div class="welcome-card">
 
-    <p>
-      芦屋市の未来をより良くするため、
-      思いついたことをそのまま投稿してください。
-      AIが論点整理や客観データの補完を行い、
-      政策提案へと成長させます。
-    </p>
+<h1>
+市民とAIが共創する政策形成
+</h1>
 
-    <p>
-      まずは他の市民の意見がどのように整理され、
-      政策形成へつながっていくのかをご覧ください。
-    </p>
+<p>
 
-    <div class="intro-buttons">
+あなたのアイデアはAIによって整理・統合され、
+市民政策ロジックツリーへ反映されます。
 
-      <button onclick="document.querySelector('[data-page=&quot;tree&quot;]').click()">
-        🌳 ロジックツリーを見る
-      </button>
+</p>
 
-      <button onclick="document.querySelector('[data-page=&quot;assistant&quot;]').click()">
-        🤖 AI政策アシスタントを始める
-      </button>
+<p>
 
-    </div>
+思いついたことをそのまま投稿してください。
 
-  </div>
+AIエージェントが
+
+論点整理
+
+客観データ
+
+他自治体事例
+
+政策提案作成
+
+を支援します。
+
+</p>
+
+<div class="cta-buttons">
+
+<button onclick="showPage('tree')">
+🌳 ロジックツリーを見る
+</button>
+
+<button onclick="showPage('assistant')">
+🤖 AI政策アシスタントを始める
+</button>
+
+<button onclick="showPage('analysis')">
+📊 分析を見る
+</button>
+
+</div>
+
+</div>
 
 </section>
+
 <section id="tree" class="page">
-<h2>市民政策ロジックツリー</h2>
-<div class="tree">
-<ul>
-<li>🌳 芦屋市の価値向上
-  <ul>
-    <li>次世代教育ブランド
-      <ul><li>世界一の絵本図書館</li><li>EdTech連携</li></ul>
-    </li>
-    <li>景観美化</li>
-  </ul>
-</li>
-<li>🤝 市民へのベネフィット</li>
-<li>💰 財政的持続可能性</li>
-<li>🚀 施設の戦略性</li>
-<li>🛡️ ガバナンス</li>
-</ul>
+
+<h1>
+🌳 市民政策ロジックツリー
+</h1>
+
+<div class="tree-root">
+芦屋市の未来
 </div>
+
+<div class="tree-row">
+
+<div class="tree-node">
+価値向上
+</div>
+
+<div class="tree-node">
+市民ベネフィット
+</div>
+
+<div class="tree-node">
+交流
+</div>
+
+<div class="tree-node">
+イノベーション
+</div>
+
+<div class="tree-node">
+運営効率
+</div>
+
+</div>
+
+<div class="placeholder-card">
+
+市民投稿によってノードが成長します。
+
+AIが類似提案を統合し、
+政策ツリーを育てます。
+
+</div>
+
 </section>
 
 <section id="assistant" class="page">
-<h2>AI政策アシスタント</h2>
-<textarea placeholder="思いついたことを自由に入力"></textarea>
-<div class="card">
-<p>AIはテーマに応じて論点整理・客観データ・他自治体事例を提示します。</p>
+
+<h1>
+🤖 AI政策アシスタント
+</h1>
+
+<div class="assistant-layout">
+
+<div class="assistant-card">
+
+<h2>
+
+思いついたことを
+そのまま入力してください
+
+</h2>
+
+<textarea id="ideaInput"
+placeholder="例：駅前公共施設に絵本図書館を作る"></textarea>
+
+<button class="primary-btn">
+AI壁打ち開始
+</button>
+
 </div>
+
+<div class="assistant-card">
+
+<h2>
+AI出力イメージ
+</h2>
+
+<div class="result-box">
+
+論点整理
+
+客観データ
+
+他自治体事例
+
+タイトル案
+
+200字要約
+
+がここに表示されます
+
+</div>
+
+</div>
+
+</div>
+
 </section>
 
 <section id="analysis" class="page">
-<h2>分析・PR</h2>
-<div class="card">価値向上指数（サンプル）</div>
-<div class="card">市民ベネフィット指数（サンプル）</div>
-<div class="card">イノベーション指数（サンプル）</div>
+
+<h1>
+📊 分析・統合センター
+</h1>
+
+<div class="metric-grid">
+
+<div class="metric-card">
+価値向上指数
+</div>
+
+<div class="metric-card">
+市民幸福指数
+</div>
+
+<div class="metric-card">
+交流指数
+</div>
+
+<div class="metric-card">
+イノベーション指数
+</div>
+
+<div class="metric-card">
+運営効率指数
+</div>
+
+</div>
+
+<div class="placeholder-card">
+
+Pull Request一覧
+
+統合候補
+
+統合済み提案
+
+AI分析結果
+
+がここに表示されます
+
+</div>
+
 </section>
 
 <section id="vision" class="page">
-<h2>ビジョン変遷</h2>
+
+<h1>
+📈 ビジョン変遷
+</h1>
+
 <div class="timeline">
-<p>2026 初期ビジョン</p>
-<p>↓</p>
-<p>2027 教育都市構想追加</p>
-<p>↓</p>
-<p>2028 イノベーション拠点化</p>
+
+<div class="timeline-item">
+2026<br>
+↓<br>
+価値向上
 </div>
+
+<div class="timeline-item">
+2027<br>
+↓<br>
+交流拠点
+</div>
+
+<div class="timeline-item">
+2028<br>
+↓<br>
+イノベーション都市
+</div>
+
+</div>
+
 </section>
 
-<script src="js/app.js"></script>
+</main>
+
+<script src="js/app.js?v=10"></script>
+
 </body>
 </html>
