@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<title>市民政策AIプラットフォーム（駅前公共施設の在り方に関して市民との対話）</title>
+<title>市民政策AIプラットフォーム</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
@@ -10,7 +10,6 @@ body{
 margin:0;
 font-family:"Yu Gothic",sans-serif;
 background:#f4f6f8;
-color:#222;
 }
 
 header{
@@ -19,7 +18,6 @@ color:#fff;
 padding:16px;
 font-size:18px;
 font-weight:bold;
-line-height:1.4;
 }
 
 nav{
@@ -39,7 +37,6 @@ border-radius:8px;
 background:#eef5ff;
 font-weight:bold;
 cursor:pointer;
-white-space:nowrap;
 }
 
 .page{display:none;padding:15px;}
@@ -50,9 +47,7 @@ display:flex;
 gap:12px;
 }
 
-.left,.right{
-flex:1;
-}
+.left,.right{flex:1;}
 
 .card{
 background:#fff;
@@ -71,23 +66,6 @@ border-radius:8px;
 cursor:pointer;
 }
 
-textarea{
-width:100%;
-height:120px;
-padding:10px;
-}
-
-button.action{
-width:100%;
-padding:12px;
-background:#1a73e8;
-color:#fff;
-border:none;
-border-radius:8px;
-cursor:pointer;
-margin-top:8px;
-}
-
 .small{font-size:13px;line-height:1.6;}
 
 .tag{
@@ -98,13 +76,18 @@ padding:3px 8px;
 border-radius:20px;
 font-size:12px;
 }
+
+textarea{
+width:100%;
+height:120px;
+}
 </style>
 </head>
 
 <body>
 
 <header>
-市民政策AIプラットフォーム（駅前公共施設の在り方に関して市民との対話）
+市民政策AIプラットフォーム
 </header>
 
 <nav>
@@ -112,7 +95,6 @@ font-size:12px;
 <button onclick="show('tree')">ロジックツリー</button>
 <button onclick="show('post')">投稿</button>
 <button onclick="show('analysis')">分析</button>
-<button onclick="show('rules')">マージルール</button>
 <button onclick="show('merge')">統合</button>
 </nav>
 
@@ -125,31 +107,53 @@ font-size:12px;
 <div class="left">
 
 <div class="card">
-<b>まずは他の市民の意見を見てください</b><br><br>
+<b>このプラットフォームについて</b><br><br>
 
-その中から興味のある意見を選び、投稿できます。<br>
-既存にない場合は「その他」で自由に投稿できます。<br><br>
+これは、市民が駅前公共施設に関して自由に意見を書き込める対話型プラットフォームです。<br><br>
 
-それではロジックツリーを見てください。
+従来は行政に意見を出すことは高いハードルがありました。<br>
+「こんな意見を出していいのか」「他の人はどう思うのか」<br>
+そうした不安を解消するための仕組みです。
 </div>
 
 <div class="card">
-<button class="action" onclick="show('tree')">
-ロジックツリーを見る
-</button>
+<b>このプラットフォームの特徴</b><br><br>
+
+・市民の意見をそのまま受け取る<br>
+・AIが自動で整理・要約・構造化<br>
+・ロジックツリーとして全体像を可視化<br>
+・意見の流れと統合プロセスを公開
 </div>
 
-<div class="card small">
-✔ 思いつき投稿 → OK（専門知識不要）<br>
-✔ AIが要約・構造化<br>
-✔ 政策化プロセス可視化<br>
-✔ ロジックツリー表示<br>
-✔ 分析機能<br>
-✔ 統合プロセス公開
+<div class="card">
+<b>使い方</b><br><br>
+
+まずはロジックツリーを見てください。<br>
+気になるテーマを選び、そのまま意見を投稿できます。<br>
+既存にない場合は自由投稿も可能です。
+</div>
+
+<button class="tag" onclick="show('tree')">
+ロジックツリーを見る
+</button>
+
+</div>
+
+<!-- RIGHT -->
+<div class="right">
+
+<div class="card">
+<b>4コマイラスト（概念）</b><br><br>
+
+① 市民が意見を書く<br>
+② AIが整理する<br>
+③ ロジックツリーに反映<br>
+④ 政策になる
 </div>
 
 <div class="card">
 <b>4ステップ</b><br><br>
+
 ① 市民意見<br>
 ↓<br>
 ② AI構造化<br>
@@ -157,27 +161,6 @@ font-size:12px;
 ③ ロジックツリー統合<br>
 ↓<br>
 ④ 政策化
-</div>
-
-</div>
-
-<!-- RIGHT (4コマ + ステップ) -->
-<div class="right">
-
-<div class="card">
-<b>4コマイメージ（簡易）</b><br><br>
-
-① 市民が投稿<br>
-② AIが整理<br>
-③ ツリーに統合<br>
-④ 政策になる
-</div>
-
-<div class="card">
-<b>システムの特徴</b><br><br>
-・意見が政策に変換される<br>
-・プロセスが全て可視化<br>
-・統合ルールも公開<br>
 </div>
 
 </div>
@@ -195,24 +178,25 @@ font-size:12px;
 コストセンターからプロフィットセンターへ：市民のウェルビーイングと知財の集積による投資型都市経営の実現
 </p>
 
+<!-- 大分類 -->
 <div class="node" onclick="goPost('価値向上')">
-1. 芦屋市の価値向上
+① 芦屋市の価値向上
 </div>
 
 <div class="node" onclick="goPost('ベネフィット')">
-2. 市民ベネフィット
+② 市民へのベネフィット
 </div>
 
 <div class="node" onclick="goPost('財政')">
-3. 財政持続性
+③ 財政的持続可能性
 </div>
 
 <div class="node" onclick="goPost('施設')">
-4. 施設戦略
+④ 施設の戦略性
 </div>
 
 <div class="node" onclick="goPost('ガバナンス')">
-5. ガバナンス
+⑤ 都市の強靭性とガバナンス
 </div>
 
 </div>
@@ -222,15 +206,16 @@ font-size:12px;
 <div id="post" class="page">
 
 <div class="card">
-<h3>投稿 + AI対話</h3>
+<h3>投稿</h3>
 
 <div id="themeBox"></div>
 
 <textarea id="input"></textarea>
 
-<button class="action" onclick="runAI()">AI要約生成</button>
+<button onclick="runAI()">AI要約</button>
 
 <div id="result"></div>
+
 </div>
 
 </div>
@@ -243,25 +228,10 @@ font-size:12px;
 </div>
 </div>
 
-<!-- ================= RULES ================= -->
-<div id="rules" class="page">
-<div class="card">
-<h3>マージ・統合ルール</h3>
-
-<p class="small">
-・AIが統合権限を持つ<br>
-・人間はルール設計のみ可能<br>
-・意見は衝突時にスコアリングされる<br>
-・重要度・公共性・整合性で統合される<br>
-</p>
-
-</div>
-</div>
-
 <!-- ================= MERGE ================= -->
 <div id="merge" class="page">
 <div class="card">
-<h3>統合ビュー（政策変遷）</h3>
+<h3>統合ビュー</h3>
 <div id="mergeBox"></div>
 </div>
 </div>
@@ -271,13 +241,11 @@ font-size:12px;
 let posts = [];
 let currentTheme = "";
 
-/* ================= PAGE ================= */
 function show(id){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
 document.getElementById(id).classList.add("active");
 }
 
-/* ================= TREE → POST ================= */
 function goPost(theme){
 currentTheme = theme;
 document.getElementById("themeBox").innerHTML =
@@ -285,7 +253,6 @@ document.getElementById("themeBox").innerHTML =
 show("post");
 }
 
-/* ================= AI ================= */
 function runAI(){
 
 let text = document.getElementById("input").value;
@@ -294,11 +261,7 @@ if(!text) return;
 let title = text.slice(0,10);
 let summary = text.slice(0,200);
 
-posts.unshift({
-title,
-summary,
-theme: currentTheme
-});
+posts.unshift({title,summary,theme:currentTheme});
 
 document.getElementById("result").innerHTML = `
 <div class="card">
@@ -314,56 +277,40 @@ document.getElementById("result").innerHTML = `
 `;
 }
 
-/* ================= FIX ================= */
 function fix(){
 
 document.getElementById("result").innerHTML += `
 <div class="card">
-✔ 投稿が確定しました<br><br>
+✔ 確定しました<br><br>
 
-この意見は<br>
-・ロジックツリー<br>
-・Pull Request<br><br>
-に反映されます
+・ロジックツリー反映予定<br>
+・PR反映予定<br><br>
 
-<br><br>
-<button onclick="show('tree')">ロジックツリーへ</button>
-<button onclick="show('merge')">PRを見る</button>
+<button onclick="show('tree')">ツリーへ</button>
+<button onclick="show('merge')">統合へ</button>
 </div>
 `;
 
 render();
 }
 
-/* ================= EDIT ================= */
 function edit(){
-
 document.getElementById("result").innerHTML += `
 <div class="card">
-修正内容を入力してください<br><br>
-<textarea></textarea>
+修正内容を入力<br><textarea></textarea>
 </div>
 `;
 }
 
-/* ================= ANALYSIS ================= */
 function render(){
 
-let map = {};
-posts.forEach(p=>{
-map[p.theme]=(map[p.theme]||0)+1;
-});
-
 document.getElementById("analysisBox").innerHTML =
-Object.entries(map).map(([k,v])=>
-`<div class="card">${k}：${v}件</div>`
-).join("") || "なし";
+posts.length + "件の投稿";
 
 document.getElementById("mergeBox").innerHTML =
 posts.map(p=>`
 <div class="card">
-<b>${p.title}</b><br>
-${p.summary}
+<b>${p.title}</b><br>${p.summary}
 </div>
 `).join("") || "なし";
 }
