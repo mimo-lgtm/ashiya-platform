@@ -9,35 +9,76 @@
 
 <body>
 
-<!-- イントロ -->
-<div id="introScreen" class="screen">
+<!-- ① イントロダクション（必須） -->
+<div id="intro">
 
-  <h1>市民対話プラットフォーム</h1>
+  <h1>市民対話AIプラットフォーム</h1>
 
   <p>
-    市民の意見をロジックツリーで構造化し、政策へ変換する実証システムです。
+    市民の意見をAIと対話しながら整理し、政策アイデアへと変換する実証プラットフォームです。<br><br>
+
+    まずはロジックツリーで既存の市民意見を確認してください。<br>
+    興味のあるテーマを選び、自分の意見を投稿できます。<br>
+    AIが未整理の意見でも構造化します。
   </p>
 
-  <button onclick="goMain()">開始</button>
+  <button onclick="start()">ロジックツリーを見る</button>
 
 </div>
 
-<!-- ナビ -->
-<div class="topbar hidden" id="topbar">
-  <button onclick="switchView('tree')">ロジックツリー</button>
-  <button onclick="switchView('posts')">投稿</button>
-  <button onclick="switchView('pr')">Pull Request</button>
-  <button onclick="switchView('analysis')">分析</button>
-  <button onclick="switchView('merge')">統合</button>
-</div>
+<!-- ② メインUI -->
+<div id="main" style="display:none;">
 
-<!-- メイン -->
-<div id="app" class="hidden">
+  <!-- ナビ -->
+  <div class="topbar">
+    <button onclick="switchView('tree')">ロジックツリー</button>
+    <button onclick="switchView('posts')">投稿</button>
+    <button onclick="switchView('pr')">Pull Request</button>
+    <button onclick="switchView('analysis')">分析</button>
+    <button onclick="switchView('merge')">統合</button>
+  </div>
 
   <!-- ロジックツリー -->
   <div id="treeView" class="view">
 
-    <pre id="treeBox" class="treeBox"></pre>
+<pre class="treeBox">
+Version History
+v0.1 ロジックツリー型UI
+v0.2 思考カードUI（現在）
+
+市民政策ロジックツリー（Vision）
+コストセンターからプロフィットセンターへ：
+市民のウェルビーイングと知財の集積による投資型都市経営の実現
+
+1. 芦屋市の価値向上（ブランド・移住促進）
+次世代教育ブランドの確立
+世界一の絵本図書館、EdTech企業連携
+街の魅力化・景観美化
+公園芝生化、市民協働
+
+2. 市民へのベネフィット（ウェルビーイング）
+多世代交流・サードプレイス
+カフェ、コミュニティ運営
+知的探究・スキルアップ
+リスキリング、共同研究、コワーキング
+
+3. 財政的持続可能性
+施設の収益化
+SHARE LOUNGE、チャレンジショップ
+寄付・ふるさと納税
+クラファン連動
+
+4. 施設の戦略性
+知のゲートウェイ化
+デジタルライブラリ、ITサポート
+イノベーション・起業支援
+
+5. 都市の強靭性とガバナンス
+デュアルユース
+災害シミュレーション、都市指令室
+DAO型住民自治
+投票、トークン設計
+</pre>
 
   </div>
 
@@ -46,29 +87,23 @@
 
     <h2>投稿</h2>
 
-    <div class="treeClickHint">
-      ※ロジックツリー項目をクリックして投稿テーマを選択
-    </div>
-
     <div id="posts"></div>
 
     <textarea id="input"></textarea>
-    <button id="btn">投稿</button>
-
-    <div id="selectedTheme"></div>
+    <button onclick="post()">投稿</button>
 
   </div>
 
   <!-- PR -->
   <div id="prView" class="view hidden">
     <h2>Pull Request</h2>
-    <p>市民意見の統合候補（v0.2構造）</p>
+    <p>市民意見の統合・改善提案を表示</p>
   </div>
 
   <!-- 分析 -->
   <div id="analysisView" class="view hidden">
     <h2>分析</h2>
-    <p>意見の分類・影響分析・要約（AI統合予定）</p>
+    <p>AIによる分類・要約・影響分析</p>
   </div>
 
   <!-- 統合 -->
