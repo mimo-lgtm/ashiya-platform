@@ -7,13 +7,13 @@ background:#f4f6f8;
 header{
 background:#1a73e8;
 color:#fff;
-padding:16px;
+padding:14px;
 font-weight:bold;
 }
 
 nav{
 display:flex;
-gap:8px;
+gap:6px;
 padding:10px;
 background:#fff;
 position:sticky;
@@ -36,16 +36,8 @@ font-weight:bold;
 background:#fff;
 padding:14px;
 border-radius:12px;
-margin-bottom:12px;
+margin-bottom:10px;
 box-shadow:0 2px 8px rgba(0,0,0,.08);
-}
-
-.node{
-padding:10px;
-border-left:4px solid #1a73e8;
-background:#f7fbff;
-margin:6px 0;
-cursor:pointer;
 }
 
 textarea{
@@ -62,7 +54,13 @@ color:#fff;
 border:none;
 border-radius:8px;
 margin-top:8px;
-cursor:pointer;
+}
+
+.node{
+padding:10px;
+border-left:4px solid #1a73e8;
+background:#f7fbff;
+margin:6px 0;
 }
 
 .tag{

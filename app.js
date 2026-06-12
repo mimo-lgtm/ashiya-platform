@@ -1,7 +1,7 @@
 let pr = [];
 let tree = {};
 
-/* ===== PAGE SWITCH ===== */
+/* ===== PAGE ===== */
 function show(id){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
 document.getElementById(id).classList.add("active");
@@ -11,14 +11,16 @@ if(id==="pr") renderPR();
 if(id==="analysis") renderAnalysis();
 }
 
-/* ===== TREE CLICK → POST ===== */
-function goPost(text){
-document.getElementById("input").value = text;
-show("post");
-}
-
-/* ===== GROQ ===== */
+/* ===== GROQ API ===== */
 async function callGroq(text){
+
+if(!window.GROQ_API_KEY){
+return {
+title:"API未設定",
+summary:text,
+category:"未分類"
+};
+}
 
 try{
 const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
@@ -32,36 +34,41 @@ model:"llama-3.1-70b-versatile",
 messages:[
 {
 role:"system",
-content:"必ずJSONで返す：title(10字以内),summary(200〜300字),category"
+content:`
+必ずJSONで返す：
+title（10字以内）
+summary（200〜300字）
+category（分類）
+`
 },
 {role:"user",content:text}
 ]
 })
 });
 
-const d = await res.json();
-let c = d.choices?.[0]?.message?.content || "";
+const data = await res.json();
+let raw = data.choices?.[0]?.message?.content || "";
 
 try{
-return JSON.parse(c);
+return JSON.parse(raw);
 }catch(e){
 return {
-title:"要約生成",
-summary:c,
+title:"AI要約",
+summary:raw,
 category:"未分類"
 };
 }
 
 }catch(e){
 return {
-title:"エラー要約",
+title:"通信エラー",
 summary:text,
 category:"未分類"
 };
 }
 }
 
-/* ===== AI FLOW ===== */
+/* ===== AI RUN ===== */
 async function runAI(){
 
 let text = document.getElementById("input").value;
@@ -71,12 +78,11 @@ let ai = await callGroq(text);
 
 document.getElementById("result").innerHTML = `
 <div class="card">
-<div class="tag">${ai.category}</div>
 <h3>${ai.title}</h3>
 <p>${ai.summary}</p>
+<div class="tag">${ai.category}</div>
 
-<button class="btn"
-onclick="commit('${ai.title}','${ai.summary}','${ai.category}')">
+<button class="btn" onclick="commit('${ai.title}','${ai.summary}','${ai.category}')">
 確定して投稿
 </button>
 </div>
@@ -86,27 +92,28 @@ onclick="commit('${ai.title}','${ai.summary}','${ai.category}')">
 /* ===== COMMIT ===== */
 function commit(title,summary,category){
 
-let obj={title,summary,category};
+if(!category) category="未分類";
+
+let obj = {title,summary,category};
 
 pr.unshift(obj);
 
-/* TREE反映 */
-if(!tree[category]) tree[category]=[];
+if(!tree[category]){
+tree[category] = [];
+}
+
 tree[category].push(obj);
 
-alert("投稿・統合・分析に反映されました");
-
-show("pr");
+show("tree");
 renderAll();
 }
 
 /* ===== TREE ===== */
 function renderTree(){
 
-let html="";
+let html = "";
 
-for(let k in tree){
-
+Object.keys(tree).forEach(k=>{
 html += `<div class="card"><h3>${k}</h3>`;
 
 tree[k].forEach(t=>{
@@ -114,15 +121,14 @@ html += `<div class="node">${t.title}</div>`;
 });
 
 html += `</div>`;
-}
+});
 
 document.getElementById("treeBox").innerHTML =
-html || "まだデータなし";
+html || "まだ投稿なし";
 }
 
 /* ===== PR ===== */
 function renderPR(){
-
 document.getElementById("prBox").innerHTML =
 pr.map(p=>`
 <div class="card">
@@ -136,10 +142,10 @@ ${p.summary}
 /* ===== ANALYSIS ===== */
 function renderAnalysis(){
 
-let map={};
+let map = {};
 
 pr.forEach(p=>{
-map[p.category]=(map[p.category]||0)+1;
+map[p.category] = (map[p.category]||0)+1;
 });
 
 document.getElementById("analysisBox").innerHTML =
