@@ -2,119 +2,174 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<title>市民政策プラットフォーム</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="./style.css">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>駅前公共施設 市民対話プラットフォーム v4</title>
+
+<style>
+body{margin:0;font-family:"Yu Gothic",sans-serif;background:#f4f6f8;}
+header{background:#1a73e8;color:#fff;padding:20px;font-size:26px;font-weight:bold;}
+.subheader{padding:12px 20px;background:#eef5ff;}
+nav{display:flex;gap:10px;padding:10px;background:#fff;}
+nav button{padding:10px;border:none;background:#eef5ff;border-radius:8px;cursor:pointer;}
+.page{display:none;padding:15px;}
+.active{display:block;}
+.card{background:#fff;padding:15px;border-radius:12px;margin-bottom:12px;}
+.node{padding:12px;margin:8px 0;background:#f8fbff;border-left:5px solid #1a73e8;cursor:pointer;}
+.child{display:none;margin-left:20px;padding:10px;background:#fff;}
+textarea{width:100%;height:140px;}
+.btn{padding:12px;background:#1a73e8;color:#fff;border:none;border-radius:8px;cursor:pointer;margin-top:10px;}
+.metric{font-size:28px;font-weight:bold;color:#1a73e8;}
+.thread{border-left:3px solid #1a73e8;padding-left:10px;margin-top:10px;}
+</style>
 </head>
 
 <body>
 
-<!-- ① イントロダクション（必須） -->
-<div id="intro">
+<header>駅前公共施設 市民対話プラットフォーム</header>
 
-  <h1>市民対話AIプラットフォーム</h1>
-
-  <p>
-    市民の意見をAIと対話しながら整理し、政策アイデアへと変換する実証プラットフォームです。<br><br>
-
-    まずはロジックツリーで既存の市民意見を確認してください。<br>
-    興味のあるテーマを選び、自分の意見を投稿できます。<br>
-    AIが未整理の意見でも構造化します。
-  </p>
-
-  <button onclick="start()">ロジックツリーを見る</button>
-
+<div class="subheader">
+市民の声をAIとの対話によって整理し政策テーマへ変換する実証プラットフォーム
 </div>
 
-<!-- ② メインUI -->
-<div id="main" style="display:none;">
+<nav>
+<button onclick="showPage('home')">入口</button>
+<button onclick="showPage('tree')">ロジックツリー</button>
+<button onclick="showPage('dialog')">AI壁打ち</button>
+<button onclick="showPage('dashboard')">政策テーマ</button>
+</nav>
 
-  <!-- ナビ -->
-  <div class="topbar">
-    <button onclick="switchView('tree')">ロジックツリー</button>
-    <button onclick="switchView('posts')">投稿</button>
-    <button onclick="switchView('pr')">Pull Request</button>
-    <button onclick="switchView('analysis')">分析</button>
-    <button onclick="switchView('merge')">統合</button>
-  </div>
-
-  <!-- ロジックツリー -->
-  <div id="treeView" class="view">
-
-<pre class="treeBox">
-Version History
-v0.1 ロジックツリー型UI
-v0.2 思考カードUI（現在）
-
-市民政策ロジックツリー（Vision）
-コストセンターからプロフィットセンターへ：
-市民のウェルビーイングと知財の集積による投資型都市経営の実現
-
-1. 芦屋市の価値向上（ブランド・移住促進）
-次世代教育ブランドの確立
-世界一の絵本図書館、EdTech企業連携
-街の魅力化・景観美化
-公園芝生化、市民協働
-
-2. 市民へのベネフィット（ウェルビーイング）
-多世代交流・サードプレイス
-カフェ、コミュニティ運営
-知的探究・スキルアップ
-リスキリング、共同研究、コワーキング
-
-3. 財政的持続可能性
-施設の収益化
-SHARE LOUNGE、チャレンジショップ
-寄付・ふるさと納税
-クラファン連動
-
-4. 施設の戦略性
-知のゲートウェイ化
-デジタルライブラリ、ITサポート
-イノベーション・起業支援
-
-5. 都市の強靭性とガバナンス
-デュアルユース
-災害シミュレーション、都市指令室
-DAO型住民自治
-投票、トークン設計
-</pre>
-
-  </div>
-
-  <!-- 投稿 -->
-  <div id="postsView" class="view hidden">
-
-    <h2>投稿</h2>
-
-    <div id="posts"></div>
-
-    <textarea id="input"></textarea>
-    <button onclick="post()">投稿</button>
-
-  </div>
-
-  <!-- PR -->
-  <div id="prView" class="view hidden">
-    <h2>Pull Request</h2>
-    <p>市民意見の統合・改善提案を表示</p>
-  </div>
-
-  <!-- 分析 -->
-  <div id="analysisView" class="view hidden">
-    <h2>分析</h2>
-    <p>AIによる分類・要約・影響分析</p>
-  </div>
-
-  <!-- 統合 -->
-  <div id="mergeView" class="view hidden">
-    <h2>統合</h2>
-    <p>複数意見の統合・政策ドラフト生成</p>
-  </div>
-
+<!-- HOME -->
+<div id="home" class="page active">
+<div class="card">
+<h2>あなたの意見を政策へ育てます</h2>
+<button class="btn" onclick="showPage('tree')">ロジックツリーを見る</button>
+</div>
 </div>
 
-<script src="./app.js"></script>
+<!-- TREE -->
+<div id="tree" class="page">
+
+<div class="card">
+
+<h2>市民政策ロジックツリー（Vision）</h2>
+
+<div class="node" onclick="toggle('a');selectTheme('価値向上')">
+① 芦屋市の価値向上
+</div>
+
+<div id="a" class="child">
+教育ブランド / 景観 / 公園
+</div>
+
+<div class="node" onclick="toggle('b');selectTheme('市民ベネフィット')">
+② 市民ベネフィット
+</div>
+
+<div id="b" class="child">
+交流 / カフェ / 学習
+</div>
+
+<div class="node" onclick="toggle('c');selectTheme('財政')">
+③ 財政
+</div>
+
+<div id="c" class="child">
+収益 / 寄付
+</div>
+
+<div class="node" onclick="toggle('d');selectTheme('施設')">
+④ 施設
+</div>
+
+<div id="d" class="child">
+拠点 / 起業
+</div>
+
+<div class="node" onclick="toggle('e');selectTheme('ガバナンス')">
+⑤ ガバナンス
+</div>
+
+<div id="e" class="child">
+防災 / DAO
+</div>
+
+<button class="btn" onclick="showPage('dialog')">
+テーマについて投稿
+</button>
+
+</div>
+</div>
+
+<!-- DIALOG -->
+<div id="dialog" class="page">
+<div class="card">
+
+<h2>AI壁打ち</h2>
+
+<textarea id="input"></textarea>
+
+<button class="btn" onclick="runAI()">AI分析</button>
+
+<div id="result"></div>
+
+</div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="page">
+<div class="card">
+
+<h2>政策テーマ</h2>
+
+<div id="themeList"></div>
+
+<div class="metric" id="postCount">0</div>
+
+</div>
+</div>
+
+<script>
+let themes = {};
+let selectedTheme = "";
+let currentTitle = "";
+
+function showPage(id){
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+}
+
+function toggle(id){
+let el=document.getElementById(id);
+el.style.display = (el.style.display==="block")?"none":"block";
+}
+
+function selectTheme(t){
+selectedTheme=t;
+showPage('dialog');
+}
+
+function runAI(){
+let text=document.getElementById("input").value;
+
+let title="政策案";
+let summary=text;
+
+currentTitle=title;
+
+document.getElementById("result").innerHTML=
+`<div class="card">${summary}</div>`;
+}
+
+function update(){
+document.getElementById("themeList").innerHTML=
+Object.keys(themes).map(t=>`<div class="node">${t}</div>`).join("");
+
+document.getElementById("postCount").innerText=
+Object.values(themes).reduce((a,b)=>a+b,0);
+}
+
+update();
+</script>
 
 </body>
 </html>
