@@ -9,7 +9,7 @@
 
 <body>
 
-<!-- 上部ナビ -->
+<!-- 上部ボタン -->
 <div class="topbar">
   <button onclick="switchView('tree')">ロジックツリー</button>
   <button onclick="switchView('posts')">投稿</button>
@@ -19,82 +19,41 @@
 </div>
 
 <!-- メイン -->
-<div id="app">
+<div id="treeView" class="view">
 
-  <!-- ロジックツリー -->
-  <div id="treeView" class="view">
+  <pre id="treeBox" class="treeBox"></pre>
 
-    <div class="version">
-      Version History<br>
-      v0.1 ロジックツリー型UI<br>
-      v0.2 思考カードUI（現在）
-    </div>
+</div>
 
-    <pre class="treeBox">
-市民政策ロジックツリー（Vision）
+<div id="postsView" class="view hidden">
 
-コストセンターからプロフィットセンターへ：
-市民のウェルビーイングと知財の集積による投資型都市経営の実現
+  <h3>投稿</h3>
 
-1. 芦屋市の価値向上（ブランド・移住促進）
-次世代教育ブランドの確立
-世界一の絵本図書館、EdTech企業連携
-街の魅力化・景観美化
-公園芝生化、市民協働
-
-2. 市民へのベネフィット（ウェルビーイング）
-多世代交流・サードプレイス
-カフェ、コミュニティ運営
-知的探究・スキルアップ
-リスキリング、共同研究、コワーキング
-
-3. 財政的持続可能性
-施設の収益化
-SHARE LOUNGE、チャレンジショップ
-寄付・ふるさと納税
-クラファン連動、成果連動型事業
-
-4. 施設の戦略性
-知のゲートウェイ化
-デジタルライブラリ、ITサポート
-イノベーション・起業支援
-ピッチアリーナ、サンドボックス
-
-5. 都市の強靭性とガバナンス
-デュアルユース
-災害シミュレーション、都市指令室
-DAO型住民自治
-投票、トークン設計
-    </pre>
-
+  <div id="themeList">
+    <button onclick="selectTheme('価値向上')">価値向上</button>
+    <button onclick="selectTheme('市民ベネフィット')">市民ベネフィット</button>
+    <button onclick="selectTheme('財政')">財政</button>
+    <button onclick="selectTheme('施設')">施設</button>
+    <button onclick="selectTheme('ガバナンス')">ガバナンス</button>
   </div>
 
-  <!-- 投稿 -->
-  <div id="postsView" class="view hidden">
-    <h3>投稿</h3>
-    <div id="posts"></div>
-    <textarea id="input"></textarea>
-    <button id="btn">投稿</button>
-  </div>
+  <div id="posts"></div>
 
-  <!-- PR -->
-  <div id="prView" class="view hidden">
-    <h3>Pull Request（統合候補）</h3>
-    <div id="prBox">未実装（後でAI統合）</div>
-  </div>
+  <textarea id="input"></textarea>
+  <button id="btn">投稿</button>
 
-  <!-- 分析 -->
-  <div id="analysisView" class="view hidden">
-    <h3>分析</h3>
-    <div id="analysisBox">未実装（後でAI統合）</div>
-  </div>
+</div>
 
-  <!-- 統合 -->
-  <div id="mergeView" class="view hidden">
-    <h3>統合ロジック</h3>
-    <div id="mergeBox">未実装（後でAI統合）</div>
-  </div>
+<div id="prView" class="view hidden">
+  <h3>Pull Request</h3>
+</div>
 
+<div id="analysisView" class="view hidden">
+  <h3>分析</h3>
+</div>
+
+<div id="mergeView" class="view hidden">
+  <h3>統合</h3>
 </div>
 
 <script src="./app.js"></script>
