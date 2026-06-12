@@ -33,3 +33,6 @@ body {
 #themeList button {
   margin: 4px;
 }
+.hidden {
+  display: none !important;
+}
