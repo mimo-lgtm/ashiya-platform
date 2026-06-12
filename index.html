@@ -2,45 +2,97 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<title>市民対話プラットフォーム</title>
+<title>市民政策プラットフォーム</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
 
-<!-- イントロ -->
-<div id="introScreen" style="padding:20px;">
-  <h1>市民対話AIプラットフォーム</h1>
-
-  <p>
-    市民の意見を整理し、政策テーマへ変換する実証プラットフォームです。<br><br>
-
-    まずロジックツリーで他の市民意見を確認してください。<br>
-    その後、自分の意見を投稿できます。
-  </p>
-
-  <button id="startBtn">ロジックツリーを見る</button>
+<!-- 上部ナビ -->
+<div class="topbar">
+  <button onclick="switchView('tree')">ロジックツリー</button>
+  <button onclick="switchView('posts')">投稿</button>
+  <button onclick="switchView('pr')">Pull Request</button>
+  <button onclick="switchView('analysis')">分析</button>
+  <button onclick="switchView('merge')">統合</button>
 </div>
 
 <!-- メイン -->
-<div id="mainScreen" style="display:none;">
+<div id="app">
 
-  <header class="header">
-    駅前公共施設 市民対話プラットフォーム
-  </header>
+  <!-- ロジックツリー -->
+  <div id="treeView" class="view">
 
-  <div class="container">
+    <div class="version">
+      Version History<br>
+      v0.1 ロジックツリー型UI<br>
+      v0.2 思考カードUI（現在）
+    </div>
 
-    <div class="tree"></div>
+    <pre class="treeBox">
+市民政策ロジックツリー（Vision）
 
-    <div class="posts"></div>
+コストセンターからプロフィットセンターへ：
+市民のウェルビーイングと知財の集積による投資型都市経営の実現
+
+1. 芦屋市の価値向上（ブランド・移住促進）
+次世代教育ブランドの確立
+世界一の絵本図書館、EdTech企業連携
+街の魅力化・景観美化
+公園芝生化、市民協働
+
+2. 市民へのベネフィット（ウェルビーイング）
+多世代交流・サードプレイス
+カフェ、コミュニティ運営
+知的探究・スキルアップ
+リスキリング、共同研究、コワーキング
+
+3. 財政的持続可能性
+施設の収益化
+SHARE LOUNGE、チャレンジショップ
+寄付・ふるさと納税
+クラファン連動、成果連動型事業
+
+4. 施設の戦略性
+知のゲートウェイ化
+デジタルライブラリ、ITサポート
+イノベーション・起業支援
+ピッチアリーナ、サンドボックス
+
+5. 都市の強靭性とガバナンス
+デュアルユース
+災害シミュレーション、都市指令室
+DAO型住民自治
+投票、トークン設計
+    </pre>
 
   </div>
 
-  <div class="post-area">
-    <textarea id="input" placeholder="意見を入力"></textarea>
+  <!-- 投稿 -->
+  <div id="postsView" class="view hidden">
+    <h3>投稿</h3>
+    <div id="posts"></div>
+    <textarea id="input"></textarea>
     <button id="btn">投稿</button>
+  </div>
+
+  <!-- PR -->
+  <div id="prView" class="view hidden">
+    <h3>Pull Request（統合候補）</h3>
+    <div id="prBox">未実装（後でAI統合）</div>
+  </div>
+
+  <!-- 分析 -->
+  <div id="analysisView" class="view hidden">
+    <h3>分析</h3>
+    <div id="analysisBox">未実装（後でAI統合）</div>
+  </div>
+
+  <!-- 統合 -->
+  <div id="mergeView" class="view hidden">
+    <h3>統合ロジック</h3>
+    <div id="mergeBox">未実装（後でAI統合）</div>
   </div>
 
 </div>
