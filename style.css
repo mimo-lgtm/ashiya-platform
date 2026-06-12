@@ -12,17 +12,18 @@ body{font-family:sans-serif;margin:0;background:#f6f8fb}
 textarea{width:100%;min-height:180px}
 .timeline{background:white;padding:20px;border-radius:12px}
 .hero-comic{
-    max-width:1200px;
-    margin:30px auto;
+    max-width:1400px;
+    margin:20px auto;
     text-align:center;
 }
 
 .hero-comic img{
-    width:100%;
+    width:95%;
+    max-width:1400px;
+    height:auto;
     border-radius:20px;
-    box-shadow:0 8px 30px rgba(0,0,0,0.15);
+    box-shadow:0 10px 35px rgba(0,0,0,0.15);
 }
-
 .intro-message{
     max-width:900px;
     margin:30px auto;
@@ -32,4 +33,61 @@ textarea{width:100%;min-height:180px}
     line-height:1.8;
     font-size:18px;
     box-shadow:0 4px 15px rgba(0,0,0,0.08);
+}
+.hero-comic{
+    max-width:1200px;
+    margin:20px auto;
+    text-align:center;
+}
+
+.hero-comic img{
+    width:70%;
+    max-width:900px;
+    height:auto;
+    border-radius:20px;
+    box-shadow:0 10px 35px rgba(0,0,0,0.15);
+}
+
+.intro-message{
+    max-width:900px;
+    margin:30px auto;
+    background:#ffffff;
+    padding:30px;
+    border-radius:20px;
+    line-height:1.9;
+    font-size:18px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.08);
+}
+
+.intro-message h2{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.intro-buttons{
+    margin-top:30px;
+    text-align:center;
+}
+
+.intro-buttons button{
+    margin:10px;
+    padding:16px 28px;
+    font-size:18px;
+    font-weight:bold;
+    border:none;
+    border-radius:14px;
+    cursor:pointer;
+    color:white;
+    background:linear-gradient(
+        135deg,
+        #4F8EF7,
+        #43C59E,
+        #8B6EF5
+    );
+    box-shadow:0 6px 18px rgba(0,0,0,0.15);
+    transition:0.2s;
+}
+
+.intro-buttons button:hover{
+    transform:translateY(-3px);
 }
