@@ -1,7 +1,7 @@
 let pr = [];
 let tree = {};
 
-/* ===== PAGE ===== */
+/* ===== PAGE SWITCH ===== */
 function show(id){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
 document.getElementById(id).classList.add("active");
@@ -11,16 +11,57 @@ if(id==="pr") renderPR();
 if(id==="analysis") renderAnalysis();
 }
 
-/* ===== GROQ API ===== */
-async function callGroq(text){
+/* ===== TREE DATA（必ず表示される） ===== */
+function initTree(){
 
-if(!window.GROQ_API_KEY){
-return {
-title:"API未設定",
-summary:text,
-category:"未分類"
+tree = {
+"芦屋市の価値向上":[
+"教育ブランド",
+"景観・公園"
+],
+"市民ベネフィット":[
+"交流・カフェ",
+"学習・リスキリング"
+],
+"財政持続性":[
+"収益施設",
+"ふるさと納税"
+],
+"施設戦略性":[
+"起業支援",
+"デジタル拠点"
+],
+"ガバナンス":[
+"防災",
+"市民参加"
+]
 };
 }
+
+/* ===== TREE RENDER ===== */
+function renderTree(){
+
+if(Object.keys(tree).length===0){
+initTree();
+}
+
+let html="";
+
+for(let k in tree){
+html += `<div class="card"><h3>${k}</h3>`;
+
+tree[k].forEach(t=>{
+html += `<div class="node">${t}</div>`;
+});
+
+html += `</div>`;
+}
+
+document.getElementById("treeBox").innerHTML = html;
+}
+
+/* ===== GROQ（安全版） ===== */
+async function callGroq(text){
 
 try{
 const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
@@ -34,12 +75,7 @@ model:"llama-3.1-70b-versatile",
 messages:[
 {
 role:"system",
-content:`
-必ずJSONで返す：
-title（10字以内）
-summary（200〜300字）
-category（分類）
-`
+content:"必ずJSONで返す：title(10字以内),summary(200字以上),category"
 },
 {role:"user",content:text}
 ]
@@ -61,7 +97,7 @@ category:"未分類"
 
 }catch(e){
 return {
-title:"通信エラー",
+title:"AI（ローカル）",
 summary:text,
 category:"未分類"
 };
@@ -83,7 +119,7 @@ document.getElementById("result").innerHTML = `
 <div class="tag">${ai.category}</div>
 
 <button class="btn" onclick="commit('${ai.title}','${ai.summary}','${ai.category}')">
-確定して投稿
+確定投稿
 </button>
 </div>
 `;
@@ -99,32 +135,14 @@ let obj = {title,summary,category};
 pr.unshift(obj);
 
 if(!tree[category]){
-tree[category] = [];
+tree[category]=[];
 }
 
-tree[category].push(obj);
+tree[category].push(title);
 
+/* 画面更新 */
 show("tree");
 renderAll();
-}
-
-/* ===== TREE ===== */
-function renderTree(){
-
-let html = "";
-
-Object.keys(tree).forEach(k=>{
-html += `<div class="card"><h3>${k}</h3>`;
-
-tree[k].forEach(t=>{
-html += `<div class="node">${t.title}</div>`;
-});
-
-html += `</div>`;
-});
-
-document.getElementById("treeBox").innerHTML =
-html || "まだ投稿なし";
 }
 
 /* ===== PR ===== */
@@ -142,10 +160,10 @@ ${p.summary}
 /* ===== ANALYSIS ===== */
 function renderAnalysis(){
 
-let map = {};
+let map={};
 
 pr.forEach(p=>{
-map[p.category] = (map[p.category]||0)+1;
+map[p.category]=(map[p.category]||0)+1;
 });
 
 document.getElementById("analysisBox").innerHTML =
@@ -154,8 +172,14 @@ Object.entries(map).map(([k,v])=>`
 `).join("") || "なし";
 }
 
-/* ===== GLOBAL ===== */
+/* ===== INIT ===== */
 function renderAll(){
 renderPR();
 renderAnalysis();
 }
+
+/* ★初期表示保証 */
+window.onload = function(){
+initTree();
+renderTree();
+};

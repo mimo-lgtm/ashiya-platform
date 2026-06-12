@@ -2,9 +2,12 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<title>市民政策AIプラットフォーム（駅前公共施設の在り方に関して市民との対話）</title>
+<title>市民政策AIプラットフォーム</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
+<script>
+window.GROQ_API_KEY="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";
+</script>
 <link rel="stylesheet" href="./style.css">
 </head>
 
@@ -25,31 +28,17 @@
 <!-- INTRO -->
 <div id="intro" class="page active">
 <div class="card">
-
 <h2>イントロダクション</h2>
 
 <p>
-これは、市民が駅前公共施設について自由に書き込みが出来るプラットフォームです。<br><br>
+これは、市民が駅前公共施設について自由に意見を書き込めるプラットフォームです。<br><br>
 
-普段は行政に対して意見することはとてもハードルが高いですが、
-この仕組みにより思いつきレベルの意見でも政策化できます。
+思いつきの意見でも、AIが政策レベルに構造化します。
 </p>
-
 </div>
 
 <div class="card">
-<h3>特徴</h3>
-思いつき投稿 → OK（専門知識不要）<br>
-🤖 AIが自動で要約・構造化<br>
-🔍 政策化プロセスを可視化<br>
-🌳 ロジックツリーで構造表示<br>
-📊 分析・傾向の可視化<br>
-🔄 政策統合プロセス公開
-</div>
-
-<div class="card">
-<h3>4ステップ</h3>
-① 市民意見 → ② AI構造化 → ③ ロジックツリー統合 → ④ 政策化
+思いつき投稿OK → AI構造化 → ロジックツリー化 → 政策統合可視化
 </div>
 
 </div>
@@ -57,10 +46,8 @@
 <!-- TREE -->
 <div id="tree" class="page">
 <div class="card">
-<h2>市民政策ロジックツリー（Vision）</h2>
-
+<h2>ロジックツリー</h2>
 <div id="treeBox"></div>
-
 </div>
 </div>
 
@@ -70,7 +57,7 @@
 
 <textarea id="input" placeholder="意見を入力"></textarea>
 
-<button class="btn" onclick="runAI()">AI壁打ち（Groq）</button>
+<button class="btn" onclick="runAI()">AI分析</button>
 
 <div id="result"></div>
 
@@ -80,7 +67,7 @@
 <!-- PR -->
 <div id="pr" class="page">
 <div class="card">
-<h2>Pull Request</h2>
+<h2>PR（投稿一覧）</h2>
 <div id="prBox"></div>
 </div>
 </div>
