@@ -146,4 +146,6 @@ document.getElementById("result").innerHTML =
 /* =========================
    初期化
 ========================= */
-initTree();
+window.addEventListener("DOMContentLoaded", () => {
+  initTree();
+});
