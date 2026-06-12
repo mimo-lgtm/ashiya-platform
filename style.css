@@ -3,6 +3,10 @@ body {
   font-family: sans-serif;
 }
 
+.screen {
+  padding: 20px;
+}
+
 .topbar {
   display: flex;
   gap: 8px;
@@ -18,15 +22,23 @@ body {
   cursor: pointer;
 }
 
-.view {
-  padding: 15px;
-}
-
 .hidden {
   display: none;
+}
+
+.view {
+  padding: 15px;
 }
 
 .treeBox {
   white-space: pre-line;
   font-size: 14px;
+  line-height: 1.6;
+  cursor: pointer;
+}
+
+.treeClickHint {
+  font-size: 12px;
+  color: gray;
+  margin-bottom: 10px;
 }

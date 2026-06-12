@@ -9,8 +9,21 @@
 
 <body>
 
-<!-- 上部ナビ（ここが重要） -->
-<div class="topbar">
+<!-- イントロ -->
+<div id="introScreen" class="screen">
+
+  <h1>市民対話プラットフォーム</h1>
+
+  <p>
+    市民の意見をロジックツリーで構造化し、政策へ変換する実証システムです。
+  </p>
+
+  <button onclick="goMain()">開始</button>
+
+</div>
+
+<!-- ナビ -->
+<div class="topbar hidden" id="topbar">
   <button onclick="switchView('tree')">ロジックツリー</button>
   <button onclick="switchView('posts')">投稿</button>
   <button onclick="switchView('pr')">Pull Request</button>
@@ -18,7 +31,8 @@
   <button onclick="switchView('merge')">統合</button>
 </div>
 
-<div id="app">
+<!-- メイン -->
+<div id="app" class="hidden">
 
   <!-- ロジックツリー -->
   <div id="treeView" class="view">
@@ -32,28 +46,34 @@
 
     <h2>投稿</h2>
 
+    <div class="treeClickHint">
+      ※ロジックツリー項目をクリックして投稿テーマを選択
+    </div>
+
     <div id="posts"></div>
 
     <textarea id="input"></textarea>
     <button id="btn">投稿</button>
+
+    <div id="selectedTheme"></div>
 
   </div>
 
   <!-- PR -->
   <div id="prView" class="view hidden">
     <h2>Pull Request</h2>
-    <p>市民意見の統合候補を表示する領域</p>
+    <p>市民意見の統合候補（v0.2構造）</p>
   </div>
 
   <!-- 分析 -->
   <div id="analysisView" class="view hidden">
     <h2>分析</h2>
-    <p>AIによる分類・要約・影響分析（後でGroq連携）</p>
+    <p>意見の分類・影響分析・要約（AI統合予定）</p>
   </div>
 
   <!-- 統合 -->
   <div id="mergeView" class="view hidden">
-    <h2>統合ビュー</h2>
+    <h2>統合</h2>
     <p>複数意見の統合・政策ドラフト生成</p>
   </div>
 
