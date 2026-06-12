@@ -1,6 +1,4 @@
-let currentTheme = null;
-
-function switchView(v) {
+window.switchView = function(v) {
 
   document.getElementById("treeView").classList.add("hidden");
   document.getElementById("postsView").classList.add("hidden");
@@ -9,13 +7,16 @@ function switchView(v) {
   document.getElementById("mergeView").classList.add("hidden");
 
   document.getElementById(v + "View").classList.remove("hidden");
-}
+};
 
-/* ツリー */
-const treeData = `
+/* ロジックツリー */
+const treeText = `
 市民政策ロジックツリー（Vision）
 
-1. 価値向上
+コストセンターからプロフィットセンターへ：
+市民のウェルビーイングと知財の集積による投資型都市経営の実現
+
+1. 芦屋市の価値向上
 ・教育ブランド
 ・景観改善
 
@@ -24,38 +25,42 @@ const treeData = `
 ・カフェ
 ・学習
 
-3. 財政
+3. 財政持続性
 ・収益化
 ・寄付
 
-4. 施設
+4. 施設戦略
 ・拠点化
+・起業支援
 
-5. ガバナンス
+5. 都市ガバナンス
 ・防災
 ・自治
 `;
 
-document.getElementById("treeBox").innerText = treeData;
+document.addEventListener("DOMContentLoaded", () => {
 
-/* テーマ選択 */
-function selectTheme(t) {
-  currentTheme = t;
-}
+  document.getElementById("treeBox").innerText = treeText;
 
-/* 投稿 */
-document.getElementById("btn").onclick = () => {
+  const btn = document.getElementById("btn");
+  const input = document.getElementById("input");
+  const posts = document.getElementById("posts");
 
-  const text = document.getElementById("input").value.trim();
-  if (!text) return;
+  if (btn) {
+    btn.onclick = () => {
 
-  const div = document.createElement("div");
-  div.innerText = `[${currentTheme || "未分類"}] ${text}`;
+      const text = input.value.trim();
+      if (!text) return;
 
-  document.getElementById("posts").prepend(div);
+      const div = document.createElement("div");
+      div.innerText = text;
 
-  document.getElementById("input").value = "";
-};
+      posts.prepend(div);
+
+      input.value = "";
+    };
+  }
+});
 
 /* 初期表示 */
 switchView("tree");
