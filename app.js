@@ -1,77 +1,116 @@
-let pr = [];
 let tree = {};
 
-/* =========================
-   ページ切替（UIはそのまま維持）
-========================= */
-function show(id){
+function showPage(id){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
 document.getElementById(id).classList.add("active");
-
-if(id==="tree") renderTree();
-if(id==="pr") renderPR();
-if(id==="analysis") renderAnalysis();
 }
 
 /* =========================
-   ロジックツリー初期化（固定）
+   ロジックツリー（完全固定）
 ========================= */
 function initTree(){
+
 tree = {
-"芦屋市の価値向上":[
-"教育ブランド",
-"景観・公園"
+"① 芦屋市の価値向上（ブランド・移住促進）":{
+"次世代教育ブランドの確立":[
+"世界一の絵本図書館",
+"EdTech企業連携"
 ],
-"市民ベネフィット":[
-"交流・カフェ",
-"学習・リスキリング"
-],
-"財政持続性":[
-"収益施設",
-"ふるさと納税"
-],
-"施設戦略性":[
-"起業支援",
-"デジタル拠点"
-],
-"都市ガバナンス":[
-"防災",
-"市民参加"
+"街の魅力化・景観美化":[
+"公園芝生化",
+"市民協働"
 ]
+},
+
+"② 市民へのベネフィット":{
+"多世代交流・サードプレイス":[
+"カフェ",
+"コミュニティ運営"
+],
+"知的探究・スキルアップ":[
+"リスキリング",
+"共同研究"
+]
+},
+
+"③ 財政的持続可能性":{
+"施設の収益化":[
+"SHARE LOUNGE",
+"チャレンジショップ"
+],
+"資金調達":[
+"ふるさと納税",
+"クラファン"
+]
+},
+
+"④ 施設の戦略性":{
+"知のゲートウェイ化":[
+"デジタルライブラリ",
+"ITサポート"
+],
+"起業支援":[
+"ピッチアリーナ",
+"サンドボックス"
+]
+},
+
+"⑤ 都市の強靭性とガバナンス":{
+"デュアルユース":[
+"災害シミュレーション",
+"都市指令室"
+],
+"DAO型市民自治":[
+"投票",
+"トークン設計"
+]
+}
 };
+
+renderTree();
 }
 
 /* =========================
-   ツリー描画（崩さない）
+   ツリー描画（重要）
 ========================= */
 function renderTree(){
 
-if(Object.keys(tree).length===0){
-initTree();
-}
+let box=document.getElementById("treeBox");
+if(!box) return;
 
 let html="";
 
-for(let k in tree){
-html += `<div class="card"><h3>${k}</h3>`;
+Object.entries(tree).forEach(([main,sub])=>{
 
-tree[k].forEach(t=>{
-html += `<div class="node">${t}</div>`;
+html+=`<div class="card"><h3>${main}</h3>`;
+
+Object.entries(sub).forEach(([mid,low])=>{
+
+html+=`<div class="node"><b>${mid}</b></div>`;
+
+low.forEach(l=>{
+html+=`<div class="node" style="margin-left:20px">${l}</div>`;
 });
 
-html += `</div>`;
-}
+});
 
-document.getElementById("treeBox").innerHTML = html;
+html+=`</div>`;
+});
+
+box.innerHTML=html;
 }
 
 /* =========================
-   ★ GROQ接続（完全修正版）
+   Groq（安全版）
 ========================= */
-async function callGroq(text){
+async function runAI(){
 
+const text=document.getElementById("input").value;
+if(!text) return;
+
+let res="";
 try{
-const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+res = await fetch("https://api.groq.com/openai/v1/chat/completions",{
 method:"POST",
 headers:{
 "Content-Type":"application/json",
@@ -82,122 +121,29 @@ model:"llama-3.1-70b-versatile",
 messages:[
 {
 role:"system",
-content:`
-必ずJSONのみ返す。
-形式:
-{
-"title":"10字以内",
-"summary":"200〜300字",
-"category":"分類"
-}
-説明は禁止。`
+content:"必ずJSONで返す。{title,summary,category}"
 },
 {role:"user",content:text}
 ]
 })
 });
 
-const data = await res.json();
-return data.choices?.[0]?.message?.content || "";
+res = await res.json();
+res = res.choices?.[0]?.message?.content || "";
 
 }catch(e){
-return null;
-}
-}
-
-/* =========================
-   AI壁打ち（ここが本体）
-========================= */
-async function runAI(){
-
-let text = document.getElementById("input").value;
-if(!text) return;
-
-let raw = await callGroq(text);
-
-/* ★ここが重要：壊れても必ず表示 */
-let ai;
-
-try{
-ai = JSON.parse(raw);
-}catch(e){
-ai = {
+res = JSON.stringify({
 title:"AI要約",
-summary: raw || text,
-category:"未分類"
-};
-}
-
-/* UI表示（既存構造維持） */
-document.getElementById("result").innerHTML = `
-<div class="card">
-<h3>${ai.title}</h3>
-<p>${ai.summary}</p>
-<div class="tag">${ai.category}</div>
-
-<button class="btn" onclick="commit('${ai.title}','${ai.summary}','${ai.category}')">
-この内容で登録
-</button>
-</div>
-`;
-}
-
-/* =========================
-   投稿確定
-========================= */
-function commit(title,summary,category){
-
-if(!category) category="未分類";
-
-let obj = {title,summary,category};
-pr.unshift(obj);
-
-/* ツリーにも反映 */
-if(!tree[category]){
-tree[category]=[];
-}
-tree[category].push(title);
-
-renderTree();
-renderPR();
-renderAnalysis();
-}
-
-/* =========================
-   PR表示
-========================= */
-function renderPR(){
-document.getElementById("prBox").innerHTML =
-pr.map(p=>`
-<div class="card">
-<div class="tag">${p.category}</div>
-<b>${p.title}</b><br><br>
-${p.summary}
-</div>
-`).join("") || "まだ投稿なし";
-}
-
-/* =========================
-   分析表示
-========================= */
-function renderAnalysis(){
-
-let map={};
-
-pr.forEach(p=>{
-map[p.category]=(map[p.category]||0)+1;
+summary:text.slice(0,200),
+category:"fallback"
 });
+}
 
-document.getElementById("analysisBox").innerHTML =
-Object.entries(map).map(([k,v])=>`
-<div class="card">${k}：${v}件</div>
-`).join("") || "まだデータなし";
+document.getElementById("result").innerHTML =
+"<pre>"+res+"</pre>";
 }
 
 /* =========================
-   初期化（必須）
+   初期化
 ========================= */
-window.onload = function(){
 initTree();
-renderTree();
-};
