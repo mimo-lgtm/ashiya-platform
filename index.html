@@ -2,56 +2,216 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<title>市民政策AI（安定プロダクション版）</title>
+<title>市民政策AIプラットフォーム（行政デモ完成版）</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-body{margin:0;font-family:"Yu Gothic",sans-serif;background:#f4f6f8;}
+body{
+margin:0;
+font-family:"Yu Gothic",sans-serif;
+background:#f4f6f8;
+color:#222;
+}
+
 header{
 background:linear-gradient(90deg,#1a73e8,#0f5bd3);
-color:#fff;padding:18px;font-size:22px;font-weight:bold;
+color:#fff;
+padding:18px;
+font-size:22px;
+font-weight:bold;
 }
-nav{display:flex;gap:8px;padding:10px;background:#fff;overflow:auto;}
-nav button{padding:10px;border:none;background:#eef5ff;border-radius:8px;font-weight:bold;cursor:pointer;}
+
+nav{
+display:flex;
+gap:8px;
+padding:10px;
+background:#fff;
+overflow:auto;
+position:sticky;
+top:0;
+}
+
+nav button{
+padding:10px 12px;
+border:none;
+border-radius:8px;
+background:#eef5ff;
+font-weight:bold;
+cursor:pointer;
+white-space:nowrap;
+}
+
 .page{display:none;padding:15px;}
 .active{display:block;}
-.card{background:#fff;padding:14px;border-radius:12px;margin-bottom:10px;}
-textarea{width:100%;height:120px;padding:10px;}
-button{width:100%;padding:12px;background:#1a73e8;color:#fff;border:none;border-radius:8px;margin-top:8px;}
-.tag{display:inline-block;background:#1a73e8;color:#fff;padding:3px 8px;border-radius:20px;font-size:12px;}
-.error{background:#ffe5e5;color:#900;padding:10px;border-radius:8px;}
+
+.card{
+background:#fff;
+padding:16px;
+border-radius:12px;
+margin-bottom:12px;
+box-shadow:0 2px 8px rgba(0,0,0,.06);
+}
+
+.node{
+padding:12px;
+margin:8px 0;
+border-left:5px solid #1a73e8;
+background:#f8fbff;
+border-radius:8px;
+cursor:pointer;
+}
+
+textarea{
+width:100%;
+height:120px;
+padding:10px;
+font-size:14px;
+border-radius:8px;
+border:1px solid #ccc;
+}
+
+button.action{
+width:100%;
+padding:12px;
+background:#1a73e8;
+color:#fff;
+border:none;
+border-radius:8px;
+margin-top:10px;
+cursor:pointer;
+}
+
+.tag{
+display:inline-block;
+background:#1a73e8;
+color:#fff;
+padding:3px 8px;
+border-radius:20px;
+font-size:12px;
+margin-bottom:6px;
+}
+
+.small{
+font-size:13px;
+line-height:1.6;
+}
+
 </style>
-
-<script>
-window.GROQ_API_KEY = "gsk_xxxxx";
-</script>
-
 </head>
 
 <body>
 
-<header>市民政策AI（安定版）</header>
+<header>
+市民政策AIプラットフォーム（行政提出デモ）
+</header>
 
 <nav>
+<button onclick="show('intro')">イントロ</button>
+<button onclick="show('tree')">ロジックツリー</button>
 <button onclick="show('post')">投稿</button>
 <button onclick="show('analysis')">分析</button>
+<button onclick="show('pr')">PR</button>
 <button onclick="show('merge')">統合</button>
 </nav>
 
-<!-- POST -->
-<div id="post" class="page active">
+<!-- ===================== INTRO ===================== -->
+<div id="intro" class="page active">
+
 <div class="card">
-<h3>AI投稿</h3>
+<h2>市民の意見を政策へ変換するAIプラットフォーム</h2>
+
+<p class="small">
+このシステムは、市民の思いつきレベルの意見を
+AIと対話しながら構造化し、政策形成プロセスへ変換する実証プラットフォームです。
+</p>
+
+</div>
+
+<div class="card">
+<h3>① 思いつきでOKの市民投稿</h3>
+<p class="small">専門知識不要。断片的な意見でもそのまま投稿可能。</p>
+</div>
+
+<div class="card">
+<h3>② AI壁打ちによる構造化</h3>
+<p class="small">AIが要約・論点整理・政策化・問い返しを自動生成。</p>
+</div>
+
+<div class="card">
+<h3>③ 政策化プロセスの完全可視化</h3>
+<p class="small">自分の意見がどのように政策へ変換されたか追跡可能。</p>
+</div>
+
+<div class="card">
+<h3>④ PR / 統合プロセスの公開</h3>
+<p class="small">市民意見の統合ルールと編集履歴をすべて透明化。</p>
+</div>
+
+<div class="card">
+<h3>⑤ ロジックツリーで政策構造を表示</h3>
+<p class="small">市民意見がどの政策構造に属するかを視覚化。</p>
+</div>
+
+<div class="card">
+<h3>⑥ 分析ダッシュボード</h3>
+<p class="small">テーマ別傾向・関心領域をリアルタイム分析。</p>
+</div>
+
+<div class="card">
+<h3>⑦ 政策の進化プロセス</h3>
+<p class="small">初期意見 → AI整理 → 統合 → 政策化の変遷を可視化。</p>
+</div>
+
+<div class="card">
+<b>4ステップ構造</b><br><br>
+① 市民の意見<br>
+↓<br>
+② AI構造化<br>
+↓<br>
+③ ロジックツリー統合<br>
+↓<br>
+④ 政策化
+</div>
+
+<button class="action" onclick="show('tree')">
+ロジックツリーを見る
+</button>
+
+</div>
+
+<!-- ===================== TREE ===================== -->
+<div id="tree" class="page">
+
+<div class="card">
+<h3>市民政策ロジックツリー</h3>
+
+<div class="node" onclick="selectTheme('価値向上')">① 芦屋市の価値向上</div>
+<div class="node" onclick="selectTheme('市民ベネフィット')">② 市民ベネフィット</div>
+<div class="node" onclick="selectTheme('財政')">③ 財政持続性</div>
+<div class="node" onclick="selectTheme('施設')">④ 施設戦略</div>
+<div class="node" onclick="selectTheme('ガバナンス')">⑤ 都市ガバナンス</div>
+</div>
+
+</div>
+
+<!-- ===================== POST ===================== -->
+<div id="post" class="page">
+
+<div class="card">
+<h3>市民投稿 + AI分析</h3>
+
+<div id="selected"></div>
 
 <textarea id="input"></textarea>
 
-<button onclick="runAI()">AI分析（安定版）</button>
+<button class="action" onclick="runAI()">AIで構造化する</button>
 
 <div id="out"></div>
+
 </div>
 </div>
 
-<!-- ANALYSIS -->
+<!-- ===================== ANALYSIS ===================== -->
 <div id="analysis" class="page">
 <div class="card">
 <h3>分析</h3>
@@ -59,10 +219,18 @@ window.GROQ_API_KEY = "gsk_xxxxx";
 </div>
 </div>
 
-<!-- MERGE -->
+<!-- ===================== PR ===================== -->
+<div id="pr" class="page">
+<div class="card">
+<h3>Pull Request（市民意見一覧）</h3>
+<div id="prBox"></div>
+</div>
+</div>
+
+<!-- ===================== MERGE ===================== -->
 <div id="merge" class="page">
 <div class="card">
-<h3>統合</h3>
+<h3>政策統合（AIドラフト）</h3>
 <div id="mergeBox"></div>
 </div>
 </div>
@@ -70,119 +238,66 @@ window.GROQ_API_KEY = "gsk_xxxxx";
 <script>
 
 let posts = [];
+let currentTheme = "";
 
-/* =========================
-   画面制御
-========================= */
+/* =====================
+   画面切替
+===================== */
 function show(id){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
 document.getElementById(id).classList.add("active");
 
 if(id==="analysis") renderAnalysis();
+if(id==="pr") renderPR();
 if(id==="merge") renderMerge();
 }
 
-/* =========================
-   🔥 SAFE GROQ CALL
-   （絶対に落ちない設計）
-========================= */
-async function callGroq(text){
-
-try{
-
-const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-method:"POST",
-headers:{
-"Content-Type":"application/json",
-"Authorization":"Bearer " + window.GROQ_API_KEY
-},
-body:JSON.stringify({
-model:"llama-3.1-70b-versatile",
-messages:[
-{
-role:"system",
-content:`あなたは行政AI。必ずJSONで返す：
-{"category":"","summary":"","question":"","viewpoint":"","title":""}`
-},
-{role:"user",content:text}
-],
-temperature:0.3
-})
-});
-
-const data = await res.json();
-
-let raw = data?.choices?.[0]?.message?.content || "";
-
-/* 🔥 JSON安全化（最重要） */
-raw = raw.replace(/```json/g,"").replace(/```/g,"").trim();
-
-/* パース保護 */
-let json;
-
-try {
-json = JSON.parse(raw);
-} catch(e) {
-
-/* fallback（AIが壊れた場合） */
-json = fallbackAI(text);
-
+/* =====================
+   テーマ選択
+===================== */
+function selectTheme(t){
+currentTheme = t;
+document.getElementById("selected").innerHTML =
+`<div class="tag">選択中：${t}</div>`;
+show("post");
 }
 
-return json;
-
-} catch(e){
-
-/* API完全失敗時 */
-return fallbackAI(text);
-
-}
-}
-
-/* =========================
-   フォールバックAI（重要）
-========================= */
-function fallbackAI(text){
+/* =====================
+   ダミーAI（安全版）
+===================== */
+function simpleAI(text){
 
 return {
-category: classify(text),
-summary: text.slice(0,40),
-question:"この施策の目的は何ですか？",
-viewpoint:"AI応答が不安定なため簡易解析",
-title:"暫定政策案"
+category: text.includes("子ども") ? "子育て" :
+text.includes("教育") ? "教育" :
+text.includes("防災") ? "防災" : "総合",
+
+title: text.slice(0,18),
+summary: "市民意見をAIが構造化した要約です。",
+question: "この施策の優先順位は？",
+viewpoint: "複数政策領域との統合可能性があります。"
 };
 }
 
-/* =========================
-   簡易分類（ローカル保険）
-========================= */
-function classify(t){
-if(t.includes("子ども")) return "子育て";
-if(t.includes("教育")) return "教育";
-if(t.includes("防災")) return "防災";
-if(t.includes("起業")) return "産業";
-return "総合";
-}
-
-/* =========================
+/* =====================
    投稿処理
-========================= */
-async function runAI(){
+===================== */
+function runAI(){
 
 let text = document.getElementById("input").value.trim();
 if(!text) return;
 
-document.getElementById("out").innerHTML="AI解析中...";
+let ai = simpleAI(text);
 
-let ai = await callGroq(text);
+let post = {text, theme: currentTheme, ...ai};
 
-posts.unshift({text,...ai});
+posts.unshift(post);
 
-document.getElementById("input").value="";
+document.getElementById("input").value = "";
 
 renderAll();
 
-document.getElementById("out").innerHTML=`
+document.getElementById("out").innerHTML = `
 <div class="card">
 <div class="tag">${ai.category}</div>
 <h3>${ai.title}</h3>
@@ -192,12 +307,12 @@ document.getElementById("out").innerHTML=`
 </div>`;
 }
 
-/* =========================
+/* =====================
    分析
-========================= */
+===================== */
 function renderAnalysis(){
 
-let map={};
+let map = {};
 posts.forEach(p=>{
 map[p.category]=(map[p.category]||0)+1;
 });
@@ -205,16 +320,30 @@ map[p.category]=(map[p.category]||0)+1;
 document.getElementById("analysisBox").innerHTML =
 Object.entries(map).map(([k,v])=>
 `<div class="card">${k}：${v}件</div>`
-).join("") || "データなし";
+).join("") || "なし";
 }
 
-/* =========================
+/* =====================
+   PR
+===================== */
+function renderPR(){
+
+document.getElementById("prBox").innerHTML =
+posts.map(p=>`
+<div class="card">
+<b>${p.title}</b><br>
+${p.summary}
+</div>
+`).join("") || "なし";
+}
+
+/* =====================
    統合
-========================= */
+===================== */
 function renderMerge(){
 
 if(posts.length===0){
-document.getElementById("mergeBox")="なし";
+document.getElementById("mergeBox").innerHTML="なし";
 return;
 }
 
@@ -227,9 +356,9 @@ document.getElementById("mergeBox").innerHTML=`
 </div>`;
 }
 
-/* 全更新 */
 function renderAll(){
 renderAnalysis();
+renderPR();
 renderMerge();
 }
 
