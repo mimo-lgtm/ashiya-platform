@@ -4,10 +4,14 @@
 <meta charset="utf-8">
 <title>市民政策AIプラットフォーム</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+window.GROQ_API_KEY="gsk_xxxxx";
+</script>
 
 <script>
-window.GROQ_API_KEY="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";
+window.GROQ_API_KEY="gsk_xxxxxgsk_CEu8q1acO26ZAyNobNUdWGdyb3FY376CaEmhYcx6Qd5N0Ag1snHk";
 </script>
+
 <link rel="stylesheet" href="./style.css">
 </head>
 
@@ -28,18 +32,23 @@ window.GROQ_API_KEY="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";
 <!-- INTRO -->
 <div id="intro" class="page active">
 <div class="card">
+
 <h2>イントロダクション</h2>
 
 <p>
-これは、市民が駅前公共施設について自由に意見を書き込めるプラットフォームです。<br><br>
-
-思いつきの意見でも、AIが政策レベルに構造化します。
+市民が駅前公共施設について自由に意見を書き込めるプラットフォームです。<br><br>
+思いつきレベルの意見でも、AIが政策構造に変換します。
 </p>
+
 </div>
 
 <div class="card">
-思いつき投稿OK → AI構造化 → ロジックツリー化 → 政策統合可視化
+思いつき投稿OK → AI構造化 → ロジックツリー → PR → 分析
 </div>
+
+<button class="btn" onclick="show('tree')">
+ロジックツリーを見る
+</button>
 
 </div>
 
@@ -57,7 +66,7 @@ window.GROQ_API_KEY="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";
 
 <textarea id="input" placeholder="意見を入力"></textarea>
 
-<button class="btn" onclick="runAI()">AI分析</button>
+<button class="btn" onclick="runAI()">AI分析（Groq）</button>
 
 <div id="result"></div>
 

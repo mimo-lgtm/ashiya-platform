@@ -1,7 +1,7 @@
 let pr = [];
 let tree = {};
 
-/* ===== PAGE SWITCH ===== */
+/* ===== PAGE ===== */
 function show(id){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
 document.getElementById(id).classList.add("active");
@@ -11,9 +11,8 @@ if(id==="pr") renderPR();
 if(id==="analysis") renderAnalysis();
 }
 
-/* ===== TREE DATA（必ず表示される） ===== */
+/* ===== INIT TREE ===== */
 function initTree(){
-
 tree = {
 "芦屋市の価値向上":[
 "教育ブランド",
@@ -31,7 +30,7 @@ tree = {
 "起業支援",
 "デジタル拠点"
 ],
-"ガバナンス":[
+"都市ガバナンス":[
 "防災",
 "市民参加"
 ]
@@ -60,7 +59,7 @@ html += `</div>`;
 document.getElementById("treeBox").innerHTML = html;
 }
 
-/* ===== GROQ（安全版） ===== */
+/* ===== GROQ ===== */
 async function callGroq(text){
 
 try{
@@ -75,7 +74,10 @@ model:"llama-3.1-70b-versatile",
 messages:[
 {
 role:"system",
-content:"必ずJSONで返す：title(10字以内),summary(200字以上),category"
+content:`必ずJSONのみで返す：
+title(10字以内)
+summary(200〜300字)
+category`
 },
 {role:"user",content:text}
 ]
@@ -85,6 +87,7 @@ content:"必ずJSONで返す：title(10字以内),summary(200字以上),category
 const data = await res.json();
 let raw = data.choices?.[0]?.message?.content || "";
 
+/* JSON安全処理 */
 try{
 return JSON.parse(raw);
 }catch(e){
@@ -97,7 +100,7 @@ category:"未分類"
 
 }catch(e){
 return {
-title:"AI（ローカル）",
+title:"通信エラー",
 summary:text,
 category:"未分類"
 };
@@ -140,7 +143,6 @@ tree[category]=[];
 
 tree[category].push(title);
 
-/* 画面更新 */
 show("tree");
 renderAll();
 }
@@ -178,7 +180,7 @@ renderPR();
 renderAnalysis();
 }
 
-/* ★初期表示保証 */
+/* ★初期化保証 */
 window.onload = function(){
 initTree();
 renderTree();
