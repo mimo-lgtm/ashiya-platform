@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<title>市民政策AIプラットフォーム</title>
+<title>駅前公共施設のありかた 市民との対話</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
@@ -29,7 +29,7 @@ box-shadow:0 2px 8px rgba(0,0,0,.08)
 }
 
 .node{
-padding:10px;border-left:4px solid #1a73e8;background:#f7fbff;margin:6px 0;cursor:pointer
+padding:10px;border-left:4px solid #1a73e8;background:#f7fbff;margin:6px 0
 }
 
 textarea{width:100%;height:120px;padding:10px}
@@ -49,50 +49,43 @@ display:inline-block;background:#1a73e8;color:#fff;padding:4px 8px;border-radius
 <body>
 
 <header>
-市民政策AIプラットフォーム（駅前公共施設の在り方に関して市民との対話）
+駅前公共施設のありかた 市民との対話プラットフォーム
 </header>
 
 <nav>
 <button onclick="show('intro')">イントロ</button>
 <button onclick="show('tree')">ロジックツリー</button>
-<button onclick="show('post')">投稿</button>
+<button onclick="show('post')">AI壁打ち</button>
 <button onclick="show('pr')">PR</button>
 <button onclick="show('analysis')">分析</button>
+<button onclick="show('rule')">統合ルール</button>
 </nav>
 
-<!-- ================= INTRO（完全復元） ================= -->
+<!-- ================= INTRO ================= -->
 <div id="intro" class="page active">
 
 <div class="card">
-
-<h2>市民が自由に意見できる新しい仕組み</h2>
+<h2>このプラットフォームについて</h2>
 
 <p class="small">
-これは、市民が駅前公共施設に関して自由に書き込みが出来るプラットフォームです。<br><br>
+これは、市民が駅前公共施設について自由に意見を書き込める仕組みです。<br><br>
 
-普段は行政に対して意見することはとてもハードルが高かった。<br>
-こんな意見をいってもいいのだろうかとか、他の人はどう思っているのだろうか。<br><br>
-
-その心理的障壁を解消するための仕組みです。
+従来は行政への意見は心理的ハードルが高かったが、それを解消し、<br>
+「思いつきレベル」でも政策に反映できるようにするための実験的プラットフォームです。
 </p>
-
-<div class="card">
-✔ 思いつき投稿OK（専門知識不要）<br>
-✔ AIが自動で要約・構造化<br>
-✔ ロジックツリーで可視化<br>
-✔ 投稿が政策として統合される<br>
-✔ すべての意見が履歴化される
 </div>
 
 <div class="card">
-📌 4ステップ<br><br>
-① 市民意見<br>
-↓<br>
-② AI構造化<br>
-↓<br>
-③ ロジックツリー統合<br>
-↓<br>
-④ 政策化
+✔ 思いつき投稿OK<br>
+✔ AIが要約・構造化<br>
+✔ ロジックツリーで可視化<br>
+✔ PR履歴で全意見公開<br>
+✔ 統合プロセスを透明化
+</div>
+
+<div class="card">
+<h3>4ステップ</h3>
+① 市民意見 → ② AI構造化 → ③ ロジックツリー → ④ 政策化
 </div>
 
 <button class="action" onclick="show('tree')">
@@ -100,13 +93,22 @@ display:inline-block;background:#1a73e8;color:#fff;padding:4px 8px;border-radius
 </button>
 
 </div>
-</div>
 
-<!-- ================= TREE ================= -->
+<!-- ================= TREE（指定版） ================= -->
 <div id="tree" class="page">
 <div class="card">
-<h3>ロジックツリー（表示修正済み）</h3>
-<div id="treeBox"></div>
+<h3>市民政策ロジックツリー（Vision）</h3>
+
+<div class="node">1. 芦屋市の価値向上（ブランド・移住促進）</div>
+<div class="node">2. 市民へのベネフィット（ウェルビーイング）</div>
+<div class="node">3. 財政的持続可能性</div>
+<div class="node">4. 施設の戦略性</div>
+<div class="node">5. 都市の強靭性とガバナンス</div>
+
+<p class="small">
+※各ノードは投稿後にAIによって拡張・分解されます
+</p>
+
 </div>
 </div>
 
@@ -114,20 +116,19 @@ display:inline-block;background:#1a73e8;color:#fff;padding:4px 8px;border-radius
 <div id="post" class="page">
 
 <div class="card">
-
 <textarea id="input" placeholder="意見を入力"></textarea>
 
-<button class="action" onclick="runAI()">AI解析（Groq）</button>
+<button class="action" onclick="runAI()">AI壁打ち（Groq）</button>
 
 <div id="result"></div>
-
 </div>
+
 </div>
 
 <!-- ================= PR ================= -->
 <div id="pr" class="page">
 <div class="card">
-<h3>PR履歴</h3>
+<h3>Pull Request（全市民意見）</h3>
 <div id="prBox"></div>
 </div>
 </div>
@@ -140,9 +141,23 @@ display:inline-block;background:#1a73e8;color:#fff;padding:4px 8px;border-radius
 </div>
 </div>
 
+<!-- ================= RULE ================= -->
+<div id="rule" class="page">
+
+<div class="card">
+<h3>統合ルール（公開）</h3>
+
+✔ AIが一次統合権限を持つ<br>
+✔ 人間はルール設計のみ関与<br>
+✔ 同一テーマは自動マージ<br>
+✔ 矛盾意見は併存保持<br>
+✔ 変更履歴はすべてPR化
+</div>
+
+</div>
+
 <script>
 
-let tree = {};
 let pr = [];
 
 /* ================= NAV ================= */
@@ -150,12 +165,11 @@ function show(id){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
 document.getElementById(id).classList.add("active");
 
-if(id==="tree") renderTree();
-if(id==="analysis") renderAnalysis();
 if(id==="pr") renderPR();
+if(id==="analysis") renderAnalysis();
 }
 
-/* ================= GROQ（安全版） ================= */
+/* ================= GROQ ================= */
 async function callGroq(text){
 
 try{
@@ -168,51 +182,62 @@ headers:{
 body:JSON.stringify({
 model:"llama-3.1-70b-versatile",
 messages:[
-{role:"system",content:"必ずJSONで返す：title,summary,category"},
+{role:"system",content:"必ずJSONで返す:title(10字以内),summary(200字),category"},
 {role:"user",content:text}
 ]
 })
 });
 
-const data = await res.json();
-let content = data.choices?.[0]?.message?.content || "";
-
-return JSON.parse(content);
+const d = await res.json();
+let c = d.choices?.[0]?.message?.content || "";
+return JSON.parse(c);
 
 }catch(e){
 return {
-title:"解析結果",
+title:"要約",
 summary:text.slice(0,120),
 category:"未分類"
 };
 }
 }
 
-/* ================= TREE ================= */
-function addTree(cat,item){
-if(!tree[cat]) tree[cat]=[];
-tree[cat].push(item);
+/* ================= FLOW ================= */
+async function runAI(){
+
+let text=document.getElementById("input").value;
+if(!text) return;
+
+let ai = await callGroq(text);
+
+document.getElementById("result").innerHTML = `
+<div class="card">
+<div class="tag">${ai.category}</div>
+<h3>${ai.title}</h3>
+<p>${ai.summary}</p>
+
+<button class="action"
+onclick="commit('${ai.title}','${ai.summary}','${ai.category}')">
+この内容で確定
+</button>
+</div>
+`;
 }
 
-function renderTree(){
+/* ================= COMMIT ================= */
+function commit(title,summary,category){
 
-let html="";
+let obj={title,summary,category};
 
-for(let k in tree){
-html += `<div class="card"><b>${k}</b>`;
-tree[k].forEach(t=>{
-html += `<div class="node">${t.title}</div>`;
-});
-html += `</div>`;
-}
+pr.unshift(obj);
 
-document.getElementById("treeBox").innerHTML =
-html || "データなし";
+alert("投稿はPR・ツリー・分析に反映されました");
+
+show("pr");
+renderAll();
 }
 
 /* ================= PR ================= */
 function renderPR(){
-
 document.getElementById("prBox").innerHTML =
 pr.map(p=>`
 <div class="card">
@@ -232,42 +257,15 @@ map[p.category]=(map[p.category]||0)+1;
 });
 
 document.getElementById("analysisBox").innerHTML =
-Object.entries(map).map(([k,v])=>
-`<div class="card">${k}：${v}</div>`
-).join("") || "なし";
+Object.entries(map).map(([k,v])=>`
+<div class="card">${k}: ${v}</div>
+`).join("") || "なし";
 }
 
-/* ================= FLOW ================= */
-async function runAI(){
-
-let text=document.getElementById("input").value;
-if(!text) return;
-
-let ai = await callGroq(text);
-
-document.getElementById("result").innerHTML = `
-<div class="card">
-<div class="tag">${ai.category}</div>
-<h3>${ai.title}</h3>
-<p>${ai.summary}</p>
-
-<button class="action" onclick="confirmPost('${ai.title}','${ai.summary}','${ai.category}')">
-確定
-</button>
-</div>
-`;
-}
-
-function confirmPost(title,summary,category){
-
-let obj={title,summary,category};
-
-pr.unshift(obj);
-addTree(category,obj);
-
-alert("反映完了");
-
-show("tree");
+/* ================= GLOBAL UPDATE ================= */
+function renderAll(){
+renderPR();
+renderAnalysis();
 }
 
 </script>
