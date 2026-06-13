@@ -395,6 +395,104 @@ transform:translateX(6px);
 background:#eff6ff;
 }
 
+/* ===== HOME NEW ===== */
+
+.intro-hero{
+max-width:1400px;
+margin:auto;
+}
+
+.intro-top{
+background:white;
+padding:30px;
+border-radius:20px;
+margin-bottom:25px;
+box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+.intro-top h2{
+margin-bottom:15px;
+color:#2563eb;
+}
+
+.intro-middle{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:25px;
+margin-bottom:25px;
+align-items:center;
+}
+
+.intro-image img{
+width:100%;
+max-width:650px;
+border-radius:20px;
+box-shadow:0 12px 25px rgba(0,0,0,.12);
+}
+
+.feature-box{
+background:white;
+padding:25px;
+border-radius:20px;
+box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+.feature-box h3{
+color:#2563eb;
+margin-bottom:15px;
+}
+
+.feature-box li{
+margin-bottom:10px;
+}
+
+.intro-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:25px;
+margin-bottom:25px;
+}
+
+.info-card{
+background:white;
+padding:25px;
+border-radius:20px;
+box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+.info-card h3{
+margin-bottom:15px;
+color:#2563eb;
+}
+
+.purpose-box{
+background:white;
+padding:30px;
+border-radius:20px;
+text-align:center;
+box-shadow:0 8px 20px rgba(0,0,0,.08);
+margin-bottom:25px;
+}
+
+.tree-cta{
+text-align:center;
+background:linear-gradient(135deg,#2563eb,#06b6d4);
+padding:35px;
+border-radius:20px;
+color:white;
+}
+
+.tree-btn{
+display:inline-block;
+margin-top:15px;
+padding:14px 28px;
+background:white;
+color:#2563eb;
+font-weight:bold;
+border-radius:12px;
+text-decoration:none;
+}
+
 </style></head>
 
 <body>
@@ -416,8 +514,9 @@ background:#eff6ff;
 <!-- ================= INTRO ================= -->
 <section id="intro" class="page active">
 
-<!-- 上段 -->
 <div class="placeholder-card">
+
+<h1>市民政策AIプラットフォーム</h1>
 
 <h2>このプラットフォームについて</h2>
 
@@ -438,12 +537,11 @@ AIと共に整理・構造化しながら政策形成につなげる対話型プ
 
 </div>
 
-<!-- 中段 -->
 <div class="intro-feature">
 
 <div class="feature-left">
 
-<h3>特徴</h3>
+<h2>特徴</h2>
 
 <ul>
 <li>思いついたままの投稿が可能</li>
@@ -457,18 +555,17 @@ AIと共に整理・構造化しながら政策形成につなげる対話型プ
 
 <div class="feature-right">
 
-<img src="images/comic-all.png">
+<img src="images/comic-all.png" alt="市民政策AIプラットフォーム">
 
 </div>
 
 </div>
 
-<!-- 下段 -->
 <div class="intro-grid">
 
 <div class="placeholder-card">
 
-<h3>このような課題を感じていませんか？</h3>
+<h2>このような課題を感じていませんか？</h2>
 
 <ul>
 <li>考えはあるが文章化が難しい</li>
@@ -481,7 +578,7 @@ AIと共に整理・構造化しながら政策形成につなげる対話型プ
 
 <div class="placeholder-card">
 
-<h3>投稿の流れ</h3>
+<h2>投稿の流れ</h2>
 
 <ol>
 <li>市民が自由投稿</li>
@@ -496,7 +593,7 @@ AIと共に整理・構造化しながら政策形成につなげる対話型プ
 
 <div class="placeholder-card">
 
-<h3>この仕組みの目的</h3>
+<h2>この仕組みの目的</h2>
 
 <p>
 どのような意見も素材として扱われ、
@@ -504,17 +601,19 @@ AIが中立的に整理し、
 社会全体の知として統合します。
 </p>
 
-<div style="text-align:center;margin-top:25px;">
+</div>
+
+<div class="placeholder-card" style="text-align:center;">
+
+<h2>他の市民の意見や提案を見てみませんか？</h2>
 
 <p>
-他の市民の方の意見や提案を見てみませんか？
+投稿された意見はロジックツリー上で整理・統合されています。
 </p>
 
 <button onclick="showPage('tree')">
 🌳 ロジックツリーを見る
 </button>
-
-</div>
 
 </div>
 
