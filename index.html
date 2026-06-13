@@ -263,6 +263,27 @@ loadMetrics();
 </script>
 
 <script src="js/app.js?v=10"></script>
+<div id="data"></div>
 
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbwcN5Wbzbp8nZSV2GMvbMpXCWe9k8C5ToBN_P57kC1Dab4VZ-ib7Uim_SPct9XBzrEujg/exec";
+
+async function loadData(){
+  const res = await fetch(API_URL);
+  const data = await res.json();
+
+  const container = document.getElementById("data");
+
+  container.innerHTML = data.map(d => `
+    <div style="padding:10px;margin:10px;border:1px solid #ccc;">
+      <b>${d["  タイトル  "] || d["タイトル"]}</b><br>
+      カテゴリ：${d["  カテゴリ  "] || d["カテゴリ"]}<br>
+      内容：${d["  内容  "] || d["内容"]}
+    </div>
+  `).join("");
+}
+
+loadData();
+</script>
 </body>
 </html>
