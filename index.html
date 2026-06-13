@@ -19,22 +19,21 @@
 
 <nav>
 <button onclick="showPage('ai')">AIアシスタント</button>
-<button onclick="showPage('analysis')">分析</button>
-<button onclick="showPage('vision')">ビジョン</button>
+<button onclick="showPage('analysis')">分析・統合</button>
+<button onclick="showPage('vision')">ビジョン変遷</button>
 </nav>
 
 </header>
 
 <main>
 
-<!-- ========================= AI UI（唯一の入力） ========================= -->
+<!-- ========================= AI ========================= -->
 <section id="ai" class="page active">
 
 <h1>🤖 AI政策アシスタント</h1>
 
 <div class="assistant-layout">
 
-<!-- 入力 -->
 <div class="assistant-card">
 
 <h2>アイデア入力</h2>
@@ -48,7 +47,6 @@ placeholder="例：駅前公共施設に絵本図書館を作る"></textarea>
 
 </div>
 
-<!-- AI結果 -->
 <div class="assistant-card">
 
 <h2>AI壁打ち結果</h2>
@@ -63,22 +61,39 @@ placeholder="例：駅前公共施設に絵本図書館を作る"></textarea>
 
 </section>
 
-<!-- ========================= ANALYSIS（表示のみ） ========================= -->
+<!-- ========================= ANALYSIS ========================= -->
 <section id="analysis" class="page">
 
 <h1>📊 市民投稿ダッシュボード</h1>
 
+<div class="metric-grid">
+
+<div class="metric-card">価値向上指数</div>
+<div class="metric-card">市民幸福指数</div>
+<div class="metric-card">交流指数</div>
+<div class="metric-card">イノベーション指数</div>
+<div class="metric-card">運営効率指数</div>
+
+</div>
+
+<div class="placeholder-card">
+<h2>市民投稿一覧</h2>
 <div id="data"></div>
+</div>
 
 </section>
 
 <!-- ========================= VISION ========================= -->
 <section id="vision" class="page">
 
-<h1>📈 ビジョン</h1>
+<h1>📈 ビジョン変遷</h1>
 
-<div class="placeholder-card">
-将来ビジョン表示エリア
+<div class="timeline">
+
+<div class="timeline-item">2026 価値向上</div>
+<div class="timeline-item">2027 交流拠点</div>
+<div class="timeline-item">2028 イノベーション都市</div>
+
 </div>
 
 </section>
@@ -94,19 +109,16 @@ function showPage(id){
 }
 
 /* =========================
-   Google Form（裏送信）
-   ※ここだけあなたのFormに差し替え
+Google Form（裏送信）
 ========================= */
 const GOOGLE_FORM_URL = "https://docs.google.com/forms/d/e/XXXXXXXX/formResponse";
 
-/* フィールドID（Formで生成される）
-   ※後であなたのFormに合わせて調整 */
 const ENTRY_TITLE = "entry.111111";
 const ENTRY_CATEGORY = "entry.222222";
 const ENTRY_CONTENT = "entry.333333";
 
 /* =========================
-   投稿処理
+投稿
 ========================= */
 function submitIdea(){
 
@@ -117,11 +129,9 @@ function submitIdea(){
     return;
   }
 
-  // AI結果（仮）
   document.getElementById("aiResult").innerText =
-    "AI分析中...\n→ 要約・分類・論点整理を実行";
+    "AI分析中...\n論点整理・分類・要約を実行";
 
-  // Google Formへ裏送信
   const formData = new FormData();
   formData.append(ENTRY_TITLE, text.substring(0,30));
   formData.append(ENTRY_CATEGORY, "価値向上");
@@ -133,13 +143,12 @@ function submitIdea(){
     body: formData
   });
 
-  alert("投稿しました（AI＋政策データ送信完了）");
-
   document.getElementById("ideaInput").value = "";
+  alert("投稿しました");
 }
 
 /* =========================
-   ダッシュボード表示（API）
+データ取得（Sheets API）
 ========================= */
 const API_URL = "https://script.google.com/macros/s/AKfycbwcN5Wbzbp8nZSV2GMvbMpXCWe9k8C5ToBN_P57kC1Dab4VZ-ib7Uim_SPct9XBzrEujg/exec";
 
@@ -153,10 +162,9 @@ async function loadData(){
   container.innerHTML = data.map(d => `
     <div style="
       background:white;
-      margin:12px auto;
+      margin:12px 0;
       padding:16px;
       border-radius:12px;
-      max-width:800px;
       box-shadow:0 4px 12px rgba(0,0,0,0.08);
     ">
       <div style="font-size:18px;font-weight:bold;">
@@ -176,7 +184,6 @@ async function loadData(){
 }
 
 loadData();
-
 </script>
 
 </body>
