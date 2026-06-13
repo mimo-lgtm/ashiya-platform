@@ -18,41 +18,94 @@
 </div>
 
 <nav>
-<button onclick="showPage('ai')">AIアシスタント</button>
+
+<button onclick="showPage('intro')">ホーム</button>
+<button onclick="showPage('tree')">ロジックツリー</button>
+<button onclick="showPage('assistant')">AI政策アシスタント</button>
 <button onclick="showPage('analysis')">分析・統合</button>
 <button onclick="showPage('vision')">ビジョン変遷</button>
+
 </nav>
 
 </header>
 
 <main>
 
-<!-- ========================= AI ========================= -->
-<section id="ai" class="page active">
+<!-- ========================= INTRO ========================= -->
+<section id="intro" class="page active">
 
-<h1>🤖 AI政策アシスタント</h1>
+<div class="hero-comic">
+<img src="images/comic-all.png" alt="市民政策AIプラットフォーム">
+</div>
+
+<div class="welcome-card">
+
+<h1>市民とAIが共創する政策形成</h1>
+
+<p>
+あなたのアイデアはAIによって整理・統合され、政策ロジックツリーへ反映されます。
+</p>
+
+<p>
+思いついたことをそのまま投稿してください。AIが支援します。
+</p>
+
+<div class="cta-buttons">
+<button onclick="showPage('tree')">🌳 ロジックツリー</button>
+<button onclick="showPage('assistant')">🤖 AIアシスタント</button>
+<button onclick="showPage('analysis')">📊 分析</button>
+</div>
+
+</div>
+
+</section>
+
+<!-- ========================= TREE ========================= -->
+<section id="tree" class="page">
+
+<h1>🌳 ロジックツリー</h1>
+
+<div class="tree-root">芦屋市の未来</div>
+
+<div class="tree-row">
+
+<div class="tree-node">価値向上</div>
+<div class="tree-node">市民ベネフィット</div>
+<div class="tree-node">交流</div>
+<div class="tree-node">イノベーション</div>
+<div class="tree-node">運営効率</div>
+
+</div>
+
+<div class="placeholder-card">
+市民投稿によって成長します
+</div>
+
+</section>
+
+<!-- ========================= ASSISTANT ========================= -->
+<section id="assistant" class="page">
+
+<h1>🤖 AIアシスタント</h1>
 
 <div class="assistant-layout">
 
 <div class="assistant-card">
 
-<h2>アイデア入力</h2>
+<h2>入力</h2>
 
-<textarea id="ideaInput"
-placeholder="例：駅前公共施設に絵本図書館を作る"></textarea>
+<textarea id="ideaInput"></textarea>
 
-<button class="primary-btn" onclick="submitIdea()">
-投稿する（AI＋政策提案）
-</button>
+<button class="primary-btn">AI分析</button>
 
 </div>
 
 <div class="assistant-card">
 
-<h2>AI壁打ち結果</h2>
+<h2>結果</h2>
 
-<div class="result-box" id="aiResult">
-ここにAIの整理・要約・提案が表示されます
+<div class="result-box">
+ここにAI結果が表示されます
 </div>
 
 </div>
@@ -64,21 +117,22 @@ placeholder="例：駅前公共施設に絵本図書館を作る"></textarea>
 <!-- ========================= ANALYSIS ========================= -->
 <section id="analysis" class="page">
 
-<h1>📊 市民投稿ダッシュボード</h1>
+<h1>📊 分析センター</h1>
 
 <div class="metric-grid">
 
-<div class="metric-card">価値向上指数</div>
-<div class="metric-card">市民幸福指数</div>
-<div class="metric-card">交流指数</div>
-<div class="metric-card">イノベーション指数</div>
-<div class="metric-card">運営効率指数</div>
+<div class="metric-card">価値向上</div>
+<div class="metric-card">幸福</div>
+<div class="metric-card">交流</div>
+<div class="metric-card">イノベーション</div>
+<div class="metric-card">効率</div>
 
 </div>
 
+<!-- ★ここにデータ表示 -->
 <div class="placeholder-card">
-<h2>市民投稿一覧</h2>
-<div id="data"></div>
+  <h2>市民投稿一覧</h2>
+  <div id="data"></div>
 </div>
 
 </section>
@@ -90,9 +144,9 @@ placeholder="例：駅前公共施設に絵本図書館を作る"></textarea>
 
 <div class="timeline">
 
-<div class="timeline-item">2026 価値向上</div>
-<div class="timeline-item">2027 交流拠点</div>
-<div class="timeline-item">2028 イノベーション都市</div>
+<div class="timeline-item">2026<br>価値向上</div>
+<div class="timeline-item">2027<br>交流</div>
+<div class="timeline-item">2028<br>イノベーション</div>
 
 </div>
 
@@ -102,58 +156,12 @@ placeholder="例：駅前公共施設に絵本図書館を作る"></textarea>
 
 <!-- ========================= SCRIPT ========================= -->
 
+<script src="js/app.js?v=10"></script>
+
 <script>
-function showPage(id){
-  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-}
-
-/* =========================
-Google Form（裏送信）
-========================= */
-const GOOGLE_FORM_URL = "https://docs.google.com/forms/d/e/XXXXXXXX/formResponse";
-
-const ENTRY_TITLE = "entry.111111";
-const ENTRY_CATEGORY = "entry.222222";
-const ENTRY_CONTENT = "entry.333333";
-
-/* =========================
-投稿
-========================= */
-function submitIdea(){
-
-  const text = document.getElementById("ideaInput").value;
-
-  if(!text){
-    alert("入力してください");
-    return;
-  }
-
-  document.getElementById("aiResult").innerText =
-    "AI分析中...\n論点整理・分類・要約を実行";
-
-  const formData = new FormData();
-  formData.append(ENTRY_TITLE, text.substring(0,30));
-  formData.append(ENTRY_CATEGORY, "価値向上");
-  formData.append(ENTRY_CONTENT, text);
-
-  fetch(GOOGLE_FORM_URL, {
-    method: "POST",
-    mode: "no-cors",
-    body: formData
-  });
-
-  document.getElementById("ideaInput").value = "";
-  alert("投稿しました");
-}
-
-/* =========================
-データ取得（Sheets API）
-========================= */
 const API_URL = "https://script.google.com/macros/s/AKfycbwcN5Wbzbp8nZSV2GMvbMpXCWe9k8C5ToBN_P57kC1Dab4VZ-ib7Uim_SPct9XBzrEujg/exec";
 
 async function loadData(){
-
   const res = await fetch(API_URL);
   const data = await res.json();
 
@@ -167,7 +175,7 @@ async function loadData(){
       border-radius:12px;
       box-shadow:0 4px 12px rgba(0,0,0,0.08);
     ">
-      <div style="font-size:18px;font-weight:bold;">
+      <div style="font-weight:bold;font-size:18px;">
         ${d["  タイトル  "] || d["タイトル"]}
       </div>
 
@@ -180,16 +188,10 @@ async function loadData(){
       </div>
     </div>
   `).join("");
-
 }
 
 loadData();
 </script>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  showPage("ai");
-});
-</script>
 </body>
 </html>
