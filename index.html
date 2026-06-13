@@ -7,8 +7,8 @@
 <title>市民政策AIプラットフォーム</title>
 
 <link rel="stylesheet" href="style.css">
-
 </head>
+
 <body>
 
 <header class="topbar">
@@ -20,13 +20,9 @@
 <nav>
 
 <button onclick="showPage('intro')">ホーム</button>
-
 <button onclick="showPage('tree')">ロジックツリー</button>
-
 <button onclick="showPage('assistant')">AI政策アシスタント</button>
-
 <button onclick="showPage('analysis')">分析・統合</button>
-
 <button onclick="showPage('vision')">ビジョン変遷</button>
 
 </nav>
@@ -35,6 +31,9 @@
 
 <main>
 
+<!-- =========================
+INTRO
+========================= -->
 <section id="intro" class="page active">
 
 <div class="hero-comic">
@@ -46,48 +45,24 @@ alt="市民政策AIプラットフォーム">
 
 <div class="welcome-card">
 
-<h1>
+<h1 id="main-title">
 市民とAIが共創する政策形成
 </h1>
 
-<p>
-
-あなたのアイデアはAIによって整理・統合され、
-市民政策ロジックツリーへ反映されます。
-
+<p id="intro-text-1">
+あなたのアイデアはAIによって整理・統合され、政策ロジックツリーへ反映されます。
 </p>
 
-<p>
-
+<p id="intro-text-2">
 思いついたことをそのまま投稿してください。
-
-AIエージェントが
-
-論点整理
-
-客観データ
-
-他自治体事例
-
-政策提案作成
-
-を支援します。
-
+AIエージェントが論点整理・データ分析・政策提案を支援します。
 </p>
 
 <div class="cta-buttons">
 
-<button onclick="showPage('tree')">
-🌳 ロジックツリーを見る
-</button>
-
-<button onclick="showPage('assistant')">
-🤖 AI政策アシスタントを始める
-</button>
-
-<button onclick="showPage('analysis')">
-📊 分析を見る
-</button>
+<button onclick="showPage('tree')">🌳 ロジックツリーを見る</button>
+<button onclick="showPage('assistant')">🤖 AI政策アシスタント</button>
+<button onclick="showPage('analysis')">📊 分析を見る</button>
 
 </div>
 
@@ -95,72 +70,66 @@ AIエージェントが
 
 </section>
 
+<!-- =========================
+TREE
+========================= -->
 <section id="tree" class="page">
 
-<h1>
-🌳 市民政策ロジックツリー
-</h1>
+<h1>🌳 市民政策ロジックツリー</h1>
 
-<div class="tree-root">
+<div class="tree-root" id="tree-root">
 芦屋市の未来
 </div>
 
 <div class="tree-row">
 
-<div class="tree-node">
+<div class="tree-node" data-node="value">
 価値向上
 </div>
 
-<div class="tree-node">
+<div class="tree-node" data-node="benefit">
 市民ベネフィット
 </div>
 
-<div class="tree-node">
+<div class="tree-node" data-node="exchange">
 交流
 </div>
 
-<div class="tree-node">
+<div class="tree-node" data-node="innovation">
 イノベーション
 </div>
 
-<div class="tree-node">
+<div class="tree-node" data-node="operation">
 運営効率
 </div>
 
 </div>
 
-<div class="placeholder-card">
+<div class="placeholder-card" id="tree-status">
 
-市民投稿によってノードが成長します。
-
-AIが類似提案を統合し、
-政策ツリーを育てます。
+市民投稿によってノードが成長します。AIが類似提案を統合し、政策ツリーを育てます。
 
 </div>
 
 </section>
 
+<!-- =========================
+ASSISTANT
+========================= -->
 <section id="assistant" class="page">
 
-<h1>
-🤖 AI政策アシスタント
-</h1>
+<h1>🤖 AI政策アシスタント</h1>
 
 <div class="assistant-layout">
 
 <div class="assistant-card">
 
-<h2>
-
-思いついたことを
-そのまま入力してください
-
-</h2>
+<h2>思いついたことをそのまま入力</h2>
 
 <textarea id="ideaInput"
 placeholder="例：駅前公共施設に絵本図書館を作る"></textarea>
 
-<button class="primary-btn">
+<button class="primary-btn" id="ai-submit-btn">
 AI壁打ち開始
 </button>
 
@@ -168,21 +137,11 @@ AI壁打ち開始
 
 <div class="assistant-card">
 
-<h2>
-AI出力イメージ
-</h2>
+<h2>AI出力イメージ</h2>
 
-<div class="result-box">
+<div class="result-box" id="ai-result">
 
-論点整理
-
-客観データ
-
-他自治体事例
-
-タイトル案
-
-200字要約
+論点整理 / 客観データ / 他自治体事例 / 要約 / 提案
 
 がここに表示されます
 
@@ -194,76 +153,74 @@ AI出力イメージ
 
 </section>
 
+<!-- =========================
+ANALYSIS（価値スコア型）
+========================= -->
 <section id="analysis" class="page">
 
-<h1>
-📊 分析・統合センター
-</h1>
+<h1>📊 価値スコア分析センター</h1>
 
 <div class="metric-grid">
 
 <div class="metric-card">
 価値向上指数
+<div id="metric-value-1">--</div>
 </div>
 
 <div class="metric-card">
 市民幸福指数
+<div id="metric-value-2">--</div>
 </div>
 
 <div class="metric-card">
 交流指数
+<div id="metric-value-3">--</div>
 </div>
 
 <div class="metric-card">
 イノベーション指数
+<div id="metric-value-4">--</div>
 </div>
 
 <div class="metric-card">
 運営効率指数
+<div id="metric-value-5">--</div>
 </div>
 
 </div>
+
+<!-- 投稿・統合エリア -->
+<div id="analysis-container">
 
 <div class="placeholder-card">
 
-Pull Request一覧
+Pull Request一覧 / 統合候補 / AI分析結果がここに表示されます
 
-統合候補
-
-統合済み提案
-
-AI分析結果
-
-がここに表示されます
+</div>
 
 </div>
 
 </section>
 
+<!-- =========================
+VISION
+========================= -->
 <section id="vision" class="page">
 
-<h1>
-📈 ビジョン変遷
-</h1>
+<h1>📈 ビジョン変遷</h1>
 
 <div class="timeline">
 
-<div class="timeline-item">
-2026<br>
-↓<br>
-価値向上
+<div class="timeline-item" data-year="2026">
+2026<br>↓<br>価値向上
 </div>
 
-<div class="timeline-item">
-2027<br>
-↓<br>
-交流拠点
+<div class="timeline-item" data-year="2027">
+2027<br>↓<br>交流拠点
 </div>
 
-<div class="timeline-item">
-2028<br>
-↓<br>
-イノベーション都市
+<div class="timeline-item" data-year="2028">
+2028<br>↓<br>イノベーション都市
 </div>
 
 </div>
@@ -271,6 +228,39 @@ AI分析結果
 </section>
 
 </main>
+
+<!-- =========================
+DATA HOOK（重要追加）
+========================= -->
+<script>
+
+const DATA_SOURCE = "google-sheets-ready";
+
+/*
+今はダミー（後でGoogle Sheets / AIに置換）
+*/
+const APP_STATE = {
+  metrics: {
+    value: 82,
+    happiness: 78,
+    exchange: 91,
+    innovation: 74,
+    efficiency: 69
+  }
+};
+
+// KPI反映
+function loadMetrics() {
+  document.getElementById("metric-value-1").innerText = APP_STATE.metrics.value;
+  document.getElementById("metric-value-2").innerText = APP_STATE.metrics.happiness;
+  document.getElementById("metric-value-3").innerText = APP_STATE.metrics.exchange;
+  document.getElementById("metric-value-4").innerText = APP_STATE.metrics.innovation;
+  document.getElementById("metric-value-5").innerText = APP_STATE.metrics.efficiency;
+}
+
+loadMetrics();
+
+</script>
 
 <script src="js/app.js?v=10"></script>
 
