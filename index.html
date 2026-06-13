@@ -205,6 +205,59 @@ font-weight:700;
 box-shadow:0 8px 24px rgba(0,0,0,.08);
 border-top:5px solid #2563eb;
 }
+/* ================= ANALYSIS SCORE ================= */
+
+.score-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:20px;
+margin:30px 0;
+}
+
+.score-card{
+background:white;
+padding:20px;
+border-radius:18px;
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+border-top:5px solid #2563eb;
+}
+
+.score-card h4{
+margin-bottom:10px;
+color:#1e3a8a;
+}
+
+.score-value{
+font-size:28px;
+font-weight:bold;
+color:#2563eb;
+margin-bottom:12px;
+}
+
+.score-bar{
+height:12px;
+background:#e5e7eb;
+border-radius:10px;
+overflow:hidden;
+margin-bottom:12px;
+}
+
+.score-fill{
+height:100%;
+background:linear-gradient(90deg,#2563eb,#06b6d4);
+}
+
+.w25{
+width:100%;
+}
+
+.w20{
+width:80%;
+}
+
+.w15{
+width:60%;
+}
 
 /* ================= POST LIST ================= */
 
@@ -1073,6 +1126,55 @@ AI提言
 </p>
 
 <h3>② 統合ルール（AI評価基準）</h3>
+
+<div class="score-grid">
+
+<div class="score-card">
+<h4>① 芦屋市の価値向上</h4>
+<div class="score-value">25%</div>
+<div class="score-bar">
+<div class="score-fill w25"></div>
+</div>
+<p>集客力・移住意欲・推奨意向</p>
+</div>
+
+<div class="score-card">
+<h4>② 市民ベネフィット</h4>
+<div class="score-value">25%</div>
+<div class="score-bar">
+<div class="score-fill w25"></div>
+</div>
+<p>満足度・リピート性・生活の質</p>
+</div>
+
+<div class="score-card">
+<h4>③ 市民交流・イノベーション</h4>
+<div class="score-value">20%</div>
+<div class="score-bar">
+<div class="score-fill w20"></div>
+</div>
+<p>交流・協働・事業創出</p>
+</div>
+
+<div class="score-card">
+<h4>④ マルチユース性</h4>
+<div class="score-value">15%</div>
+<div class="score-bar">
+<div class="score-fill w15"></div>
+</div>
+<p>多目的利用・稼働率向上</p>
+</div>
+
+<div class="score-card">
+<h4>⑤ 運営効率・持続可能性</h4>
+<div class="score-value">15%</div>
+<div class="score-bar">
+<div class="score-fill w15"></div>
+</div>
+<p>DX・無人化・ボランティア活用</p>
+</div>
+
+</div>
 <p>
 投稿は以下の評価軸に基づき、AIによって数値化・分析されます。
 これらの基準は固定ではなく、市民合意により随時更新されます。
