@@ -313,7 +313,89 @@ h1{
 font-size:28px;
 }
 
-}</style></head>
+}
+/* ================= TREE V2 ================= */
+
+.logic-tree{
+margin-top:40px;
+}
+
+.tree-root{
+max-width:600px;
+margin:0 auto 50px;
+padding:20px;
+text-align:center;
+font-size:28px;
+font-weight:700;
+color:white;
+border-radius:20px;
+background:linear-gradient(135deg,#2563eb,#06b6d4);
+box-shadow:0 15px 35px rgba(0,0,0,.15);
+}
+
+.tree-level{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:30px;
+}
+
+.tree-parent{
+width:420px;
+position:relative;
+}
+
+.tree-node{
+padding:18px;
+border-radius:18px;
+font-weight:700;
+color:white;
+text-align:center;
+font-size:20px;
+box-shadow:0 10px 25px rgba(0,0,0,.12);
+}
+
+.root-node{
+background:linear-gradient(135deg,#16a34a,#22c55e);
+}
+
+.benefit{
+background:linear-gradient(135deg,#2563eb,#60a5fa);
+}
+
+.finance{
+background:linear-gradient(135deg,#f59e0b,#fbbf24);
+}
+
+.strategy{
+background:linear-gradient(135deg,#8b5cf6,#a78bfa);
+}
+
+.gov{
+background:linear-gradient(135deg,#ef4444,#f87171);
+}
+
+.tree-children{
+margin-top:12px;
+padding-left:20px;
+border-left:4px solid #cbd5e1;
+}
+
+.tree-leaf{
+background:white;
+padding:12px;
+margin:10px 0;
+border-radius:12px;
+box-shadow:0 4px 12px rgba(0,0,0,.08);
+transition:.2s;
+}
+
+.tree-leaf:hover{
+transform:translateX(6px);
+background:#eff6ff;
+}
+
+</style></head>
 
 <body>
 
@@ -334,10 +416,6 @@ font-size:28px;
 <!-- ================= INTRO ================= -->
 <section id="intro" class="page active">
 
-<div class="hero-comic">
-<img src="images/comic-all.png" alt="市民政策AIプラットフォーム">
-</div>
-
 <div class="placeholder-card">
 
 <h2>このプラットフォームについて</h2>
@@ -348,51 +426,87 @@ AIと共に整理・構造化しながら政策形成につなげる対話型プ
 </p>
 
 <p>
-従来の行政意見提出には、「表現の難しさ」「他者の意見の不透明性」「反映プロセスの不明確さ」といった課題がありました。
-本システムはそれらを解消し、透明で継続的な市民参加を実現します。
+従来の行政意見提出には、
+「表現の難しさ」
+「他者の意見の不透明性」
+「反映プロセスの不明確さ」
+といった課題がありました。
 </p>
+
+</div>
+
+<div class="intro-layout">
+
+<div class="intro-left">
+
+<div class="placeholder-card">
 
 <h3>特徴</h3>
 
 <ul>
-<li>思いついたままの投稿が可能（専門知識不要）</li>
+<li>思いついたままの投稿が可能</li>
 <li>AIが自動で要約・論点整理・構造化</li>
 <li>ロジックツリーによる政策構造の可視化</li>
 <li>投稿・統合プロセスの透明化</li>
 <li>市民参加型の継続的な改善サイクル</li>
+
 </ul>
 
-<h3>投稿の流れ</h3>
+</div>
 
-<ol>
-<li>市民が自由に意見を投稿</li>
-<li>AIが論点整理・要約・構造化</li>
-<li>ロジックツリーへ分類・統合</li>
-<li>政策化プロセスとして蓄積・可視化</li>
-</ol>
+</div>
+
+<div class="intro-right">
+
+<img src="images/comic-all.png" alt="市民政策AIプラットフォーム">
+
+</div>
+
+</div>
+
+<div class="intro-grid">
+
+<div class="placeholder-card">
+
+<h3>このような課題を感じていませんか？</h3>
+
+<ul>
+<li>考えはあるが文章化が難しい</li>
+<li>否定されるのが不安</li>
+<li>他の市民の意見が見えない</li>
+<li>反映されないなら意味がないと思う</li>
+</ul>
 
 </div>
 
 <div class="placeholder-card">
 
-<h2>このような課題を感じていませんか？</h2>
+<h3>投稿の流れ</h3>
 
-<ul>
-<li>考えはあるが、文章化や整理が難しく投稿に至らない</li>
-<li>意見が否定されたり誤解されることへの不安がある</li>
-<li>他の市民の意見や全体像が見えず、参加の意義が感じにくい</li>
-<li>どうせ反映されないなら投稿しても意味がないと感じる</li>
-</ul>
+<ol>
+<li>市民が自由投稿</li>
+<li>AIが整理・構造化</li>
+<li>ロジックツリーへ統合</li>
+<li>政策形成へ反映</li>
+</ol>
+
+</div>
+
+</div>
+
+<div class="placeholder-card">
+
+<h3>この仕組みの目的</h3>
 
 <p>
-本プラットフォームは、これらの課題を前提に設計されています。
-個人の意見を評価する場ではなく、<b>意見を構造化し社会全体の知として統合する仕組み</b>です。
+どのような意見も素材として扱われ、
+AIが中立的に整理し、
+社会全体の知として統合します。
 </p>
 
-<p>
-そのため、どのような意見でも「素材」として扱われ、
-AIが中立的に整理し、政策構造へと変換します。
-</p>
+<button onclick="showPage('tree')">
+🌳 他の市民の意見を見る
+</button>
 
 </div>
 
@@ -407,46 +521,97 @@ AIが中立的に整理し、政策構造へと変換します。
 市民のウェルビーイングと知財の集積による投資型都市経営の実現
 </div>
 
-<div class="tree-block">
+<div class="logic-tree">
 
-<h2>1. 芦屋市の価値向上（ブランド・移住促進）</h2>
-<ul>
-<li>次世代教育ブランドの確立</li>
-<li>世界一の絵本図書館、EdTech企業連携</li>
-<li>街の魅力化・景観美化</li>
-<li>公園芝生化、市民協働</li>
-</ul>
+<div class="tree-root">
+🏛 市民政策ロジックツリー
+</div>
 
-<h2>2. 市民へのベネフィット（ウェルビーイング）</h2>
-<ul>
-<li>多世代交流・サードプレイス</li>
-<li>カフェ・コミュニティ運営</li>
-<li>リスキリング・共同研究</li>
-</ul>
+<div class="tree-level">
 
-<h2>3. 財政的持続可能性</h2>
-<ul>
-<li>施設収益化</li>
-<li>チャレンジショップ</li>
-<li>ふるさと納税・寄付</li>
-</ul>
+<div class="tree-parent">
 
-<h2>4. 施設の戦略性</h2>
-<ul>
-<li>知のゲートウェイ化</li>
-<li>起業支援・ピッチ</li>
-<li>デジタルライブラリ</li>
-</ul>
+<div class="tree-node root-node">
+① 芦屋市の価値向上
+</div>
 
-<h2>5. 都市の強靭性とガバナンス</h2>
-<ul>
-<li>災害対応拠点</li>
-<li>DAO型住民自治</li>
-<li>トークン設計</li>
-</ul>
+<div class="tree-children">
+<div class="tree-leaf">次世代教育ブランド</div>
+<div class="tree-leaf">世界一の絵本図書館</div>
+<div class="tree-leaf">EdTech企業連携</div>
+<div class="tree-leaf">景観美化</div>
+<div class="tree-leaf">公園芝生化</div>
+</div>
 
 </div>
 
+<div class="tree-parent">
+
+<div class="tree-node benefit">
+② 市民ベネフィット
+</div>
+
+<div class="tree-children">
+<div class="tree-leaf">多世代交流</div>
+<div class="tree-leaf">サードプレイス</div>
+<div class="tree-leaf">カフェ運営</div>
+<div class="tree-leaf">共同研究</div>
+<div class="tree-leaf">リスキリング</div>
+</div>
+
+</div>
+
+<div class="tree-parent">
+
+<div class="tree-node finance">
+③ 財政的持続可能性
+</div>
+
+<div class="tree-children">
+<div class="tree-leaf">施設収益化</div>
+<div class="tree-leaf">SHARE LOUNGE</div>
+<div class="tree-leaf">チャレンジショップ</div>
+<div class="tree-leaf">寄付</div>
+<div class="tree-leaf">ふるさと納税</div>
+</div>
+
+</div>
+
+<div class="tree-parent">
+
+<div class="tree-node strategy">
+④ 施設の戦略性
+</div>
+
+<div class="tree-children">
+<div class="tree-leaf">知のゲートウェイ</div>
+<div class="tree-leaf">デジタルライブラリ</div>
+<div class="tree-leaf">ITサポート</div>
+<div class="tree-leaf">起業支援</div>
+<div class="tree-leaf">ピッチアリーナ</div>
+</div>
+
+</div>
+
+<div class="tree-parent">
+
+<div class="tree-node gov">
+⑤ 都市の強靭性
+</div>
+
+<div class="tree-children">
+<div class="tree-leaf">デュアルユース</div>
+<div class="tree-leaf">都市指令室</div>
+<div class="tree-leaf">災害シミュレーション</div>
+<div class="tree-leaf">DAO自治</div>
+<div class="tree-leaf">トークン設計</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
 </section>
 
 <!-- ================= AI ================= -->
