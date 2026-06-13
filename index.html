@@ -12,90 +12,153 @@
 <body>
 
 <header class="topbar">
-  <div class="logo">🏛 市民政策AIプラットフォーム</div>
 
-  <nav>
-    <button onclick="showPage('intro')">ホーム</button>
-    <button onclick="showPage('assistant')">AIアシスタント</button>
-    <button onclick="showPage('analysis')">分析</button>
-    <button onclick="showPage('vision')">ビジョン</button>
-  </nav>
+<div class="logo">
+🏛 市民政策AIプラットフォーム
+</div>
+
+<nav>
+<button onclick="showPage('intro')">ホーム</button>
+<button onclick="showPage('tree')">ロジックツリー</button>
+<button onclick="showPage('assistant')">AIアシスタント</button>
+<button onclick="showPage('analysis')">分析・統合</button>
+<button onclick="showPage('vision')">ビジョン変遷</button>
+</nav>
+
 </header>
 
 <main>
 
-<!-- INTRO -->
+<!-- ========================= INTRO ========================= -->
 <section id="intro" class="page active">
-  <h1>市民とAIの共創プラットフォーム</h1>
-  <div class="card">
-    思いついたアイデアを入力してください。AIが整理し政策化します。
-  </div>
+
+<div class="hero-comic">
+<img src="images/comic-all.png" alt="市民政策AIプラットフォーム">
+</div>
+
+<div class="welcome-card">
+
+<h1>市民とAIが共創する政策形成</h1>
+
+<p>あなたのアイデアはAIで整理され、政策に反映されます。</p>
+
+<div class="cta-buttons">
+<button onclick="showPage('tree')">🌳 ロジックツリー</button>
+<button onclick="showPage('assistant')">🤖 AIアシスタント</button>
+<button onclick="showPage('analysis')">📊 分析</button>
+</div>
+
+</div>
+
 </section>
 
-<!-- AI ASSISTANT -->
+<!-- ========================= TREE ========================= -->
+<section id="tree" class="page">
+
+<h1>🌳 ロジックツリー</h1>
+
+<div class="tree-root" id="treeRoot">
+芦屋市の未来
+</div>
+
+<div class="tree-row">
+<div class="tree-node">価値向上</div>
+<div class="tree-node">市民ベネフィット</div>
+<div class="tree-node">交流</div>
+<div class="tree-node">イノベーション</div>
+<div class="tree-node">運営効率</div>
+</div>
+
+<div class="placeholder-card">
+市民投稿により自動更新されます
+</div>
+
+</section>
+
+<!-- ========================= ASSISTANT ========================= -->
 <section id="assistant" class="page">
 
-  <h1>🤖 AIアシスタント</h1>
+<h1>🤖 AIアシスタント</h1>
 
-  <div class="grid">
+<div class="assistant-layout">
 
-    <div class="card">
-      <h2>入力</h2>
+<div class="assistant-card">
 
-      <textarea id="ideaInput" placeholder="例：駅前に図書館を作る"></textarea>
+<h2>入力</h2>
 
-      <button onclick="submitIdea()">投稿（AI要約＋送信）</button>
-    </div>
+<textarea id="ideaInput" placeholder="例：駅前に図書館を作る"></textarea>
 
-    <div class="card">
-      <h2>AI結果</h2>
-      <div id="aiResult">ここにAI要約が表示されます</div>
-    </div>
+<button class="primary-btn" onclick="submitIdea()">
+AI分析・投稿
+</button>
 
-  </div>
+</div>
+
+<div class="assistant-card">
+
+<h2>AI結果</h2>
+
+<div class="result-box" id="aiResult">
+ここにAI要約が表示されます
+</div>
+
+</div>
+
+</div>
 
 </section>
 
-<!-- ANALYSIS -->
+<!-- ========================= ANALYSIS ========================= -->
 <section id="analysis" class="page">
 
-  <h1>📊 投稿ダッシュボード</h1>
+<h1>📊 分析センター</h1>
 
-  <div class="card">
-    <h2>投稿一覧</h2>
-    <div id="data"></div>
-  </div>
+<div class="metric-grid">
+<div class="metric-card">価値向上</div>
+<div class="metric-card">幸福</div>
+<div class="metric-card">交流</div>
+<div class="metric-card">イノベーション</div>
+<div class="metric-card">効率</div>
+</div>
+
+<div class="placeholder-card">
+<h2>市民投稿一覧</h2>
+<div id="data"></div>
+</div>
 
 </section>
 
-<!-- VISION -->
+<!-- ========================= VISION ========================= -->
 <section id="vision" class="page">
 
-  <h1>📈 ビジョン</h1>
+<h1>📈 ビジョン変遷</h1>
 
-  <div class="card" id="tree">
-    投稿データに応じて自動更新されます
-  </div>
+<div class="timeline">
+<div class="timeline-item">2026 価値向上</div>
+<div class="timeline-item">2027 交流</div>
+<div class="timeline-item">2028 イノベーション</div>
+</div>
 
 </section>
 
 </main>
 
-<script>
+<!-- ========================= SCRIPT ========================= -->
 
+<script>
 function showPage(id){
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 }
 
-/* ===== Google Form ===== */
+/* ========================= Google Form ========================= */
 const GOOGLE_FORM_URL = "https://docs.google.com/forms/d/e/XXXXXXXX/formResponse";
 
 const ENTRY_TITLE = "entry.111111";
 const ENTRY_CATEGORY = "entry.222222";
 const ENTRY_CONTENT = "entry.333333";
 
-/* ===== カテゴリ分類 ===== */
+/* ========================= カテゴリ自動分類 ========================= */
 function classify(text){
 
   if(text.includes("駅") || text.includes("交通")) return "インフラ";
@@ -106,17 +169,16 @@ function classify(text){
   return "一般";
 }
 
-/* ===== AI投稿 ===== */
+/* ========================= AI要約＋投稿 ========================= */
 async function submitIdea(){
 
   const text = document.getElementById("ideaInput").value;
-
   if(!text){
     alert("入力してください");
     return;
   }
 
-  const summary = text.length > 80 ? text.slice(0,80)+"..." : text;
+  const summary = text.length > 80 ? text.slice(0,80) + "..." : text;
 
   document.getElementById("aiResult").innerText =
     "AI要約:\n" + summary;
@@ -135,58 +197,70 @@ async function submitIdea(){
   document.getElementById("ideaInput").value = "";
 }
 
-/* ===== データ取得 ===== */
-const API_URL = "https://script.google.com/macros/s/AKfycbwcN5Wbzbp8nZSV2GMvbMpXCWe9k8C5ToBN_P57kC1Dab4VZ-ib7Uim_SPct9XBzrEujg/exec";
+/* ========================= 重複排除 ========================= */
+function deduplicate(data){
 
-function dedup(data){
   const seen = new Set();
-  return data.filter(d=>{
-    const k = (d["タイトル"]||"") + (d["内容"]||"");
-    if(seen.has(k)) return false;
-    seen.add(k);
+
+  return data.filter(d => {
+
+    const key = (d["タイトル"] || "") + (d["内容"] || "");
+
+    if(seen.has(key)) return false;
+
+    seen.add(key);
     return true;
   });
 }
+
+/* ========================= ロジックツリー更新 ========================= */
+function updateTree(data){
+
+  const tree = document.getElementById("treeRoot");
+
+  const map = {};
+
+  data.forEach(d => {
+    const c = d["カテゴリ"] || "一般";
+    map[c] = (map[c] || 0) + 1;
+  });
+
+  tree.innerHTML =
+    "芦屋市の未来（自動生成）<br><br>" +
+    Object.entries(map)
+      .map(([k,v]) => `${k}：${v}`)
+      .join("<br>");
+}
+
+/* ========================= データ取得 ========================= */
+const API_URL = "https://script.google.com/macros/s/AKfycbwcN5Wbzbp8nZSV2GMvbMpXCWe9k8C5ToBN_P57kC1Dab4VZ-ib7Uim_SPct9XBzrEujg/exec";
 
 async function loadData(){
 
   const res = await fetch(API_URL);
   let data = await res.json();
 
-  data = dedup(data);
+  data = deduplicate(data);
 
-  document.getElementById("data").innerHTML = data.map(d=>`
-
+  document.getElementById("data").innerHTML = data.map(d => `
     <div class="card">
 
-      <div class="title">${d["タイトル"] || d["  タイトル  "]}</div>
+      <div class="title">
+        ${d["タイトル"] || d["  タイトル  "]}
+      </div>
 
-      <div class="cat">📂 ${d["カテゴリ"] || d["  カテゴリ  "]}</div>
+      <div class="cat">
+        📂 ${d["カテゴリ"] || d["  カテゴリ  "]}
+      </div>
 
-      <div class="body">${d["内容"] || d["  内容  "]}</div>
+      <div class="body">
+        ${d["内容"] || d["  内容  "]}
+      </div>
 
     </div>
-
   `).join("");
 
   updateTree(data);
-}
-
-/* ===== ロジックツリー ===== */
-function updateTree(data){
-
-  const tree = document.getElementById("tree");
-
-  const map = {};
-
-  data.forEach(d=>{
-    const c = d["カテゴリ"] || "一般";
-    map[c] = (map[c]||0)+1;
-  });
-
-  tree.innerHTML =
-    "投稿カテゴリ分布<br><br>" +
-    Object.entries(map).map(([k,v])=>`${k}：${v}`).join("<br>");
 }
 
 loadData();
