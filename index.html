@@ -29,33 +29,33 @@
 
 <main>
 
-<!-- ========================= INTRO ========================= -->
+<!-- ========================= INTRO（昨日デザイン復活） ========================= -->
 <section id="intro" class="page active">
 
 <div class="hero-comic">
-<img src="images/comic-all.png" alt="市民政策AIプラットフォーム">
+<img src="images/comic-all.png" alt="">
 </div>
 
 <div class="welcome-card">
 
 <h1>市民とAIが共創する政策形成</h1>
 
-<p>あなたのアイデアはAIで整理され、政策に反映されます。</p>
+<p>あなたのアイデアはAIで整理され政策化されます。</p>
 
 <div class="cta-buttons">
-<button onclick="showPage('tree')">🌳 ロジックツリー</button>
-<button onclick="showPage('assistant')">🤖 AIアシスタント</button>
-<button onclick="showPage('analysis')">📊 分析</button>
+<button onclick="showPage('tree')">ロジックツリー</button>
+<button onclick="showPage('assistant')">AIアシスタント</button>
+<button onclick="showPage('analysis')">分析</button>
 </div>
 
 </div>
 
 </section>
 
-<!-- ========================= TREE ========================= -->
+<!-- ========================= TREE（昨日のUI復活） ========================= -->
 <section id="tree" class="page">
 
-<h1>🌳 ロジックツリー</h1>
+<h1>ロジックツリー</h1>
 
 <div class="tree-root" id="treeRoot">
 芦屋市の未来
@@ -70,15 +70,15 @@
 </div>
 
 <div class="placeholder-card">
-市民投稿により自動更新されます
+市民投稿によって自動成長
 </div>
 
 </section>
 
-<!-- ========================= ASSISTANT ========================= -->
+<!-- ========================= ASSISTANT（機能統合） ========================= -->
 <section id="assistant" class="page">
 
-<h1>🤖 AIアシスタント</h1>
+<h1>AIアシスタント</h1>
 
 <div class="assistant-layout">
 
@@ -86,7 +86,7 @@
 
 <h2>入力</h2>
 
-<textarea id="ideaInput" placeholder="例：駅前に図書館を作る"></textarea>
+<textarea id="ideaInput"></textarea>
 
 <button class="primary-btn" onclick="submitIdea()">
 AI分析・投稿
@@ -108,17 +108,19 @@ AI分析・投稿
 
 </section>
 
-<!-- ========================= ANALYSIS ========================= -->
+<!-- ========================= ANALYSIS（昨日UI＋機能） ========================= -->
 <section id="analysis" class="page">
 
-<h1>📊 分析センター</h1>
+<h1>分析センター</h1>
 
 <div class="metric-grid">
+
 <div class="metric-card">価値向上</div>
 <div class="metric-card">幸福</div>
 <div class="metric-card">交流</div>
 <div class="metric-card">イノベーション</div>
 <div class="metric-card">効率</div>
+
 </div>
 
 <div class="placeholder-card">
@@ -128,22 +130,22 @@ AI分析・投稿
 
 </section>
 
-<!-- ========================= VISION ========================= -->
+<!-- ========================= VISION（昨日UI復活） ========================= -->
 <section id="vision" class="page">
 
-<h1>📈 ビジョン変遷</h1>
+<h1>ビジョン変遷</h1>
 
 <div class="timeline">
+
 <div class="timeline-item">2026 価値向上</div>
 <div class="timeline-item">2027 交流</div>
 <div class="timeline-item">2028 イノベーション</div>
+
 </div>
 
 </section>
 
 </main>
-
-<!-- ========================= SCRIPT ========================= -->
 
 <script>
 function showPage(id){
@@ -151,88 +153,77 @@ function showPage(id){
   document.getElementById(id).classList.add("active");
 }
 
-/* ========================= Google Form ========================= */
-const GOOGLE_FORM_URL = "https://docs.google.com/forms/d/e/XXXXXXXX/formResponse";
+/* ===== Google Form ===== */
+const GOOGLE_FORM_URL = "https://script.google.com/macros/s/AKfycbwcN5Wbzbp8nZSV2GMvbMpXCWe9k8C5ToBN_P57kC1Dab4VZ-ib7Uim_SPct9XBzrEujg/exec";
 
 const ENTRY_TITLE = "entry.111111";
 const ENTRY_CATEGORY = "entry.222222";
 const ENTRY_CONTENT = "entry.333333";
 
-/* ========================= カテゴリ自動分類 ========================= */
+/* ===== カテゴリ分類 ===== */
 function classify(text){
 
   if(text.includes("駅") || text.includes("交通")) return "インフラ";
-  if(text.includes("教育") || text.includes("学校")) return "教育";
-  if(text.includes("公園") || text.includes("緑")) return "環境";
+  if(text.includes("教育")) return "教育";
+  if(text.includes("公園")) return "環境";
   if(text.includes("AI") || text.includes("デジタル")) return "DX";
 
   return "一般";
 }
 
-/* ========================= AI要約＋投稿 ========================= */
+/* ===== submit（AI＋送信） ===== */
 async function submitIdea(){
 
   const text = document.getElementById("ideaInput").value;
-  if(!text){
-    alert("入力してください");
-    return;
-  }
+  if(!text) return;
 
-  const summary = text.length > 80 ? text.slice(0,80) + "..." : text;
+  const summary = text.length > 80 ? text.slice(0,80)+"..." : text;
 
-  document.getElementById("aiResult").innerText =
-    "AI要約:\n" + summary;
+  document.getElementById("aiResult").innerText = summary;
 
   const formData = new FormData();
   formData.append(ENTRY_TITLE, summary);
   formData.append(ENTRY_CATEGORY, classify(text));
   formData.append(ENTRY_CONTENT, text);
 
-  fetch(GOOGLE_FORM_URL, {
-    method: "POST",
-    mode: "no-cors",
-    body: formData
+  fetch(GOOGLE_FORM_URL,{
+    method:"POST",
+    mode:"no-cors",
+    body:formData
   });
 
   document.getElementById("ideaInput").value = "";
 }
 
-/* ========================= 重複排除 ========================= */
+/* ===== 重複排除 ===== */
 function deduplicate(data){
 
   const seen = new Set();
 
-  return data.filter(d => {
-
-    const key = (d["タイトル"] || "") + (d["内容"] || "");
-
+  return data.filter(d=>{
+    const key = (d["タイトル"]||"") + (d["内容"]||"");
     if(seen.has(key)) return false;
-
     seen.add(key);
     return true;
   });
 }
 
-/* ========================= ロジックツリー更新 ========================= */
+/* ===== ツリー更新 ===== */
 function updateTree(data){
-
-  const tree = document.getElementById("treeRoot");
 
   const map = {};
 
-  data.forEach(d => {
+  data.forEach(d=>{
     const c = d["カテゴリ"] || "一般";
-    map[c] = (map[c] || 0) + 1;
+    map[c] = (map[c]||0)+1;
   });
 
-  tree.innerHTML =
-    "芦屋市の未来（自動生成）<br><br>" +
-    Object.entries(map)
-      .map(([k,v]) => `${k}：${v}`)
-      .join("<br>");
+  document.getElementById("treeRoot").innerHTML =
+    "芦屋市の未来<br><br>" +
+    Object.entries(map).map(([k,v])=>`${k}：${v}`).join("<br>");
 }
 
-/* ========================= データ取得 ========================= */
+/* ===== データ取得 ===== */
 const API_URL = "https://script.google.com/macros/s/AKfycbwcN5Wbzbp8nZSV2GMvbMpXCWe9k8C5ToBN_P57kC1Dab4VZ-ib7Uim_SPct9XBzrEujg/exec";
 
 async function loadData(){
@@ -242,21 +233,11 @@ async function loadData(){
 
   data = deduplicate(data);
 
-  document.getElementById("data").innerHTML = data.map(d => `
+  document.getElementById("data").innerHTML = data.map(d=>`
     <div class="card">
-
-      <div class="title">
-        ${d["タイトル"] || d["  タイトル  "]}
-      </div>
-
-      <div class="cat">
-        📂 ${d["カテゴリ"] || d["  カテゴリ  "]}
-      </div>
-
-      <div class="body">
-        ${d["内容"] || d["  内容  "]}
-      </div>
-
+      <div class="title">${d["タイトル"]}</div>
+      <div class="cat">📂 ${d["カテゴリ"]}</div>
+      <div class="body">${d["内容"]}</div>
     </div>
   `).join("");
 
