@@ -3,19 +3,33 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>市民政策AIプラットフォーム</title>
 
 <link rel="stylesheet" href="style.css">
+
+<style>
+.page{display:none;padding:20px;}
+.page.active{display:block;}
+
+.assistant-layout{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.assistant-card,.placeholder-card{
+background:#fff;padding:16px;border-radius:12px;
+box-shadow:0 2px 10px rgba(0,0,0,0.08);
+}
+
+textarea{width:100%;height:140px;}
+
+nav button{margin:4px;padding:8px 12px;cursor:pointer;}
+
+.tree-block h2{margin-top:20px;}
+.tree-block ul{background:#fff;padding:12px;border-radius:10px;}
+</style>
 </head>
 
 <body>
 
 <header class="topbar">
-
-<div class="logo">
-🏛 市民政策AIプラットフォーム
-</div>
+<div class="logo">🏛 市民政策AIプラットフォーム</div>
 
 <nav>
 <button onclick="showPage('intro')">ホーム</button>
@@ -24,123 +38,124 @@
 <button onclick="showPage('analysis')">分析・統合</button>
 <button onclick="showPage('vision')">ビジョン変遷</button>
 </nav>
-
 </header>
 
 <main>
 
-<!-- ========================= INTRO（昨日デザイン復活） ========================= -->
+<!-- ================= INTRO ================= -->
 <section id="intro" class="page active">
 
-<div class="hero-comic">
-<img src="images/comic-all.png" alt="">
-</div>
+<div class="placeholder-card">
+<h2>このプラットフォームについて</h2>
 
-<div class="welcome-card">
+<p>市民が駅前公共施設のあり方について自由に意見を書き込める対話プラットフォームです。</p>
 
-<h1>市民とAIが共創する政策形成</h1>
+<p>従来の行政意見提出の課題を解決します。</p>
 
-<p>あなたのアイデアはAIで整理され政策化されます。</p>
-
-<div class="cta-buttons">
-<button onclick="showPage('tree')">ロジックツリー</button>
-<button onclick="showPage('assistant')">AIアシスタント</button>
-<button onclick="showPage('analysis')">分析</button>
-</div>
+<ul>
+<li>思いつき投稿OK</li>
+<li>AIが自動要約・構造化</li>
+<li>ロジックツリー可視化</li>
+<li>統合プロセス公開</li>
+</ul>
 
 </div>
 
 </section>
 
-<!-- ========================= TREE（昨日のUI復活） ========================= -->
+<!-- ================= TREE（完全版） ================= -->
 <section id="tree" class="page">
 
-<h1>ロジックツリー</h1>
-
-<div class="tree-root" id="treeRoot">
-芦屋市の未来
-</div>
-
-<div class="tree-row">
-<div class="tree-node">価値向上</div>
-<div class="tree-node">市民ベネフィット</div>
-<div class="tree-node">交流</div>
-<div class="tree-node">イノベーション</div>
-<div class="tree-node">運営効率</div>
-</div>
+<h1>🌳 市民政策ロジックツリー（Vision）</h1>
 
 <div class="placeholder-card">
-市民投稿によって自動成長
+コストセンターからプロフィットセンターへ：<br>
+市民のウェルビーイングと知財の集積による投資型都市経営の実現
+</div>
+
+<div class="tree-block">
+
+<h2>1. 芦屋市の価値向上（ブランド・移住促進）</h2>
+<ul>
+<li>次世代教育ブランドの確立</li>
+<li>世界一の絵本図書館、EdTech企業連携</li>
+<li>街の魅力化・景観美化</li>
+<li>公園芝生化、市民協働</li>
+</ul>
+
+<h2>2. 市民へのベネフィット（ウェルビーイング）</h2>
+<ul>
+<li>多世代交流・サードプレイス</li>
+<li>カフェ・コミュニティ運営</li>
+<li>リスキリング・共同研究</li>
+</ul>
+
+<h2>3. 財政的持続可能性</h2>
+<ul>
+<li>施設収益化</li>
+<li>チャレンジショップ</li>
+<li>ふるさと納税・寄付</li>
+</ul>
+
+<h2>4. 施設の戦略性</h2>
+<ul>
+<li>知のゲートウェイ化</li>
+<li>起業支援・ピッチ</li>
+<li>デジタルライブラリ</li>
+</ul>
+
+<h2>5. 都市の強靭性とガバナンス</h2>
+<ul>
+<li>災害対応拠点</li>
+<li>DAO型住民自治</li>
+<li>トークン設計</li>
+</ul>
+
 </div>
 
 </section>
 
-<!-- ========================= ASSISTANT（機能統合） ========================= -->
+<!-- ================= AI ================= -->
 <section id="assistant" class="page">
 
-<h1>AIアシスタント</h1>
+<h1>🤖 AI壁打ち</h1>
 
 <div class="assistant-layout">
 
 <div class="assistant-card">
-
-<h2>入力</h2>
-
-<textarea id="ideaInput"></textarea>
-
-<button class="primary-btn" onclick="submitIdea()">
-AI分析・投稿
-</button>
-
+<h3>入力</h3>
+<textarea id="input"></textarea>
+<button onclick="aiStep1()">AI壁打ち</button>
 </div>
 
-<div class="assistant-card">
-
-<h2>AI結果</h2>
-
-<div class="result-box" id="aiResult">
-ここにAI要約が表示されます
-</div>
-
+<div class="assistant-card" id="aiBox">
+結果がここに表示されます
 </div>
 
 </div>
 
 </section>
 
-<!-- ========================= ANALYSIS（昨日UI＋機能） ========================= -->
+<!-- ================= ANALYSIS ================= -->
 <section id="analysis" class="page">
 
-<h1>分析センター</h1>
-
-<div class="metric-grid">
-
-<div class="metric-card">価値向上</div>
-<div class="metric-card">幸福</div>
-<div class="metric-card">交流</div>
-<div class="metric-card">イノベーション</div>
-<div class="metric-card">効率</div>
-
-</div>
+<h1>📊 分析センター</h1>
 
 <div class="placeholder-card">
-<h2>市民投稿一覧</h2>
+<h3>市民投稿一覧（PR / 統合対象）</h3>
 <div id="data"></div>
 </div>
 
 </section>
 
-<!-- ========================= VISION（昨日UI復活） ========================= -->
+<!-- ================= VISION ================= -->
 <section id="vision" class="page">
 
-<h1>ビジョン変遷</h1>
+<h1>📈 ビジョン変遷</h1>
 
-<div class="timeline">
-
-<div class="timeline-item">2026 価値向上</div>
-<div class="timeline-item">2027 交流</div>
-<div class="timeline-item">2028 イノベーション</div>
-
+<div class="placeholder-card">
+初期：
+芦屋の価値向上 / 市民ウェルビーイング / 交流 / コスト最適化
 </div>
 
 </section>
@@ -148,103 +163,78 @@ AI分析・投稿
 </main>
 
 <script>
+
+/* ================= NAV ================= */
 function showPage(id){
-  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
+document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+document.getElementById(id).classList.add('active');
 }
 
-/* ===== Google Form ===== */
-const GOOGLE_FORM_URL = "https://script.google.com/macros/s/AKfycbwcN5Wbzbp8nZSV2GMvbMpXCWe9k8C5ToBN_P57kC1Dab4VZ-ib7Uim_SPct9XBzrEujg/exec";
+/* ================= FORM ================= */
+const FORM_URL="https://docs.google.com/forms/d/e/XXXXXXXX/formResponse";
+const A="entry.1",B="entry.2",C="entry.3";
 
-const ENTRY_TITLE = "entry.111111";
-const ENTRY_CATEGORY = "entry.222222";
-const ENTRY_CONTENT = "entry.333333";
+/* ================= AI ================= */
+function aiStep1(){
 
-/* ===== カテゴリ分類 ===== */
-function classify(text){
+const text=document.getElementById("input").value;
 
-  if(text.includes("駅") || text.includes("交通")) return "インフラ";
-  if(text.includes("教育")) return "教育";
-  if(text.includes("公園")) return "環境";
-  if(text.includes("AI") || text.includes("デジタル")) return "DX";
+const result=
+"AI論点整理:\n・構造化\n・政策化視点\n・利害整理";
 
-  return "一般";
+document.getElementById("aiBox").innerHTML=`
+<p>${result}</p>
+<p>200字要約して投稿しますか？</p>
+<button onclick="aiSubmit('${text}')">はい</button>
+<button onclick="edit()">いいえ</button>
+`;
 }
 
-/* ===== submit（AI＋送信） ===== */
-async function submitIdea(){
+function aiSubmit(text){
 
-  const text = document.getElementById("ideaInput").value;
-  if(!text) return;
+const title=text.slice(0,20);
+const summary=text.slice(0,200);
 
-  const summary = text.length > 80 ? text.slice(0,80)+"..." : text;
+document.getElementById("aiBox").innerHTML=`
+<h3>${title}</h3>
+<p>${summary}</p>
+<p>投稿完了（ツリー＋PR反映）</p>
+`;
 
-  document.getElementById("aiResult").innerText = summary;
+const fd=new FormData();
+fd.append(A,title);
+fd.append(B,"AI分類");
+fd.append(C,summary);
 
-  const formData = new FormData();
-  formData.append(ENTRY_TITLE, summary);
-  formData.append(ENTRY_CATEGORY, classify(text));
-  formData.append(ENTRY_CONTENT, text);
-
-  fetch(GOOGLE_FORM_URL,{
-    method:"POST",
-    mode:"no-cors",
-    body:formData
-  });
-
-  document.getElementById("ideaInput").value = "";
+fetch(FORM_URL,{
+method:"POST",
+mode:"no-cors",
+body:fd
+});
 }
 
-/* ===== 重複排除 ===== */
-function deduplicate(data){
-
-  const seen = new Set();
-
-  return data.filter(d=>{
-    const key = (d["タイトル"]||"") + (d["内容"]||"");
-    if(seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
+function edit(){
+document.getElementById("aiBox").innerHTML="再入力してください";
 }
 
-/* ===== ツリー更新 ===== */
-function updateTree(data){
+/* ================= DATA ================= */
+const API="https://script.google.com/macros/s/AKfycbwcN5Wbzbp8nZSV2GMvbMpXCWe9k8C5ToBN_P57kC1Dab4VZ-ib7Uim_SPct9XBzrEujg/exec";
 
-  const map = {};
+async function load(){
+const r=await fetch(API);
+const d=await r.json();
 
-  data.forEach(d=>{
-    const c = d["カテゴリ"] || "一般";
-    map[c] = (map[c]||0)+1;
-  });
-
-  document.getElementById("treeRoot").innerHTML =
-    "芦屋市の未来<br><br>" +
-    Object.entries(map).map(([k,v])=>`${k}：${v}`).join("<br>");
+document.getElementById("data").innerHTML=
+d.map(x=>`
+<div class="placeholder-card">
+<b>${x["タイトル"]||""}</b><br>
+${x["カテゴリ"]||""}<br>
+${x["内容"]||""}
+</div>
+`).join("");
 }
 
-/* ===== データ取得 ===== */
-const API_URL = "https://script.google.com/macros/s/AKfycbwcN5Wbzbp8nZSV2GMvbMpXCWe9k8C5ToBN_P57kC1Dab4VZ-ib7Uim_SPct9XBzrEujg/exec";
-
-async function loadData(){
-
-  const res = await fetch(API_URL);
-  let data = await res.json();
-
-  data = deduplicate(data);
-
-  document.getElementById("data").innerHTML = data.map(d=>`
-    <div class="card">
-      <div class="title">${d["タイトル"]}</div>
-      <div class="cat">📂 ${d["カテゴリ"]}</div>
-      <div class="body">${d["内容"]}</div>
-    </div>
-  `).join("");
-
-  updateTree(data);
-}
-
-loadData();
+load();
 
 </script>
 
