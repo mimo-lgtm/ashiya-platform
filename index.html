@@ -18,13 +18,11 @@
 </div>
 
 <nav>
-
 <button onclick="showPage('intro')">ホーム</button>
 <button onclick="showPage('tree')">ロジックツリー</button>
-<button onclick="showPage('assistant')">AI政策アシスタント</button>
+<button onclick="showPage('assistant')">AIアシスタント</button>
 <button onclick="showPage('analysis')">分析・統合</button>
 <button onclick="showPage('vision')">ビジョン変遷</button>
-
 </nav>
 
 </header>
@@ -47,7 +45,7 @@
 </p>
 
 <p>
-思いついたことをそのまま投稿してください。AIが支援します。
+思いついたことをそのまま入力してください。
 </p>
 
 <div class="cta-buttons">
@@ -68,13 +66,11 @@
 <div class="tree-root">芦屋市の未来</div>
 
 <div class="tree-row">
-
 <div class="tree-node">価値向上</div>
 <div class="tree-node">市民ベネフィット</div>
 <div class="tree-node">交流</div>
 <div class="tree-node">イノベーション</div>
 <div class="tree-node">運営効率</div>
-
 </div>
 
 <div class="placeholder-card">
@@ -94,9 +90,11 @@
 
 <h2>入力</h2>
 
-<textarea id="ideaInput"></textarea>
+<textarea id="ideaInput" placeholder="例：駅前に図書館を作る"></textarea>
 
-<button class="primary-btn">AI分析</button>
+<button class="primary-btn" onclick="submitIdea()">
+AI分析・投稿
+</button>
 
 </div>
 
@@ -104,7 +102,7 @@
 
 <h2>結果</h2>
 
-<div class="result-box">
+<div class="result-box" id="aiResult">
 ここにAI結果が表示されます
 </div>
 
@@ -120,19 +118,16 @@
 <h1>📊 分析センター</h1>
 
 <div class="metric-grid">
-
 <div class="metric-card">価値向上</div>
 <div class="metric-card">幸福</div>
 <div class="metric-card">交流</div>
 <div class="metric-card">イノベーション</div>
 <div class="metric-card">効率</div>
-
 </div>
 
-<!-- ★ここにデータ表示 -->
 <div class="placeholder-card">
-  <h2>市民投稿一覧</h2>
-  <div id="data"></div>
+<h2>市民投稿一覧</h2>
+<div id="data" class="post-list"></div>
 </div>
 
 </section>
@@ -143,11 +138,9 @@
 <h1>📈 ビジョン変遷</h1>
 
 <div class="timeline">
-
-<div class="timeline-item">2026<br>価値向上</div>
-<div class="timeline-item">2027<br>交流</div>
-<div class="timeline-item">2028<br>イノベーション</div>
-
+<div class="timeline-item">2026 価値向上</div>
+<div class="timeline-item">2027 交流</div>
+<div class="timeline-item">2028 イノベーション</div>
 </div>
 
 </section>
@@ -156,18 +149,56 @@
 
 <!-- ========================= SCRIPT ========================= -->
 
-<script src="js/app.js?v=10"></script>
-
 <script>
+function showPage(id){
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+/* ===== Google Form ===== */
+const GOOGLE_FORM_URL = "https://docs.google.com/forms/d/e/XXXXXXXX/formResponse";
+
+const ENTRY_TITLE = "entry.111111";
+const ENTRY_CATEGORY = "entry.222222";
+const ENTRY_CONTENT = "entry.333333";
+
+/* ===== 投稿処理 ===== */
+function submitIdea(){
+
+  const text = document.getElementById("ideaInput").value;
+
+  if(!text){
+    alert("入力してください");
+    return;
+  }
+
+  document.getElementById("aiResult").innerText =
+    "AI分析中...";
+
+  const formData = new FormData();
+  formData.append(ENTRY_TITLE, text.substring(0,30));
+  formData.append(ENTRY_CATEGORY, "価値向上");
+  formData.append(ENTRY_CONTENT, text);
+
+  fetch(GOOGLE_FORM_URL, {
+    method: "POST",
+    mode: "no-cors",
+    body: formData
+  });
+
+  document.getElementById("ideaInput").value = "";
+  alert("投稿しました");
+}
+
+/* ===== データ取得 ===== */
 const API_URL = "https://script.google.com/macros/s/AKfycbwcN5Wbzbp8nZSV2GMvbMpXCWe9k8C5ToBN_P57kC1Dab4VZ-ib7Uim_SPct9XBzrEujg/exec";
 
 async function loadData(){
+
   const res = await fetch(API_URL);
   const data = await res.json();
 
-  const container = document.getElementById("data");
-
-  container.innerHTML = data.map(d => `
+  document.getElementById("data").innerHTML = data.map(d => `
     <div style="
       background:white;
       margin:12px 0;
@@ -176,15 +207,15 @@ async function loadData(){
       box-shadow:0 4px 12px rgba(0,0,0,0.08);
     ">
       <div style="font-weight:bold;font-size:18px;">
-        ${d["  タイトル  "] || d["タイトル"]}
+        ${d["タイトル"] || d["  タイトル  "]}
       </div>
 
       <div style="color:#666;margin-top:6px;">
-        📂 ${d["  カテゴリ  "] || d["カテゴリ"]}
+        📂 ${d["カテゴリ"] || d["  カテゴリ  "]}
       </div>
 
       <div style="margin-top:8px;line-height:1.6;">
-        ${d["  内容  "] || d["内容"]}
+        ${d["内容"] || d["  内容  "]}
       </div>
     </div>
   `).join("");
