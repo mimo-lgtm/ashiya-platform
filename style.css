@@ -318,3 +318,47 @@ color:#1e3a8a;
 padding-left:20px;
 line-height:1.8;
 }
+
+.intro-feature{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:30px;
+align-items:center;
+margin:30px 0;
+}
+
+.feature-left{
+background:white;
+padding:25px;
+border-radius:20px;
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+.feature-right img{
+width:65%;
+display:block;
+margin-left:auto;
+border-radius:20px;
+box-shadow:0 10px 30px rgba(0,0,0,.15);
+}
+
+.intro-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:25px;
+margin-bottom:25px;
+}
+
+.analysis-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:25px;
+margin-bottom:30px;
+}
+
+.analysis-card{
+background:white;
+padding:25px;
+border-radius:20px;
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
