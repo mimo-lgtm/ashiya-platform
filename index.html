@@ -779,6 +779,7 @@ async function aiStep1(){
 
   document.getElementById("aiBox").innerHTML = `
     <h3>AI分析結果</h3>
+
     <p>${text}</p>
 
     <br>
@@ -797,37 +798,35 @@ async function submitIdea(){
     content: document.getElementById("input").value
   };
 
-  const res = await fetch("https://script.google.com/macros/s/AKfycbzopgSpPPozJ3Q6J2fDSrI8zE0iIlgK-VLqTixe4VL9dPtzvpOZ9UOyPjK8yPQSA6n7vg/exec", {
-    method: "POST",
-    body: JSON.stringify(data)
-  });
+  const res = await fetch(
+    "https://script.google.com/macros/s/AKfycbzopgSpPPozJ3Q6J2fDSrI8zE0iIlgK-VLqTixe4VL9dPtzvpOZ9UOyPjK8yPQSA6n7vg/exec",
+    {
+      method: "POST",
+      body: JSON.stringify(data)
+    }
+  );
 
   const json = await res.json();
 
-  document.getElementById("aiBox").innerHTML =
-`
-<div style="
-background:#dcfce7;
-border:2px solid #22c55e;
-padding:20px;
-border-radius:15px;
-">
+  document.getElementById("aiBox").innerHTML = `
+    <div style="
+      background:#dcfce7;
+      border:2px solid #22c55e;
+      padding:20px;
+      border-radius:15px;
+    ">
+      <h2>✅ 投稿完了</h2>
 
-<h2>✅ 投稿完了</h2>
+      <p>ご意見を受け付けました。</p>
 
-<p>
-ご意見を受け付けました。
-</p>
+      <h3>AI要約</h3>
 
-<h3>AI要約</h3>
-
-<p>${json.summary}</p>
-
-</div>
-`;
+      <p>${json.summary || "要約なし"}</p>
+    </div>
+  `;
 
   document.getElementById("aiTitleBox").innerText = data.title;
-  document.getElementById("aiSummaryBox").innerText = json.summary;
+  document.getElementById("aiSummaryBox").innerText = json.summary || "";
 }
 
 /* DATA */
