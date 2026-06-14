@@ -590,8 +590,13 @@ h1,h2,h3{
 <div class="assistant-card">
 <h3>入力</h3>
 <textarea id="input"></textarea>
+
+<input id="title" placeholder="タイトル">
+
+<button onclick="submitIdea()">投稿する</button>
 <button onclick="aiStep1()" class="big-button">AI壁打ち</button>
 </div>
+
 
 <!-- 出力 -->
 <div class="assistant-card" id="aiBox">
@@ -780,6 +785,9 @@ function aiStep1(){
 
 function aiSubmit(text){
 
+document.getElementById("aiTitleBox").innerText = title;
+document.getElementById("aiSummaryBox").innerText = summary;
+
   const title=text.slice(0,20);
   const summary=text.slice(0,200);
 
@@ -794,8 +802,7 @@ function aiSubmit(text){
   fd.append("entry.2","AI分類");
   fd.append("entry.3",summary);
 
-  fetch("https://docs.google.com/forms/d/e/XXXXXXXX/formResponse",{
-    method:"POST",
+      method:"POST",
     mode:"no-cors",
     body:fd
   });
@@ -803,7 +810,7 @@ function aiSubmit(text){
 
 /* DATA */
 async function load(){
-  const r=await fetch("API_URL");
+  const r=await fetch("https://script.google.com/macros/s/exec");
   const d=await r.json();
 
   document.getElementById("data").innerHTML =
@@ -843,6 +850,26 @@ showPage("detail");
 }
 
 }
+function submitIdea(){
+
+  const data = {
+    title: document.getElementById("title").value,
+    category: "市民提案",
+    content: document.getElementById("input").value
+  };
+
+  fetch("https://script.google.com/macros/s/AKfycbzopgSpPPozJ3Q6J2fDSrI8zE0iIlgK-VLqTixe4VL9dPtzvpOZ9UOyPjK8yPQSA6n7vg/exec", {
+    method: "POST",
+    body: JSON.stringify(data)
+  })
+  .then(res => res.json())
+  .then(res => {
+    document.getElementById("aiBox").innerHTML =
+      "<h3>要約</h3><p>" + res.summary + "</p>";
+  });
+
+}
+
 
 </script>
 
