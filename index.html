@@ -717,6 +717,7 @@ AR空間と音声AIを統合し、没入型学習環境を構築
 </section>
 <!-- ================= CURRENT VISION ================= -->
 
+<section id="vision" class="page">
 <div class="vision-card active">
 
 <div class="vision-date">2026年7月</div>
@@ -782,7 +783,7 @@ function aiStep1(){
   `;
 }
 
-function submitIdea(){
+async function submitIdea(){
 
   const data = {
     title: document.getElementById("title").value,
@@ -790,25 +791,25 @@ function submitIdea(){
     content: document.getElementById("input").value
   };
 
-  fetch("https://script.google.com/macros/s/あなたのGASID/exec", {
+  const res = await fetch("https://script.google.com/macros/s/あなたのGASID/exec", {
     method: "POST",
     body: JSON.stringify(data)
-  })
-  .then(res => res.json())
-  .then(res => {
-    document.getElementById("aiBox").innerHTML =
-      "<h3>要約</h3><p>" + res.summary + "</p>";
-const r = await fetch("https://script.google.com/macros/s/AKfycbzopgSpPPozJ3Q6J2fDSrI8zE0iIlgK-VLqTixe4VL9dPtzvpOZ9UOyPjK8yPQSA6n7vg/exec");
-    document.getElementById("aiTitleBox").innerText = data.title;
-    document.getElementById("aiSummaryBox").innerText = res.summary;
   });
 
-}
+  const json = await res.json();
 
+  document.getElementById("aiBox").innerHTML =
+    "<h3>要約</h3><p>" + json.summary + "</p>";
+
+  document.getElementById("aiTitleBox").innerText = data.title;
+  document.getElementById("aiSummaryBox").innerText = json.summary;
+}
 
 /* DATA */
 async function load(){
-  const d=await r.json();
+
+  const res = await fetch("https://script.google.com/macros/s/あなたのGASID/exec");
+  const d = await res.json();
 
   document.getElementById("data").innerHTML =
     d.map(x=>`
@@ -819,7 +820,6 @@ async function load(){
       </div>
     `).join("");
 }
-
 load();
 
 function openDetail(type){
