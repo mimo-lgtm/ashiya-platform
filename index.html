@@ -591,12 +591,8 @@ h1,h2,h3{
 
 <input id="title" placeholder="タイトル">
 
-<button onclick="submitIdea()" class="big-button">
-投稿する
-</button>
-
 <button onclick="aiStep1()" class="big-button">
-AI壁打ち
+🤖 AI壁打ち
 </button>
 </div>
 
@@ -777,8 +773,20 @@ function showPage(id){
 }
 
 /* AI */
-function aiStep1(){
-  submitIdea();
+async function aiStep1(){
+
+  const text = document.getElementById("input").value;
+
+  document.getElementById("aiBox").innerHTML = `
+    <h3>AI分析結果</h3>
+    <p>${text}</p>
+
+    <br>
+
+    <button onclick="submitIdea()" class="big-button">
+      投稿する
+    </button>
+  `;
 }
 
 async function submitIdea(){
