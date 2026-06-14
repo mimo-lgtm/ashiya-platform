@@ -469,101 +469,136 @@ h1,h2,h3{
 <!-- ================= TREE ================= -->
 <section id="tree" class="page">
 
-  <h1>🌳 市民政策ロジックツリー</h1>
+<h1>🌳 市民政策ロジックツリー</h1>
 
-  <div class="placeholder-card">
-    コストセンターからプロフィットセンターへ：<br>
-    市民価値と知財の集積による都市経営
-  </div>
+<!-- ① 追加：誘導文 -->
+<div class="placeholder-card">
 
-  <div class="logic-tree">
+<h2>ようこそ、ロジックツリーのページへ</h2>
 
-    <div class="tree-root">🏛 市民政策ロジックツリー</div>
+<p>
+このツリーの中で興味のある項目をクリックすると、
+各テーマの概要をご覧いただけます。
+</p>
 
-    <div class="tree-level">
+<p>
+気になるテーマはそのままAIと対話しながら深めることができます。
+</p>
 
-      <div class="tree-parent">
-        <div class="tree-node root-node">① 芦屋市の価値向上</div>
-        <div class="tree-children">
-          <div class="tree-leaf">次世代教育ブランド</div>
-          <div class="tree-leaf">絵本図書館</div>
-          <div class="tree-leaf">EdTech連携</div>
-          <div class="tree-leaf">景観美化</div>
-          <div class="tree-leaf">公園芝生化</div>
-        </div>
-      </div>
+</div>
 
-      <div class="tree-parent">
-        <div class="tree-node benefit">② 市民ベネフィット</div>
-        <div class="tree-children">
-          <div class="tree-leaf">多世代交流</div>
-          <div class="tree-leaf">サードプレイス</div>
-          <div class="tree-leaf">リスキリング</div>
-          <div class="tree-leaf">共同研究</div>
-        </div>
-      </div>
+<div class="placeholder-card">
+コストセンターからプロフィットセンターへ：<br>
+市民価値と知財の集積による都市経営
+</div>
 
-      <div class="tree-parent">
-        <div class="tree-node finance">③ 財政持続性</div>
-        <div class="tree-children">
-          <div class="tree-leaf">施設収益化</div>
-          <div class="tree-leaf">チャレンジショップ</div>
-          <div class="tree-leaf">寄付</div>
-          <div class="tree-leaf">ふるさと納税</div>
-        </div>
-      </div>
+<div class="logic-tree">
 
-      <div class="tree-parent">
-        <div class="tree-node strategy">④ 戦略性</div>
-        <div class="tree-children">
-          <div class="tree-leaf">知のゲートウェイ</div>
-          <div class="tree-leaf">起業支援</div>
-          <div class="tree-leaf">ITサポート</div>
-        </div>
-      </div>
+<div class="tree-root">🏛 市民政策ロジックツリー</div>
 
-      <div class="tree-parent">
-        <div class="tree-node gov">⑤ 都市強靭性</div>
-        <div class="tree-children">
-          <div class="tree-leaf">防災システム</div>
-          <div class="tree-leaf">都市指令室</div>
-          <div class="tree-leaf">DAO自治</div>
-        </div>
-      </div>
+<div class="tree-level">
 
-    </div>
-  </div>
+<!-- ① -->
+<div class="tree-parent">
+
+<div class="tree-node root-node">
+① 芦屋市の価値向上
+</div>
+
+<div class="tree-children">
+
+<!-- ★ダミー追加（クリック可能） -->
+<div class="tree-leaf" onclick="openDetail('ehon')">
+📚 絵本図書館（AI知育拠点）
+</div>
+
+<div class="tree-leaf">次世代教育ブランド</div>
+<div class="tree-leaf">EdTech連携</div>
+<div class="tree-leaf">景観美化</div>
+<div class="tree-leaf">公園芝生化</div>
+
+</div>
+</div>
+
+<!-- 他はそのまま -->
+<div class="tree-parent">
+<div class="tree-node benefit">② 市民ベネフィット</div>
+<div class="tree-children">
+<div class="tree-leaf">多世代交流</div>
+<div class="tree-leaf">サードプレイス</div>
+</div>
+</div>
+
+<div class="tree-parent">
+<div class="tree-node finance">③ 財政持続性</div>
+<div class="tree-children">
+<div class="tree-leaf">施設収益化</div>
+</div>
+</div>
+
+<div class="tree-parent">
+<div class="tree-node strategy">④ 戦略性</div>
+<div class="tree-children">
+<div class="tree-leaf">起業支援</div>
+</div>
+</div>
+
+<div class="tree-parent">
+<div class="tree-node gov">⑤ 都市強靭性</div>
+<div class="tree-children">
+<div class="tree-leaf">防災システム</div>
+</div>
+</div>
+
+</div>
+</div>
+
 </section>
 
-<!-- ================= AI ================= -->
+<!-- ================= DETAIL VIEW（追加） ================= -->
+<section id="detail" class="page">
+
+<div class="placeholder-card" id="detailBox">
+
+<!-- JSで差し替え -->
+</div>
+
+</section><!-- ================= AI ================= -->
 <section id="assistant" class="page">
 
-  <h1>🤖 AI壁打ち</h1>
+<h1>🤖 AI壁打ち</h1>
 
-  <div class="placeholder-card">
+<div class="placeholder-card">
 
-    <p style="margin-bottom:15px;">
-      思考がまとまっていなくても問題ありません。  
-      AIと対話しながら文章・構造・論点を整理できます。
-    </p>
+<div class="assistant-layout">
 
-    <div class="assistant-layout">
+<!-- 入力 -->
+<div class="assistant-card">
+<h3>入力</h3>
+<textarea id="input"></textarea>
+<button onclick="aiStep1()" class="big-button">AI壁打ち</button>
+</div>
 
-      <div class="assistant-card">
-        <h3>入力</h3>
-        <textarea id="input"></textarea>
-        <button onclick="aiStep1()" class="big-button" style="margin-top:12px;">
-          AI壁打ち
-        </button>
-      </div>
+<!-- 出力 -->
+<div class="assistant-card" id="aiBox">
+結果がここに表示されます
+</div>
 
-      <div class="assistant-card" id="aiBox">
-        結果がここに表示されます
-      </div>
+</div>
 
-    </div>
+<!-- ★追加：推奨タイトル -->
+<div class="placeholder-card">
+<h3>推奨タイトル</h3>
+<div id="aiTitleBox">未生成</div>
+</div>
 
-  </div>
+<!-- ★追加：200字要約 -->
+<div class="placeholder-card">
+<h3>200字要約</h3>
+<div id="aiSummaryBox">未生成</div>
+</div>
+
+</div>
 
 </section>
 
@@ -630,37 +665,72 @@ h1,h2,h3{
 <!-- ================= VISION ================= -->
 <section id="vision" class="page">
 
-  <h1>📈 ビジョン変遷</h1>
+<h1>📈 ビジョン・コンセプトの変遷</h1>
 
-  <div class="placeholder-card">
+<div class="placeholder-card">
 
-    <h2>コンセプト</h2>
+<h2>このページについて</h2>
 
-    <p>
-      公共施設は固定された計画ではなく、市民提案で進化します。
-    </p>
+<p>
+芦屋駅前公共施設のあり方やコンセプトは固定されたものではなく、
+市民の提案によって継続的に更新されていきます。
+</p>
 
-  </div>
+<p>
+このページでは、その変化の履歴と理由を可視化します。
+</p>
 
-  <div class="vision-timeline">
+</div>
 
-    <div class="vision-card">
+<!-- ================= CURRENT VISION ================= -->
+<div class="vision-timeline">
 
-      <div class="vision-date">2026年7月</div>
+<div class="vision-card active">
 
-      <h3>初期ビジョン</h3>
+<div class="vision-date">2026年7月</div>
 
-      <p>
-        市民価値創出型の公共施設への転換。
-      </p>
+<h3>初期ビジョン</h3>
 
-    </div>
+<div class="vision-tags">
 
-  </div>
+<span>芦屋の価値向上</span>
+<span>市民ウェルビーイング</span>
+<span>市民交流</span>
+<span>コスト最適化</span>
 
-</section>
+</div>
 
-</main>
+<p>
+公共施設を単なるコストセンターではなく、
+市民価値を創出する投資型施設として再定義する。
+</p>
+
+</div>
+
+</div>
+
+<!-- ================= NEXT VISION BOX（追加） ================= -->
+<div class="placeholder-card">
+
+<h2>次回ビジョン（検討中）</h2>
+
+<p>
+このエリアは今後、市民提案とAI分析によって更新されます。
+</p>
+
+<div style="margin-top:15px;padding:15px;border-left:5px solid #2563eb;background:#f8fafc;border-radius:12px;">
+
+<b>現在の仮テーマ：</b><br><br>
+
+・市民データ駆動型都市運営<br>
+・公共施設の収益モデル化<br>
+・AI共同意思決定プロセスの導入<br>
+
+</div>
+
+</div>
+
+</section></main>
 
 <script>
 
@@ -719,6 +789,32 @@ async function load(){
 }
 
 load();
+
+function openDetail(type){
+
+if(type === "ehon"){
+
+document.getElementById("detailBox").innerHTML = `
+<h2>📚 絵本図書館（AI知育拠点）</h2>
+
+<p>
+世界一の絵本蔵書数を誇る当館は、最先端技術が融合した次世代型知育拠点です。
+VR・AR映像とAI読み聞かせにより、子供の感性を育てます。
+</p>
+
+<p>
+AIが最適な絵本を推薦し、保護者相談にも対応します。
+</p>
+
+<button class="big-button" onclick="showPage('assistant')">
+あなたの意見も聞かせてください → AI壁打ちへ
+</button>
+`;
+
+showPage("detail");
+}
+
+}
 
 </script>
 
