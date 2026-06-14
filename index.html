@@ -592,11 +592,14 @@ h1,h2,h3{
 <textarea id="input"></textarea>
 
 <input id="title" placeholder="タイトル">
+
 <button onclick="submitIdea()" class="big-button">
 投稿する
 </button>
-<button onclick="submitIdea()">投稿する</button>
 
+<button onclick="aiStep1()" class="big-button">
+AI壁打ち
+</button>
 </div>
 
 
@@ -777,13 +780,7 @@ function showPage(id){
 
 /* AI */
 function aiStep1(){
-
-  document.getElementById("aiBox").innerHTML=`
-    <p>AI分析準備完了</p>
-    <button onclick="submitIdea()" class="big-button">
-      投稿する
-    </button>
-  `;
+  submitIdea();
 }
 
 async function submitIdea(){
