@@ -594,7 +594,7 @@ h1,h2,h3{
 <input id="title" placeholder="タイトル">
 
 <button onclick="submitIdea()">投稿する</button>
-<button onclick="aiStep1()" class="big-button">AI壁打ち</button>
+
 </div>
 
 
@@ -775,14 +775,11 @@ function showPage(id){
 
 /* AI */
 function aiStep1(){
-  const text=document.getElementById("input").value;
 
-  document.getElementById("aiBox").innerHTML=`
-    <p>AI分析中...</p>
-    <button onclick="aiSubmit('${text}')" class="big-button">投稿する</button>
-  `;
+  document.getElementById("aiBox").innerHTML =
+  "<p>AI分析後、「投稿する」を押してください。</p>";
+
 }
-
 async function submitIdea(){
 
   const data = {
@@ -808,7 +805,7 @@ async function submitIdea(){
 /* DATA */
 async function load(){
 
-  const res = await fetch("https://script.google.com/macros/s/あなたのGASID/exec");
+  const res = await fetch("https://script.google.com/macros/s/AKfycbzopgSpPPozJ3Q6J2fDSrI8zE0iIlgK-VLqTixe4VL9dPtzvpOZ9UOyPjK8yPQSA6n7vg/exec");
   const d = await res.json();
 
   document.getElementById("data").innerHTML =
