@@ -805,7 +805,26 @@ async function submitIdea(){
   const json = await res.json();
 
   document.getElementById("aiBox").innerHTML =
-    "<h3>要約</h3><p>" + json.summary + "</p>";
+`
+<div style="
+background:#dcfce7;
+border:2px solid #22c55e;
+padding:20px;
+border-radius:15px;
+">
+
+<h2>✅ 投稿完了</h2>
+
+<p>
+ご意見を受け付けました。
+</p>
+
+<h3>AI要約</h3>
+
+<p>${json.summary}</p>
+
+</div>
+`;
 
   document.getElementById("aiTitleBox").innerText = data.title;
   document.getElementById("aiSummaryBox").innerText = json.summary;
