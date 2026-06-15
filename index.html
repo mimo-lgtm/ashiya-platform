@@ -581,52 +581,88 @@ h1,h2,h3{
 <!-- AI壁打ちページ -->
 <section id="assistant" class="page">
 
-<h1>AI壁打ち</h1>
+<h1>🤖 AI壁打ち</h1>
 
-<textarea id="ideaInput"></textarea>
+<div class="assistant-layout">
 
-<button onclick="runAI()">AI分析</button>
+  <!-- 左 -->
+  <div class="placeholder-card">
+
+    <h2>市民意見入力</h2>
+
+    <textarea
+      id="ideaInput"
+      placeholder="自由に意見を書いてください"
+    ></textarea>
+
+    <br><br>
+
+    <button class="big-button" onclick="runAI()">
+      AI分析
+    </button>
+
+  </div>
+
+  <!-- 右 -->
+  <div class="placeholder-card">
+
+    <h2>AI分析結果</h2>
+
+    <div id="resultBox">
+      AIの分析結果がここに表示されます
+    </div>
+
+  </div>
+
+</div>
+
+<br>
 
 <div class="placeholder-card">
 
   <h3>推奨タイトル</h3>
-  <div id="titleBox"></div>
+
+  <div id="titleBox" style="
+    min-height:60px;
+    padding:15px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    background:#fff;
+  ">
+  </div>
+
+  <br>
 
   <h3>200文字要約</h3>
-  <div id="summaryBox"></div>
 
-  <h3>AI出力</h3>
-  <div id="resultBox"></div>
+  <div id="summaryBox" style="
+    min-height:120px;
+    padding:15px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    background:#fff;
+  ">
+  </div>
 
 </div>
 
-<div id="decisionBox" style="display:none;"></div>
+<div
+  id="decisionBox"
+  class="placeholder-card"
+  style="display:none;"
+>
 
-</section>
+  <h2>投稿しますか？</h2>
 
-<section id="assistant" class="page">
+  <button class="big-button" onclick="sendToPR()">
+    投稿する
+  </button>
 
-  <h1>AI壁打ち</h1>
+  <button class="big-button" onclick="backToAI()">
+    戻る
+  </button>
 
-  <div class="placeholder-card">
-
-    <textarea id="ideaInput" placeholder="アイデアを入力してください"></textarea>
-
-    <button onclick="runAI()">AI分析</button>
-
-  </div>
-
-  <div class="placeholder-card">
-
-    <h3>タイトル案</h3>
-    <div id="resultBox"></div>
-
-    <h3>200文字要約</h3>
-    <div id="summaryBox"></div>
-
-  </div>
-
-  <div id="decisionBox" style="display:none;"></div>
+</div>
 
 </section>
 

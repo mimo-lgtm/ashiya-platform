@@ -144,39 +144,20 @@ function setCategory(c){
 
 function runAI(){
 
-  const input = document.getElementById("ideaInput");
+  const text =
+    document.getElementById("ideaInput").value;
 
-  if(!input) return;
+  document.getElementById("resultBox").innerText =
+    text;
 
-  const text = input.value;
+  document.getElementById("titleBox").innerText =
+    "提案：" + text.slice(0,20);
 
-  const resultBox = document.getElementById("resultBox");
-  const titleBox = document.getElementById("titleBox");
-  const summaryBox = document.getElementById("summaryBox");
-  const decisionBox = document.getElementById("decisionBox");
+  document.getElementById("summaryBox").innerText =
+    text.slice(0,200);
 
-  if(resultBox){
-    resultBox.innerText = text;
-  }
-
-  if(titleBox){
-    titleBox.innerText =
-      text.length > 20
-      ? text.substring(0,20) + "..."
-      : text;
-  }
-
-  if(summaryBox){
-    summaryBox.innerText =
-      text.length > 200
-      ? text.substring(0,200) + "..."
-      : text;
-  }
-
-  if(decisionBox){
-    decisionBox.style.display = "block";
-  }
-
+  document.getElementById("decisionBox").style.display =
+    "block";
 }
 
 async function sendToPR(){
