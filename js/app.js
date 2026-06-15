@@ -91,23 +91,31 @@ function setCategory(c){
   selectedCategory = c;
 }
 
-  function runAI(){
+ function runAI(){
   const input = document.getElementById("ideaInput");
+  const result = document.getElementById("resultBox");
+  const decision = document.getElementById("decisionBox");
 
-  console.log("input:", input);
+  if(!input || !result) return;
 
-  const text = input ? input.value : "NO INPUT FOUND";
+  const text = input.value;
 
-  document.getElementById("resultBox").innerText = "タイトル：" + text;
-  document.getElementById("summaryBox").innerText = "要約：" + text.slice(0,200);
+  result.innerText = text;
+
+  if(decision){
+    decision.style.display = "block";
+  }
 }
 
 async function sendToPR(){
+  const input = document.getElementById("ideaInput");
+  const result = document.getElementById("resultBox");
+
   const data = {
     title: "AI生成",
     category: selectedCategory || "未分類",
-    content: document.getElementById("ideaInput").value || "",
-    summary: document.getElementById("resultBox").innerText || ""
+    content: input ? input.value : "",
+    summary: result ? result.innerText : ""
   };
 
   await fetch(GAS_URL,{
@@ -126,3 +134,13 @@ document.addEventListener("DOMContentLoaded", loadData);
 
 document.getElementById("titleBox").innerText = "AI生成タイトル";
 document.getElementById("summaryBox").innerText = "200字要約...";
+
+function openDetail(id){
+  const box = document.getElementById("detailBox");
+  if(!box) return;
+
+  box.innerHTML = "📚 絵本図書館（AI知育拠点）詳細ページ（仮）";
+  showPage("detail");
+}
+
+document.getElementById("summaryBox").innerText = text.slice(0,200);
