@@ -3,14 +3,350 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>市民政策AIプラットフォーム</title>
 
-<link rel="stylesheet" href="./style.css">
-<script src="./js/app.js" defer></script>
-</head>
+
+<style>
+
+/* ================= 1.RESET ================= */
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  overflow-wrap:break-word;
+}
+
+body{
+  font-family:"Yu Gothic","Meiryo",sans-serif;
+  background:linear-gradient(135deg,#edf4ff,#f7fffb,#fff8ef);
+  color:#1e293b;
+  line-height:1.6;
+  margin:0;
+  padding:12px;
+  font-size:16px;
+}
+
+/* =================2. HEADER ================= */
+
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:999;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:16px 24px;
+  background:rgba(15,23,42,.92);
+  backdrop-filter:blur(12px);
+  box-shadow:0 4px 20px rgba(0,0,0,.15);
+}
+
+.logo{
+  font-size:22px;
+  font-weight:700;
+  color:#fff;
+}
+
+nav{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+nav button{
+  border:none;
+  padding:10px 16px;
+  border-radius:12px;
+  font-weight:700;
+  cursor:pointer;
+  background:#fff;
+  transition:.25s;
+}
+
+nav button:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 20px rgba(0,0,0,.15);
+}
+
+/* ================= 3.PAGE ================= */
+
+.page{
+  display:none;
+  padding:40px 24px;
+  max-width:1400px;
+  margin:auto;
+}
+
+.page.active{
+  display:block;
+}
+
+/* ================= 4.TITLES ================= */
+
+h1{
+  font-size:32px;
+  margin-bottom:20px;
+  text-align:center;
+  color:#0f172a;
+}
+
+h2{
+  margin-bottom:15px;
+  color:#0f172a;
+}
+
+h3{
+  margin-top:20px;
+  margin-bottom:10px;
+  color:#1d4ed8;
+}
+
+h1,h2,h3{
+  word-break:break-word;
+}
+
+/* ================= 5.IMAGES ================= */
+
+img{
+  max-width:100%;
+  height:auto;
+  display:block;
+}
+
+/* ================= 6.CARD SYSTEM ================= */
+
+.placeholder-card,
+.assistant-card,
+.analysis-card,
+.feature-box,
+.info-card,
+.purpose-box{
+  background:rgba(255,255,255,.92);
+  backdrop-filter:blur(12px);
+  padding:24px;
+  border-radius:20px;
+  margin-bottom:24px;
+  box-shadow:0 10px 30px rgba(0,0,0,.08);
+  border:1px solid rgba(255,255,255,.5);
+}
+
+/* ================= 7.SCORE GRID ================= */
+
+.score-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:12px;
+  margin:25px 0;
+}
+
+.score-card{
+  background:white;
+  padding:12px;
+  border-radius:16px;
+  box-shadow:0 8px 18px rgba(0,0,0,.08);
+  border-top:4px solid #2563eb;
+}
+
+.score-value{
+  font-size:20px;
+  font-weight:bold;
+  color:#2563eb;
+}
+
+/* ================= 8.ANALYSIS LAYOUT ================= */
+
+.analysis-bottom{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:20px;
+  margin:30px 0;
+}
+
+/* スマホ */
+@media(max-width:900px){
+  .analysis-bottom{
+    grid-template-columns:1fr;
+  }
+}
+
+/* ================= 9.BUTTON SYSTEM ================= */
+
+button{
+  cursor:pointer;
+}
+
+.big-button,
+.tree-btn{
+  display:inline-block;
+  padding:18px 32px;
+  font-size:20px;
+  font-weight:800;
+  background:linear-gradient(135deg,#2563eb,#06b6d4);
+  color:white;
+  border-radius:14px;
+  text-align:center;
+  box-shadow:0 10px 25px rgba(0,0,0,.15);
+  transition:.2s;
+  text-decoration:none;
+  border:none;
+}
+
+.big-button:hover,
+.tree-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 15px 30px rgba(0,0,0,.2);
+}
+
+/* ================= 10.AI LAYOUT ================= */
+
+.assistant-layout{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:24px;
+}
+
+textarea{
+  width:100%;
+  height:260px;
+  padding:15px;
+  font-size:16px;
+  border-radius:15px;
+  border:1px solid #dbeafe;
+  background:#fff;
+}
+
+textarea:focus{
+  outline:none;
+  border-color:#3b82f6;
+}
+
+#aiBox{
+  min-height:300px;
+}
+
+/* =================11. TREE ================= */
+
+.logic-tree{
+  margin-top:40px;
+}
+
+.tree-root{
+  max-width:600px;
+  margin:0 auto 50px;
+  padding:20px;
+  text-align:center;
+  font-size:24px;
+  font-weight:700;
+  color:white;
+  border-radius:20px;
+  background:linear-gradient(135deg,#2563eb,#06b6d4);
+  box-shadow:0 15px 35px rgba(0,0,0,.15);
+}
+
+.tree-level{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:30px;
+}
+
+.tree-parent{
+  width:420px;
+  position:relative;
+}
+
+.tree-node{
+  padding:18px;
+  border-radius:18px;
+  font-weight:700;
+  color:white;
+  text-align:center;
+  font-size:20px;
+  box-shadow:0 10px 25px rgba(0,0,0,.12);
+}
+
+.root-node{ background:linear-gradient(135deg,#16a34a,#22c55e); }
+.benefit{ background:linear-gradient(135deg,#2563eb,#60a5fa); }
+.finance{ background:linear-gradient(135deg,#f59e0b,#fbbf24); }
+.strategy{ background:linear-gradient(135deg,#8b5cf6,#a78bfa); }
+.gov{ background:linear-gradient(135deg,#ef4444,#f87171); }
+
+.tree-children{
+  margin-top:12px;
+  padding-left:20px;
+  border-left:4px solid #cbd5e1;
+}
+
+.tree-leaf{
+  background:white;
+  padding:12px;
+  margin:10px 0;
+  border-radius:12px;
+  box-shadow:0 4px 12px rgba(0,0,0,.08);
+  transition:.2s;
+}
+
+.tree-leaf:hover{
+  transform:translateX(6px);
+  background:#eff6ff;
+}
+
+/* ================= 12.GRID FIXES ================= */
+
+.metric-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px;
+  margin-bottom:30px;
+}
+
+/* =================13. POST LIST ================= */
+
+#data{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
+  gap:20px;
+}
+
+/* ================= 14.GLOBAL FIX ================= */
+
+img{
+  max-width:100%;
+  height:auto;
+}
+
+h1,h2,h3{
+  word-break:break-word;
+}
+
+/* ================= 15.MOBILE ================= */
+
+@media(max-width:900px){
+
+  .assistant-layout{
+    grid-template-columns:1fr;
+  }
+
+  .topbar{
+    flex-direction:column;
+    gap:12px;
+  }
+
+  nav{
+    justify-content:center;
+  }
+
+  h1{
+    font-size:26px;
+  }
+}
+
+</style></head>
 
 <body>
-<!-- cache-bust -->
+
 <header class="topbar">
   <div class="logo">🏛 市民政策AIプラットフォーム</div>
 
@@ -20,99 +356,551 @@
     <button onclick="showPage('assistant')">AI壁打ち</button>
     <button onclick="showPage('rules')">分析ルール</button>
     <button onclick="showPage('pullrequest')">PULL REQUEST</button>
-    <button onclick="showPage('vision')">ビジョン</button>
+    <button onclick="showPage('vision')">ビジョン変遷</button>
   </nav>
 </header>
 
 <main>
 
-<!-- 19 INTRO -->
+<!-- ================= 16.INTRO ================= -->
 <section id="intro" class="page active">
+
   <div class="placeholder-card">
-    <h1>駅前公共施設AIプラットフォーム</h1>
+
+    <h1>駅前公共施設について皆で考えよう</h1>
+    <p style="text-align:center;color:#64748b;margin-top:-10px;">
+      市民政策プラットフォーム
+    </p>
+
+    <h2>このプラットフォームについて</h2>
+
+    <p>
+      本システムは、市民が駅前公共施設のあり方について自由に意見を投稿し、
+      AIと共に整理・構造化しながら政策形成につなげる対話型プラットフォームです。
+    </p>
+
+    <p>
+      従来の行政意見提出には、
+      表現の難しさ・他者意見の不透明性・反映プロセスの不明確さといった課題がありました。
+      本システムはそれらを解消し、透明で継続的な市民参加を実現します。
+    </p>
+
   </div>
-</section>
 
-<!-- 20 TREE -->
-<section id="tree" class="page">
-
-  <div class="placeholder-card">
-    <h1>ロジックツリー</h1>
+  <!-- HERO IMAGE -->
+  <div class="placeholder-card" style="padding:0;overflow:hidden;">
+    <img src="images/comic-all.png" alt="市民政策AIプラットフォーム">
   </div>
 
-  <!-- 23 TREE ROOT -->
+  <!-- FEATURES -->
   <div class="placeholder-card">
-    <h2>市民政策構造</h2>
+
+    <h2>特徴</h2>
 
     <ul>
-      <li>① 芦屋市の価値向上</li>
-      <li>② 市民ベネフィット</li>
-      <li>③ 財政持続性</li>
-      <li>④ 戦略性</li>
-      <li>⑤ 都市強靭性</li>
+      <li>思いついたままの投稿が可能</li>
+      <li>AIが自動で要約・論点整理・構造化</li>
+      <li>ロジックツリーによる政策構造の可視化</li>
+      <li>投稿・統合プロセスの透明化</li>
+      <li>市民参加型の継続的な改善サイクル</li>
     </ul>
+
   </div>
 
-</section>
-
-<!-- 25 AI -->
-<section id="assistant" class="page">
-
+  <!-- PROBLEMS -->
   <div class="placeholder-card">
 
-    <h1>AI壁打ち</h1>
+    <h2>このような課題を感じていませんか？</h2>
 
-    <!-- CATEGORY（追加要件対応） -->
-    <div class="category-bar">
-      <button onclick="setCat('価値向上')">価値向上</button>
-      <button onclick="setCat('市民ベネフィット')">ベネフィット</button>
-      <button onclick="setCat('財政持続性')">財政</button>
-      <button onclick="setCat('戦略性')">戦略</button>
-      <button onclick="setCat('都市強靭性')">強靭性</button>
-    </div>
+    <ul>
+      <li>考えはあるが文章化が難しい</li>
+      <li>否定されるのが不安</li>
+      <li>他の市民の意見が見えない</li>
+      <li>反映されないなら意味がないと思う</li>
+    </ul>
 
-    <textarea id="input" placeholder="あなたの考えをきかせてください"></textarea>
+  </div>
 
-    <button onclick="runAI()" class="big-button">
-      AI実行
+  <!-- FLOW -->
+  <div class="placeholder-card">
+
+    <h2>投稿の流れ</h2>
+
+    <ol>
+      <li>市民が自由投稿</li>
+      <li>AIが整理・構造化</li>
+      <li>ロジックツリーへ統合</li>
+      <li>政策形成へ反映</li>
+    </ol>
+
+  </div>
+
+  <!-- PURPOSE -->
+  <div class="placeholder-card">
+
+    <h2>この仕組みの目的</h2>
+
+    <p>
+      どのような意見も素材として扱われ、
+      AIが中立的に整理し、社会全体の知として統合します。
+    </p>
+
+  </div>
+
+  <!-- CTA -->
+  <div class="placeholder-card" style="text-align:center;">
+
+    <h2>他の市民の意見や提案を見てみましょう</h2>
+
+    <p>
+      投稿された意見はロジックツリー上で整理・統合されています。
+    </p>
+
+    <button class="big-button" onclick="showPage('tree')">
+      🌳 ロジックツリーを見る
     </button>
 
   </div>
 
-  <div id="aiBox" class="placeholder-card">
-    結果表示エリア
-  </div>
+</section>
+
+<div id="treeData"></div>
+
+<!-- ================= 17.TREE ================= -->
+<section id="tree" class="page">
+
+<h1>🌳 市民政策ロジックツリー</h1>
+function renderTree(){
+
+  const box = document.getElementById("treeData");
+
+  const merged = POSTS.filter(p => p.merged === true);
+
+  box.innerHTML = merged.map(p => `
+    <div class="placeholder-card">
+      <b>${p.title || ""}</b><br>
+      ${p.summary || p.content || ""}
+    </div>
+  `).join("");
+}
+
+<!-- =================18. INTRO GUIDE ================= -->
+<div class="placeholder-card">
+
+<h2>ようこそ、ロジックツリーのページへ</h2>
+
+<p>
+このツリーの中で興味のある項目をクリックすると、
+各テーマの概要をご覧いただけます。
+</p>
+
+<p>
+気になるテーマはそのままAIと対話しながら深めることができます。
+</p>
+
+</div>
+
+<!-- ================= 19.CURRENT CONCEPT (NEW) ================= -->
+<div class="placeholder-card" style="border-left:6px solid #f59e0b;">
+
+<h2>📌 現在のコンセプト案（カレント）</h2>
+
+<p style="font-weight:600;">
+コストセンターからプロフィットセンターへ
+</p>
+
+<p>
+市民のウェルビーイングと知財の集積による
+投資型都市経営の実現を目指す。
+</p>
+
+</div>
+
+<!-- ================= 20.TREE ROOT ================= -->
+<div class="logic-tree">
+
+<div class="tree-root">🏛 市民政策ロジックツリー</div>
+
+<div class="tree-level">
+
+<!-- ① -->
+<div class="tree-parent">
+
+<div class="tree-node root-node">
+① 芦屋市の価値向上
+</div>
+
+<div class="tree-children">
+
+<!-- ★ダミー追加（クリック可能） -->
+<div class="tree-leaf" onclick="openDetail('ehon')">
+📚 絵本図書館（AI知育拠点）
+</div>
+
+<div class="tree-leaf">次世代教育ブランド</div>
+<div class="tree-leaf">EdTech連携</div>
+<div class="tree-leaf">景観美化</div>
+<div class="tree-leaf">公園芝生化</div>
+
+</div>
+</div>
+
+<!-- 他はそのまま -->
+<div class="tree-parent">
+<div class="tree-node benefit">② 市民ベネフィット</div>
+<div class="tree-children">
+<div class="tree-leaf">多世代交流</div>
+<div class="tree-leaf">サードプレイス</div>
+</div>
+</div>
+
+<div class="tree-parent">
+<div class="tree-node finance">③ 財政持続性</div>
+<div class="tree-children">
+<div class="tree-leaf">施設収益化</div>
+</div>
+</div>
+
+<div class="tree-parent">
+<div class="tree-node strategy">④ 戦略性</div>
+<div class="tree-children">
+<div class="tree-leaf">起業支援</div>
+</div>
+</div>
+
+<div class="tree-parent">
+<div class="tree-node gov">⑤ 都市強靭性</div>
+<div class="tree-children">
+<div class="tree-leaf">防災システム</div>
+</div>
+</div>
+
+</div>
+</div>
 
 </section>
 
-<!-- 26 RULES -->
+<!-- ================= 21.DETAIL VIEW（追加） ================= -->
+<section id="detail" class="page">
+
+<div class="placeholder-card" id="detailBox">
+
+<!-- JSで差し替え -->
+</div>
+
+</section>
+
+/* ================= AI 22================= */
+
+let selectedCategory = "";
+
+function setCategory(cat){
+  selectedCategory = cat;
+}
+
+async function runAI(){
+
+  const text = document.getElementById("ideaInput").value;
+
+  document.getElementById("resultBox").innerHTML =
+    "<h3>AI処理中</h3><p>" + text + "</p>";
+
+  document.getElementById("decisionBox").style.display = "block";
+}
+
+async function sendToPR(){
+
+  const data = {
+    title: "AI生成案",
+    category: selectedCategory || "未分類",
+    content: document.getElementById("ideaInput").value,
+    summary: document.getElementById("resultBox").innerText
+  };
+
+  await fetch("https://script.google.com/macros/s/AKfycbzopgSpPPozJ3Q6J2fDSrI8zE0iIlgK-VLqTixe4VL9dPtzvpOZ9UOyPjK8yPQSA6n7vg/exec", {
+    method:"POST",
+    body: JSON.stringify(data)
+  });
+
+  alert("PR送信完了");
+}
+
+function backToAI(){
+  document.getElementById("decisionBox").style.display = "none";
+}
+
+/* ================= AI 23================= */
+
+let selectedCategory = "";
+
+function setCategory(cat){
+  selectedCategory = cat;
+}
+
+async function runAI(){
+
+  const text = document.getElementById("ideaInput").value;
+
+  document.getElementById("resultBox").innerHTML =
+    "<h3>AI処理中</h3><p>" + text + "</p>";
+
+  document.getElementById("decisionBox").style.display = "block";
+}
+
+async function sendToPR(){
+
+  const data = {
+    title: "AI生成案",
+    category: selectedCategory || "未分類",
+    content: document.getElementById("ideaInput").value,
+    summary: document.getElementById("resultBox").innerText
+  };
+
+  await fetch("https://script.google.com/macros/s/AKfycbzopgSpPPozJ3Q6J2fDSrI8zE0iIlgK-VLqTixe4VL9dPtzvpOZ9UOyPjK8yPQSA6n7vg/exec", {
+    method:"POST",
+    body: JSON.stringify(data)
+  });
+
+  alert("PR送信完了");
+}
+
+function backToAI(){
+  document.getElementById("decisionBox").style.display = "none";
+}
+
+<!-- ================= 23.RULES ================= -->
 <section id="rules" class="page">
+
+  <h1>📊 分析ルール</h1>
+
   <div class="placeholder-card">
-    <h1>分析ルール</h1>
+
+    <h2>評価について</h2>
+
+    <p>
+      市民提案はAIにより分類・構造化され、政策判断の参考情報として可視化されます。
+    </p>
+
   </div>
+
+  <div class="score-grid">
+
+    <div class="score-card"><h4>価値向上</h4><div class="score-value">25%</div></div>
+    <div class="score-card"><h4>ベネフィット</h4><div class="score-value">25%</div></div>
+    <div class="score-card"><h4>交流</h4><div class="score-value">20%</div></div>
+    <div class="score-card"><h4>マルチユース</h4><div class="score-value">15%</div></div>
+    <div class="score-card"><h4>運営効率</h4><div class="score-value">15%</div></div>
+
+  </div>
+
+  <div class="analysis-bottom">
+
+    <div class="analysis-card">
+      <h2>ルール変更</h2>
+      <p>市民が提案し、AIが影響分析を行います。</p>
+    </div>
+
+    <div class="analysis-card">
+      <h2>AIの役割</h2>
+      <p>AIは評価を決めず、整理・分析のみを行います。</p>
+    </div>
+
+  </div>
+
 </section>
 
-<!-- 27 PULL REQUEST -->
+
+<!-- ================= 24..PULL REQUEST（新構造） ================= -->
 <section id="pullrequest" class="page">
 
-  <div class="placeholder-card">
-    <h1>PULL REQUEST</h1>
-  </div>
+<h1>📋 PULL REQUEST</h1>
 
-  <div id="data"></div>
+<div class="placeholder-card">
+  <h2>カテゴリ別投稿</h2>
+  <p>未統合（赤）／統合済（緑）で管理されます</p>
+</div>
+
+<!-- カテゴリフィルタ -->
+<div class="placeholder-card">
+
+<button onclick="filterPR('価値向上')">① 芦屋市の価値向上</button>
+<button onclick="filterPR('市民ベネフィット')">② 市民ベネフィット</button>
+<button onclick="filterPR('財政持続性')">③ 財政持続性</button>
+<button onclick="filterPR('戦略性')">④ 戦略性</button>
+<button onclick="filterPR('都市強靭性')">⑤ 都市強靭性</button>
+
+</div>
+
+<!-- 表示エリア -->
+<div id="prList"></div>
 
 </section>
 
-<!-- 29 VISION -->
+function filterPR(cat){
+
+  const box = document.getElementById("prList");
+
+  const filtered = POSTS.filter(p => p.category === cat);
+
+  box.innerHTML = filtered.map(p => `
+    <div class="placeholder-card">
+      <b>${p.title || ""}</b><br>
+      <span style="color:${p.merged ? "green" : "red"}">
+        ${p.merged ? "統合済" : "未統合"}
+      </span><br><br>
+      ${p.summary || p.content || ""}
+    </div>
+  `).join("");
+}
+
+<!-- ================= 25.DUMMY PR ITEMS ================= -->
+
+<div id="prList"></div>
+
+<!-- ================= 26.CURRENT VISION ================= -->
+
 <section id="vision" class="page">
+<div class="vision-card active">
 
-  <div class="placeholder-card">
-    <h1>VISION</h1>
-  </div>
+<div class="vision-date">2026年7月</div>
+
+<h3>初期ビジョン</h3>
+
+<div class="vision-tags">
+
+<span>芦屋の価値向上</span>
+<span>市民ウェルビーイング</span>
+<span>市民交流</span>
+<span>コスト最適化</span>
+
+</div>
+
+<p>
+公共施設を単なるコストセンターではなく、
+市民価値を創出する投資型施設として再定義する。
+</p>
+
+</div>
+
+</div>
+
+<!-- ================= 27.NEXT VISION BOX（追加） ================= -->
+<div class="placeholder-card">
+
+<h2>次回ビジョン（検討中）</h2>
+
+<p>
+このエリアは今後、市民提案とAI分析によって更新されます。
+</p>
+
+<div style="margin-top:15px;padding:15px;border-left:5px solid #2563eb;background:#f8fafc;border-radius:12px;">
+
+<b>現在の仮テーマ：</b><br><br>
+
+・市民データ駆動型都市運営<br>
+・公共施設の収益モデル化<br>
+・AI共同意思決定プロセスの導入<br>
+
+</div>
+
+</div>
+
+</section></main>
+
+<script>
+
+/* NAV */
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+/* AI */
+<section id="assistant" class="page">
+
+<h1>AI壁打ち</h1>
+
+<div class="card">
+
+<!-- 入力 -->
+<textarea id="ideaInput" placeholder="これも、あなたの考えをきかせてください"></textarea>
+
+<!-- カテゴリ選択ボタン -->
+<div style="margin:10px 0;">
+  <button onclick="setCategory('価値向上')">① 芦屋市の価値向上</button>
+  <button onclick="setCategory('市民ベネフィット')">② 市民ベネフィット</button>
+  <button onclick="setCategory('財政持続性')">③ 財政持続性</button>
+  <button onclick="setCategory('戦略性')">④ 戦略性</button>
+  <button onclick="setCategory('都市強靭性')">⑤ 都市強靭性</button>
+</div>
+
+<!-- 実行 -->
+<button onclick="runAI()">AI壁打ち</button>
+
+<!-- 結果 -->
+<div id="resultBox" class="card">結果がここに表示されます</div>
+
+<!-- 分岐UI -->
+<div id="decisionBox" class="card" style="display:none;">
+  <h3>この内容でどうしますか？</h3>
+
+  <button onclick="sendToPR()">A. 200字要約してPRへ</button>
+  <button onclick="backToAI()">B. 意見を修正する</button>
+</div>
+
+</div>
 
 </section>
 
-</main>
+/*28. DATA */
+let POSTS = [];
+
+async function load(){
+
+  const res = await fetch("https://script.google.com/macros/s/AKfycbzopgSpPPozJ3Q6J2fDSrI8zE0iIlgK-VLqTixe4VL9dPtzvpOZ9UOyPjK8yPQSA6n7vg/exec");
+
+  POSTS = await res.json();
+
+  document.getElementById("data").innerHTML =
+    POSTS.map(x=>`
+      <div class="placeholder-card">
+        <b>${x["タイトル"]||""}</b><br>
+        ${x["カテゴリ"]||""}<br>
+        ${x["内容"]||""}
+      </div>
+    `).join("");
+}
+
+load();
+
+function openDetail(type){
+
+if(type === "ehon"){
+
+document.getElementById("detailBox").innerHTML = `
+<h2>📚 絵本図書館（AI知育拠点）</h2>
+
+<p>
+世界一の絵本蔵書数を誇る当館は、最先端技術が融合した次世代型知育拠点です。
+VR・AR映像とAI読み聞かせにより、子供の感性を育てます。
+</p>
+
+<p>
+AIが最適な絵本を推薦し、保護者相談にも対応します。
+</p>
+
+<button class="big-button" onclick="showPage('assistant')">
+あなたの意見も聞かせてください → AI壁打ちへ
+</button>
+`;
+
+showPage("detail");
+}
+
+}
+
+
+</script>
 
 </body>
 </html>
