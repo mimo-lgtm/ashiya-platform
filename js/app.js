@@ -82,3 +82,26 @@ async function load(){
 }
 
 load();
+
+async function load(){
+
+  try{
+
+    const res = await fetch(GAS_URL);
+    const data = await res.json();
+
+    const el = document.getElementById("data");
+    if(!el) return;
+
+    el.innerHTML = data.map(d=>`
+      <div class="placeholder-card">
+        <b>${d.title || ""}</b><br>
+        ${d.category || ""}<br>
+        ${d.content || ""}
+      </div>
+    `).join("");
+
+  }catch(e){
+    console.log("LOAD ERROR", e);
+  }
+}
