@@ -92,22 +92,36 @@ function renderPR(){
 
   if(!box) return;
 
-  box.innerHTML = POSTS.map(p => `
-    <div class="placeholder-card">
+  const grouped = {};
 
-      <b>${p.title || ""}</b><br>
+  POSTS.forEach(p => {
+    const cat = p.category || "未分類";
+    if(!grouped[cat]) grouped[cat] = [];
+    grouped[cat].push(p);
+  });
 
-      <span style="color:${p.merged ? "green" : "red"}">
-        ${p.merged ? "統合済" : "未統合"}
-      </span>
+  let html = "";
 
-      <br><br>
+  Object.keys(grouped).forEach(cat => {
 
-      ${p.summary || p.content || ""}
+    html += `<h2>${cat}</h2>`;
 
-    </div>
-  `).join("");
+    grouped[cat].forEach(p => {
 
+      html += `
+        <div class="placeholder-card">
+          <b>${p.title || ""}</b>
+          <span style="color:${p.merged ? "green" : "red"}">
+            ${p.merged ? "🟢統合済" : "🔴未統合"}
+          </span>
+        </div>
+      `;
+
+    });
+
+  });
+
+  box.innerHTML = html;
 }
 
 function filterPR(cat){
