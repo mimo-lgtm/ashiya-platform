@@ -158,6 +158,7 @@ async function runAI(){
   const result = await response.json();
 
   const aiText = result.result || "";
+console.log(aiText);
 
   document.getElementById("resultBox").innerText =
   aiText;
@@ -224,6 +225,7 @@ async function sendToPR(){
 }
 
 function backToAI(){
+
 
   const box = document.getElementById("decisionBox");
 
