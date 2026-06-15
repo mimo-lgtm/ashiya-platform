@@ -160,13 +160,30 @@ async function runAI(){
   const aiText = result.result || "";
 
   document.getElementById("resultBox").innerText =
-    aiText;
+  aiText;
 
-  document.getElementById("titleBox").innerText =
-    "";
+const lines = aiText.split("\n");
 
-  document.getElementById("summaryBox").innerText =
-    "";
+let title = "";
+let summary = "";
+
+for(let i=0;i<lines.length;i++){
+
+  if(lines[i].includes("推奨タイトル")){
+    title = lines[i+1] || "";
+  }
+
+  if(lines[i].includes("200字要約")){
+    summary = lines.slice(i+1).join("\n");
+  }
+
+}
+
+document.getElementById("titleBox").innerText =
+  title;
+
+document.getElementById("summaryBox").innerText =
+  summary;
 
   document.getElementById("decisionBox").style.display =
     "block";
