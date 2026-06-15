@@ -166,17 +166,17 @@ const summaryMatch = aiText.match(/(?:■|\*\*)?200字要約(?:\*\*)?\s*[\r\n]+(
 document.getElementById("resultBox").innerText =
   aiText;
 
+document.getElementById("resultBox").innerText =
+  aiText;
+
 document.getElementById("titleBox").innerText =
-  "テストタイトル";
+  titleMatch ? titleMatch[1].trim() : "";
 
 document.getElementById("summaryBox").innerText =
-  "テスト要約";
+  summaryMatch ? summaryMatch[1].trim() : "";
 
-  document.getElementById("titleBox").innerText =
-    "AIがタイトルを生成しました";
-
-  document.getElementById("summaryBox").innerText =
-    "AIが200字要約を生成しました";
+document.getElementById("decisionBox").style.display =
+  "block";
 
   document.getElementById("decisionBox").style.display =
     "block";
