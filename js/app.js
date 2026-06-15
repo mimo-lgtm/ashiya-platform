@@ -91,10 +91,15 @@ function setCategory(c){
   selectedCategory = c;
 }
 
-function runAI(){
-  const text = document.getElementById("ideaInput").value || "";
-  document.getElementById("resultBox").innerText = text;
-  document.getElementById("decisionBox").style.display = "block";
+  function runAI(){
+  const input = document.getElementById("ideaInput");
+
+  console.log("input:", input);
+
+  const text = input ? input.value : "NO INPUT FOUND";
+
+  document.getElementById("resultBox").innerText = "タイトル：" + text;
+  document.getElementById("summaryBox").innerText = "要約：" + text.slice(0,200);
 }
 
 async function sendToPR(){
