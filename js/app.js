@@ -159,11 +159,9 @@ async function runAI(){
 
 const aiText = result.result || "";
 
-const titleMatch =
-  aiText.match(/■推奨タイトル[\s\S]*?\n(.+)/);
+const titleMatch = aiText.match(/(?:■|\*\*)?推奨タイトル(?:\*\*)?\s*[\r\n]+(.+)/);
 
-const summaryMatch =
-  aiText.match(/■200字要約[\s\S]*?\n([\s\S]*)/);
+const summaryMatch = aiText.match(/(?:■|\*\*)?200字要約(?:\*\*)?\s*[\r\n]+([\s\S]*)/);
 
 document.getElementById("resultBox").innerText =
   aiText;
