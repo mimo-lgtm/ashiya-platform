@@ -732,144 +732,109 @@ function filterPR(cat){
 </section></main>
 
 <script>
+const GAS_URL = "https://script.google.com/macros/s/AKfycbzopgSpPPozJ3Q6J2fDSrI8zE0iIlgK-VLqTixe4VL9dPtzvpOZ9UOyPjK8yPQSA6n7vg/exec";
 
-/* NAV */
+let POSTS = [];
+let selectedCategory = "";
+
+/* PAGE */
 function showPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+  const el = document.getElementById(id);
+  if(el) el.classList.add('active');
 }
 
-/* AI */
-<section id="assistant" class="page">
+/* LOAD */
+async function loadData(){
+  try{
+    const res = await fetch(GAS_URL);
+    POSTS = await res.json();
+    renderPR();
+    renderTree();
+  }catch(e){
+    console.log(e);
+  }
+}
 
-<h1>AI壁打ち</h1>
+/* TREE */
+function renderTree(){
+  const box = document.getElementById("treeData");
+  if(!box) return;
 
-<div class="card">
+  const merged = POSTS.filter(p=>p.merged);
 
-<!-- 入力 -->
-<textarea id="ideaInput" placeholder="これも、あなたの考えをきかせてください"></textarea>
+  box.innerHTML = merged.map(p=>`
+    <div class="placeholder-card">
+      <b>${p.title||""}</b><br>
+      ${p.summary||p.content||""}
+    </div>
+  `).join("");
+}
 
-<!-- カテゴリ選択ボタン -->
-<div style="margin:10px 0;">
-  <button onclick="setCategory('価値向上')">① 芦屋市の価値向上</button>
-  <button onclick="setCategory('市民ベネフィット')">② 市民ベネフィット</button>
-  <button onclick="setCategory('財政持続性')">③ 財政持続性</button>
-  <button onclick="setCategory('戦略性')">④ 戦略性</button>
-  <button onclick="setCategory('都市強靭性')">⑤ 都市強靭性</button>
-</div>
+/* PR */
+function renderPR(){
+  const box = document.getElementById("prList");
+  if(!box) return;
 
-<!-- 実行 -->
-<button onclick="runAI()">AI壁打ち</button>
+  box.innerHTML = POSTS.map(p=>`
+    <div class="placeholder-card">
+      <b>${p.title||""}</b><br>
+      <span style="color:${p.merged?'green':'red'}">
+        ${p.merged?'統合済':'未統合'}
+      </span><br><br>
+      ${p.summary||p.content||""}
+    </div>
+  `).join("");
+}
 
-<!-- 結果 -->
-<div id="resultBox" class="card">結果がここに表示されます</div>
+function filterPR(cat){
+  const box = document.getElementById("prList");
 
-<!-- 分岐UI -->
-<div id="decisionBox" class="card" style="display:none;">
-  <h3>この内容でどうしますか？</h3>
-
-  <button onclick="sendToPR()">A. 200字要約してPRへ</button>
-  <button onclick="backToAI()">B. 意見を修正する</button>
-</div>
-
-</div>
-
-</section>
-
-/*28. DATA */
-let POSTS = [];
-
-async function load(){
-
-  const res = await fetch("https://script.google.com/macros/s/AKfycbzopgSpPPozJ3Q6J2fDSrI8zE0iIlgK-VLqTixe4VL9dPtzvpOZ9UOyPjK8yPQSA6n7vg/exec");
-
-  POSTS = await res.json();
-
-  document.getElementById("data").innerHTML =
-    POSTS.map(x=>`
+  box.innerHTML = POSTS
+    .filter(p=>p.category===cat)
+    .map(p=>`
       <div class="placeholder-card">
-        <b>${x["タイトル"]||""}</b><br>
-        ${x["カテゴリ"]||""}<br>
-        ${x["内容"]||""}
+        <b>${p.title||""}</b><br>
+        <span style="color:${p.merged?'green':'red'}">
+          ${p.merged?'統合済':'未統合'}
+        </span><br><br>
+        ${p.summary||p.content||""}
       </div>
     `).join("");
 }
 
-load();
-
-function openDetail(type){
-
-if(type === "ehon"){
-
-document.getElementById("detailBox").innerHTML = `
-<h2>📚 絵本図書館（AI知育拠点）</h2>
-
-<p>
-世界一の絵本蔵書数を誇る当館は、最先端技術が融合した次世代型知育拠点です。
-VR・AR映像とAI読み聞かせにより、子供の感性を育てます。
-</p>
-
-<p>
-AIが最適な絵本を推薦し、保護者相談にも対応します。
-</p>
-
-<button class="big-button" onclick="showPage('assistant')">
-あなたの意見も聞かせてください → AI壁打ちへ
-</button>
-`;
-
-showPage("detail");
-}
-
-}
-
-let selectedCategory = "";
-
-function setCategory(cat){
-  selectedCategory = cat;
+/* AI */
+function setCategory(c){
+  selectedCategory = c;
 }
 
 function runAI(){
   const text = document.getElementById("ideaInput").value;
-
-  document.getElementById("resultBox").innerHTML =
-    "<h3>AI処理中</h3><p>" + text + "</p>";
-
+  document.getElementById("resultBox").innerText = text;
   document.getElementById("decisionBox").style.display = "block";
 }
 
 async function sendToPR(){
   const data = {
-    title: "AI生成案",
+    title: "AI生成",
     category: selectedCategory || "未分類",
     content: document.getElementById("ideaInput").value,
     summary: document.getElementById("resultBox").innerText
   };
 
-  await fetch("https://script.google.com/macros/s/AKfycbzopgSpPPozJ3Q6J2fDSrI8zE0iIlgK-VLqTixe4VL9dPtzvpOZ9UOyPjK8yPQSA6n7vg/exec", {
-    method: "POST",
-    body: JSON.stringify(data)
+  await fetch(GAS_URL,{
+    method:"POST",
+    body:JSON.stringify(data)
   });
 
-  alert("PR送信完了");
+  loadData();
 }
 
 function backToAI(){
   document.getElementById("decisionBox").style.display = "none";
 }
 
-function filterPR(cat){
-  const box = document.getElementById("prList");
-  const filtered = POSTS.filter(p => p.category === cat);
-
-  box.innerHTML = filtered.map(p => `
-    <div class="placeholder-card">
-      <b>${p.title || ""}</b><br>
-      ${p.merged ? "統合済" : "未統合"}<br><br>
-      ${p.summary || p.content || ""}
-    </div>
-  `).join("");
-}
+document.addEventListener("DOMContentLoaded", loadData);
 
 </script>
 
