@@ -142,19 +142,29 @@ function setCategory(c){
   selectedCategory = c;
 }
 
-function runAI(){
+async function runAI(){
 
   const text =
     document.getElementById("ideaInput").value;
 
+  const response = await fetch(GAS_URL,{
+    method:"POST",
+    body:JSON.stringify({
+      category:selectedCategory || "未分類",
+      content:text
+    })
+  });
+
+  const result = await response.json();
+
   document.getElementById("resultBox").innerText =
-    text;
+    result.result || "AI分析失敗";
 
   document.getElementById("titleBox").innerText =
-    "提案：" + text.slice(0,20);
+    "AIがタイトルを生成しました";
 
   document.getElementById("summaryBox").innerText =
-    text.slice(0,200);
+    "AIが200字要約を生成しました";
 
   document.getElementById("decisionBox").style.display =
     "block";
