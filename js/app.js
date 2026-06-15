@@ -166,17 +166,11 @@ const summaryMatch = aiText.match(/(?:■|\*\*)?200字要約(?:\*\*)?\s*[\r\n]+(
 document.getElementById("resultBox").innerText =
   aiText;
 
-document.getElementById("resultBox").innerText =
+document.getElementById("titleBox").innerText =
   aiText;
 
-document.getElementById("titleBox").innerText =
-  titleMatch ? titleMatch[1].trim() : "";
-
 document.getElementById("summaryBox").innerText =
-  summaryMatch ? summaryMatch[1].trim() : "";
-
-document.getElementById("decisionBox").style.display =
-  "block";
+  aiText;
 
   document.getElementById("decisionBox").style.display =
     "block";
