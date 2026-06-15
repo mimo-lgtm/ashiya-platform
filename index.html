@@ -608,22 +608,29 @@ h1,h2,h3{
 
 <section id="assistant" class="page">
 
-<h1>AI壁打ち</h1>
+  <h1>AI壁打ち</h1>
 
-<textarea id="ideaInput"></textarea>
+  <div class="placeholder-card">
 
-<button onclick="runAI()">AI分析</button>
+    <textarea id="ideaInput" placeholder="アイデアを入力してください"></textarea>
 
-<h3>タイトル案</h3>
-<div id="resultBox"></div>
+    <button onclick="runAI()">AI分析</button>
 
-<h3>200文字要約</h3>
-<div id="summaryBox"></div>
+  </div>
 
-<div id="decisionBox" style="display:none;"></div>
+  <div class="placeholder-card">
+
+    <h3>タイトル案</h3>
+    <div id="resultBox"></div>
+
+    <h3>200文字要約</h3>
+    <div id="summaryBox"></div>
+
+  </div>
+
+  <div id="decisionBox" style="display:none;"></div>
 
 </section>
-
 
 <!-- ================= 23.RULES ================= -->
 <section id="rules" class="page">

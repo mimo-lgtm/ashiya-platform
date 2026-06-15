@@ -37,6 +37,22 @@ function renderTree(){
   `).join("");
 }
 
+function openDetail(id){
+  const box = document.getElementById("detailBox");
+  if(!box) return;
+
+  if(id === "ehon"){
+    box.innerHTML = `
+      <div class="placeholder-card">
+        <h2>📚 絵本図書館（AI知育拠点）</h2>
+        <p>AI学習・子ども教育・知育コンテンツの拠点構想です。</p>
+      </div>
+    `;
+  }
+
+  showPage("detail");
+}
+
 /* PR */
 function renderPR(){
   const box = document.getElementById("prList");
@@ -102,3 +118,6 @@ function backToAI(){
 }
 
 document.addEventListener("DOMContentLoaded", loadData);
+
+document.getElementById("titleBox").innerText = "AI生成タイトル";
+document.getElementById("summaryBox").innerText = "200字要約...";
