@@ -157,8 +157,22 @@ async function runAI(){
 
   const result = await response.json();
 
-  document.getElementById("resultBox").innerText =
-    result.result || "AI分析失敗";
+const aiText = result.result || "";
+
+const titleMatch =
+  aiText.match(/■推奨タイトル[\s\S]*?\n(.+)/);
+
+const summaryMatch =
+  aiText.match(/■200字要約[\s\S]*?\n([\s\S]*)/);
+
+document.getElementById("resultBox").innerText =
+  aiText;
+
+document.getElementById("titleBox").innerText =
+  titleMatch ? titleMatch[1].trim() : "";
+
+document.getElementById("summaryBox").innerText =
+  summaryMatch ? summaryMatch[1].trim() : "";
 
   document.getElementById("titleBox").innerText =
     "AIがタイトルを生成しました";
