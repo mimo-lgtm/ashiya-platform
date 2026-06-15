@@ -19,6 +19,10 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbzopgSpPPozJ3Q6J2fDSrI8
 let POSTS = [];
 let selectedCategory = "";
 
+/* ================= INIT ================= */
+
+document.addEventListener("DOMContentLoaded", loadData);
+
 /* ================= LOAD ================= */
 
 async function loadData(){
@@ -33,55 +37,50 @@ async function loadData(){
     renderPRList();
 
   }catch(e){
-    console.log("load error", e);
+    console.log(e);
   }
 }
 
-/* ================= PR（一覧） ================= */
+/* ================= PAGE RENDER ================= */
 
 function renderPR(){
-
   const box = document.getElementById("data");
   if(!box) return;
 
-  box.innerHTML = POSTS.map(x=>`
+  box.innerHTML = POSTS.map(p=>`
     <div class="placeholder-card">
-      <b>${x["タイトル"] || ""}</b><br>
-      <small>${x["カテゴリ"] || "未分類"}</small><br><br>
-      ${x["内容"] || ""}
+      <b>${p.title || p["タイトル"] || ""}</b><br>
+      <small>${p.category || p["カテゴリ"] || "未分類"}</small><br><br>
+      ${p.content || p["内容"] || ""}
     </div>
   `).join("");
 }
 
-/* ================= TREE（統合済みのみ） ================= */
-
 function renderTree(){
-
   const tree = document.getElementById("treeData");
   if(!tree) return;
 
-  const merged = POSTS.filter(x => x.merged === true);
+  const merged = POSTS.filter(p => p.merged === true);
 
-  tree.innerHTML = merged.map(x=>`
+  tree.innerHTML = merged.map(p=>`
     <div class="placeholder-card">
-      <b>${x["タイトル"] || ""}</b><br>
-      ${x["内容"] || ""}
+      <b>${p.title || p["タイトル"] || ""}</b><br>
+      ${p.content || p["内容"] || ""}
     </div>
   `).join("");
 }
 
-/* ================= PR（カテゴリ別・未統合/統合） ================= */
+/* ================= PR LIST ================= */
 
 function renderPRList(filter=""){
-
   const box = document.getElementById("prList");
   if(!box) return;
 
-  const filtered = filter
+  const list = filter
     ? POSTS.filter(p => p.category === filter)
     : POSTS;
 
-  box.innerHTML = filtered.map(p=>`
+  box.innerHTML = list.map(p=>`
     <div class="placeholder-card">
       <b>${p.title || p["タイトル"] || ""}</b><br>
 
@@ -95,7 +94,6 @@ function renderPRList(filter=""){
   `).join("");
 }
 
-/* フィルター */
 function filterPR(cat){
   renderPRList(cat);
 }
@@ -114,17 +112,10 @@ async function aiStep1(){
     <h3>AI結果</h3>
     <p>${text}</p>
 
-    <button onclick="submitIdea()" class="big-button">
-      A. 200字要約してPRへ
-    </button>
-
-    <button onclick="backToAI()" class="big-button">
-      B. 意見を修正する
-    </button>
+    <button onclick="submitIdea()" class="big-button">A. PRへ</button>
+    <button onclick="backToAI()" class="big-button">B. 戻る</button>
   `;
 }
-
-/* ================= AI → PR送信 ================= */
 
 async function submitIdea(){
 
@@ -136,28 +127,14 @@ async function submitIdea(){
     merged: false
   };
 
-  const res = await fetch(GAS_URL, {
+  await fetch(GAS_URL, {
     method: "POST",
     body: JSON.stringify(data)
   });
 
-  await res.json();
-
-  document.getElementById("aiBox").innerHTML = `
-    <div style="padding:20px;background:#dcfce7;border-radius:12px;">
-      <h3>PR送信完了</h3>
-    </div>
-  `;
-
   loadData();
 }
-
-/* ================= AI戻る ================= */
 
 function backToAI(){
   document.getElementById("aiBox").innerHTML = "入力を修正してください";
 }
-
-/* ================= INIT ================= */
-
-document.addEventListener("DOMContentLoaded", loadData);
