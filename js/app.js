@@ -3,28 +3,46 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbzopgSpPPozJ3Q6J2fDSrI8
 let POSTS = [];
 let selectedCategory = "";
 
-/* PAGE */
-function showPage(id){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  const el = document.getElementById(id);
-  if(el) el.classList.add('active');
-}
+/* ================= PAGE ================= */
 
-/* LOAD */
-async function loadData(){
-  try{
-    const res = await fetch(GAS_URL);
-    POSTS = await res.json();
-    renderPR();
-    renderTree();
-  }catch(e){
-    console.log(e);
+function showPage(id){
+  document.querySelectorAll(".page").forEach(p=>{
+    p.classList.remove("active");
+  });
+
+  const el = document.getElementById(id);
+
+  if(el){
+    el.classList.add("active");
   }
 }
 
-/* TREE */
+/* ================= LOAD ================= */
+
+async function loadData(){
+
+  try{
+
+    const res = await fetch(GAS_URL);
+    POSTS = await res.json();
+
+    renderPR();
+    renderTree();
+
+  }catch(e){
+
+    console.log("LOAD ERROR",e);
+
+  }
+
+}
+
+/* ================= TREE ================= */
+
 function renderTree(){
+
   const box = document.getElementById("treeData");
+
   if(!box) return;
 
   const merged = POSTS.filter(p => p.merged === true);
@@ -35,110 +53,180 @@ function renderTree(){
       ${p.summary || p.content || ""}
     </div>
   `).join("");
+
 }
 
+/* ================= DETAIL ================= */
+
 function openDetail(id){
+
   const box = document.getElementById("detailBox");
+
   if(!box) return;
 
   if(id === "ehon"){
+
     box.innerHTML = `
       <div class="placeholder-card">
         <h2>📚 絵本図書館（AI知育拠点）</h2>
-        <p>AI学習・子ども教育・知育コンテンツの拠点構想です。</p>
+
+        <p>
+          AI・絵本・知育・親子学習を融合した
+          次世代教育拠点の構想です。
+        </p>
+
       </div>
     `;
+
   }
 
   showPage("detail");
+
 }
 
-/* PR */
+/* ================= PR ================= */
+
 function renderPR(){
+
   const box = document.getElementById("prList");
+
   if(!box) return;
 
   box.innerHTML = POSTS.map(p => `
     <div class="placeholder-card">
+
       <b>${p.title || ""}</b><br>
-      <span style="color:${p.merged ? 'green' : 'red'}">
-        ${p.merged ? '統合済' : '未統合'}
-      </span><br><br>
+
+      <span style="color:${p.merged ? "green" : "red"}">
+        ${p.merged ? "統合済" : "未統合"}
+      </span>
+
+      <br><br>
+
       ${p.summary || p.content || ""}
+
     </div>
   `).join("");
+
 }
 
 function filterPR(cat){
+
   const box = document.getElementById("prList");
+
   if(!box) return;
 
   box.innerHTML = POSTS
     .filter(p => p.category === cat)
     .map(p => `
       <div class="placeholder-card">
+
         <b>${p.title || ""}</b><br>
-        <span style="color:${p.merged ? 'green' : 'red'}">
-          ${p.merged ? '統合済' : '未統合'}
-        </span><br><br>
+
+        <span style="color:${p.merged ? "green" : "red"}">
+          ${p.merged ? "統合済" : "未統合"}
+        </span>
+
+        <br><br>
+
         ${p.summary || p.content || ""}
+
       </div>
     `).join("");
+
 }
 
-/* AI */
+/* ================= AI ================= */
+
 function setCategory(c){
   selectedCategory = c;
 }
 
- function runAI(){
-  const text = document.getElementById("ideaInput").value;
+function runAI(){
 
-  document.getElementById("resultBox").innerText = text;
+  const input = document.getElementById("ideaInput");
 
-  // 仮生成（今は同じ文章でOK）
-  document.getElementById("titleBox").innerText = "仮タイトル：" + text.slice(0, 20);
+  if(!input) return;
 
-  document.getElementById("summaryBox").innerText = text.slice(0, 200);
+  const text = input.value;
 
-  document.getElementById("decisionBox").style.display = "block";
+  const resultBox = document.getElementById("resultBox");
+  const titleBox = document.getElementById("titleBox");
+  const summaryBox = document.getElementById("summaryBox");
+  const decisionBox = document.getElementById("decisionBox");
+
+  if(resultBox){
+    resultBox.innerText = text;
+  }
+
+  if(titleBox){
+    titleBox.innerText =
+      text.length > 20
+      ? text.substring(0,20) + "..."
+      : text;
+  }
+
+  if(summaryBox){
+    summaryBox.innerText =
+      text.length > 200
+      ? text.substring(0,200) + "..."
+      : text;
+  }
+
+  if(decisionBox){
+    decisionBox.style.display = "block";
+  }
+
 }
 
-
 async function sendToPR(){
+
   const input = document.getElementById("ideaInput");
   const result = document.getElementById("resultBox");
 
   const data = {
+
     title: "AI生成",
+
     category: selectedCategory || "未分類",
+
     content: input ? input.value : "",
+
     summary: result ? result.innerText : ""
+
   };
 
-  await fetch(GAS_URL,{
-    method:"POST",
-    body:JSON.stringify(data)
-  });
+  try{
 
-  loadData();
+    await fetch(GAS_URL,{
+      method:"POST",
+      body:JSON.stringify(data)
+    });
+
+    loadData();
+
+  }catch(e){
+
+    console.log("POST ERROR",e);
+
+  }
+
 }
 
 function backToAI(){
-  document.getElementById("decisionBox").style.display = "none";
+
+  const box = document.getElementById("decisionBox");
+
+  if(box){
+    box.style.display = "none";
+  }
+
 }
 
-document.addEventListener("DOMContentLoaded", loadData);
+/* ================= START ================= */
 
-document.getElementById("titleBox").innerText = "AI生成タイトル";
-document.getElementById("summaryBox").innerText = "200字要約...";
+document.addEventListener("DOMContentLoaded",()=>{
 
-function openDetail(id){
-  const box = document.getElementById("detailBox");
-  if(!box) return;
+  loadData();
 
-  box.innerHTML = "📚 絵本図書館（AI知育拠点）詳細ページ（仮）";
-  showPage("detail");
-}
-
-document.getElementById("summaryBox").innerText = text.slice(0,200);
+});
