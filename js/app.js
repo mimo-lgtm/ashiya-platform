@@ -157,20 +157,16 @@ async function runAI(){
 
   const result = await response.json();
 
-const aiText = result.result || "";
+  const aiText = result.result || "";
 
-const titleMatch = aiText.match(/(?:■|\*\*)?推奨タイトル(?:\*\*)?\s*[\r\n]+(.+)/);
+  document.getElementById("resultBox").innerText =
+    aiText;
 
-const summaryMatch = aiText.match(/(?:■|\*\*)?200字要約(?:\*\*)?\s*[\r\n]+([\s\S]*)/);
+  document.getElementById("titleBox").innerText =
+    "";
 
-document.getElementById("resultBox").innerText =
-  aiText;
-
-document.getElementById("titleBox").innerText =
-  aiText;
-
-document.getElementById("summaryBox").innerText =
-  aiText;
+  document.getElementById("summaryBox").innerText =
+    "";
 
   document.getElementById("decisionBox").style.display =
     "block";
