@@ -581,28 +581,26 @@ h1,h2,h3{
 <!-- AI壁打ちページ -->
 <section id="assistant" class="page">
 
-  <div class="assistant-card">
+<h1>AI壁打ち</h1>
 
-    <h2>AI壁打ち</h2>
+<textarea id="ideaInput"></textarea>
 
-    <div class="assistant-layout">
+<button onclick="runAI()">AI分析</button>
 
-      <textarea id="ideaInput" placeholder="アイデアを入力"></textarea>
+<div class="placeholder-card">
 
-      <div>
-        <div id="resultBox" class="placeholder-card"></div>
+  <h3>推奨タイトル</h3>
+  <div id="titleBox"></div>
 
-        <div id="decisionBox" class="placeholder-card" style="display:none;">
-          <button onclick="sendToPR()">送信</button>
-          <button onclick="backToAI()">戻る</button>
-        </div>
-      </div>
+  <h3>200文字要約</h3>
+  <div id="summaryBox"></div>
 
-    </div>
+  <h3>AI出力</h3>
+  <div id="resultBox"></div>
 
-    <button class="big-button" onclick="runAI()">AI実行</button>
+</div>
 
-  </div>
+<div id="decisionBox" style="display:none;"></div>
 
 </section>
 

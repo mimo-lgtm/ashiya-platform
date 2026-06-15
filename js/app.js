@@ -92,20 +92,18 @@ function setCategory(c){
 }
 
  function runAI(){
-  const input = document.getElementById("ideaInput");
-  const result = document.getElementById("resultBox");
-  const decision = document.getElementById("decisionBox");
+  const text = document.getElementById("ideaInput").value;
 
-  if(!input || !result) return;
+  document.getElementById("resultBox").innerText = text;
 
-  const text = input.value;
+  // 仮生成（今は同じ文章でOK）
+  document.getElementById("titleBox").innerText = "仮タイトル：" + text.slice(0, 20);
 
-  result.innerText = text;
+  document.getElementById("summaryBox").innerText = text.slice(0, 200);
 
-  if(decision){
-    decision.style.display = "block";
-  }
+  document.getElementById("decisionBox").style.display = "block";
 }
+
 
 async function sendToPR(){
   const input = document.getElementById("ideaInput");
