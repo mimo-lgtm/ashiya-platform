@@ -167,10 +167,10 @@ document.getElementById("resultBox").innerText =
   aiText;
 
 document.getElementById("titleBox").innerText =
-  titleMatch ? titleMatch[1].trim() : "";
+  "テストタイトル";
 
 document.getElementById("summaryBox").innerText =
-  summaryMatch ? summaryMatch[1].trim() : "";
+  "テスト要約";
 
   document.getElementById("titleBox").innerText =
     "AIがタイトルを生成しました";
