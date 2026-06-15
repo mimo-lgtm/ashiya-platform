@@ -590,83 +590,6 @@ function renderTree(){
 
 </section>
 
-/* ================= AI 22================= */
-
-let selectedCategory = "";
-
-function setCategory(cat){
-  selectedCategory = cat;
-}
-
-async function runAI(){
-
-  const text = document.getElementById("ideaInput").value;
-
-  document.getElementById("resultBox").innerHTML =
-    "<h3>AI処理中</h3><p>" + text + "</p>";
-
-  document.getElementById("decisionBox").style.display = "block";
-}
-
-async function sendToPR(){
-
-  const data = {
-    title: "AI生成案",
-    category: selectedCategory || "未分類",
-    content: document.getElementById("ideaInput").value,
-    summary: document.getElementById("resultBox").innerText
-  };
-
-  await fetch("https://script.google.com/macros/s/AKfycbzopgSpPPozJ3Q6J2fDSrI8zE0iIlgK-VLqTixe4VL9dPtzvpOZ9UOyPjK8yPQSA6n7vg/exec", {
-    method:"POST",
-    body: JSON.stringify(data)
-  });
-
-  alert("PR送信完了");
-}
-
-function backToAI(){
-  document.getElementById("decisionBox").style.display = "none";
-}
-
-/* ================= AI 23================= */
-
-let selectedCategory = "";
-
-function setCategory(cat){
-  selectedCategory = cat;
-}
-
-async function runAI(){
-
-  const text = document.getElementById("ideaInput").value;
-
-  document.getElementById("resultBox").innerHTML =
-    "<h3>AI処理中</h3><p>" + text + "</p>";
-
-  document.getElementById("decisionBox").style.display = "block";
-}
-
-async function sendToPR(){
-
-  const data = {
-    title: "AI生成案",
-    category: selectedCategory || "未分類",
-    content: document.getElementById("ideaInput").value,
-    summary: document.getElementById("resultBox").innerText
-  };
-
-  await fetch("https://script.google.com/macros/s/AKfycbzopgSpPPozJ3Q6J2fDSrI8zE0iIlgK-VLqTixe4VL9dPtzvpOZ9UOyPjK8yPQSA6n7vg/exec", {
-    method:"POST",
-    body: JSON.stringify(data)
-  });
-
-  alert("PR送信完了");
-}
-
-function backToAI(){
-  document.getElementById("decisionBox").style.display = "none";
-}
 
 <!-- ================= 23.RULES ================= -->
 <section id="rules" class="page">
@@ -899,6 +822,53 @@ showPage("detail");
 
 }
 
+let selectedCategory = "";
+
+function setCategory(cat){
+  selectedCategory = cat;
+}
+
+function runAI(){
+  const text = document.getElementById("ideaInput").value;
+
+  document.getElementById("resultBox").innerHTML =
+    "<h3>AI処理中</h3><p>" + text + "</p>";
+
+  document.getElementById("decisionBox").style.display = "block";
+}
+
+async function sendToPR(){
+  const data = {
+    title: "AI生成案",
+    category: selectedCategory || "未分類",
+    content: document.getElementById("ideaInput").value,
+    summary: document.getElementById("resultBox").innerText
+  };
+
+  await fetch("https://script.google.com/macros/s/AKfycbzopgSpPPozJ3Q6J2fDSrI8zE0iIlgK-VLqTixe4VL9dPtzvpOZ9UOyPjK8yPQSA6n7vg/exec", {
+    method: "POST",
+    body: JSON.stringify(data)
+  });
+
+  alert("PR送信完了");
+}
+
+function backToAI(){
+  document.getElementById("decisionBox").style.display = "none";
+}
+
+function filterPR(cat){
+  const box = document.getElementById("prList");
+  const filtered = POSTS.filter(p => p.category === cat);
+
+  box.innerHTML = filtered.map(p => `
+    <div class="placeholder-card">
+      <b>${p.title || ""}</b><br>
+      ${p.merged ? "統合済" : "未統合"}<br><br>
+      ${p.summary || p.content || ""}
+    </div>
+  `).join("");
+}
 
 </script>
 
