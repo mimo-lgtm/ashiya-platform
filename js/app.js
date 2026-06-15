@@ -233,4 +233,26 @@ function backToAI(){
 
 document.addEventListener("DOMContentLoaded", loadData);
 
+const filtered = POSTS.filter(p => p.category === cat);
+
+const merged = POSTS.filter(p => p.merged === true);
+
+  box.innerHTML = filtered.map(p => `
+    <div class="placeholder-card">
+      <b>${p.title || ""}</b><br>
+      <span style="color:${p.merged ? "green" : "red"}">
+        ${p.merged ? "統合済" : "未統合"}
+      </span><br><br>
+      ${p.summary || p.content || ""}
+    </div>
+  `).join("");
+
+box.innerHTML = merged.map(p => `
+
+    <div class="placeholder-card">
+      <b>${p.title || ""}</b><br>
+      ${p.summary || p.content || ""}
+    </div>
+  `).join("");
+
 </script>

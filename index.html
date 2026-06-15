@@ -473,15 +473,9 @@ h1,h2,h3{
 
   const box = document.getElementById("treeData");
 
-  const merged = POSTS.filter(p => p.merged === true);
 
-  box.innerHTML = merged.map(p => `
 
-    <div class="placeholder-card">
-      <b>${p.title || ""}</b><br>
-      ${p.summary || p.content || ""}
-    </div>
-  `).join("");
+  
 }
 
 <!-- =================18. INTRO GUIDE ================= -->
@@ -661,17 +655,7 @@ h1,h2,h3{
 
   const box = document.getElementById("prList");
 
-  const filtered = POSTS.filter(p => p.category === cat);
-
-  box.innerHTML = filtered.map(p => `
-    <div class="placeholder-card">
-      <b>${p.title || ""}</b><br>
-      <span style="color:${p.merged ? "green" : "red"}">
-        ${p.merged ? "統合済" : "未統合"}
-      </span><br><br>
-      ${p.summary || p.content || ""}
-    </div>
-  `).join("");
+  
 }
 
 <!-- ================= 25.DUMMY PR ITEMS ================= -->
