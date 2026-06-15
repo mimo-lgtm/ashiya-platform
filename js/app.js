@@ -6,16 +6,37 @@ let selectedCategory = "";
 /* ===== PAGE ===== */
 function showPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+
+  const target = document.getElementById(id);
+  if(target){
+    target.classList.add('active');
+  }
 }
 
 /* ===== LOAD ===== */
 async function loadData(){
-  const res = await fetch(GAS_URL);
-  POSTS = await res.json();
+  try{
+    const res = await fetch(GAS_URL);
 
-  renderPR();
-  renderTree();
+    const text = await res.text();
+
+    let data = [];
+
+    try {
+      data = JSON.parse(text);
+    } catch(e){
+      console.log("GASがJSONではありません:", text);
+      return;
+    }
+
+    POSTS = data;
+
+    renderPR();
+    renderTree();
+
+  }catch(e){
+    console.log("load error", e);
+  }
 }
 
 /* ===== TREE ===== */
@@ -23,12 +44,12 @@ function renderTree(){
   const box = document.getElementById("treeData");
   if(!box) return;
 
-  const merged = POSTS.filter(p=>p.merged);
+  const merged = POSTS.filter(p => p.merged === true);
 
-  box.innerHTML = merged.map(p=>`
+  box.innerHTML = merged.map(p => `
     <div class="placeholder-card">
-      <b>${p.title||""}</b><br>
-      ${p.summary||p.content||""}
+      <b>${p.title || ""}</b><br>
+      ${p.summary || p.content || ""}
     </div>
   `).join("");
 }
@@ -38,28 +59,30 @@ function renderPR(){
   const box = document.getElementById("prList");
   if(!box) return;
 
-  box.innerHTML = POSTS.map(p=>`
+  box.innerHTML = POSTS.map(p => `
     <div class="placeholder-card">
-      <b>${p.title||""}</b><br>
-      <span style="color:${p.merged?'green':'red'}">
-        ${p.merged?'統合済':'未統合'}
+      <b>${p.title || ""}</b><br>
+      <span style="color:${p.merged ? 'green' : 'red'}">
+        ${p.merged ? '統合済' : '未統合'}
       </span><br><br>
-      ${p.summary||p.content||""}
+      ${p.summary || p.content || ""}
     </div>
   `).join("");
 }
 
 function filterPR(cat){
   const box = document.getElementById("prList");
+  if(!box) return;
+
   box.innerHTML = POSTS
-    .filter(p=>p.category===cat)
-    .map(p=>`
+    .filter(p => p.category === cat)
+    .map(p => `
       <div class="placeholder-card">
-        <b>${p.title||""}</b><br>
-        <span style="color:${p.merged?'green':'red'}">
-          ${p.merged?'統合済':'未統合'}
+        <b>${p.title || ""}</b><br>
+        <span style="color:${p.merged ? 'green' : 'red'}">
+          ${p.merged ? '統合済' : '未統合'}
         </span><br><br>
-        ${p.summary||p.content||""}
+        ${p.summary || p.content || ""}
       </div>
     `).join("");
 }
@@ -70,8 +93,9 @@ function setCategory(c){
 }
 
 function runAI(){
-  const text = document.getElementById("ideaInput").value;
-  document.getElementById("resultBox").innerHTML = text;
+  const text = document.getElementById("ideaInput")?.value || "";
+
+  document.getElementById("resultBox").innerText = text;
   document.getElementById("decisionBox").style.display = "block";
 }
 
@@ -79,20 +103,26 @@ async function sendToPR(){
   const data = {
     title: "AI生成",
     category: selectedCategory || "未分類",
-    content: document.getElementById("ideaInput").value,
-    summary: document.getElementById("resultBox").innerText
+    content: document.getElementById("ideaInput")?.value || "",
+    summary: document.getElementById("resultBox")?.innerText || ""
   };
 
-  await fetch(GAS_URL,{
-    method:"POST",
-    body:JSON.stringify(data)
-  });
+  try{
+    await fetch(GAS_URL,{
+      method:"POST",
+      body:JSON.stringify(data)
+    });
 
-  loadData();
+    loadData();
+
+  }catch(e){
+    console.log("POST error", e);
+  }
 }
 
 function backToAI(){
-  document.getElementById("decisionBox").style.display = "none";
+  const box = document.getElementById("decisionBox");
+  if(box) box.style.display = "none";
 }
 
 document.addEventListener("DOMContentLoaded", loadData);
