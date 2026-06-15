@@ -144,7 +144,10 @@ function setCategory(c){
 
 async function runAI(){
 
-  const text =
+ selectedCategory =
+  document.getElementById("categorySelect").value; 
+
+const text =
     document.getElementById("ideaInput").value;
 
   const response = await fetch(GAS_URL,{
