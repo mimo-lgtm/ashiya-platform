@@ -471,12 +471,6 @@ h1,h2,h3{
 
 <h1>🌳 市民政策ロジックツリー</h1>
 
-  const box = document.getElementById("treeData");
-
-
-
-  
-}
 
 <!-- =================18. INTRO GUIDE ================= -->
 <div class="placeholder-card">
@@ -612,6 +606,24 @@ h1,h2,h3{
 
 </section>
 
+<section id="assistant" class="page">
+
+<h1>AI壁打ち</h1>
+
+<textarea id="ideaInput"></textarea>
+
+<button onclick="runAI()">AI分析</button>
+
+<h3>タイトル案</h3>
+<div id="resultBox"></div>
+
+<h3>200文字要約</h3>
+<div id="summaryBox"></div>
+
+<div id="decisionBox" style="display:none;"></div>
+
+</section>
+
 
 <!-- ================= 23.RULES ================= -->
 <section id="rules" class="page">
@@ -681,10 +693,6 @@ h1,h2,h3{
 
 </section>
 
-  const box = document.getElementById("prList");
-
-  
-}
 
 <!-- ================= 25.DUMMY PR ITEMS ================= -->
 
