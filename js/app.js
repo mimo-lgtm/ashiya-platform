@@ -122,9 +122,9 @@ function renderTimeline(){
     "2026/07 政策統合フェーズ"
   ];
 
-  box.innerHTML = timeline.map(t=>`
-    <div class="placeholder-card">${t}</div>
-  `).join("");
+  box.innerHTML = timeline.map(t=>
+    `<div class="placeholder-card">${t}</div>`
+  ).join("");
 }
 
 /* ================= AI ================= */
