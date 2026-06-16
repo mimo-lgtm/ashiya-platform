@@ -5,13 +5,13 @@
 }
 
 body {
-  font-family: "Yu Gothic", "Meiryo", sans-serif;
+  font-family: "Yu Gothic","Meiryo",sans-serif;
   background: linear-gradient(135deg,#eef3ff,#f7fff8,#fff7ed);
-  color: #222;
-  line-height: 1.6;
+  color:#222;
+  line-height:1.6;
 }
 
-/* ================= 1 HEADER ================= */
+/* HEADER */
 .topbar{
   position:sticky;
   top:0;
@@ -32,11 +32,11 @@ nav button{
   cursor:pointer;
 }
 
-/* ================= 2 PAGE ================= */
+/* PAGE */
 .page{ display:none; padding:40px; }
 .page.active{ display:block; }
 
-/* ================= 4 CARD ================= */
+/* CARD */
 .placeholder-card{
   background:#fff;
   padding:24px;
@@ -46,14 +46,7 @@ nav button{
   box-shadow:0 10px 30px rgba(0,0,0,0.08);
 }
 
-/* ================= 7 AI ================= */
-textarea{
-  width:100%;
-  height:200px;
-  padding:12px;
-  border-radius:10px;
-}
-
+/* BUTTON */
 .big-button{
   padding:14px 20px;
   background:#2563eb;
@@ -63,37 +56,25 @@ textarea{
   cursor:pointer;
 }
 
-/* ================= CATEGORY ================= */
+/* AI */
+textarea{
+  width:100%;
+  height:200px;
+  padding:12px;
+  border-radius:10px;
+}
+
+/* CATEGORY */
 .category-bar{
   display:flex;
   gap:10px;
-  flex-wrap:wrap;
-  margin-bottom:10px;
 }
 
-.category-bar button{
-  padding:8px 12px;
-  border:none;
-  border-radius:10px;
-  background:#e5e7eb;
+/* PR */
+.pr-merged{ border-left:6px solid #22c55e; }
+.pr-unmerged{ border-left:6px solid #ef4444; }
+
+/* TREE */
+#treeData .placeholder-card{
   cursor:pointer;
-}
-
-.category-bar button.active{
-  background:#2563eb;
-  color:#fff;
-}
-
-/* ================= PR ================= */
-.pr-merged{
-  border-left:6px solid #22c55e;
-}
-
-.pr-unmerged{
-  border-left:6px solid #ef4444;
-}
-
-/* ================= MOBILE ================= */
-@media(max-width:900px){
-  .page{ padding:20px; }
 }
