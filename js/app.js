@@ -62,6 +62,11 @@ async function loadData() {
       return;
     }
 
+if (typeof renderTree !== "function") {
+  console.error("renderTree is missing");
+  return;
+}
+
     renderTree(data);
 
   } catch (e) {
