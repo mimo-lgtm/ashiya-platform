@@ -410,3 +410,7 @@ function openTree() {
 }
 
 window.openTree = openTree;
+
+function renderTree(data) {
+  console.log("renderTree stub executed", data);
+}
