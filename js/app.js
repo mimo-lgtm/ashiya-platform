@@ -1,421 +1,214 @@
-function renderTree(data) {
-  console.log("renderTree fallback executed", data);
-}
-
-window.openTree = window.openTree || function () {
-  console.log("openTree fallback executed");
-};
-
-(function () {
-  const originalAddEventListener = EventTarget.prototype.addEventListener;
-
-  EventTarget.prototype.addEventListener = function (type, listener, options) {
-    if (typeof listener === "function") {
-      const wrapped = function (...args) {
-        try {
-          return listener.apply(this, args);
-        } catch (e) {
-          console.error("Caught error:", e);
-        }
-      };
-      return originalAddEventListener.call(this, type, wrapped, options);
-    }
-    return originalAddEventListener.call(this, type, listener, options);
-  };
-})();
-
-
-const GAS_URL =
-"https://script.google.com/macros/s/AKfycbzopgSpPPozJ3Q6J2fDSrI8zE0iIlgK-VLqTixe4VL9dPtzvpOZ9UOyPjK8yPQSA6n7vg/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbzopgSpPPozJ3Q6J2fDSrI8zE0iIlgK-VLqTixe4VL9dPtzvpOZ9UOyPjK8yPQSA6n7vg/exec";
 
 let POSTS = [];
-let CURRENT_FILTER = "all";
+let selectedCategory = "";
+
+/* ================= INIT ================= */
+document.addEventListener("DOMContentLoaded", () => {
+  loadData();
+});
 
 /* ================= PAGE ================= */
-
 function showPage(id){
 
-  document
-    .querySelectorAll(".page")
-    .forEach(page=>{
-      page.classList.remove("active");
-    });
+  document.querySelectorAll(".page").forEach(p=>{
+    p.classList.remove("active");
+  });
 
-  const target =
-    document.getElementById(id);
-
-  if(target){
-    target.classList.add("active");
-  }
-
-  window.scrollTo(0,0);
+  const target = document.getElementById(id);
+  if(target) target.classList.add("active");
 }
 
 /* ================= LOAD ================= */
-
-async function loadData() {
-  try {
-    const data = await fetchData(); // ←元の処理があるならここは維持
-
-    if (typeof renderTree !== "function") {
-      console.warn("renderTree is missing");
-      return;
-    }
-
-if (typeof renderTree !== "function") {
-  console.error("renderTree is missing");
-  return;
-}
-
-    renderTree(data);
-
-  } catch (e) {
-    console.error(e);
-  }
-}
-
-
-/* ================= TREE ================= */
-
-function openTheme(theme){
-
-  showPage("assistant");
-
-  const input =
-    document.getElementById("ideaInput");
-
-  if(input){
-
-    input.value =
-      "【テーマ】" +
-      theme +
-      "\n\n";
-
-  }
-
-}
-
-/* ================= DETAIL ================= */
-
-function openDetail(name){
-
-  const box =
-    document.getElementById("detailBox");
-
-  if(!box) return;
-
-  box.innerHTML = `
-    <h2>${name}</h2>
-
-    <p>
-    このテーマに関する
-    市民提案・AI分析を
-    今後表示します。
-    </p>
-  `;
-
-  showPage("detail");
-
-}
-
-/* ================= AI ================= */
-
-async function runAI(){
-
-  const input =
-    document.getElementById("ideaInput");
-
-  if(!input) return;
-
-  const text =
-    input.value.trim();
-
-  if(!text){
-
-    alert("意見を入力してください");
-
-    return;
-  }
+async function loadData(){
 
   try{
 
-    const res =
-      await fetch(GAS_URL,{
+    const res = await fetch(GAS_URL);
+    POSTS = await res.json();
 
-        method:"POST",
+    renderTree();
+    renderPR();
+    renderTimeline();
 
-        body:JSON.stringify({
-          mode:"analysis",
-          content:text
-        })
-
-      });
-
-    const data =
-      await res.json();
-
-    const result =
-      data.result || "";
-
-    const title =
-      data.title ||
-      "市民提案";
-
-    const summary =
-      data.summary ||
-      result.substring(0,200);
-
-    const titleBox =
-      document.getElementById("titleBox");
-
-    const summaryBox =
-      document.getElementById("summaryBox");
-
-    const aiBox =
-      document.getElementById("aiBox");
-
-    if(titleBox){
-
-      titleBox.innerHTML =
-        title;
-
-    }
-
-    if(summaryBox){
-
-      summaryBox.innerHTML =
-        summary;
-
-    }
-
-    if(aiBox){
-
-      aiBox.innerHTML =
-        result;
-
-    }
-
-    const decision =
-      document.getElementById("decisionBox");
-
-    if(decision){
-
-      decision.style.display =
-        "block";
-
-    }
-
-  }catch(err){
-
-    console.log(err);
-
-    alert("AI分析エラー");
-
+  }catch(e){
+    console.log("LOAD ERROR", e);
   }
-
 }
 
-/* ================= AI BACK ================= */
+/* ================= TREE ================= */
+function renderTree(){
 
-function backToAI(){
+  const box = document.getElementById("treeData");
+  if(!box) return;
 
-  const box =
-    document.getElementById("decisionBox");
+  const categoryMap = {};
 
-  if(box){
+  POSTS.forEach(p=>{
+    const cat = p.category || "未分類";
+    categoryMap[cat] = (categoryMap[cat] || 0) + 1;
+  });
 
-    box.style.display =
-      "none";
+  let html = "";
 
-  }
+  Object.keys(categoryMap).forEach(cat=>{
+    html += `
+      <div class="placeholder-card">
+        <b>${cat}</b><br>
+        統合提案数：${categoryMap[cat]}件
+      </div>
+    `;
+  });
 
+  box.innerHTML = html;
 }
 
-/* ================= SEND PR ================= */
+/* ================= PR ================= */
+function renderPR(){
 
-async function sendToPR(){
+  const box = document.getElementById("prList");
+  if(!box) return;
+
+  const categoryOrder = [
+    "① 芦屋市の価値向上",
+    "② 市民ベネフィット",
+    "③ 財政持続性",
+    "④ 戦略性",
+    "⑤ 都市強靭性"
+  ];
+
+  const grouped = {};
+
+  POSTS.forEach(p=>{
+    const cat = p.category || "未分類";
+    if(!grouped[cat]) grouped[cat] = [];
+    grouped[cat].push(p);
+  });
+
+  let html = "";
+
+  categoryOrder.forEach(cat=>{
+
+    const list = grouped[cat];
+    if(!list) return;
+
+    html += `<h2 style="margin-top:20px;">${cat}</h2>`;
+
+    list.forEach(p=>{
+      html += `
+        <div class="placeholder-card">
+          <b>${p.title || ""}</b>
+          <span style="color:${p.merged ? "green" : "red"}">
+            ${p.merged ? "🟢統合済" : "🔴未統合"}
+          </span>
+        </div>
+      `;
+    });
+
+  });
+
+  box.innerHTML = html;
+}
+
+/* ================= TIMELINE ================= */
+function renderTimeline(){
+
+  const box = document.getElementById("timeline");
+  if(!box) return;
+
+  const timeline = [
+    "2026/05 市民参加型構想スタート",
+    "2026/06 AI分析導入",
+    "2026/07 政策統合フェーズ"
+  ];
+
+  box.innerHTML = timeline.map(t=>
+    `<div class="placeholder-card">${t}</div>`
+  ).join("");
+}
+
+/* ================= AI ================= */
+async function runAI(){
 
   const category =
-    document.getElementById("categorySelect")?.value || "";
+    document.getElementById("categorySelect")?.value || "未分類";
 
-  const title =
-    document.getElementById("titleBox")?.innerText || "市民提案";
-
-  const summary =
-    document.getElementById("summaryBox")?.innerText || "";
-
-  const content =
+  const text =
     document.getElementById("ideaInput")?.value || "";
 
   try{
 
-    await fetch(GAS_URL,{
-
+    const res = await fetch(GAS_URL,{
       method:"POST",
-
       body:JSON.stringify({
-
-        mode:"post",
-
-        category:category,
-
-        title:title,
-
-        summary:summary,
-
-        content:content,
-
-        merged:false
-
+        category,
+        content:text
       })
-
     });
 
-    alert("投稿しました");
+    const result = await res.json();
+    const aiText = result.result || "";
 
-    loadData();
+    const resultBox = document.getElementById("resultBox");
+    const titleBox = document.getElementById("titleBox");
+    const summaryBox = document.getElementById("summaryBox");
 
-    showPage("pullrequest");
+    if(resultBox){
+      resultBox.innerHTML = `
+        <h3>AI分析結果</h3>
+        <p>${aiText.slice(0,200)}</p>
 
-  }catch(err){
+        <h3>メリット</h3>
+        <p>地域活性化・教育効果・経済波及</p>
 
-    console.log(err);
+        <h3>懸念点</h3>
+        <p>財源・運用コスト・合意形成</p>
 
-    alert("投稿エラー");
+        <h3>行政視点</h3>
+        <p>中長期の都市戦略に寄与</p>
 
-  }
-
-}
-
-/* ================= FILTER ================= */
-
-function filterPR(category){
-
-  CURRENT_FILTER = category;
-
-  renderPR();
-
-}
-
-/* ================= RENDER PR ================= */
-
-function renderPR(){
-
-  const box =
-    document.getElementById("prList");
-
-  if(!box) return;
-
-  let data = POSTS;
-
-  if(
-    CURRENT_FILTER !== "all"
-  ){
-
-    data = POSTS.filter(item=>{
-
-      return (
-        item.category &&
-        item.category.includes(
-          CURRENT_FILTER
-        )
-      );
-
-    });
-
-  }
-
-  box.innerHTML =
-    data.map((item,index)=>{
-
-      const mergedClass =
-        item.merged
-        ? "pr-merged"
-        : "pr-unmerged";
-
-      return `
-
-      <div
-        class="pr-card ${mergedClass}"
-      >
-
-        <div
-          class="pr-title"
-          onclick="togglePR(${index})"
-        >
-
-          ${item.title || "無題"}
-
-        </div>
-
-        <div
-          class="pr-summary"
-          id="pr-${index}"
-        >
-
-          ${item.summary || item.content || ""}
-
-        </div>
-
-      </div>
-
+        <h3>市民視点</h3>
+        <p>参加型政策として評価</p>
       `;
+    }
 
-    }).join("");
+    if(titleBox) titleBox.innerText = "AI生成タイトル";
+    if(summaryBox) summaryBox.innerText = aiText.slice(0,120);
 
-}
+    const decisionBox = document.getElementById("decisionBox");
+    if(decisionBox) decisionBox.style.display = "block";
 
-/* ================= TOGGLE ================= */
-
-function togglePR(index){
-
-  const target =
-    document.getElementById(
-      `pr-${index}`
-    );
-
-  if(!target) return;
-
-  if(
-    target.style.display ===
-    "block"
-  ){
-
-    target.style.display =
-      "none";
-
-  }else{
-
-    target.style.display =
-      "block";
-
+  }catch(e){
+    console.log("AI ERROR", e);
   }
-
 }
 
-/* ================= START ================= */
-window.showPage = showPage;
-window.runAI = runAI;
-window.sendToPR = sendToPR;
-window.backToAI = backToAI;
+/* ================= SEND ================= */
+async function sendToPR(){
 
-document.addEventListener( "DOMContentLoaded",
+  const input = document.getElementById("ideaInput")?.value || "";
 
-  ()=>{
+  try{
+
+    await fetch(GAS_URL,{
+      method:"POST",
+      body:JSON.stringify({
+        title:"AI生成",
+        category:selectedCategory,
+        content:input
+      })
+    });
 
     loadData();
 
+  }catch(e){
+    console.log("POST ERROR", e);
   }
-
-);
-
-
-function openTree() {
-  console.log("openTree was called but not implemented");
 }
 
-window.openTree = openTree;
+/* ================= BACK ================= */
+function backToAI(){
 
-function renderTree(data) {
-  console.log("renderTree stub executed", data);
+  const box = document.getElementById("decisionBox");
+  if(box) box.style.display = "none";
 }
