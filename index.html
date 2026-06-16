@@ -464,13 +464,81 @@ h1,h2,h3{
 
 </section>
 
-<div id="treeData"></div>
+function renderTree(){
+
+  const box = document.getElementById("treeData");
+  if(!box) return;
+
+  const treeItems = [
+    "📚 絵本図書館（AI知育拠点）",
+    "🎓 次世代教育ブランド",
+    "💻 EdTech連携",
+    "🌳 景観美化",
+    "🏞 公園芝生化",
+    "🤝 多世代交流",
+    "☕ サードプレイス",
+    "💰 施設収益化",
+    "🚀 起業支援",
+    "🛡 防災システム"
+  ];
+
+  let html = "";
+
+  treeItems.forEach((item, i) => {
+
+    html += `
+      <div class="placeholder-card"
+           onclick="openTree('${i}')"
+           style="cursor:pointer;">
+
+        ${item}
+
+      </div>
+    `;
+
+  });
+
+  box.innerHTML = html;
+}
+
+function openTree(id){
+
+  const box = document.getElementById("detailBox");
+  if(!box) return;
+
+  const details = [
+    "AIと絵本を融合した教育拠点構想",
+    "教育ブランドの再設計",
+    "EdTech企業との連携モデル",
+    "都市景観の改善政策",
+    "公園の芝生化プロジェクト",
+    "世代間交流拠点",
+    "地域カフェ型拠点",
+    "公共施設の収益化モデル",
+    "スタートアップ支援",
+    "防災DX・避難最適化"
+  ];
+
+  box.innerHTML = `
+    <div class="placeholder-card">
+
+      <h2>${details[id] || ""}</h2>
+
+      <p>（ここに今後AI分析・提案を表示）</p>
+
+    </div>
+  `;
+
+  showPage("detail");
+}
 
 <!-- ================= 17.TREE ================= -->
 <section id="tree" class="page">
 
-<h1>🌳 市民政策ロジックツリー</h1>
+<div id="treeData"></div>
+<div id="timeline"></div>
 
+<h1>🌳 市民政策ロジックツリー</h1>
 
 <!-- =================18. INTRO GUIDE ================= -->
 <div class="placeholder-card">
