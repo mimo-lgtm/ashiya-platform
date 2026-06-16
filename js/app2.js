@@ -3,6 +3,7 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbzopgSpPPozJ3Q6J2fDSrI8
 let POSTS = [];
 let selectedCategory = "";
 
+
 /* ================= PAGE ================= */
 
 function showPage(id){
