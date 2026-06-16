@@ -10,10 +10,29 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /* ================= PAGE ================= */
-function showPage(id) {
-  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+function showPage(id){
+
+  document.querySelectorAll(".page").forEach(p=>{
+    p.classList.remove("active");
+    p.scrollTop = 0;
+  });
+
   const el = document.getElementById(id);
-  if (el) el.classList.add("active");
+  if(el){
+    el.classList.add("active");
+  }
+
+  // ★追加：AIページ以外の表示バグ防止
+  if(id !== "assistant"){
+    const r = document.getElementById("resultBox");
+    if(r) r.innerHTML = "";
+
+    const t = document.getElementById("titleBox");
+    if(t) t.innerText = "";
+
+    const s = document.getElementById("summaryBox");
+    if(s) s.innerText = "";
+  }
 }
 
 /* ================= LOAD ================= */
@@ -129,61 +148,50 @@ function openDetail(id) {
 }
 
 /* ================= AI ================= */
-async function runAI() {
+async function runAI(){
 
-  selectedCategory =
+  const category =
     document.getElementById("categorySelect")?.value || "未分類";
 
   const text =
     document.getElementById("ideaInput")?.value || "";
 
-  try {
+  const resultBox = document.getElementById("resultBox");
+  const titleBox = document.getElementById("titleBox");
+  const summaryBox = document.getElementById("summaryBox");
 
-    const res = await fetch(GAS_URL, {
-      method: "POST",
-      body: JSON.stringify({
-        category: selectedCategory,
-        content: text
+  try{
+
+    const res = await fetch(GAS_URL,{
+      method:"POST",
+      body:JSON.stringify({
+        category,
+        content:text
       })
     });
 
-    const result = await res.json();
-    const aiText = result.result || "";
+    const data = await res.json();
 
-    const resultBox = document.getElementById("resultBox");
-    const titleBox = document.getElementById("titleBox");
-    const summaryBox = document.getElementById("summaryBox");
+    const aiText = data?.result || "AI応答なし";
 
-    if (resultBox) {
-      resultBox.innerHTML = `
-        <h3>AI分析</h3>
-        <p>${aiText.slice(0, 200)}</p>
-
-        <h3>メリット</h3>
-        <p>地域活性・教育効果</p>
-
-        <h3>懸念点</h3>
-        <p>財源・運営</p>
-
-        <h3>行政視点</h3>
-        <p>政策整合性</p>
-
-        <h3>市民視点</h3>
-        <p>参加型価値</p>
-      `;
+    if(resultBox){
+      resultBox.innerHTML = aiText.replace(/\n/g,"<br>");
     }
 
-    if (titleBox) titleBox.innerText = "AI生成タイトル";
-    if (summaryBox) summaryBox.innerText = "AI生成要約";
+    if(titleBox) titleBox.innerText = "AI生成タイトル";
+    if(summaryBox) summaryBox.innerText = aiText.slice(0,120);
 
-    const decision = document.getElementById("decisionBox");
-    if (decision) decision.style.display = "block";
+    const box = document.getElementById("decisionBox");
+    if(box) box.style.display = "block";
 
-  } catch (e) {
-    console.log("AI ERROR", e);
+  }catch(e){
+    console.log("AI ERROR",e);
+
+    if(resultBox){
+      resultBox.innerHTML = "エラー：AI取得失敗";
+    }
   }
 }
-
 /* ================= SEND ================= */
 async function sendToPR() {
 
