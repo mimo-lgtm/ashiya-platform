@@ -28,23 +28,11 @@ function showPage(id){
 
 async function loadData(){
 
-  try{
-
-    const res =
-      await fetch(GAS_URL);
-
-    POSTS =
-      await res.json();
-
-    renderPR();
-
-  }catch(err){
-
-    console.log(err);
-
-  }
+  renderTree();
+  renderPR();
 
 }
+
 
 /* ================= TREE ================= */
 
