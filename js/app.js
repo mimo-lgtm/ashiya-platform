@@ -357,7 +357,6 @@ window.showPage = showPage;
 window.runAI = runAI;
 window.sendToPR = sendToPR;
 window.backToAI = backToAI;
-window.openTree = openTree;
 
 document.addEventListener( "DOMContentLoaded",
 
@@ -368,3 +367,10 @@ document.addEventListener( "DOMContentLoaded",
   }
 
 );
+
+
+function openTree() {
+  console.log("openTree was called but not implemented");
+}
+
+window.openTree = openTree;
