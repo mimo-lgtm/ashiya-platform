@@ -13,12 +13,20 @@ function showPage(id){
 
   document.querySelectorAll(".page").forEach(p=>{
     p.classList.remove("active");
+
+    // 🔥重要：中身をクリア（残留防止）
+    p.querySelectorAll(".placeholder-card").forEach(el=>{
+      // 必要最低限だけ残す
+      if(el.id === "treeData") return;
+      if(el.id === "timeline") return;
+      if(el.id === "prList") return;
+      if(el.id === "resultBox") return;
+    });
   });
 
-  const el = document.getElementById(id);
-  if(el) el.classList.add("active");
+  const target = document.getElementById(id);
+  if(target) target.classList.add("active");
 }
-
 /* ================= LOAD ================= */
 async function loadData(){
 
@@ -149,9 +157,19 @@ async function runAI(){
     const result = await res.json();
     const aiText = result.result || "";
 
-    const resultBox = document.getElementById("resultBox");
-    if(resultBox){
-      resultBox.innerHTML = `
+    const resultBox = document.querySelector("#assistant #resultBox");
+const titleBox = document.querySelector("#assistant #titleBox");
+const summaryBox = document.querySelector("#assistant #summaryBox");
+
+if(resultBox){
+  resultBox.innerHTML = `
+    <h3>要約</h3>
+    <p>${aiText.slice(0,200)}</p>
+  `;
+}
+
+if(titleBox) titleBox.innerText = "AI生成タイトル";
+if(summaryBox) summaryBox.innerText = aiText.slice(0,120); `
         <h3>要約</h3>
         <p>${aiText.slice(0,200)}</p>
 
