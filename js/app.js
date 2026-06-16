@@ -14,14 +14,21 @@ function showPage(id){
 
   document.querySelectorAll(".page").forEach(p=>{
     p.classList.remove("active");
-    p.scrollTop = 0;
+
+    // 🔥重要：中身リセット
+    p.querySelectorAll("*").forEach(el=>{
+      if(el.id === "treeData") return;
+      if(el.id === "timeline") return;
+      if(el.id === "prList") return;
+      if(el.id === "resultBox") return;
+      if(el.id === "titleBox") return;
+      if(el.id === "summaryBox") return;
+    });
   });
 
   const el = document.getElementById(id);
-  if(el){
-    el.classList.add("active");
-  }
-
+  if(el) el.classList.add("active");
+}
   // ★追加：AIページ以外の表示バグ防止
   if(id !== "assistant"){
     const r = document.getElementById("resultBox");
