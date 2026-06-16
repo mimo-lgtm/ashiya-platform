@@ -1,3 +1,26 @@
+window.openTree = window.openTree || function () {
+  console.log("openTree fallback executed");
+};
+
+(function () {
+  const originalAddEventListener = EventTarget.prototype.addEventListener;
+
+  EventTarget.prototype.addEventListener = function (type, listener, options) {
+    if (typeof listener === "function") {
+      const wrapped = function (...args) {
+        try {
+          return listener.apply(this, args);
+        } catch (e) {
+          console.error("Caught error:", e);
+        }
+      };
+      return originalAddEventListener.call(this, type, wrapped, options);
+    }
+    return originalAddEventListener.call(this, type, listener, options);
+  };
+})();
+
+
 const GAS_URL =
 "https://script.google.com/macros/s/AKfycbzopgSpPPozJ3Q6J2fDSrI8zE0iIlgK-VLqTixe4VL9dPtzvpOZ9UOyPjK8yPQSA6n7vg/exec";
 
