@@ -6,143 +6,1127 @@
 
 <title>市民政策AIプラットフォーム</title>
 
-<link rel="stylesheet" href="./style.css">
+<link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
 <header class="topbar">
-  <div class="logo">🏛 市民政策AIプラットフォーム</div>
+
+  <div class="logo">
+    🏛 市民政策AIプラットフォーム
+  </div>
 
   <nav>
-    <button onclick="showPage('intro')">ホーム</button>
-    <button onclick="showPage('tree')">ロジックツリー</button>
-    <button onclick="showPage('assistant')">AI壁打ち</button>
-    <button onclick="showPage('rules')">分析ルール</button>
-    <button onclick="showPage('pullrequest')">PULL REQUEST</button>
-    <button onclick="showPage('vision')">ビジョン変遷</button>
+
+    <button onclick="showPage('intro')">
+      ホーム
+    </button>
+
+    <button onclick="showPage('tree')">
+      ロジックツリー
+    </button>
+
+    <button onclick="showPage('assistant')">
+      AI壁打ち
+    </button>
+
+    <button onclick="showPage('rules')">
+      分析ルール
+    </button>
+
+    <button onclick="showPage('pullrequest')">
+      PULL REQUEST
+    </button>
+
+    <button onclick="showPage('vision')">
+      ビジョン変遷
+    </button>
+
   </nav>
+
 </header>
 
 <main>
 
-<!-- ================= INTRO ================= -->
+<!-- ===================================== -->
+<!-- HOME                                 -->
+<!-- ===================================== -->
+
 <section id="intro" class="page active">
 
-  <div class="placeholder-card">
-    <h1>駅前公共施設について皆で考えよう</h1>
-    <p style="text-align:center;color:#64748b;margin-top:-10px;">
-      市民政策プラットフォーム
-    </p>
+<div class="placeholder-card">
 
-    <h2>このプラットフォームについて</h2>
+<h1>
+駅前公共施設について皆で考えよう
+</h1>
 
-    <p>
-      本システムは、市民が駅前公共施設のあり方について自由に意見を投稿し、
-      AIと共に整理・構造化しながら政策形成につなげる対話型プラットフォームです。
-    </p>
+<p class="sub-title">
+市民政策プラットフォーム
+</p>
 
-    <p>
-      従来の行政意見提出には、
-      表現の難しさ・他者意見の不透明性・反映プロセスの不明確さといった課題がありました。
-      本システムはそれらを解消し、透明で継続的な市民参加を実現します。
-    </p>
-  </div>
+<h2>
+このプラットフォームについて
+</h2>
 
-  <div class="placeholder-card" style="padding:0;overflow:hidden;">
-    <img src="images/comic-all.png">
-  </div>
+<p>
+本システムは、市民が駅前公共施設のあり方について自由に意見を投稿し、
+AIと共に整理・構造化しながら政策形成につなげる対話型プラットフォームです。
+</p>
 
-  <div class="placeholder-card">
-    <h2>特徴</h2>
-    <ul>
-      <li>思いついたままの投稿が可能</li>
-      <li>AIが自動で要約・論点整理・構造化</li>
-      <li>ロジックツリーによる政策構造の可視化</li>
-      <li>投稿・統合プロセスの透明化</li>
-      <li>市民参加型の継続的な改善サイクル</li>
-    </ul>
-  </div>
+<br>
 
-  <div class="placeholder-card">
-    <h2>このような課題を感じていませんか？</h2>
-    <ul>
-      <li>考えはあるが文章化が難しい</li>
-      <li>否定されるのが不安</li>
-      <li>他の市民の意見が見えない</li>
-      <li>反映されないなら意味がないと思う</li>
-    </ul>
-  </div>
+<p>
+従来の行政意見提出には、
+表現の難しさ・他者意見の不透明性・反映プロセスの不明確さといった課題がありました。
+</p>
 
-  <div class="placeholder-card">
-    <h2>投稿の流れ</h2>
-    <ol>
-      <li>市民が自由投稿</li>
-      <li>AIが整理・構造化</li>
-      <li>ロジックツリーへ統合</li>
-      <li>政策形成へ反映</li>
-    </ol>
-  </div>
+<br>
 
-  <div class="placeholder-card">
-    <h2>この仕組みの目的</h2>
-    <p>どのような意見も素材として扱われ、AIが中立的に整理し、社会全体の知として統合します。</p>
-  </div>
+<p>
+本システムはそれらを解消し、
+透明で継続的な市民参加を実現します。
+</p>
 
-  <div class="placeholder-card" style="text-align:center;">
-    <h2>他の市民の意見や提案を見てみましょう</h2>
-    <button class="big-button" onclick="showPage('tree')">
-      🌳 ロジックツリーを見る
-    </button>
-  </div>
+</div>
 
-</section>
+<!-- HERO IMAGE -->
 
-<!-- TREE -->
+<div class="hero-image-card">
+
+<img
+  src="images/comic-all.png"
+  alt="市民政策AIプラットフォーム">
+
+</div>
+
+<!-- FEATURES -->
+
+<div class="placeholder-card">
+
+<h2>
+この仕組みでできること
+</h2>
+
+<ul>
+
+<li>
+思いついたままの投稿が可能
+</li>
+
+<li>
+AIが自動で要約・論点整理・構造化
+</li>
+
+<li>
+ロジックツリーによる政策構造の可視化
+</li>
+
+<li>
+投稿・統合プロセスの透明化
+</li>
+
+<li>
+市民参加型の継続的な改善サイクル
+</li>
+
+</ul>
+
+</div>
+
+<!-- PROBLEMS -->
+
+<div class="placeholder-card">
+
+<h2>
+このような課題を感じていませんか？
+</h2>
+
+<ul>
+
+<li>
+考えはあるが文章化が難しい
+</li>
+
+<li>
+否定されるのが不安
+</li>
+
+<li>
+他の市民の意見が見えない
+</li>
+
+<li>
+反映されないなら意味がないと思う
+</li>
+
+</ul>
+
+</div>
+
+<!-- FLOW -->
+
+<div class="placeholder-card">
+
+<h2>
+投稿の流れ
+</h2>
+
+<ol>
+
+<li>
+市民が自由投稿
+</li>
+
+<li>
+AIが整理・構造化
+</li>
+
+<li>
+ロジックツリーへ統合
+</li>
+
+<li>
+政策形成へ反映
+</li>
+
+</ol>
+
+</div>
+
+<!-- PURPOSE -->
+
+<div class="placeholder-card">
+
+<h2>
+この仕組みの目的
+</h2>
+
+<p>
+どのような意見も素材として扱われ、
+AIが中立的に整理し、
+社会全体の知として統合します。
+</p>
+
+<br>
+
+<p>
+市民が提案し、
+AIが影響分析を行い、
+政策形成に役立つ知識として蓄積していきます。
+</p>
+
+</div>
+
+<!-- CTA -->
+
+<div class="placeholder-card center">
+
+<h2>
+他の市民の意見や提案を見てみましょう
+</h2>
+
+<p>
+投稿された意見はロジックツリー上で整理・統合されています。
+</p>
+
+<br>
+
+<button
+  class="big-button"
+  onclick="showPage('tree')">
+
+🌳 ロジックツリーを見る
+
+</button>
+
+</div>
+
+<!-- ===================================== -->
+<!-- LOGIC TREE                            -->
+<!-- ===================================== -->
+
 <section id="tree" class="page">
-  <div id="treeData"></div>
-  <div id="timeline"></div>
 
-  <h1>🌳 ロジックツリー</h1>
+<h1>
+🌳 市民政策ロジックツリー
+</h1>
+
+<div class="placeholder-card">
+
+<h2>
+市民政策ロジックツリー（Vision）
+</h2>
+
+<p>
+コストセンターからプロフィットセンターへ：
+市民のウェルビーイングと知財の集積による
+投資型都市経営の実現
+</p>
+
+</div>
+
+<div class="logic-tree">
+
+<!-- ============================ -->
+<!-- ① 芦屋市の価値向上 -->
+<!-- ============================ -->
+
+<div class="tree-parent">
+
+<div class="tree-node root-node">
+
+① 芦屋市の価値向上
+
+</div>
+
+<div class="tree-children">
+
+<div class="tree-leaf"
+onclick="openTheme('次世代教育ブランド')">
+
+次世代教育ブランドの確立
+
+</div>
+
+<div class="tree-sub">
+
+世界一の絵本図書館
+
+</div>
+
+<div class="tree-sub">
+
+EdTech企業連携
+
+</div>
+
+<div class="tree-leaf"
+onclick="openTheme('街の魅力化・景観美化')">
+
+街の魅力化・景観美化
+
+</div>
+
+<div class="tree-sub">
+
+公園芝生化
+
+</div>
+
+<div class="tree-sub">
+
+市民協働
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ============================ -->
+<!-- ② 市民へのベネフィット -->
+<!-- ============================ -->
+
+<div class="tree-parent">
+
+<div class="tree-node benefit">
+
+② 市民へのベネフィット
+
+</div>
+
+<div class="tree-children">
+
+<div class="tree-leaf"
+onclick="openTheme('多世代交流')">
+
+多世代交流・サードプレイス
+
+</div>
+
+<div class="tree-sub">
+
+カフェ
+
+</div>
+
+<div class="tree-sub">
+
+コミュニティ運営
+
+</div>
+
+<div class="tree-leaf"
+onclick="openTheme('知的探究')">
+
+知的探究・スキルアップ
+
+</div>
+
+<div class="tree-sub">
+
+リスキリング
+
+</div>
+
+<div class="tree-sub">
+
+共同研究
+
+</div>
+
+<div class="tree-sub">
+
+コワーキング
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ============================ -->
+<!-- ③ 財政 -->
+<!-- ============================ -->
+
+<div class="tree-parent">
+
+<div class="tree-node finance">
+
+③ 財政的持続可能性
+
+</div>
+
+<div class="tree-children">
+
+<div class="tree-leaf"
+onclick="openTheme('施設収益化')">
+
+施設の収益化
+
+</div>
+
+<div class="tree-sub">
+
+SHARE LOUNGE
+
+</div>
+
+<div class="tree-sub">
+
+チャレンジショップ
+
+</div>
+
+<div class="tree-leaf"
+onclick="openTheme('寄付')">
+
+寄付・ふるさと納税
+
+</div>
+
+<div class="tree-sub">
+
+クラウドファンディング
+
+</div>
+
+<div class="tree-sub">
+
+成果連動型事業
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ============================ -->
+<!-- ④ 戦略性 -->
+<!-- ============================ -->
+
+<div class="tree-parent">
+
+<div class="tree-node strategy">
+
+④ 施設の戦略性
+
+</div>
+
+<div class="tree-children">
+
+<div class="tree-leaf"
+onclick="openTheme('知のゲートウェイ')">
+
+知のゲートウェイ化
+
+</div>
+
+<div class="tree-sub">
+
+デジタルライブラリ
+
+</div>
+
+<div class="tree-sub">
+
+ITサポート
+
+</div>
+
+<div class="tree-leaf"
+onclick="openTheme('起業支援')">
+
+イノベーション・起業支援
+
+</div>
+
+<div class="tree-sub">
+
+ピッチアリーナ
+
+</div>
+
+<div class="tree-sub">
+
+サンドボックス
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ============================ -->
+<!-- ⑤ 強靭性 -->
+<!-- ============================ -->
+
+<div class="tree-parent">
+
+<div class="tree-node gov">
+
+⑤ 都市の強靭性とガバナンス
+
+</div>
+
+<div class="tree-children">
+
+<div class="tree-leaf"
+onclick="openTheme('デュアルユース')">
+
+デュアルユース
+
+</div>
+
+<div class="tree-sub">
+
+災害シミュレーション
+
+</div>
+
+<div class="tree-sub">
+
+都市指令室
+
+</div>
+
+<div class="tree-leaf"
+onclick="openTheme('DAO')">
+
+DAO型住民自治
+
+</div>
+
+<div class="tree-sub">
+
+投票
+
+</div>
+
+<div class="tree-sub">
+
+トークン設計
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
 </section>
 
-<!-- DETAIL -->
+<!-- ===================================== -->
+<!-- DETAIL                                -->
+<!-- ===================================== -->
+
 <section id="detail" class="page">
-  <div class="placeholder-card" id="detailBox"></div>
+
+<div
+class="placeholder-card"
+id="detailBox">
+
+<h2>
+テーマ詳細
+</h2>
+
+<p>
+ロジックツリーから選択してください
+</p>
+
+</div>
+
 </section>
 
-<!-- AI -->
+<!-- ===================================== -->
+<!-- AI壁打ち                             -->
+<!-- ===================================== -->
+
 <section id="assistant" class="page">
-  <h1>AI壁打ち</h1>
 
-  <textarea id="ideaInput"></textarea>
+<h1>
+🤖 AI壁打ち
+</h1>
 
-  <button class="big-button" onclick="runAI()">AI分析</button>
+<div class="assistant-layout">
 
-  <div id="titleBox"></div>
-  <div id="summaryBox"></div>
+<!-- 左側 -->
 
-  <div id="decisionBox" class="placeholder-card" style="display:none;">
-    <button onclick="sendToPR()">投稿</button>
-    <button onclick="backToAI()">戻る</button>
-  </div>
+<div class="placeholder-card">
+
+<h2>
+市民意見入力
+</h2>
+
+<h3>
+カテゴリー
+</h3>
+
+<select id="categorySelect">
+
+<option value="芦屋市の価値向上">
+① 芦屋市の価値向上
+</option>
+
+<option value="市民へのベネフィット">
+② 市民へのベネフィット
+</option>
+
+<option value="財政的持続可能性">
+③ 財政的持続可能性
+</option>
+
+<option value="施設の戦略性">
+④ 施設の戦略性
+</option>
+
+<option value="都市の強靭性とガバナンス">
+⑤ 都市の強靭性とガバナンス
+</option>
+
+</select>
+
+<br><br>
+
+<textarea
+id="ideaInput"
+placeholder="自由に意見を書いてください">
+</textarea>
+
+<br><br>
+
+<button
+class="big-button"
+onclick="runAI()">
+
+AI分析
+
+</button>
+
+</div>
+
+<!-- 右側 -->
+
+<div class="placeholder-card">
+
+<h2>AI分析結果</h2>
+<div id="aiBox"></div>
+<div id="aiBox">
+
+<p>
+ここにAIの分析結果が表示されます
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- 推奨タイトル -->
+
+<div class="placeholder-card">
+
+<h2>
+推奨タイトル
+</h2>
+
+<div id="titleBox"
+class="result-box">
+
+AIタイトルが表示されます
+
+</div>
+
+</div>
+
+<!-- 要約 -->
+
+<div class="placeholder-card">
+
+<h2>
+200文字要約
+</h2>
+
+<div id="summaryBox"
+class="result-box">
+
+要約が表示されます
+
+</div>
+
+</div>
+
+<!-- 投稿確認 -->
+
+<div
+id="decisionBox"
+class="placeholder-card"
+style="display:none;">
+
+<h2>
+この内容で投稿しますか？
+</h2>
+
+<p>
+内容を確認して投稿してください
+</p>
+
+<br>
+
+<button
+class="big-button"
+onclick="sendToPR()">
+
+投稿する
+
+</button>
+
+<button
+class="big-button"
+onclick="backToAI()">
+
+戻る
+
+</button>
+
+</div>
+
 </section>
 
-<!-- RULES -->
+<!-- ===================================== -->
+<!-- 分析ルール                           -->
+<!-- ===================================== -->
+
 <section id="rules" class="page">
-  <h1>分析ルール</h1>
-  <p>市民提案はAIにより分類・構造化され、政策判断の参考情報として可視化されます。</p>
+
+<h1>
+📊 分析ルール
+</h1>
+
+<div class="placeholder-card">
+
+<h2>
+評価について
+</h2>
+
+<p>
+市民提案はAIにより分類・構造化され、
+政策判断の参考情報として可視化されます。
+</p>
+
+</div>
+
+<div class="score-grid">
+
+<div class="score-card">
+
+<h4>価値向上</h4>
+
+<div class="score-value">
+25%
+</div>
+
+</div>
+
+<div class="score-card">
+
+<h4>ベネフィット</h4>
+
+<div class="score-value">
+25%
+</div>
+
+</div>
+
+<div class="score-card">
+
+<h4>交流</h4>
+
+<div class="score-value">
+20%
+</div>
+
+</div>
+
+<div class="score-card">
+
+<h4>マルチユース</h4>
+
+<div class="score-value">
+15%
+</div>
+
+</div>
+
+<div class="score-card">
+
+<h4>運営効率</h4>
+
+<div class="score-value">
+15%
+</div>
+
+</div>
+
+</div>
+
+<div class="analysis-bottom">
+
+<div class="analysis-card">
+
+<h2>
+ルール変更
+</h2>
+
+<p>
+市民が提案し、
+AIが影響分析を行います。
+</p>
+
+</div>
+
+<div class="analysis-card">
+
+<h2>
+AIの役割
+</h2>
+
+<p>
+AIは評価を決めず、
+整理・分析のみを行います。
+</p>
+
+</div>
+
+</div>
+
+<div class="placeholder-card">
+
+<h2>
+分析の考え方
+</h2>
+
+<p>
+市民の提案は否定されません。
+</p>
+
+<p>
+AIは提案を分類し、
+ロジックツリーへ統合し、
+政策形成に役立つ知識として整理します。
+</p>
+
+<p>
+評価の決定権は市民と行政にあり、
+AIは判断主体ではありません。
+</p>
+
+</div>
+
 </section>
 
-<!-- PR -->
+<!-- ===================================== -->
+<!-- PULL REQUEST                         -->
+<!-- ===================================== -->
+
 <section id="pullrequest" class="page">
-  <h1>PULL REQUEST</h1>
-  <div id="prList"></div>
+
+<h1>
+📋 PULL REQUEST
+</h1>
+
+<div class="placeholder-card">
+
+<h2>
+カテゴリ別投稿
+</h2>
+
+<p>
+未統合（赤）／統合済（緑）で管理されます
+</p>
+
+</div>
+
+<!-- カテゴリボタン -->
+
+<div class="placeholder-card category-bar">
+
+<button onclick="filterPR('価値向上')">
+① 芦屋市の価値向上
+</button>
+
+<button onclick="filterPR('ベネフィット')">
+② 市民へのベネフィット
+</button>
+
+<button onclick="filterPR('財政')">
+③ 財政的持続可能性
+</button>
+
+<button onclick="filterPR('戦略')">
+④ 施設の戦略性
+</button>
+
+<button onclick="filterPR('ガバナンス')">
+⑤ 都市の強靭性とガバナンス
+</button>
+
+<button onclick="filterPR('all')">
+全て表示
+</button>
+
+</div>
+
+<!-- 投稿一覧 -->
+
+<div id="prList">
+
+<!-- app.jsで生成 -->
+
+</div>
+
 </section>
 
-<!-- VISION -->
+<!-- ===================================== -->
+<!-- VISION                               -->
+<!-- ===================================== -->
+
 <section id="vision" class="page">
-  <h1>ビジョン</h1>
+
+<h1>
+🚀 ビジョン変遷
+</h1>
+
+<!-- 現在 -->
+
+<div class="vision-card active">
+
+<div class="vision-date">
+
+2026年7月
+
+</div>
+
+<h3>
+
+初期ビジョン
+
+</h3>
+
+<div class="vision-tags">
+
+<span>芦屋の価値向上</span>
+
+<span>市民ウェルビーイング</span>
+
+<span>市民交流</span>
+
+<span>コスト最適化</span>
+
+</div>
+
+<p>
+
+公共施設を単なるコストセンターではなく、
+
+市民価値を創出する投資型施設として再定義する。
+
+</p>
+
+</div>
+
+<!-- 現在案 -->
+
+<div class="placeholder-card">
+
+<h2>
+現在のコンセプト
+</h2>
+
+<p style="font-size:20px;font-weight:bold;">
+
+コストセンターからプロフィットセンターへ
+
+</p>
+
+<br>
+
+<p>
+
+市民のウェルビーイングと知財の集積による
+
+投資型都市経営の実現
+
+</p>
+
+</div>
+
+<!-- 次回案 -->
+
+<div class="placeholder-card">
+
+<h2>
+
+次回ビジョン（検討中）
+
+</h2>
+
+<p>
+
+このエリアは今後、
+
+市民提案とAI分析によって更新されます。
+
+</p>
+
+<div class="vision-next">
+
+<b>
+
+現在の仮テーマ
+
+</b>
+
+<br><br>
+
+・市民データ駆動型都市運営
+
+<br>
+
+・公共施設の収益モデル化
+
+<br>
+
+・AI共同意思決定プロセスの導入
+
+</div>
+
+</div>
+
+<!-- ビジョン履歴 -->
+
+<div class="placeholder-card">
+
+<h2>
+
+ビジョン変遷タイムライン
+
+</h2>
+
+<div id="timeline">
+
+<div class="timeline-item">
+
+<h4>
+
+Phase 1
+
+</h4>
+
+<p>
+
+公共施設の再活性化
+
+</p>
+
+</div>
+
+<div class="timeline-item">
+
+<h4>
+
+Phase 2
+
+</h4>
+
+<p>
+
+市民交流拠点
+
+</p>
+
+</div>
+
+<div class="timeline-item">
+
+<h4>
+
+Phase 3
+
+</h4>
+
+<p>
+
+知のゲートウェイ
+
+</p>
+
+</div>
+
+<div class="timeline-item">
+
+<h4>
+
+Current
+
+</h4>
+
+<p>
+
+投資型都市経営
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
 </section>
 
 </main>
