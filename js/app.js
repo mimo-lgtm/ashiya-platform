@@ -1,3 +1,7 @@
+function renderTree(data) {
+  console.log("renderTree fallback executed", data);
+}
+
 window.openTree = window.openTree || function () {
   console.log("openTree fallback executed");
 };
@@ -49,11 +53,20 @@ function showPage(id){
 
 /* ================= LOAD ================= */
 
-async function loadData(){
+async function loadData() {
+  try {
+    const data = await fetchData(); // ←元の処理があるならここは維持
 
-  renderTree();
-  renderPR();
+    if (typeof renderTree !== "function") {
+      console.warn("renderTree is missing");
+      return;
+    }
 
+    renderTree(data);
+
+  } catch (e) {
+    console.error(e);
+  }
 }
 
 
