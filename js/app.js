@@ -365,10 +365,13 @@ function togglePR(index){
 }
 
 /* ================= START ================= */
+window.showPage = showPage;
+window.runAI = runAI;
+window.sendToPR = sendToPR;
+window.backToAI = backToAI;
+window.openTree = openTree;
 
-document.addEventListener(
-
-  "DOMContentLoaded",
+document.addEventListener( "DOMContentLoaded",
 
   ()=>{
 
