@@ -1,47 +1,52 @@
 const GAS_URL = "https://script.google.com/macros/s/AKfycbzopgSpPPozJ3Q6J2fDSrI8zE0iIlgK-VLqTixe4VL9dPtzvpOZ9UOyPjK8yPQSA6n7vg/exec";
 
+/* ================= STATE ================= */
 let POSTS = [];
 let selectedCategory = "";
 
+/* ================= INIT ================= */
+document.addEventListener("DOMContentLoaded", () => {
+  loadData();
+});
+
 /* ================= PAGE ================= */
-function showPage(id){
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-  const el=document.getElementById(id);
-  if(el) el.classList.add("active");
+function showPage(id) {
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  const el = document.getElementById(id);
+  if (el) el.classList.add("active");
 }
 
 /* ================= LOAD ================= */
-async function loadData(){
-  try{
-    const res=await fetch(GAS_URL);
-    POSTS=await res.json();
+async function loadData() {
+  try {
+    const res = await fetch(GAS_URL);
+    POSTS = await res.json();
 
     renderTree();
     renderPR();
     renderTimeline();
 
-  }catch(e){
-    console.log("LOAD ERROR",e);
+  } catch (e) {
+    console.log("LOAD ERROR", e);
   }
 }
 
-/* ================= TREE（5日間構造維持） ================= */
-function renderTree(){
+/* ================= TREE ================= */
+function renderTree() {
+  const box = document.getElementById("treeData");
+  if (!box) return;
 
-  const box=document.getElementById("treeData");
-  if(!box) return;
+  const categoryMap = {};
 
-  const categoryMap={};
-
-  POSTS.forEach(p=>{
-    const cat=p.category||"未分類";
-    categoryMap[cat]=(categoryMap[cat]||0)+1;
+  POSTS.forEach(p => {
+    const cat = p.category || "未分類";
+    categoryMap[cat] = (categoryMap[cat] || 0) + 1;
   });
 
-  let html="";
+  let html = "";
 
-  Object.keys(categoryMap).forEach(cat=>{
-    html+=`
+  Object.keys(categoryMap).forEach(cat => {
+    html += `
       <div class="card">
         <b>${cat}</b><br>
         統合提案数：${categoryMap[cat]}件
@@ -49,16 +54,15 @@ function renderTree(){
     `;
   });
 
-  box.innerHTML=html;
+  box.innerHTML = html;
 }
 
-/* ================= PR（完全フル・GitHub風維持） ================= */
-function renderPR(){
+/* ================= PR ================= */
+function renderPR() {
+  const box = document.getElementById("prList");
+  if (!box) return;
 
-  const box=document.getElementById("prList");
-  if(!box) return;
-
-  const categoryOrder=[
+  const order = [
     "① 芦屋市の価値向上",
     "② 市民ベネフィット",
     "③ 財政持続性",
@@ -66,124 +70,163 @@ function renderPR(){
     "⑤ 都市強靭性"
   ];
 
-  const grouped={};
+  const grouped = {};
 
-  POSTS.forEach(p=>{
-    const cat=p.category||"未分類";
-    if(!grouped[cat]) grouped[cat]=[];
+  POSTS.forEach(p => {
+    const cat = p.category || "未分類";
+    if (!grouped[cat]) grouped[cat] = [];
     grouped[cat].push(p);
   });
 
-  let html="";
+  let html = "";
 
-  categoryOrder.forEach(cat=>{
+  order.forEach(cat => {
+    const list = grouped[cat];
+    if (!list) return;
 
-    const list=grouped[cat];
-    if(!list) return;
+    html += `<div class="card"><h2>${cat}</h2></div>`;
 
-    html+=`<div class="card"><h2>${cat}</h2></div>`;
-
-    list.forEach(p=>{
-
-      html+=`
-        <div class="pr-card">
+    list.forEach(p => {
+      html += `
+        <div class="card">
           <div style="display:flex;justify-content:space-between;">
-            <b>${p.title||""}</b>
+            <b>${p.title || ""}</b>
             <span style="
-              padding:2px 8px;
+              padding:3px 10px;
               border-radius:12px;
               font-size:12px;
-              background:${p.merged?"#2ecc71":"#e74c3c"};
-              color:white;
+              background:${p.merged ? "#2ecc71" : "#e74c3c"};
+              color:#fff;
             ">
-              ${p.merged?"🟢統合済":"🔴未統合"}
+              ${p.merged ? "統合済" : "未統合"}
             </span>
           </div>
         </div>
       `;
     });
-
   });
 
-  box.innerHTML=html;
+  box.innerHTML = html;
 }
 
-/* ================= DETAIL（維持） ================= */
-function openDetail(id){
+/* ================= TREE DETAIL ================= */
+function openDetail(id) {
+  const box = document.getElementById("detailBox");
+  if (!box) return;
 
-  const box=document.getElementById("detailBox");
-  if(!box) return;
-
-  const details={
-    ehon:"AIと絵本を融合した教育拠点構想",
+  const map = {
+    ehon: "AIと絵本を融合した教育拠点構想"
   };
 
-  box.innerHTML=`
+  box.innerHTML = `
     <div class="card">
-      <h2>${details[id]||""}</h2>
-      <p>AI分析・拡張予定</p>
+      <h2>${map[id] || ""}</h2>
+      <p>詳細分析は今後拡張予定</p>
     </div>
   `;
 
   showPage("detail");
 }
 
-/* ================= AI（完全維持＋構造化） ================= */
-async function runAI(){
+/* ================= AI ================= */
+async function runAI() {
 
-  selectedCategory=document.getElementById("categorySelect").value;
-  const text=document.getElementById("ideaInput").value;
+  selectedCategory =
+    document.getElementById("categorySelect")?.value || "未分類";
 
-  const res=await fetch(GAS_URL,{
-    method:"POST",
-    body:JSON.stringify({
-      category:selectedCategory,
-      content:text
-    })
-  });
+  const text =
+    document.getElementById("ideaInput")?.value || "";
 
-  const result=await res.json();
-  const aiText=result.result||"";
+  try {
 
-  document.getElementById("resultBox").innerHTML=`
-    <h3>AI分析</h3>
-    <p>${aiText.slice(0,200)}</p>
+    const res = await fetch(GAS_URL, {
+      method: "POST",
+      body: JSON.stringify({
+        category: selectedCategory,
+        content: text
+      })
+    });
 
-    <h3>メリット</h3>
-    <p>地域活性・教育効果</p>
+    const result = await res.json();
+    const aiText = result.result || "";
 
-    <h3>懸念</h3>
-    <p>財源・合意形成</p>
+    const resultBox = document.getElementById("resultBox");
+    const titleBox = document.getElementById("titleBox");
+    const summaryBox = document.getElementById("summaryBox");
 
-    <h3>行政視点</h3>
-    <p>政策整合性</p>
+    if (resultBox) {
+      resultBox.innerHTML = `
+        <h3>AI分析</h3>
+        <p>${aiText.slice(0, 200)}</p>
 
-    <h3>市民視点</h3>
-    <p>参加型価値</p>
-  `;
+        <h3>メリット</h3>
+        <p>地域活性・教育効果</p>
 
-  document.getElementById("titleBox").innerText="AI生成タイトル";
-  document.getElementById("summaryBox").innerText="AI生成要約";
+        <h3>懸念点</h3>
+        <p>財源・運営</p>
+
+        <h3>行政視点</h3>
+        <p>政策整合性</p>
+
+        <h3>市民視点</h3>
+        <p>参加型価値</p>
+      `;
+    }
+
+    if (titleBox) titleBox.innerText = "AI生成タイトル";
+    if (summaryBox) summaryBox.innerText = "AI生成要約";
+
+    const decision = document.getElementById("decisionBox");
+    if (decision) decision.style.display = "block";
+
+  } catch (e) {
+    console.log("AI ERROR", e);
+  }
 }
 
-/* ================= TIMELINE（復元） ================= */
-function renderTimeline(){
+/* ================= SEND ================= */
+async function sendToPR() {
 
-  const box=document.getElementById("timeline");
-  if(!box) return;
+  const input = document.getElementById("ideaInput");
+  const result = document.getElementById("resultBox");
 
-  const timeline=[
+  try {
+
+    await fetch(GAS_URL, {
+      method: "POST",
+      body: JSON.stringify({
+        title: "AI生成",
+        category: selectedCategory,
+        content: input?.value || "",
+        summary: result?.innerText || ""
+      })
+    });
+
+    loadData();
+
+  } catch (e) {
+    console.log("POST ERROR", e);
+  }
+}
+
+/* ================= BACK ================= */
+function backToAI() {
+  const box = document.getElementById("decisionBox");
+  if (box) box.style.display = "none";
+}
+
+/* ================= TIMELINE ================= */
+function renderTimeline() {
+  const box = document.getElementById("timeline");
+  if (!box) return;
+
+  const timeline = [
     "2026/05 市民参加型構想スタート",
     "2026/06 AI分析導入",
     "2026/07 政策統合フェーズ"
   ];
 
-  box.innerHTML=timeline.map(t=>`
-    <div class="card">${t}</div>
-  `).join("");
+  box.innerHTML = timeline
+    .map(t => `<div class="card">${t}</div>`)
+    .join("");
 }
-
-/* ================= START ================= */
-document.addEventListener("DOMContentLoaded",()=>{
-  loadData();
-});
