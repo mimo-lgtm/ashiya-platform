@@ -1,214 +1,131 @@
-const GAS_URL = "https://script.google.com/macros/s/AKfycbzopgSpPPozJ3Q6J2fDSrI8zE0iIlgK-VLqTixe4VL9dPtzvpOZ9UOyPjK8yPQSA6n7vg/exec";
-
-let POSTS = [];
-let selectedCategory = "";
-
-/* ================= INIT ================= */
-document.addEventListener("DOMContentLoaded", () => {
-  loadData();
-});
-
-/* ================= PAGE ================= */
 function showPage(id){
-
-  document.querySelectorAll(".page").forEach(p=>{
-    p.classList.remove("active");
-  });
-
-  const target = document.getElementById(id);
-  if(target) target.classList.add("active");
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
 }
 
-/* ================= LOAD ================= */
-async function loadData(){
+/* =========================
+   ロジックツリー
+========================= */
 
-  try{
+function openCategory(type){
 
-    const res = await fetch(GAS_URL);
-    POSTS = await res.json();
+  const map = {
+    value: [
+      "次世代教育ブランド",
+      "EdTech連携",
+      "景観美化",
+      "公園芝生化"
+    ],
+    benefit: [
+      "多世代交流",
+      "サードプレイス"
+    ],
+    finance: [
+      "施設収益化",
+      "クラウドファンディング"
+    ],
+    strategy: [
+      "起業支援",
+      "コワーキング"
+    ],
+    resilience: [
+      "防災システム",
+      "都市指令室"
+    ]
+  };
 
-    renderTree();
-    renderPR();
-    renderTimeline();
+  const list = map[type] || [];
 
-  }catch(e){
-    console.log("LOAD ERROR", e);
-  }
+  document.getElementById("treeDetail").innerHTML = `
+    <div class="card">
+      <h2>詳細</h2>
+      ${list.map(x=>`
+        <div class="item" onclick="openIdea('${x}')">
+          ${x}
+        </div>
+      `).join("")}
+    </div>
+  `;
 }
 
-/* ================= TREE ================= */
-function renderTree(){
+/* 選択されたテーマ */
+function openIdea(text){
 
-  const box = document.getElementById("treeData");
-  if(!box) return;
+  document.getElementById("treeDetail").innerHTML = `
+    <div class="card">
+      <h3>${text}</h3>
+      <p>このテーマについて意見を投稿できます</p>
 
-  const categoryMap = {};
-
-  POSTS.forEach(p=>{
-    const cat = p.category || "未分類";
-    categoryMap[cat] = (categoryMap[cat] || 0) + 1;
-  });
-
-  let html = "";
-
-  Object.keys(categoryMap).forEach(cat=>{
-    html += `
-      <div class="placeholder-card">
-        <b>${cat}</b><br>
-        統合提案数：${categoryMap[cat]}件
-      </div>
-    `;
-  });
-
-  box.innerHTML = html;
+      <button class="big" onclick="goAI('${text}')">
+        AI壁打ちへ
+      </button>
+    </div>
+  `;
 }
 
-/* ================= PR ================= */
-function renderPR(){
+function goAI(text){
+  showPage("ai");
+  document.getElementById("input").value =
+    `テーマ：${text}\n\nあなたの考えを教えてください`;
+}
+
+/* =========================
+   AI壁打ち
+========================= */
+
+function aiProcess(){
+
+  const text = document.getElementById("input").value;
+  const category = document.getElementById("category").value;
+
+  // 擬似AI（後でGROQ差し替え）
+  const summary = text.slice(0,200);
+  const title = text.split("\n")[0].slice(0,20) || "市民提案";
+
+  document.getElementById("aiResult").innerHTML = `
+    <div class="card">
+      <h3>AI分析結果（500字想定）</h3>
+      <p>${text}</p>
+
+      <hr>
+
+      <h4>200字要約</h4>
+      <p>${summary}</p>
+
+      <h4>推奨タイトル</h4>
+      <p>${title}</p>
+
+      <button class="big" onclick="choiceA()">
+        A：このまま投稿
+      </button>
+
+      <button class="big" onclick="choiceB()">
+        B：修正する
+      </button>
+    </div>
+  `;
+}
+
+/* A：PRへ */
+function choiceA(){
+
+  const text = document.getElementById("input").value;
+  const category = document.getElementById("category").value;
 
   const box = document.getElementById("prList");
-  if(!box) return;
 
-  const categoryOrder = [
-    "① 芦屋市の価値向上",
-    "② 市民ベネフィット",
-    "③ 財政持続性",
-    "④ 戦略性",
-    "⑤ 都市強靭性"
-  ];
+  box.innerHTML += `
+    <div class="pr-box">
+      <div class="status red">🔴 未統合</div>
+      <h3>${category}</h3>
+      <p>${text.slice(0,200)}</p>
+    </div>
+  `;
 
-  const grouped = {};
-
-  POSTS.forEach(p=>{
-    const cat = p.category || "未分類";
-    if(!grouped[cat]) grouped[cat] = [];
-    grouped[cat].push(p);
-  });
-
-  let html = "";
-
-  categoryOrder.forEach(cat=>{
-
-    const list = grouped[cat];
-    if(!list) return;
-
-    html += `<h2 style="margin-top:20px;">${cat}</h2>`;
-
-    list.forEach(p=>{
-      html += `
-        <div class="placeholder-card">
-          <b>${p.title || ""}</b>
-          <span style="color:${p.merged ? "green" : "red"}">
-            ${p.merged ? "🟢統合済" : "🔴未統合"}
-          </span>
-        </div>
-      `;
-    });
-
-  });
-
-  box.innerHTML = html;
+  showPage("pr");
 }
 
-/* ================= TIMELINE ================= */
-function renderTimeline(){
-
-  const box = document.getElementById("timeline");
-  if(!box) return;
-
-  const timeline = [
-    "2026/05 市民参加型構想スタート",
-    "2026/06 AI分析導入",
-    "2026/07 政策統合フェーズ"
-  ];
-
-  box.innerHTML = timeline.map(t=>
-    `<div class="placeholder-card">${t}</div>`
-  ).join("");
-}
-
-/* ================= AI ================= */
-async function runAI(){
-
-  const category =
-    document.getElementById("categorySelect")?.value || "未分類";
-
-  const text =
-    document.getElementById("ideaInput")?.value || "";
-
-  try{
-
-    const res = await fetch(GAS_URL,{
-      method:"POST",
-      body:JSON.stringify({
-        category,
-        content:text
-      })
-    });
-
-    const result = await res.json();
-    const aiText = result.result || "";
-
-    const resultBox = document.getElementById("resultBox");
-    const titleBox = document.getElementById("titleBox");
-    const summaryBox = document.getElementById("summaryBox");
-
-    if(resultBox){
-      resultBox.innerHTML = `
-        <h3>AI分析結果</h3>
-        <p>${aiText.slice(0,200)}</p>
-
-        <h3>メリット</h3>
-        <p>地域活性化・教育効果・経済波及</p>
-
-        <h3>懸念点</h3>
-        <p>財源・運用コスト・合意形成</p>
-
-        <h3>行政視点</h3>
-        <p>中長期の都市戦略に寄与</p>
-
-        <h3>市民視点</h3>
-        <p>参加型政策として評価</p>
-      `;
-    }
-
-    if(titleBox) titleBox.innerText = "AI生成タイトル";
-    if(summaryBox) summaryBox.innerText = aiText.slice(0,120);
-
-    const decisionBox = document.getElementById("decisionBox");
-    if(decisionBox) decisionBox.style.display = "block";
-
-  }catch(e){
-    console.log("AI ERROR", e);
-  }
-}
-
-/* ================= SEND ================= */
-async function sendToPR(){
-
-  const input = document.getElementById("ideaInput")?.value || "";
-
-  try{
-
-    await fetch(GAS_URL,{
-      method:"POST",
-      body:JSON.stringify({
-        title:"AI生成",
-        category:selectedCategory,
-        content:input
-      })
-    });
-
-    loadData();
-
-  }catch(e){
-    console.log("POST ERROR", e);
-  }
-}
-
-/* ================= BACK ================= */
-function backToAI(){
-
-  const box = document.getElementById("decisionBox");
-  if(box) box.style.display = "none";
+/* B：戻る */
+function choiceB(){
+  showPage("ai");
 }

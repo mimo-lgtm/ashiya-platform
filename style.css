@@ -444,3 +444,39 @@ h1{
 font-size:30px;
 }
 }
+
+.item{
+  padding:12px;
+  margin:8px 0;
+  background:#f3f4f6;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+.item:hover{
+  background:#e5e7eb;
+}
+
+.pr-box{
+  background:white;
+  padding:15px;
+  border-radius:12px;
+  margin:10px;
+  border:1px solid #ddd;
+}
+
+.status.red{
+  color:red;
+  font-weight:bold;
+}
+
+.status.green{
+  color:green;
+  font-weight:bold;
+}
+
+.grid-compact{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:10px;
+}
