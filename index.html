@@ -692,13 +692,35 @@ h1,h2,h3{
 <!-- PR -->
 <section id="pullrequest" class="page">
 
-<h1>📋 PULL REQUEST</h1>
+  <h1>📋 PULL REQUEST</h1>
 
-<div id="prList"></div>
+  <div class="placeholder-card">
+    <p>AI壁打ちで作成された提案が、カテゴリー別に整理されています。</p>
+    <p>🟢 統合済 / 🔴 未統合</p>
+  </div>
 
+  <!-- カテゴリー一覧（大分類） -->
+  <div class="category-bar" style="margin-bottom:16px;">
+    <button class="cat-btn" data-pr-cat="① 芦屋市の価値向上">① 価値向上</button>
+    <button class="cat-btn" data-pr-cat="② 市民ベネフィット">② ベネフィット</button>
+    <button class="cat-btn" data-pr-cat="③ 財政持続性">③ 財政持続性</button>
+    <button class="cat-btn" data-pr-cat="④ 戦略性">④ 戦略性</button>
+    <button class="cat-btn" data-pr-cat="⑤ 都市強靭性">⑤ 都市強靭性</button>
+  </div>
 
+  <!-- 中分類＋投稿一覧 -->
+  <div id="prList" class="placeholder-card">
+    カテゴリーを選択すると、ここに200字要約の一覧が表示されます。
+  </div>
+
+  <!-- 選択した投稿の詳細表示 -->
+  <div id="prDetail" class="placeholder-card" style="display:none;">
+    <h3 id="prDetailTitle"></h3>
+    <p id="prDetailSummary"></p>
+  </div>
 
 </section>
+
 
 <!-- ================= CURRENT VISION ================= -->
 
