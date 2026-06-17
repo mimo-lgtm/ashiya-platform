@@ -40,11 +40,12 @@ function showPage(id) {
   );
   document.getElementById(id).classList.add("active");
 
+  // ★ loadPR が存在しないので呼ばない
   if (id === "pullrequest") {
-    loadPR();
+    renderPR(); // ← これなら存在する
   }
 }
-window.showPage = showPage;
+
 
 /* =========================================
    データロード（PR用）
