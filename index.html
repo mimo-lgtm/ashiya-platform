@@ -581,25 +581,72 @@ h1,h2,h3{
 
   <h1>🤖 AI壁打ち</h1>
 
-  <div class="card">
+  <div class="assistant-layout">
 
-    <textarea id="input" placeholder="あなたの考えを教えてください"></textarea>
+    <!-- 左：入力エリア -->
+    <div class="assistant-card">
+      <h2>あなたの考えを聞かせてください</h2>
 
-    <select id="category">
-      <option value="value">価値向上</option>
-      <option value="benefit">ベネフィット</option>
-      <option value="finance">財政</option>
-      <option value="strategy">戦略</option>
-      <option value="resilience">強靭性</option>
-    </select>
+      <!-- カテゴリーボタン -->
+      <div class="category-bar" style="margin-bottom:12px;">
+        <button type="button" data-cat="① 芦屋市の価値向上" class="cat-btn active">① 価値向上</button>
+        <button type="button" data-cat="② 市民ベネフィット" class="cat-btn">② ベネフィット</button>
+        <button type="button" data-cat="③ 財政持続性" class="cat-btn">③ 財政</button>
+        <button type="button" data-cat="④ 戦略性" class="cat-btn">④ 戦略性</button>
+        <button type="button" data-cat="⑤ 都市強靭性" class="cat-btn">⑤ 都市強靭性</button>
+      </div>
 
-    <button class="big" onclick="aiProcess()">AI分析</button>
+      <!-- 実際に送るカテゴリー（hidden） -->
+      <select id="categorySelect" style="display:none;">
+        <option value="① 芦屋市の価値向上" selected>① 芦屋市の価値向上</option>
+        <option value="② 市民ベネフィット">② 市民ベネフィット</option>
+        <option value="③ 財政持続性">③ 財政持続性</option>
+        <option value="④ 戦略性">④ 戦略性</option>
+        <option value="⑤ 都市強靭性">⑤ 都市強靭性</option>
+      </select>
+
+      <textarea id="ideaInput" placeholder="あなたの考えを自由に書いてください"></textarea>
+
+      <button class="primary-btn" onclick="runAI()">AI壁打ちを実行する</button>
+    </div>
+
+    <!-- 右：AI結果エリア -->
+    <div class="assistant-card">
+      <h2>AIからの整理結果</h2>
+
+      <!-- 500字上限の結果表示 -->
+      <div id="aiBox" class="result-box">
+        結果はここに表示されます。（最大500文字）
+      </div>
+
+      <!-- A/B 選択 -->
+      <div id="decisionBox" style="display:none; margin-top:16px;">
+        <p>この内容で次のどちらに進みますか？</p>
+        <button class="primary-btn" onclick="confirmSummary()">A. 200字要約とタイトルをつくる</button>
+        <button class="primary-btn" style="background:#e5e7eb;color:#111;" onclick="backToAI()">B. この結果に意見する（書き直す）</button>
+      </div>
+
+      <!-- 要約＆タイトル表示ブロック -->
+      <div id="summaryBlock" style="display:none; margin-top:20px;">
+        <div class="placeholder-card">
+          <h3>200字要約</h3>
+          <p id="summaryBox"></p>
+        </div>
+
+        <div class="placeholder-card">
+          <h3>推奨タイトル</h3>
+          <p id="titleBox"></p>
+        </div>
+
+        <button class="primary-btn" onclick="sendToPR()">この内容でPULL REQUESTに投稿する</button>
+      </div>
+
+    </div>
 
   </div>
 
-  <div id="aiResult"></div>
-
 </section>
+
 <!-- ================= RULES ================= -->
 <section id="rules" class="page">
 
