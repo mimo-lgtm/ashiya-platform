@@ -442,5 +442,27 @@ font-size:30px;
 h1{
 
 font-size:30px;
+
+  .category-bar{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-bottom:8px;
+}
+
+.category-bar .cat-btn{
+  border:none;
+  padding:8px 12px;
+  border-radius:999px;
+  background:#e5e7eb;
+  cursor:pointer;
+  font-size:14px;
+}
+
+.category-bar .cat-btn.active{
+  background:#2563eb;
+  color:#fff;
+}
+
 }
 }
