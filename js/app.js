@@ -86,7 +86,6 @@ async function runAI() {
 
     const data = await res.json();
 
-    // GAS が返す形式: { result, summary, title }
     const result = (data.result || "").slice(0, 500);
     const summary = data.summary || (data.result || "").slice(0, 200);
     const title = data.title || "市民提案";
@@ -100,7 +99,7 @@ async function runAI() {
     document.getElementById("summaryBlock").style.display = "none";
   } catch (e) {
     console.log("AI ERROR", e);
-    alert("AI分析でエラーが発生しました（GASに届いていない可能性があります）。");
+    alert("AI分析でエラーが発生しました。");
   }
 }
 window.runAI = runAI;
@@ -153,11 +152,11 @@ async function sendToPR() {
       loadData();
       showPage("pullrequest");
     } else {
-      alert("投稿時にエラーが発生しました（GASの返答が不正）。");
+      alert("投稿時にエラーが発生しました。");
     }
   } catch (e) {
     console.log("POST ERROR", e);
-    alert("投稿時にエラーが発生しました（GASに届いていません）。");
+    alert("投稿時にエラーが発生しました。");
   }
 }
 window.sendToPR = sendToPR;
