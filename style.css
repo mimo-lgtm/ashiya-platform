@@ -464,5 +464,12 @@ font-size:30px;
   color:#fff;
 }
 
+
+  /* ロジックツリーの中分類を完全に非表示にする */
+.tree-children {
+  display: none !important;
+}
+
+
 }
 }
