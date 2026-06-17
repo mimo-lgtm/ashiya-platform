@@ -168,6 +168,7 @@ async function sendToPR() {
 
 window.sendToPR = sendToPR;
 
+
 /* =========================================
    PULL REQUEST 表示
 ========================================= */
