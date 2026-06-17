@@ -135,26 +135,37 @@ async function sendToPR() {
   const content = document.getElementById("ideaInput")?.value || "";
 
   try {
-    await fetch(GAS_URL, {
+    const res = await fetch(GAS_URL, {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json"   // ← これが必須
+      },
       body: JSON.stringify({
         mode: "post",
         category: CURRENT_CATEGORY,
         title: LAST_TITLE,
         summary: LAST_SUMMARY,
         content: content,
-        merged: false,
-      }),
+        merged: false
+      })
     });
 
-    alert("PULL REQUESTに投稿しました。");
-    loadData();
-    showPage("pullrequest");
+    const json = await res.json();
+
+    if (json.status === "saved") {
+      alert("PULL REQUESTに投稿しました。");
+      loadData();
+      showPage("pullrequest");
+    } else {
+      alert("投稿時にエラーが発生しました。");
+    }
+
   } catch (e) {
     console.log("POST ERROR", e);
     alert("投稿時にエラーが発生しました。");
   }
 }
+
 window.sendToPR = sendToPR;
 
 /* =========================================
