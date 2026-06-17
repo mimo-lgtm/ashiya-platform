@@ -2,7 +2,68 @@ function showPage(id){
   document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 }
+let PR = [];
 
+function goAI(topic){
+  showPage('ai');
+  document.getElementById("aiInput").value = topic;
+}
+
+function aiRun(){
+
+  const text = document.getElementById("aiInput").value;
+  const cat = document.getElementById("aiCategory").value;
+
+  const summary = text.slice(0,200);
+  const title = text.split("\n")[0];
+
+  document.getElementById("aiResult").innerHTML = `
+    <h3>AI結果</h3>
+    <p>${text}</p>
+
+    <h4>200字要約</h4>
+    <p>${summary}</p>
+
+    <h4>推奨タイトル</h4>
+    <p>${title}</p>
+
+    <button onclick="addPR('${cat}','${summary}','${title}')">A：PR追加</button>
+    <button onclick="showPage('ai')">B：修正</button>
+  `;
+}
+
+function addPR(cat, summary, title){
+
+  PR.push({
+    cat,
+    summary,
+    title,
+    status:"red"
+  });
+
+  renderPR();
+  showPage("pr");
+}
+
+function renderPR(list=PR){
+
+  document.getElementById("prList").innerHTML =
+    list.map(p=>`
+      <div class="pr-item">
+        <div class="${p.status=='red'?'badge-red':'badge-green'}">
+          ${p.status=='red'?'🔴 未統合':'🟢 統合済'}
+        </div>
+
+        <b>${p.title}</b>
+        <p>${p.summary}</p>
+        <small>${p.cat}</small>
+      </div>
+    `).join("");
+}
+
+function filterPR(cat){
+  renderPR(PR.filter(p=>p.cat===cat));
+}
 /* =========================
    ロジックツリー
 ========================= */

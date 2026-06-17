@@ -517,15 +517,17 @@ h1,h2,h3{
 
 <div class="tree-children">
 
-<!-- ★ダミー追加（クリック可能） -->
-<div class="tree-leaf" onclick="openDetail('ehon')">
-📚 絵本図書館（AI知育拠点）
-</div>
+  <div class="tree-leaf" onclick="goAI('次世代教育ブランド')">次世代教育ブランド</div>
+  <div class="tree-leaf" onclick="goAI('EdTech連携')">EdTech連携</div>
+  <div class="tree-leaf" onclick="goAI('景観美化')">景観美化</div>
+  <div class="tree-leaf" onclick="goAI('公園芝生化')">公園芝生化</div>
 
-<div class="tree-leaf">次世代教育ブランド</div>
-<div class="tree-leaf">EdTech連携</div>
-<div class="tree-leaf">景観美化</div>
-<div class="tree-leaf">公園芝生化</div>
+  <div class="tree-leaf" onclick="goAI('多世代交流')">多世代交流</div>
+  <div class="tree-leaf" onclick="goAI('サードプレイス')">サードプレイス</div>
+
+  <div class="tree-leaf" onclick="goAI('施設収益化')">施設収益化</div>
+  <div class="tree-leaf" onclick="goAI('起業支援')">起業支援</div>
+  <div class="tree-leaf" onclick="goAI('防災システム')">防災システム</div>
 
 </div>
 </div>
@@ -573,51 +575,38 @@ h1,h2,h3{
 <!-- JSで差し替え -->
 </div>
 
-</section><!-- ================= AI ================= -->
-<section id="assistant" class="page">
+</section>
+
+<!-- ================= AI ================= -->
+<section id="ai" class="page">
 
 <h1>🤖 AI壁打ち</h1>
 
-<div class="placeholder-card">
+<div class="ai-split">
 
-<div class="assistant-layout">
+  <div class="ai-box">
+    <h3>入力</h3>
 
-<!-- 入力 -->
-<div class="assistant-card">
-<h3>入力</h3>
-<textarea id="input"></textarea>
+    <textarea id="aiInput" placeholder="あなたの考えを教えてください"></textarea>
 
-<input id="title" placeholder="タイトル">
+    <select id="aiCategory">
+      <option>価値向上</option>
+      <option>ベネフィット</option>
+      <option>財政</option>
+      <option>戦略</option>
+      <option>強靭性</option>
+    </select>
 
-<button onclick="aiStep1()" class="big-button">
-🤖 AI壁打ち
-</button>
-</div>
+    <button onclick="aiRun()">AI分析</button>
+  </div>
 
-
-<!-- 出力 -->
-<div class="assistant-card" id="aiBox">
-結果がここに表示されます
-</div>
-
-</div>
-
-<!-- ★追加：推奨タイトル -->
-<div class="placeholder-card">
-<h3>推奨タイトル</h3>
-<div id="aiTitleBox">未生成</div>
-</div>
-
-<!-- ★追加：200字要約 -->
-<div class="placeholder-card">
-<h3>200字要約</h3>
-<div id="aiSummaryBox">未生成</div>
-</div>
+  <div class="ai-box" id="aiResult">
+    結果がここに表示されます
+  </div>
 
 </div>
 
 </section>
-
 <!-- ================= RULES ================= -->
 <section id="rules" class="page">
 
@@ -660,59 +649,23 @@ h1,h2,h3{
 </section>
 
 <!-- ================= PULL REQUEST ================= -->
-<section id="pullrequest" class="page">
+<section id="pr" class="page">
 
 <h1>📋 PULL REQUEST</h1>
 
-<div class="placeholder-card">
+<div class="pr-category">
 
-<h2>市民提案一覧</h2>
-
-<p>
-市民から投稿された提案はレビューされ、
-ロジックツリーへ統合されます。
-</p>
+  <div class="pr-cat" onclick="filterPR('value')">価値向上</div>
+  <div class="pr-cat" onclick="filterPR('benefit')">ベネフィット</div>
+  <div class="pr-cat" onclick="filterPR('finance')">財政</div>
+  <div class="pr-cat" onclick="filterPR('strategy')">戦略</div>
+  <div class="pr-cat" onclick="filterPR('resilience')">強靭性</div>
 
 </div>
 
-<div id="data"></div>
+<div id="prList"></div>
 
-<!-- ================= DUMMY PR ITEMS ================= -->
-
-<div class="placeholder-card">
-<b>PR-001</b><br>
-📚 絵本図書館のAI読み聞かせ高度化提案<br>
-<span style="color:#64748b;">
-AR空間と音声AIを統合し、没入型学習環境を構築
-</span>
-</div>
-
-<div class="placeholder-card">
-<b>PR-002</b><br>
-☕ 駅前カフェの市民運営モデル設計<br>
-<span style="color:#64748b;">
-地域住民が運営に参加するコミュニティ型収益施設
-</span>
-</div>
-
-<div class="placeholder-card">
-<b>PR-003</b><br>
-🛡 防災AIシミュレーション導入案<br>
-<span style="color:#64748b;">
-災害時行動をAIが予測し避難導線を最適化
-</span>
-</div>
-
-<div class="placeholder-card">
-<b>PR-004</b><br>
-🌐 DAO型自治制度の試験導入<br>
-<span style="color:#64748b;">
-市民投票とトークンを活用した分散型意思決定モデル
-</span>
-</div>
-
-</section>
-<!-- ================= CURRENT VISION ================= -->
+</section><!-- ================= CURRENT VISION ================= -->
 
 <section id="vision" class="page">
 <div class="vision-card active">

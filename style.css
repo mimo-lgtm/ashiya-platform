@@ -480,3 +480,67 @@ font-size:30px;
   grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
   gap:10px;
 }
+
+/* ===== TREE UI ===== */
+.tree-children{
+  margin-top:10px;
+  padding-left:20px;
+  border-left:3px solid #cbd5e1;
+}
+
+.tree-leaf{
+  background:#fff;
+  padding:10px 14px;
+  margin:8px 0;
+  border-radius:10px;
+  box-shadow:0 3px 10px rgba(0,0,0,.06);
+  cursor:pointer;
+  transition:.2s;
+}
+
+.tree-leaf:hover{
+  background:#eef2ff;
+  transform:translateX(5px);
+}
+
+/* ===== AI UI ===== */
+.ai-split{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.ai-box{
+  background:#fff;
+  padding:14px;
+  border-radius:12px;
+  box-shadow:0 2px 10px rgba(0,0,0,.06);
+}
+
+/* ===== PR UI ===== */
+.pr-category{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:10px;
+  margin-bottom:15px;
+}
+
+.pr-cat{
+  background:#111827;
+  color:#fff;
+  padding:10px;
+  border-radius:10px;
+  cursor:pointer;
+  text-align:center;
+}
+
+.pr-item{
+  background:#fff;
+  border-radius:10px;
+  padding:10px;
+  margin:8px 0;
+  box-shadow:0 2px 8px rgba(0,0,0,.06);
+}
+
+.badge-red{color:red;font-weight:bold;}
+.badge-green{color:green;font-weight:bold;}
