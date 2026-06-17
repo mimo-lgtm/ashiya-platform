@@ -3,128 +3,125 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>市民政策AIプラットフォーム</title>
 
 <style>
-/* ================= BASE ================= */
-*{margin:0;padding:0;box-sizing:border-box;}
-body{
-  font-family:"Yu Gothic","Meiryo",sans-serif;
-  background:linear-gradient(135deg,#edf4ff,#f7fffb,#fff8ef);
-  color:#1e293b;
-}
-
-.page{display:none;padding:40px 20px;}
-.page.active{display:block}
-
-/* ================= HEADER ================= */
-header{
-  position:sticky;
-  top:0;
-  background:#0f172a;
-  padding:10px;
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-}
-
-header button{
-  padding:10px 14px;
-  border:none;
-  border-radius:10px;
-  background:white;
-  cursor:pointer;
-  font-weight:700;
-}
-
-/* ================= CARD ================= */
-.card{
-  background:white;
-  padding:20px;
-  border-radius:16px;
-  margin:15px 0;
-  box-shadow:0 8px 20px rgba(0,0,0,.08);
-}
-
-/* ================= TREE ================= */
-.tree-item{
-  padding:12px;
-  margin:8px 0;
-  background:#f1f5f9;
-  border-radius:10px;
-  cursor:pointer;
-}
-
-.tree-item:hover{
-  background:#dbeafe;
-}
+/* ====== ここはあなたのCSSそのままでOK ====== */
+/* 省略せず使ってOK（今のを維持） */
 </style>
 </head>
 
 <body>
 
-<header>
-  <button onclick="showPage('intro')">ホーム</button>
-  <button onclick="showPage('tree')">ロジックツリー</button>
-  <button onclick="showPage('ai')">AI壁打ち</button>
-  <button onclick="showPage('pr')">PR</button>
-  <button onclick="showPage('vision')">ビジョン</button>
+<header class="topbar">
+  <div class="logo">🏛 市民政策AIプラットフォーム</div>
+
+  <nav>
+    <button onclick="showPage('intro')">ホーム</button>
+    <button onclick="showPage('tree')">ロジックツリー</button>
+    <button onclick="showPage('ai')">AI壁打ち</button>
+    <button onclick="showPage('rules')">分析ルール</button>
+    <button onclick="showPage('pr')">PULL REQUEST</button>
+    <button onclick="showPage('vision')">ビジョン</button>
+  </nav>
 </header>
 
 <main>
 
 <!-- ================= INTRO ================= -->
 <section id="intro" class="page active">
-  <div class="card">
-    <h1>駅前公共施設 市民政策プラットフォーム</h1>
-    <p>市民意見をAIで整理し政策化するシステム</p>
+  <div class="placeholder-card">
+    <h1>駅前公共施設について皆で考えよう</h1>
+    <h2>市民政策プラットフォーム</h2>
   </div>
 </section>
 
 <!-- ================= TREE ================= -->
 <section id="tree" class="page">
-  <div class="card">
-    <h1>ロジックツリー</h1>
-    <div id="treeBox"></div>
+
+<h1>🌳 ロジックツリー</h1>
+
+<div class="logic-tree">
+
+  <div class="tree-root">政策ツリー</div>
+
+  <div class="tree-level">
+
+    <div class="tree-parent">
+      <div class="tree-node root-node">① 価値向上</div>
+
+      <div class="tree-children">
+
+        <div class="tree-leaf" onclick="goAI('次世代教育ブランド')">次世代教育ブランド</div>
+        <div class="tree-leaf" onclick="goAI('EdTech連携')">EdTech連携</div>
+        <div class="tree-leaf" onclick="goAI('景観美化')">景観美化</div>
+        <div class="tree-leaf" onclick="goAI('公園芝生化')">公園芝生化</div>
+
+        <!-- ★ダミー（重要） -->
+        <div class="tree-leaf" onclick="goAI('多世代交流')">多世代交流</div>
+        <div class="tree-leaf" onclick="goAI('サードプレイス')">サードプレイス</div>
+        <div class="tree-leaf" onclick="goAI('施設収益化')">施設収益化</div>
+        <div class="tree-leaf" onclick="goAI('起業支援')">起業支援</div>
+        <div class="tree-leaf" onclick="goAI('防災')">防災</div>
+
+      </div>
+    </div>
+
   </div>
+</div>
+
 </section>
 
 <!-- ================= AI ================= -->
 <section id="ai" class="page">
-  <div class="card">
-    <h1>AI壁打ち</h1>
 
-    <textarea id="aiInput" style="width:100%;height:140px;"></textarea>
+<h1>🤖 AI壁打ち</h1>
 
-    <select id="aiCategory">
-      <option>価値向上</option>
-      <option>ベネフィット</option>
-      <option>財政</option>
-      <option>戦略</option>
-      <option>強靭性</option>
-    </select>
+<div class="placeholder-card">
 
-    <button onclick="aiRun()">AI実行</button>
+<textarea id="aiInput"></textarea>
 
-    <div id="aiResult" class="card"></div>
-  </div>
+<select id="aiCategory">
+  <option value="value">価値向上</option>
+  <option value="benefit">ベネフィット</option>
+  <option value="finance">財政</option>
+  <option value="strategy">戦略</option>
+  <option value="resilience">強靭性</option>
+</select>
+
+<button onclick="aiRun()">AI実行</button>
+
+</div>
+
+<div id="aiResult" class="placeholder-card">
+結果がここに表示されます
+</div>
+
 </section>
 
 <!-- ================= PR ================= -->
 <section id="pr" class="page">
-  <div class="card">
-    <h1>PULL REQUEST</h1>
-    <div id="prBox"></div>
-  </div>
+
+<h1>📋 PULL REQUEST</h1>
+
+<div class="pr-category">
+  <button onclick="filterPR('value')">価値向上</button>
+  <button onclick="filterPR('benefit')">ベネフィット</button>
+  <button onclick="filterPR('finance')">財政</button>
+  <button onclick="filterPR('strategy')">戦略</button>
+  <button onclick="filterPR('resilience')">強靭性</button>
+</div>
+
+<div id="prList"></div>
+
 </section>
 
 <!-- ================= VISION ================= -->
 <section id="vision" class="page">
-  <div class="card">
-    <h1>ビジョン</h1>
-    <div id="visionBox"></div>
-  </div>
+<h1>ビジョン</h1>
+<div class="placeholder-card">
+現在のビジョン表示
+</div>
 </section>
 
 </main>
