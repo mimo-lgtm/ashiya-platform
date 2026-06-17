@@ -1,192 +1,252 @@
-function showPage(id){
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-}
-let PR = [];
 
-function goAI(topic){
-  showPage('ai');
-  document.getElementById("aiInput").value = topic;
-}
+/* =========================
+   CONFIG
+========================= */
+const GAS_URL = "https://script.google.com/macros/s/AKfycbzopgSpPPozJ3Q6J2fDSrI8zE0iIlgK-VLqTixe4VL9dPtzvpOZ9UOyPjK8yPQSA6n7vg/exec";
 
-function aiRun(){
+let POSTS = [];
+let CURRENT_CATEGORY = "";
 
-  const text = document.getElementById("aiInput").value;
-  const cat = document.getElementById("aiCategory").value;
+/* =========================
+   INIT
+========================= */
+document.addEventListener("DOMContentLoaded", () => {
+  init();
+});
 
-  const summary = text.slice(0,200);
-  const title = text.split("\n")[0];
-
-  document.getElementById("aiResult").innerHTML = `
-    <h3>AI結果</h3>
-    <p>${text}</p>
-
-    <h4>200字要約</h4>
-    <p>${summary}</p>
-
-    <h4>推奨タイトル</h4>
-    <p>${title}</p>
-
-    <button onclick="addPR('${cat}','${summary}','${title}')">A：PR追加</button>
-    <button onclick="showPage('ai')">B：修正</button>
-  `;
-}
-
-function addPR(cat, summary, title){
-
-  PR.push({
-    cat,
-    summary,
-    title,
-    status:"red"
-  });
-
+function init(){
+  loadPosts();
+  renderTree();
   renderPR();
-  showPage("pr");
-}
-
-function renderPR(list=PR){
-
-  document.getElementById("prList").innerHTML =
-    list.map(p=>`
-      <div class="pr-item">
-        <div class="${p.status=='red'?'badge-red':'badge-green'}">
-          ${p.status=='red'?'🔴 未統合':'🟢 統合済'}
-        </div>
-
-        <b>${p.title}</b>
-        <p>${p.summary}</p>
-        <small>${p.cat}</small>
-      </div>
-    `).join("");
-}
-
-function filterPR(cat){
-  renderPR(PR.filter(p=>p.cat===cat));
-}
-/* =========================
-   ロジックツリー
-========================= */
-
-function openCategory(type){
-
-  const map = {
-    value: [
-      "次世代教育ブランド",
-      "EdTech連携",
-      "景観美化",
-      "公園芝生化"
-    ],
-    benefit: [
-      "多世代交流",
-      "サードプレイス"
-    ],
-    finance: [
-      "施設収益化",
-      "クラウドファンディング"
-    ],
-    strategy: [
-      "起業支援",
-      "コワーキング"
-    ],
-    resilience: [
-      "防災システム",
-      "都市指令室"
-    ]
-  };
-
-  const list = map[type] || [];
-
-  document.getElementById("treeDetail").innerHTML = `
-    <div class="card">
-      <h2>詳細</h2>
-      ${list.map(x=>`
-        <div class="item" onclick="openIdea('${x}')">
-          ${x}
-        </div>
-      `).join("")}
-    </div>
-  `;
-}
-
-/* 選択されたテーマ */
-function openIdea(text){
-
-  document.getElementById("treeDetail").innerHTML = `
-    <div class="card">
-      <h3>${text}</h3>
-      <p>このテーマについて意見を投稿できます</p>
-
-      <button class="big" onclick="goAI('${text}')">
-        AI壁打ちへ
-      </button>
-    </div>
-  `;
-}
-
-function goAI(text){
-  showPage("ai");
-  document.getElementById("input").value =
-    `テーマ：${text}\n\nあなたの考えを教えてください`;
+  renderVision();
 }
 
 /* =========================
-   AI壁打ち
+   PAGE CONTROL
 ========================= */
+function showPage(id){
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  const target = document.getElementById(id);
+  if(target) target.classList.add("active");
+}
 
-function aiProcess(){
+/* =========================
+   DATA LOAD (GAS)
+========================= */
+async function loadPosts(){
 
-  const text = document.getElementById("input").value;
-  const category = document.getElementById("category").value;
+  try{
+    const res = await fetch(GAS_URL);
+    POSTS = await res.json();
 
-  // 擬似AI（後でGROQ差し替え）
-  const summary = text.slice(0,200);
-  const title = text.split("\n")[0].slice(0,20) || "市民提案";
+    renderPR();
 
-  document.getElementById("aiResult").innerHTML = `
-    <div class="card">
-      <h3>AI分析結果（500字想定）</h3>
-      <p>${text}</p>
+  }catch(e){
+    console.log("LOAD ERROR", e);
+  }
+}
 
-      <hr>
+/* =========================
+   TREE RENDER
+========================= */
+function renderTree(){
 
-      <h4>200字要約</h4>
+  const el = document.getElementById("treeBox");
+  if(!el) return;
+
+  el.innerHTML = `
+    <h2>① 芦屋市の価値向上</h2>
+
+    <div class="tree-item" onclick="goAI('次世代教育ブランド')">次世代教育ブランド</div>
+    <div class="tree-item" onclick="goAI('EdTech連携')">EdTech連携</div>
+    <div class="tree-item" onclick="goAI('景観美化')">景観美化</div>
+    <div class="tree-item" onclick="goAI('公園芝生化')">公園芝生化</div>
+
+    <h2>② 市民ベネフィット</h2>
+    <div class="tree-item" onclick="goAI('多世代交流')">多世代交流</div>
+    <div class="tree-item" onclick="goAI('サードプレイス')">サードプレイス</div>
+
+    <h2>③ 財政持続性</h2>
+    <div class="tree-item" onclick="goAI('施設収益化')">施設収益化</div>
+
+    <h2>④ 戦略性</h2>
+    <div class="tree-item" onclick="goAI('起業支援')">起業支援</div>
+
+    <h2>⑤ 都市強靭性</h2>
+    <div class="tree-item" onclick="goAI('防災システム')">防災システム</div>
+  `;
+}
+
+/* =========================
+   AI WALL
+========================= */
+async function aiRun(){
+
+  const input = document.getElementById("aiInput")?.value || "";
+  const category = document.getElementById("aiCategory")?.value || "未分類";
+
+  if(!input){
+    alert("入力してください");
+    return;
+  }
+
+  try{
+
+    const res = await fetch(GAS_URL,{
+      method:"POST",
+      body: JSON.stringify({
+        category,
+        content: input
+      })
+    });
+
+    const json = await res.json();
+
+    const aiText = json.result || "";
+    const summary = json.summary || "";
+    const title = json.title || "";
+
+    document.getElementById("aiResult").innerHTML = `
+      <h3>AI分析（最大500字）</h3>
+      <p>${aiText}</p>
+
+      <h3>200字要約</h3>
       <p>${summary}</p>
 
-      <h4>推奨タイトル</h4>
+      <h3>タイトル</h3>
       <p>${title}</p>
 
-      <button class="big" onclick="choiceA()">
-        A：このまま投稿
+      <button onclick="sendToPR('${category}','${title}','${summary}')">
+        A：PRへ送信
       </button>
 
-      <button class="big" onclick="choiceB()">
+      <button onclick="resetAI()">
         B：修正する
       </button>
-    </div>
-  `;
+    `;
+
+  }catch(e){
+    console.log("AI ERROR", e);
+  }
 }
 
-/* A：PRへ */
-function choiceA(){
-
-  const text = document.getElementById("input").value;
-  const category = document.getElementById("category").value;
-
-  const box = document.getElementById("prList");
-
-  box.innerHTML += `
-    <div class="pr-box">
-      <div class="status red">🔴 未統合</div>
-      <h3>${category}</h3>
-      <p>${text.slice(0,200)}</p>
-    </div>
-  `;
-
-  showPage("pr");
+function resetAI(){
+  document.getElementById("aiResult").innerHTML = "";
 }
 
-/* B：戻る */
-function choiceB(){
+/* =========================
+   GO FROM TREE → AI
+========================= */
+function goAI(text){
+
   showPage("ai");
+
+  document.getElementById("aiInput").value = text;
+}
+
+/* =========================
+   SEND TO PR
+========================= */
+async function sendToPR(category,title,summary){
+
+  try{
+
+    await fetch(GAS_URL,{
+      method:"POST",
+      body: JSON.stringify({
+        category,
+        title,
+        summary,
+        merged:false
+      })
+    });
+
+    alert("PRに追加しました");
+
+    loadPosts();
+
+  }catch(e){
+    console.log("PR ERROR", e);
+  }
+}
+
+/* =========================
+   PR RENDER
+========================= */
+function renderPR(){
+
+  const el = document.getElementById("prBox");
+  if(!el) return;
+
+  const cats = {
+    "価値向上": [],
+    "ベネフィット": [],
+    "財政": [],
+    "戦略": [],
+    "強靭性": []
+  };
+
+  POSTS.forEach(p=>{
+    if(cats[p.category]){
+      cats[p.category].push(p);
+    }
+  });
+
+  let html = "";
+
+  Object.keys(cats).forEach(cat=>{
+    
+    html += `<h2>${cat}</h2>`;
+
+    if(cats[cat].length === 0){
+      html += `<div class="card">データなし</div>`;
+      return;
+    }
+
+    cats[cat].forEach(p=>{
+      html += `
+        <div class="card">
+          <b>${p.title || "無題"}</b><br>
+          <small>${p.summary || ""}</small><br>
+          <span style="color:${p.merged ? "green":"red"}">
+            ${p.merged ? "🟢統合済":"🔴未統合"}
+          </span>
+        </div>
+      `;
+    });
+
+  });
+
+  el.innerHTML = html;
+}
+
+/* =========================
+   VISION
+========================= */
+function renderVision(){
+
+  const el = document.getElementById("visionBox");
+  if(!el) return;
+
+  el.innerHTML = `
+    <div class="card">
+      <h3>初期ビジョン</h3>
+      <p>コストセンター → プロフィットセンター</p>
+    </div>
+
+    <div class="card">
+      <h3>進化方向</h3>
+      <p>市民データ駆動型都市・AI共同意思決定</p>
+    </div>
+  `;
+}
+
+/* =========================
+   CATEGORY FILTER (optional hook)
+========================= */
+function filterPR(cat){
+  const items = document.querySelectorAll(".card");
+  items.forEach(i=>{
+    i.style.display = "block";
+  });
 }
