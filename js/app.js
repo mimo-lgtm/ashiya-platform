@@ -1,6 +1,6 @@
-/* ================================
+/* =========================================
    設定
-================================ */
+========================================= */
 const GAS_URL =
   "https://script.google.com/macros/s/AKfycbzopgSpPPozJ3Q6J2fDSrI8zE0iIlgK-VLqTixe4VL9dPtzvpOZ9UOyPjK8yPQSA6n7vg/exec";
 
@@ -11,9 +11,9 @@ let LAST_AI_TEXT = "";
 let LAST_SUMMARY = "";
 let LAST_TITLE = "";
 
-/* ================================
+/* =========================================
    初期ロード
-================================ */
+========================================= */
 document.addEventListener("DOMContentLoaded", () => {
   loadData();
 
@@ -32,9 +32,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-/* ================================
+/* =========================================
    ページ切り替え
-================================ */
+========================================= */
 function showPage(id) {
   document.querySelectorAll(".page").forEach((p) => p.classList.remove("active"));
   document.getElementById(id).classList.add("active");
@@ -42,9 +42,9 @@ function showPage(id) {
 }
 window.showPage = showPage;
 
-/* ================================
+/* =========================================
    データロード（PR用）
-================================ */
+========================================= */
 async function loadData() {
   try {
     const res = await fetch(GAS_URL);
@@ -55,9 +55,9 @@ async function loadData() {
   }
 }
 
-/* ================================
+/* =========================================
    AI壁打ち（GROQ → GAS）
-================================ */
+========================================= */
 async function runAI() {
   const text = document.getElementById("ideaInput")?.value.trim() || "";
   const category = CURRENT_CATEGORY;
@@ -79,6 +79,10 @@ async function runAI() {
 
     const data = await res.json();
 
+    /* GAS が返すべき形式
+       { result:"500字", summary:"200字", title:"推奨タイトル" }
+    */
+
     const result = (data.result || "").slice(0, 500);
     const summary = data.summary || (data.result || "").slice(0, 200);
     const title = data.title || "市民提案";
@@ -87,21 +91,19 @@ async function runAI() {
     LAST_SUMMARY = summary;
     LAST_TITLE = title;
 
-    const aiBox = document.getElementById("aiBox");
-    aiBox.innerHTML = `<p>${result}</p>`;
-
+    document.getElementById("aiBox").innerHTML = `<p>${result}</p>`;
     document.getElementById("decisionBox").style.display = "block";
     document.getElementById("summaryBlock").style.display = "none";
   } catch (e) {
     console.log("AI ERROR", e);
-    alert("AI分析でエラーが発生しました。");
+    alert("AI分析でエラーが発生しました。\nGAS のレスポンス形式を確認してください。");
   }
 }
 window.runAI = runAI;
 
-/* ================================
+/* =========================================
    A. 要約とタイトルを表示
-================================ */
+========================================= */
 function confirmSummary() {
   document.getElementById("summaryBox").innerText = LAST_SUMMARY;
   document.getElementById("titleBox").innerText = LAST_TITLE;
@@ -109,18 +111,18 @@ function confirmSummary() {
 }
 window.confirmSummary = confirmSummary;
 
-/* ================================
+/* =========================================
    B. 書き直し
-================================ */
+========================================= */
 function backToAI() {
   document.getElementById("decisionBox").style.display = "none";
   document.getElementById("summaryBlock").style.display = "none";
 }
 window.backToAI = backToAI;
 
-/* ================================
+/* =========================================
    PULL REQUESTへ投稿
-================================ */
+========================================= */
 async function sendToPR() {
   const content = document.getElementById("ideaInput")?.value || "";
 
@@ -147,9 +149,9 @@ async function sendToPR() {
 }
 window.sendToPR = sendToPR;
 
-/* ================================
+/* =========================================
    PULL REQUEST 表示
-================================ */
+========================================= */
 function renderPR() {
   const box = document.getElementById("prList");
   const detail = document.getElementById("prDetail");
@@ -207,37 +209,32 @@ function renderPR() {
 }
 window.renderPR = renderPR;
 
-/* ================================
+/* =========================================
    ロジックツリー → 詳細ページ
-================================ */
+========================================= */
 function openDetail(theme) {
   const box = document.getElementById("detailBox");
 
   const dummy = {
-    "次世代教育ブランド":
-      "芦屋市を次世代教育のブランド都市として位置づけ、駅前公共施設を学びのハブとする構想です。",
-    EdTech連携:
-      "EdTech企業との連携により、最新のデジタル教材や学習プラットフォームを市民に開放します。",
-    景観美化: "駅前エリアの景観を整備し、市民と来訪者にとって心地よい空間をつくる提案です。",
-    公園芝生化: "芝生化により、子どもから大人までくつろげる公共空間を創出します。",
-    多世代交流: "世代を超えた交流を促すプログラムや空間設計に関するアイデアです。",
-    サードプレイス:
-      "家庭でも職場でもない、第三の居場所としての公共施設のあり方を探ります。",
-    施設収益化:
-      "カフェやシェアラウンジ等を通じて、施設の自立的な収益モデルを検討します。",
-    起業支援:
-      "スタートアップやスモールビジネスの実験・発表の場として活用する構想です。",
-    防災システム:
-      "平時は学びと交流、災害時は防災拠点として機能するデュアルユースの提案です。",
+    "次世代教育ブランド": "次世代教育ブランドに関する統合済み提案の要約をここに表示します。",
+    "EdTech連携": "EdTech連携に関する統合済み提案の要約をここに表示します。",
+    "景観美化": "景観美化に関する統合済み提案の要約をここに表示します。",
+    "公園芝生化": "公園芝生化に関する統合済み提案の要約をここに表示します。",
+    "多世代交流": "多世代交流に関する統合済み提案の要約をここに表示します。",
+    "サードプレイス": "サードプレイスに関する統合済み提案の要約をここに表示します。",
+    "施設収益化": "施設収益化に関する統合済み提案の要約をここに表示します。",
+    "起業支援": "起業支援に関する統合済み提案の要約をここに表示します。",
+    "防災システム": "防災システムに関する統合済み提案の要約をここに表示します。",
   };
 
-  const text = dummy[theme] || "このテーマに関する市民提案を今後追加します。";
+  const text = dummy[theme] || "このテーマに関する統合済み提案はまだありません。";
 
   box.innerHTML = `
     <h2>${theme}</h2>
     <p>${text}</p>
+
     <button class="big-button" onclick="goToAssistantWithTheme('${theme}')">
-      このテーマについて意見を投稿する（AI壁打ちへ）
+      この分野であなたの意見を聞かせてください（AI壁打ちへ）
     </button>
   `;
 
@@ -245,9 +242,9 @@ function openDetail(theme) {
 }
 window.openDetail = openDetail;
 
-/* ================================
+/* =========================================
    詳細 → AI壁打ちへ
-================================ */
+========================================= */
 function goToAssistantWithTheme(theme) {
   showPage("assistant");
   const input = document.getElementById("ideaInput");
