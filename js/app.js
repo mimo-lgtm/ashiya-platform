@@ -78,18 +78,17 @@ async function runAI() {
   try {
     const res = await fetch(GAS_URL, {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json"   // ← 必須
+      },
       body: JSON.stringify({
         mode: "analysis",
         category,
-        content: text,
-      }),
+        content: text
+      })
     });
 
     const data = await res.json();
-
-    /* GAS が返すべき形式
-       { result:"500字", summary:"200字", title:"推奨タイトル" }
-    */
 
     const result = (data.result || "").slice(0, 500);
     const summary = data.summary || (data.result || "").slice(0, 200);
@@ -102,12 +101,13 @@ async function runAI() {
     document.getElementById("aiBox").innerHTML = `<p>${result}</p>`;
     document.getElementById("decisionBox").style.display = "block";
     document.getElementById("summaryBlock").style.display = "none";
+
   } catch (e) {
     console.log("AI ERROR", e);
     alert("AI分析でエラーが発生しました。\nGAS のレスポンス形式を確認してください。");
   }
 }
-window.runAI = runAI;
+
 
 /* =========================================
    A. 要約とタイトルを表示
