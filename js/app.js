@@ -1,214 +1,258 @@
-const GAS_URL = "https://script.google.com/macros/s/AKfycbzopgSpPPozJ3Q6J2fDSrI8zE0iIlgK-VLqTixe4VL9dPtzvpOZ9UOyPjK8yPQSA6n7vg/exec";
+/* ================================
+   設定
+================================ */
+const GAS_URL =
+  "https://script.google.com/macros/s/AKfycbzopgSpPPozJ3Q6J2fDSrI8zE0iIlgK-VLqTixe4VL9dPtzvpOZ9UOyPjK8yPQSA6n7vg/exec";
 
 let POSTS = [];
-let selectedCategory = "";
+let CURRENT_CATEGORY = "① 芦屋市の価値向上";
 
-/* ================= INIT ================= */
+let LAST_AI_TEXT = "";
+let LAST_SUMMARY = "";
+let LAST_TITLE = "";
+
+/* ================================
+   初期ロード
+================================ */
 document.addEventListener("DOMContentLoaded", () => {
   loadData();
+
+  /* カテゴリーボタン（AI壁打ち） */
+  document.querySelectorAll(".cat-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".cat-btn").forEach((b) =>
+        b.classList.remove("active")
+      );
+      btn.classList.add("active");
+
+      CURRENT_CATEGORY = btn.dataset.cat;
+      const sel = document.getElementById("categorySelect");
+      if (sel) sel.value = CURRENT_CATEGORY;
+    });
+  });
 });
 
-/* ================= PAGE ================= */
-function showPage(id){
-
-  document.querySelectorAll(".page").forEach(p=>{
-    p.classList.remove("active");
-  });
-
-  const target = document.getElementById(id);
-  if(target) target.classList.add("active");
+/* ================================
+   ページ切り替え
+================================ */
+function showPage(id) {
+  document.querySelectorAll(".page").forEach((p) => p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  window.scrollTo(0, 0);
 }
+window.showPage = showPage;
 
-/* ================= LOAD ================= */
-async function loadData(){
-
-  try{
-
+/* ================================
+   データロード（PR用）
+================================ */
+async function loadData() {
+  try {
     const res = await fetch(GAS_URL);
     POSTS = await res.json();
-
-    renderTree();
     renderPR();
-    renderTimeline();
-
-  }catch(e){
+  } catch (e) {
     console.log("LOAD ERROR", e);
   }
 }
 
-/* ================= TREE ================= */
-function renderTree(){
+/* ================================
+   AI壁打ち（GROQ → GAS）
+================================ */
+async function runAI() {
+  const text = document.getElementById("ideaInput")?.value.trim() || "";
+  const category = CURRENT_CATEGORY;
 
-  const box = document.getElementById("treeData");
-  if(!box) return;
+  if (!text) {
+    alert("あなたの考えを入力してください。");
+    return;
+  }
 
-  const categoryMap = {};
+  try {
+    const res = await fetch(GAS_URL, {
+      method: "POST",
+      body: JSON.stringify({
+        mode: "analysis",
+        category,
+        content: text,
+      }),
+    });
 
-  POSTS.forEach(p=>{
-    const cat = p.category || "未分類";
-    categoryMap[cat] = (categoryMap[cat] || 0) + 1;
-  });
+    const data = await res.json();
 
-  let html = "";
+    const result = (data.result || "").slice(0, 500);
+    const summary = data.summary || (data.result || "").slice(0, 200);
+    const title = data.title || "市民提案";
 
-  Object.keys(categoryMap).forEach(cat=>{
-    html += `
-      <div class="placeholder-card">
-        <b>${cat}</b><br>
-        統合提案数：${categoryMap[cat]}件
-      </div>
-    `;
-  });
+    LAST_AI_TEXT = result;
+    LAST_SUMMARY = summary;
+    LAST_TITLE = title;
 
-  box.innerHTML = html;
+    const aiBox = document.getElementById("aiBox");
+    aiBox.innerHTML = `<p>${result}</p>`;
+
+    document.getElementById("decisionBox").style.display = "block";
+    document.getElementById("summaryBlock").style.display = "none";
+  } catch (e) {
+    console.log("AI ERROR", e);
+    alert("AI分析でエラーが発生しました。");
+  }
 }
+window.runAI = runAI;
 
-/* ================= PR ================= */
-function renderPR(){
+/* ================================
+   A. 要約とタイトルを表示
+================================ */
+function confirmSummary() {
+  document.getElementById("summaryBox").innerText = LAST_SUMMARY;
+  document.getElementById("titleBox").innerText = LAST_TITLE;
+  document.getElementById("summaryBlock").style.display = "block";
+}
+window.confirmSummary = confirmSummary;
 
+/* ================================
+   B. 書き直し
+================================ */
+function backToAI() {
+  document.getElementById("decisionBox").style.display = "none";
+  document.getElementById("summaryBlock").style.display = "none";
+}
+window.backToAI = backToAI;
+
+/* ================================
+   PULL REQUESTへ投稿
+================================ */
+async function sendToPR() {
+  const content = document.getElementById("ideaInput")?.value || "";
+
+  try {
+    await fetch(GAS_URL, {
+      method: "POST",
+      body: JSON.stringify({
+        mode: "post",
+        category: CURRENT_CATEGORY,
+        title: LAST_TITLE,
+        summary: LAST_SUMMARY,
+        content: content,
+        merged: false,
+      }),
+    });
+
+    alert("PULL REQUESTに投稿しました。");
+    loadData();
+    showPage("pullrequest");
+  } catch (e) {
+    console.log("POST ERROR", e);
+    alert("投稿時にエラーが発生しました。");
+  }
+}
+window.sendToPR = sendToPR;
+
+/* ================================
+   PULL REQUEST 表示
+================================ */
+function renderPR() {
   const box = document.getElementById("prList");
-  if(!box) return;
+  const detail = document.getElementById("prDetail");
 
-  const categoryOrder = [
-    "① 芦屋市の価値向上",
-    "② 市民ベネフィット",
-    "③ 財政持続性",
-    "④ 戦略性",
-    "⑤ 都市強靭性"
-  ];
+  if (!box) return;
+  if (detail) detail.style.display = "none";
 
   const grouped = {};
-
-  POSTS.forEach(p=>{
+  POSTS.forEach((p) => {
     const cat = p.category || "未分類";
-    if(!grouped[cat]) grouped[cat] = [];
+    if (!grouped[cat]) grouped[cat] = [];
     grouped[cat].push(p);
   });
 
-  let html = "";
+  document.querySelectorAll("[data-pr-cat]").forEach((btn) => {
+    btn.onclick = () => {
+      const cat = btn.dataset.prCat;
+      const list = grouped[cat] || [];
 
-  categoryOrder.forEach(cat=>{
+      if (!list.length) {
+        box.innerHTML = `<p>このカテゴリーにはまだ投稿がありません。</p>`;
+        if (detail) detail.style.display = "none";
+        return;
+      }
 
-    const list = grouped[cat];
-    if(!list) return;
-
-    html += `<h2 style="margin-top:20px;">${cat}</h2>`;
-
-    list.forEach(p=>{
-      html += `
-        <div class="placeholder-card">
-          <b>${p.title || ""}</b>
-          <span style="color:${p.merged ? "green" : "red"}">
-            ${p.merged ? "🟢統合済" : "🔴未統合"}
-          </span>
+      box.innerHTML = list
+        .map(
+          (p, idx) => `
+        <div class="pr-row" data-pr-index="${idx}" data-pr-cat="${cat}">
+          <div>
+            <b>${p.title || "無題"}</b><br>
+            <span style="font-size:12px;color:#666;">${p.summary || ""}</span>
+          </div>
+          <div>${p.merged ? "🟢 統合済" : "🔴 未統合"}</div>
         </div>
-      `;
-    });
+      `
+        )
+        .join("");
 
+      box.querySelectorAll(".pr-row").forEach((row) => {
+        row.onclick = () => {
+          const i = Number(row.dataset.prIndex);
+          const c = row.dataset.prCat;
+          const item = (grouped[c] || [])[i];
+
+          document.getElementById("prDetailTitle").innerText =
+            item.title || "無題";
+          document.getElementById("prDetailSummary").innerText =
+            item.summary || item.content || "";
+          detail.style.display = "block";
+        };
+      });
+    };
   });
-
-  box.innerHTML = html;
 }
+window.renderPR = renderPR;
 
-/* ================= TIMELINE ================= */
-function renderTimeline(){
+/* ================================
+   ロジックツリー → 詳細ページ
+================================ */
+function openDetail(theme) {
+  const box = document.getElementById("detailBox");
 
-  const box = document.getElementById("timeline");
-  if(!box) return;
+  const dummy = {
+    "次世代教育ブランド":
+      "芦屋市を次世代教育のブランド都市として位置づけ、駅前公共施設を学びのハブとする構想です。",
+    EdTech連携:
+      "EdTech企業との連携により、最新のデジタル教材や学習プラットフォームを市民に開放します。",
+    景観美化: "駅前エリアの景観を整備し、市民と来訪者にとって心地よい空間をつくる提案です。",
+    公園芝生化: "芝生化により、子どもから大人までくつろげる公共空間を創出します。",
+    多世代交流: "世代を超えた交流を促すプログラムや空間設計に関するアイデアです。",
+    サードプレイス:
+      "家庭でも職場でもない、第三の居場所としての公共施設のあり方を探ります。",
+    施設収益化:
+      "カフェやシェアラウンジ等を通じて、施設の自立的な収益モデルを検討します。",
+    起業支援:
+      "スタートアップやスモールビジネスの実験・発表の場として活用する構想です。",
+    防災システム:
+      "平時は学びと交流、災害時は防災拠点として機能するデュアルユースの提案です。",
+  };
 
-  const timeline = [
-    "2026/05 市民参加型構想スタート",
-    "2026/06 AI分析導入",
-    "2026/07 政策統合フェーズ"
-  ];
+  const text = dummy[theme] || "このテーマに関する市民提案を今後追加します。";
 
-  box.innerHTML = timeline.map(t=>
-    `<div class="placeholder-card">${t}</div>`
-  ).join("");
+  box.innerHTML = `
+    <h2>${theme}</h2>
+    <p>${text}</p>
+    <button class="big-button" onclick="goToAssistantWithTheme('${theme}')">
+      このテーマについて意見を投稿する（AI壁打ちへ）
+    </button>
+  `;
+
+  showPage("detail");
 }
+window.openDetail = openDetail;
 
-/* ================= AI ================= */
-async function runAI(){
-
-  const category =
-    document.getElementById("categorySelect")?.value || "未分類";
-
-  const text =
-    document.getElementById("ideaInput")?.value || "";
-
-  try{
-
-    const res = await fetch(GAS_URL,{
-      method:"POST",
-      body:JSON.stringify({
-        category,
-        content:text
-      })
-    });
-
-    const result = await res.json();
-    const aiText = result.result || "";
-
-    const resultBox = document.getElementById("resultBox");
-    const titleBox = document.getElementById("titleBox");
-    const summaryBox = document.getElementById("summaryBox");
-
-    if(resultBox){
-      resultBox.innerHTML = `
-        <h3>AI分析結果</h3>
-        <p>${aiText.slice(0,200)}</p>
-
-        <h3>メリット</h3>
-        <p>地域活性化・教育効果・経済波及</p>
-
-        <h3>懸念点</h3>
-        <p>財源・運用コスト・合意形成</p>
-
-        <h3>行政視点</h3>
-        <p>中長期の都市戦略に寄与</p>
-
-        <h3>市民視点</h3>
-        <p>参加型政策として評価</p>
-      `;
-    }
-
-    if(titleBox) titleBox.innerText = "AI生成タイトル";
-    if(summaryBox) summaryBox.innerText = aiText.slice(0,120);
-
-    const decisionBox = document.getElementById("decisionBox");
-    if(decisionBox) decisionBox.style.display = "block";
-
-  }catch(e){
-    console.log("AI ERROR", e);
+/* ================================
+   詳細 → AI壁打ちへ
+================================ */
+function goToAssistantWithTheme(theme) {
+  showPage("assistant");
+  const input = document.getElementById("ideaInput");
+  if (input) {
+    input.value = `【テーマ】${theme}\n\nあなたの考えを自由に書いてください。`;
   }
 }
-
-/* ================= SEND ================= */
-async function sendToPR(){
-
-  const input = document.getElementById("ideaInput")?.value || "";
-
-  try{
-
-    await fetch(GAS_URL,{
-      method:"POST",
-      body:JSON.stringify({
-        title:"AI生成",
-        category:selectedCategory,
-        content:input
-      })
-    });
-
-    loadData();
-
-  }catch(e){
-    console.log("POST ERROR", e);
-  }
-}
-
-/* ================= BACK ================= */
-function backToAI(){
-
-  const box = document.getElementById("decisionBox");
-  if(box) box.style.display = "none";
-}
+window.goToAssistantWithTheme = goToAssistantWithTheme;
