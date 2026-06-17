@@ -36,10 +36,18 @@ document.addEventListener("DOMContentLoaded", () => {
    ページ切り替え
 ========================================= */
 function showPage(id) {
-  document.querySelectorAll(".page").forEach((p) => p.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-  window.scrollTo(0, 0);
+  // すべてのページを非表示
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+
+  // 指定ページを表示
+  document.getElementById(id).classList.add('active');
+
+  // ★ Pull Request ページを開いたときだけ一覧を読み込む
+  if (id === "pullrequest") {
+    loadPR();
+  }
 }
+
 window.showPage = showPage;
 
 /* =========================================
