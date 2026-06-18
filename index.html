@@ -265,8 +265,6 @@ textarea:focus{
   box-shadow:0 12px 30px rgba(0,0,0,.12);
   overflow:hidden;
 }
-
-/* 背景の木（線画） */
 .logic-tree-wrapper::before{
   content:"";
   position:absolute;
@@ -278,8 +276,6 @@ textarea:focus{
   opacity:0.18;
   pointer-events:none;
 }
-
-/* 大分類ノード群 */
 .logic-tree-root-title{
   text-align:center;
   font-size:24px;
@@ -288,7 +284,6 @@ textarea:focus{
   position:relative;
   z-index:1;
 }
-
 .logic-tree-main{
   display:flex;
   justify-content:center;
@@ -297,7 +292,6 @@ textarea:focus{
   position:relative;
   z-index:1;
 }
-
 .logic-main-node{
   width:220px;
   padding:16px;
@@ -307,12 +301,10 @@ textarea:focus{
   text-align:center;
   box-shadow:0 10px 25px rgba(0,0,0,.18);
 }
-
 .logic-main-node-title{
   font-weight:700;
   margin-bottom:8px;
 }
-
 .logic-main-node button{
   margin-top:8px;
   padding:8px 12px;
@@ -326,14 +318,11 @@ textarea:focus{
 .logic-main-node button:hover{
   background:#fb923c;
 }
-
-/* 詳細ツリー（アコーディオン） */
 .logic-detail-wrapper{
   margin-top:32px;
   position:relative;
   z-index:1;
 }
-
 .logic-accordion-block{
   margin-bottom:16px;
   border-radius:16px;
@@ -341,7 +330,6 @@ textarea:focus{
   overflow:hidden;
   border:1px solid #e5e7eb;
 }
-
 .logic-accordion-header{
   padding:12px 16px;
   display:flex;
@@ -358,14 +346,11 @@ textarea:focus{
   font-size:14px;
   color:#64748b;
 }
-
 .logic-accordion-body{
   padding:12px 16px;
   border-top:1px solid #e5e7eb;
   display:none;
 }
-
-/* 中分類・小分類リスト */
 .logic-subcategory{
   margin-bottom:12px;
 }
@@ -386,28 +371,22 @@ textarea:focus{
 
 /* ================= MOBILE ================= */
 @media(max-width:900px){
-
   .assistant-layout{
     grid-template-columns:1fr;
   }
-
   .topbar{
     flex-direction:column;
     gap:12px;
   }
-
   nav{
     justify-content:center;
   }
-
   h1{
     font-size:26px;
   }
-
   .logic-tree-wrapper::before{
     opacity:0.08;
   }
-
   .logic-main-node{
     width:100%;
   }
@@ -416,13 +395,10 @@ textarea:focus{
 
 <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-
-  <header class="topbar">
+<header class="topbar">
   <div class="logo">🏛 市民政策AIプラットフォーム</div>
-
   <nav>
     <button onclick="showPage('intro')">ホーム</button>
     <button onclick="showPage('tree')">ロジックツリー</button>
@@ -459,27 +435,92 @@ textarea:focus{
   <div class="placeholder-card">
     <h2>特徴</h2>
     <ul>
-      <li>思いついたままの投稿できますよ</li>
-      <li>AIエージェントが、あなたの意見を汲み取り自動で要約・論点整理・構造化してくれます</li>
-      <li>ロジックツリーによる政策構造の可視化できます</li>
+      <li>思いついたままの投稿ができます</li>
+      <li>AIエージェントが、あなたの意見を汲み取り自動で要約・論点整理・構造化します</li>
+      <li>ロジックツリーによる政策構造の可視化</li>
       <li>投稿・統合プロセスの完全透明化</li>
-      <li>市民参加型の継続的な改善サイクルです！</li>
+      <li>市民参加型の継続的な改善サイクル</li>
     </ul>
   </div>
 
   <div class="placeholder-card">
-    <h2>このような課題を感じていませんか？</h2>
-    <ul>
-      <li>思いは、あるけど、それを文章化が苦手</li>
-      <li>否定されたり、炎上するのが不安</li>
-      <li>他の市民の方が、どんな意見をもっているのか知りたい</li>
-      <li>意見しても、どうせ、それが、反映されないなら意味がないと思う</li>
-    </ul>
+    <h2>投稿の流れ</h2>
+    <p>市民が自由投稿 → AIエージェントが意見を整理・構造化 → ロジックツリーへ統合 → 政策形成へ反映</p>
+    <h3>この仕組みの目的</h3>
+    <p>
+      どのような意見も素材として扱われ、AIが中立的に整理し、社会全体の知として統合します。
+    </p>
+    <p>
+      他の市民の意見や提案を見てみましょう。投稿された意見はロジックツリー上で整理・統合されています。
+    </p>
+    <button class="big-button" onclick="showPage('tree')">🌳 ロジックツリーを見る</button>
   </div>
 
-  <div class="placeholder-card">
+</section>
 
-    <!-- ================= RULES ================= -->
+
+  <!-- ================= LOGIC TREE ================= -->
+<section id="tree" class="page">
+
+  <div class="placeholder-card">
+    <h1>🏛 政策提案ロジックツリー</h1>
+    <p>
+      このツリーでは、まず「大分類」を木の上に配置し、詳しく見たい分野を選ぶと、
+      中分類・小分類がアコーディオン形式で展開されます。
+    </p>
+    <p>
+      視覚的な全体像と、詳細な構造の両方を行き来しながら、
+      あなたの関心のある分野を深めていくことができます。
+    </p>
+    <h3>📌 現在のコンセプト案</h3>
+    <p>コストセンターからプロフィットセンターへ</p>
+    <p>市民のウェルビーイングと知財の集積による投資型都市経営の実現を目指す。</p>
+  </div>
+
+  <div class="logic-tree-wrapper">
+    <div class="logic-tree-root-title">🏛 政策提案ロジックツリー（大分類）</div>
+    <div id="logicMainNodes" class="logic-tree-main">
+      <!-- app.js で大分類ノードを描画 -->
+    </div>
+
+    <div class="logic-detail-wrapper">
+      <div id="logicDetailArea">
+        <!-- app.js で中分類・小分類アコーディオンを描画 -->
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ================= ASSISTANT ================= -->
+<section id="assistant" class="page">
+
+  <h1>🤖 AI壁打ち</h1>
+
+  <div class="assistant-layout">
+    <div class="assistant-card">
+      <h2>あなたの考えを聞かせてください</h2>
+      <div class="category-bar">
+        <button class="cat-btn" data-cat="価値向上">① 価値向上</button>
+        <button class="cat-btn" data-cat="ベネフィット">② ベネフィット</button>
+        <button class="cat-btn" data-cat="財政">③ 財政</button>
+        <button class="cat-btn" data-cat="戦略性">④ 戦略性</button>
+        <button class="cat-btn" data-cat="都市強靭性">⑤ 都市強靭性</button>
+      </div>
+      <p>あなたの考えを自由に書いてください。</p>
+      <textarea id="userInput" placeholder="駅前公共施設について、思いついたことをそのまま書いてみてください。"></textarea>
+      <button class="big-button" style="margin-top:12px;" onclick="runAI()">AI壁打ちを実行する</button>
+    </div>
+
+    <div class="assistant-card" id="aiBox">
+      <h2>AIからの整理結果</h2>
+      <p id="aiResult">結果はここに表示されます。（最大500文字）</p>
+    </div>
+  </div>
+
+</section>
+
+<!-- ================= RULES ================= -->
 <section id="rules" class="page">
 
   <h1>📊 分析ルール</h1>
@@ -523,7 +564,18 @@ textarea:focus{
   </div>
 
   <div id="prList" class="placeholder-card">
-    カテゴリーを選択すると、ここに200字要約の一覧が表示されます。
+    ① 芦屋市の価値向上 (0件)<br>
+    このカテゴリーにはまだ投稿がありません。<br><br>
+    ② 市民ベネフィット (0件)<br>
+    このカテゴリーにはまだ投稿がありません。<br><br>
+    ③ 財政持続可能性 (0件)<br>
+    このカテゴリーにはまだ投稿がありません。<br><br>
+    ④ 施設の戦略性 (0件)<br>
+    このカテゴリーにはまだ投稿がありません。<br><br>
+    ⑤ 都市の強靭性とガバナンス (0件)<br>
+    このカテゴリーにはまだ投稿がありません。<br><br>
+    その他 (0件)<br>
+    このカテゴリーにはまだ投稿がありません。
   </div>
 
   <div id="prDetail" class="placeholder-card" style="display:none;">
@@ -569,5 +621,3 @@ textarea:focus{
 <script src="app.js"></script>
 </body>
 </html>
-
-
