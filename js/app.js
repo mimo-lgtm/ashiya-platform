@@ -12,11 +12,78 @@ let LAST_SUMMARY = "";
 let LAST_TITLE = "";
 
 /* =========================================
+   カテゴリ構造（ロジックツリー用）
+========================================= */
+const CATEGORY_TREE = {
+  "① 芦屋市の価値向上": {
+    "次世代教育ブランドの確立": [
+      "世界一の絵本図書館",
+      "EdTech企業連携"
+    ],
+    "街の魅力化・景観美化": [
+      "公園芝生化"
+    ],
+    "市民協働": [
+      "市民参加型プロジェクト"
+    ]
+  },
+  "② 市民ベネフィット": {
+    "多世代交流・サードプレイス": [
+      "カフェ",
+      "コミュニティ運営"
+    ],
+    "知的探究・スキルアップ": [
+      "リスキリング",
+      "共同研究",
+      "コワーキング"
+    ]
+  },
+  "③ 財政持続可能性": {
+    "施設の収益化": [
+      "SHARE LOUNGE",
+      "チャレンジショップ"
+    ],
+    "寄付・ふるさと納税": [
+      "クラファン連動",
+      "成果連動型事業"
+    ]
+  },
+  "④ 施設の戦略性": {
+    "知のゲートウェイ化": [
+      "デジタルライブラリ",
+      "ITサポート"
+    ],
+    "イノベーション・起業支援": [
+      "ピッチアリーナ",
+      "サンドボックス"
+    ]
+  },
+  "⑤ 都市の強靭性とガバナンス": {
+    "デュアルユース": [
+      "災害シミュレーション",
+      "都市指令室"
+    ],
+    "DAO型住民自治": [
+      "投票",
+      "トークン設計"
+    ]
+  },
+  "その他": {
+    "未分類": []
+  }
+};
+
+/* =========================================
    初期ロード
 ========================================= */
 document.addEventListener("DOMContentLoaded", () => {
   loadData();
+  setupCategoryButtons();
+  renderLogicTree();
+});
 
+/* カテゴリボタン（AI壁打ち） */
+function setupCategoryButtons() {
   document.querySelectorAll(".cat-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
       document.querySelectorAll(".cat-btn").forEach((b) =>
@@ -29,7 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (sel) sel.value = CURRENT_CATEGORY;
     });
   });
-});
+}
 
 /* =========================================
    ページ切り替え
@@ -38,14 +105,14 @@ function showPage(id) {
   document.querySelectorAll(".page").forEach((p) =>
     p.classList.remove("active")
   );
-  document.getElementById(id).classList.add("active");
+  const page = document.getElementById(id);
+  if (page) page.classList.add("active");
 
-  // ★ loadPR が存在しないので呼ばない
   if (id === "pullrequest") {
-    renderPR(); // ← これなら存在する
+    renderPR();
   }
 }
-
+window.showPage = showPage;
 
 /* =========================================
    データロード（PR用）
@@ -76,7 +143,7 @@ async function runAI() {
     const res = await fetch(GAS_URL, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json", // ★必須
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         mode: "analysis",
@@ -134,7 +201,7 @@ async function sendToPR() {
     const res = await fetch(GAS_URL, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json", // ★必須
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         mode: "post",
@@ -174,53 +241,145 @@ function renderPR() {
 
   const grouped = {};
   POSTS.forEach((p) => {
-    const cat = p.category || "未分類";
+    const cat = p.category || "その他";
     if (!grouped[cat]) grouped[cat] = [];
     grouped[cat].push(p);
   });
 
-  document.querySelectorAll("[data-pr-cat]").forEach((btn) => {
-    btn.onclick = () => {
-      const cat = btn.dataset.prCat;
+  // 大分類ごとに一覧を表示（シンプル版）
+  const cats = Object.keys(CATEGORY_TREE);
+  box.innerHTML = cats
+    .map((cat) => {
       const list = grouped[cat] || [];
-
-      if (!list.length) {
-        box.innerHTML = `<p>このカテゴリーにはまだ投稿がありません。</p>`;
-        if (detail) detail.style.display = "none";
-        return;
-      }
-
-      box.innerHTML = list
-        .map(
-          (p, idx) => `
-        <div class="pr-row" data-pr-index="${idx}" data-pr-cat="${cat}">
-          <div>
-            <b>${p.title || "無題"}</b><br>
-            <span style="font-size:12px;color:#666;">${p.summary || ""}</span>
-          </div>
-          <div>${p.merged ? "🟢 統合済" : "🔴 未統合"}</div>
+      const count = list.length;
+      return `
+        <div style="margin-bottom:16px;">
+          <h3>${cat} <span style="font-size:12px;color:#64748b;">(${count}件)</span></h3>
+          ${
+            count
+              ? list
+                  .map(
+                    (p, idx) => `
+              <div class="pr-row" data-pr-index="${idx}" data-pr-cat="${cat}">
+                <div>
+                  <b>${p.title || "無題"}</b><br>
+                  <span style="font-size:12px;color:#666;">${p.summary || ""}</span>
+                </div>
+                <div>${p.merged ? "🟢 統合済" : "🔴 未統合"}</div>
+              </div>
+            `
+                  )
+                  .join("")
+              : `<p style="font-size:14px;color:#94a3b8;">このカテゴリーにはまだ投稿がありません。</p>`
+          }
         </div>
-      `
-        )
-        .join("");
+      `;
+    })
+    .join("");
 
-      box.querySelectorAll(".pr-row").forEach((row) => {
-        row.onclick = () => {
-          const i = Number(row.dataset.prIndex);
-          const c = row.dataset.prCat;
-          const item = (grouped[c] || [])[i];
+  box.querySelectorAll(".pr-row").forEach((row) => {
+    row.onclick = () => {
+      const i = Number(row.dataset.prIndex);
+      const c = row.dataset.prCat;
+      const list = grouped[c] || [];
+      const item = list[i];
 
-          document.getElementById("prDetailTitle").innerText =
-            item.title || "無題";
-          document.getElementById("prDetailSummary").innerText =
-            item.summary || item.content || "";
-          detail.style.display = "block";
-        };
-      });
+      document.getElementById("prDetailTitle").innerText =
+        item.title || "無題";
+      document.getElementById("prDetailSummary").innerText =
+        item.summary || item.content || "";
+      detail.style.display = "block";
     };
   });
 }
 window.renderPR = renderPR;
+
+/* =========================================
+   ロジックツリー（大分類＋アコーディオン）
+========================================= */
+function renderLogicTree() {
+  const mainArea = document.getElementById("logicMainNodes");
+  const detailArea = document.getElementById("logicDetailArea");
+  if (!mainArea || !detailArea) return;
+
+  const mainCats = Object.keys(CATEGORY_TREE);
+
+  // 大分類ノード
+  mainArea.innerHTML = mainCats
+    .map(
+      (cat) => `
+    <div class="logic-main-node">
+      <div class="logic-main-node-title">${cat}</div>
+      <button type="button" onclick="openLogicDetail('${cat}')">
+        詳しく見る
+      </button>
+    </div>
+  `
+    )
+    .join("");
+
+  // 詳細アコーディオン
+  detailArea.innerHTML = mainCats
+    .map((cat) => {
+      const subs = CATEGORY_TREE[cat] || {};
+      const subKeys = Object.keys(subs);
+      return `
+      <div class="logic-accordion-block" data-logic-cat="${cat}">
+        <div class="logic-accordion-header" onclick="toggleLogicAccordion('${cat}')">
+          <h3>${cat}</h3>
+          <span>中分類・小分類を表示</span>
+        </div>
+        <div class="logic-accordion-body" id="logic-body-${encodeURIComponent(
+          cat
+        )}">
+          ${subKeys
+            .map((sub) => {
+              const items = subs[sub] || [];
+              return `
+              <div class="logic-subcategory">
+                <div class="logic-subcategory-title">${sub}</div>
+                <ul class="logic-subcategory-items">
+                  ${items
+                    .map(
+                      (item) => `
+                    <li onclick="openDetail('${item}')">${item}</li>
+                  `
+                    )
+                    .join("")}
+                </ul>
+              </div>
+            `;
+            })
+            .join("")}
+        </div>
+      </div>
+    `;
+    })
+    .join("");
+}
+window.renderLogicTree = renderLogicTree;
+
+/* 詳しく見る（スクロール＋開く） */
+function openLogicDetail(cat) {
+  toggleLogicAccordion(cat);
+  const block = document.querySelector(
+    `.logic-accordion-block[data-logic-cat="${cat}"]`
+  );
+  if (block) {
+    block.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+}
+window.openLogicDetail = openLogicDetail;
+
+/* アコーディオン開閉 */
+function toggleLogicAccordion(cat) {
+  const id = `logic-body-${encodeURIComponent(cat)}`;
+  const body = document.getElementById(id);
+  if (!body) return;
+  const isOpen = body.style.display === "block";
+  body.style.display = isOpen ? "none" : "block";
+}
+window.toggleLogicAccordion = toggleLogicAccordion;
 
 /* =========================================
    ロジックツリー → 詳細ページ
@@ -229,27 +388,56 @@ function openDetail(theme) {
   const box = document.getElementById("detailBox");
 
   const dummy = {
-    次世代教育ブランド:
-      "次世代教育ブランドに関する統合済み提案の要約をここに表示します。",
-    EdTech連携: "EdTech連携に関する統合済み提案の要約をここに表示します。",
-    景観美化: "景観美化に関する統合済み提案の要約をここに表示します。",
-    公園芝生化: "公園芝生化に関する統合済み提案の要約をここに表示します。",
-    多世代交流: "多世代交流に関する統合済み提案の要約をここに表示します。",
-    サードプレイス:
-      "サードプレイスに関する統合済み提案の要約をここに表示します。",
-    施設収益化:
-      "施設収益化に関する統合済み提案の要約をここに表示します。",
-    起業支援: "起業支援に関する統合済み提案の要約をここに表示します。",
-    防災システム:
-      "防災システムに関する統合済み提案の要約をここに表示します。",
+    "世界一の絵本図書館":
+      "世界一の絵本図書館に関する統合済み提案の要約をここに表示します。",
+    "EdTech企業連携":
+      "EdTech企業連携に関する統合済み提案の要約をここに表示します。",
+    "公園芝生化":
+      "公園芝生化に関する統合済み提案の要約をここに表示します。",
+    "市民参加型プロジェクト":
+      "市民参加型プロジェクトに関する統合済み提案の要約をここに表示します。",
+    "カフェ":
+      "カフェに関する統合済み提案の要約をここに表示します。",
+    "コミュニティ運営":
+      "コミュニティ運営に関する統合済み提案の要約をここに表示します。",
+    "リスキリング":
+      "リスキリングに関する統合済み提案の要約をここに表示します。",
+    "共同研究":
+      "共同研究に関する統合済み提案の要約をここに表示します。",
+    "コワーキング":
+      "コワーキングに関する統合済み提案の要約をここに表示します。",
+    "SHARE LOUNGE":
+      "SHARE LOUNGEに関する統合済み提案の要約をここに表示します。",
+    "チャレンジショップ":
+      "チャレンジショップに関する統合済み提案の要約をここに表示します。",
+    "クラファン連動":
+      "クラファン連動に関する統合済み提案の要約をここに表示します。",
+    "成果連動型事業":
+      "成果連動型事業に関する統合済み提案の要約をここに表示します。",
+    "デジタルライブラリ":
+      "デジタルライブラリに関する統合済み提案の要約をここに表示します。",
+    "ITサポート":
+      "ITサポートに関する統合済み提案の要約をここに表示します。",
+    "ピッチアリーナ":
+      "ピッチアリーナに関する統合済み提案の要約をここに表示します。",
+    "サンドボックス":
+      "サンドボックスに関する統合済み提案の要約をここに表示します。",
+    "災害シミュレーション":
+      "災害シミュレーションに関する統合済み提案の要約をここに表示します。",
+    "都市指令室":
+      "都市指令室に関する統合済み提案の要約をここに表示します。",
+    "投票":
+      "投票に関する統合済み提案の要約をここに表示します。",
+    "トークン設計":
+      "トークン設計に関する統合済み提案の要約をここに表示します。",
   };
 
-  const text = dummy[theme] || "このテーマに関する統合済み提案はまだありません。";
+  const text =
+    dummy[theme] || "このテーマに関する統合済み提案はまだありません。";
 
   box.innerHTML = `
     <h2>${theme}</h2>
     <p>${text}</p>
-
     <button class="big-button" onclick="goToAssistantWithTheme('${theme}')">
       この分野であなたの意見を聞かせてください（AI壁打ちへ）
     </button>
