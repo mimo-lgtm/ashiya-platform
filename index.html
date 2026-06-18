@@ -120,7 +120,10 @@ img{
 /* ================= CARD SYSTEM ================= */
 .placeholder-card,
 .assistant-card,
-.analysis-card{
+.analysis-card,
+.feature-box,
+.info-card,
+.purpose-box{
   background:rgba(255,255,255,.92);
   backdrop-filter:blur(12px);
   padding:24px;
@@ -253,7 +256,7 @@ textarea:focus{
   background:#eff6ff;
 }
 
-/* ================= LOGIC TREE ================= */
+/* ================= LOGIC TREE（新レイアウト） ================= */
 .logic-tree-wrapper{
   position:relative;
   padding:40px 20px;
@@ -262,18 +265,37 @@ textarea:focus{
   box-shadow:0 12px 30px rgba(0,0,0,.12);
   overflow:hidden;
 }
+
+.logic-tree-wrapper::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image:url('images/tree-bg.png');
+  background-repeat:no-repeat;
+  background-position:center top;
+  background-size:contain;
+  opacity:0.18;
+  pointer-events:none;
+}
+
 .logic-tree-root-title{
   text-align:center;
   font-size:24px;
   font-weight:700;
   margin-bottom:24px;
+  position:relative;
+  z-index:1;
 }
+
 .logic-tree-main{
   display:flex;
   justify-content:center;
   flex-wrap:wrap;
   gap:24px;
+  position:relative;
+  z-index:1;
 }
+
 .logic-main-node{
   width:220px;
   padding:16px;
@@ -283,10 +305,12 @@ textarea:focus{
   text-align:center;
   box-shadow:0 10px 25px rgba(0,0,0,.18);
 }
+
 .logic-main-node-title{
   font-weight:700;
   margin-bottom:8px;
 }
+
 .logic-main-node button{
   margin-top:8px;
   padding:8px 12px;
@@ -300,9 +324,13 @@ textarea:focus{
 .logic-main-node button:hover{
   background:#fb923c;
 }
+
 .logic-detail-wrapper{
   margin-top:32px;
+  position:relative;
+  z-index:1;
 }
+
 .logic-accordion-block{
   margin-bottom:16px;
   border-radius:16px;
@@ -310,6 +338,7 @@ textarea:focus{
   overflow:hidden;
   border:1px solid #e5e7eb;
 }
+
 .logic-accordion-header{
   padding:12px 16px;
   display:flex;
@@ -326,10 +355,19 @@ textarea:focus{
   font-size:14px;
   color:#64748b;
 }
+
 .logic-accordion-body{
   padding:12px 16px;
   border-top:1px solid #e5e7eb;
   display:none;
+}
+
+.logic-subcategory{
+  margin-bottom:12px;
+}
+.logic-subcategory-title{
+  font-weight:600;
+  margin-bottom:4px;
 }
 .logic-subcategory-items{
   padding-left:16px;
@@ -344,18 +382,30 @@ textarea:focus{
 
 /* ================= MOBILE ================= */
 @media(max-width:900px){
+
   .assistant-layout{
     grid-template-columns:1fr;
   }
+
   .topbar{
     flex-direction:column;
     gap:12px;
   }
+
   nav{
     justify-content:center;
   }
+
   h1{
     font-size:26px;
+  }
+
+  .logic-tree-wrapper::before{
+    opacity:0.08;
+  }
+
+  .logic-main-node{
+    width:100%;
   }
 }
 </style>
@@ -365,6 +415,7 @@ textarea:focus{
 
 <header class="topbar">
   <div class="logo">🏛 市民政策AIプラットフォーム</div>
+
   <nav>
     <button onclick="showPage('intro')">ホーム</button>
     <button onclick="showPage('tree')">ロジックツリー</button>
@@ -437,24 +488,28 @@ textarea:focus{
       視覚的な全体像と、詳細な構造の両方を行き来しながら、
       あなたの関心のある分野を深めていくことができます。
     </p>
-    <h3>📌 現在のコンセプト案</h3>
-    <p>コストセンターからプロフィットセンターへ</p>
-    <p>市民のウェルビーイングと知財の集積による投資型都市経営の実現を目指す。</p>
   </div>
 
   <div class="logic-tree-wrapper">
     <div class="logic-tree-root-title">🏛 政策提案ロジックツリー（大分類）</div>
+
     <div id="logicMainNodes" class="logic-tree-main">
-      <!-- app.js で大分類ノードを描画 -->
+      <!-- app.js が大分類ノードを描画 -->
     </div>
 
     <div class="logic-detail-wrapper">
       <div id="logicDetailArea">
-        <!-- app.js で中分類・小分類アコーディオンを描画 -->
+        <!-- app.js が中分類・小分類アコーディオンを描画 -->
       </div>
     </div>
   </div>
 
+</section>
+
+<!-- ================= DETAIL PAGE（小分類の統合結果） ================= -->
+<section id="detail" class="page">
+  <div id="detailBox" class="placeholder-card"></div>
+  <button class="big-button" onclick="showPage('assistant')">AI壁打ちへ戻る</button>
 </section>
 
 <!-- ================= ASSISTANT ================= -->
@@ -463,29 +518,38 @@ textarea:focus{
   <h1>🤖 AI壁打ち</h1>
 
   <div class="assistant-layout">
+
+    <!-- 入力エリア -->
     <div class="assistant-card">
       <h2>あなたの考えを聞かせてください</h2>
+
       <div class="category-bar">
-        <button class="cat-btn" data-cat="価値向上">① 価値向上</button>
-        <button class="cat-btn" data-cat="ベネフィット">② ベネフィット</button>
-        <button class="cat-btn" data-cat="財政">③ 財政</button>
-        <button class="cat-btn" data-cat="戦略性">④ 戦略性</button>
-        <button class="cat-btn" data-cat="都市強靭性">⑤ 都市強靭性</button>
+        <button class="cat-btn" data-cat="① 芦屋市の価値向上">① 価値向上</button>
+        <button class="cat-btn" data-cat="② 市民ベネフィット">② ベネフィット</button>
+        <button class="cat-btn" data-cat="③ 財政持続可能性">③ 財政</button>
+        <button class="cat-btn" data-cat="④ 施設の戦略性">④ 戦略性</button>
+        <button class="cat-btn" data-cat="⑤ 都市の強靭性とガバナンス">⑤ 都市強靭性</button>
       </div>
+
       <p>あなたの考えを自由に書いてください。</p>
       <textarea id="userInput" placeholder="駅前公共施設について、思いついたことをそのまま書いてみてください。"></textarea>
-      <button class="big-button" style="margin-top:12px;" onclick="runAI()">AI壁打ちを実行する</button>
+
+      <button class="big-button" onclick="runAI()">AI壁打ちを実行する</button>
+      <button class="big-button" onclick="sendToPR()">PRに投稿する</button>
     </div>
 
+    <!-- AI結果エリア -->
     <div class="assistant-card" id="aiBox">
       <h2>AIからの整理結果</h2>
       <p id="aiResult">結果はここに表示されます。（最大500文字）</p>
     </div>
+
   </div>
 
 </section>
 
-<!-- ================= RULES ================= -->
+
+  <!-- ================= RULES ================= -->
 <section id="rules" class="page">
 
   <h1>📊 分析ルール</h1>
@@ -525,22 +589,16 @@ textarea:focus{
 
   <div class="placeholder-card">
     <h2>カテゴリー別の提案一覧</h2>
-    <p>上のAI壁打ちから投稿された提案が、カテゴリー別に200字要約で一覧表示されます。</p>
+    <p>AI壁打ちから投稿された提案が、カテゴリー別に200字要約で一覧表示されます。</p>
   </div>
 
   <div id="prList" class="placeholder-card">
-    ① 芦屋市の価値向上 (0件)<br>
-    このカテゴリーにはまだ投稿がありません。<br><br>
-    ② 市民ベネフィット (0件)<br>
-    このカテゴリーにはまだ投稿がありません。<br><br>
-    ③ 財政持続可能性 (0件)<br>
-    このカテゴリーにはまだ投稿がありません。<br><br>
-    ④ 施設の戦略性 (0件)<br>
-    このカテゴリーにはまだ投稿がありません。<br><br>
-    ⑤ 都市の強靭性とガバナンス (0件)<br>
-    このカテゴリーにはまだ投稿がありません。<br><br>
-    その他 (0件)<br>
-    このカテゴリーにはまだ投稿がありません。
+    まだ投稿がありません。
+  </div>
+
+  <div id="prDetail" class="placeholder-card" style="display:none;">
+    <h3 id="prDetailTitle"></h3>
+    <p id="prDetailSummary"></p>
   </div>
 
 </section>
