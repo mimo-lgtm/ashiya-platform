@@ -271,11 +271,11 @@ textarea:focus{
   content:"";
   position:absolute;
   inset:0;
-  background-image:url('images/tree-bg.png'); /* ← 生成した木の画像をここに配置 */
+  background-image:url('images/tree-bg.png');
   background-repeat:no-repeat;
   background-position:center top;
   background-size:contain;
-  opacity:0.18; /* PCでは少し見える */
+  opacity:0.18;
   pointer-events:none;
 }
 
@@ -405,7 +405,7 @@ textarea:focus{
   }
 
   .logic-tree-wrapper::before{
-    opacity:0.08; /* スマホでは背景の木をさらに薄く */
+    opacity:0.08;
   }
 
   .logic-main-node{
@@ -414,12 +414,13 @@ textarea:focus{
 }
 </style>
 
-  <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<header class="topbar">
+
+  <header class="topbar">
   <div class="logo">🏛 市民政策AIプラットフォーム</div>
 
   <nav>
@@ -477,155 +478,8 @@ textarea:focus{
   </div>
 
   <div class="placeholder-card">
-    <h2>投稿の流れ</h2>
-    <ol>
-      <li>市民が自由投稿</li>
-      <li>AIエージェントが意見を整理・構造化</li>
-      <li>ロジックツリーへ統合</li>
-      <li>政策形成へ反映</li>
-    </ol>
-  </div>
 
-  <div class="placeholder-card">
-    <h2>この仕組みの目的</h2>
-    <p>
-      どのような意見も素材として扱われ、
-      AIが中立的に整理し、社会全体の知として統合します。
-    </p>
-  </div>
-
-  <div class="placeholder-card" style="text-align:center;">
-    <h2>他の市民の意見や提案を見てみましょう</h2>
-    <p>投稿された意見はロジックツリー上で整理・統合されています。</p>
-    <button class="big-button" onclick="showPage('tree')">
-      🌳 ロジックツリーを見る
-    </button>
-  </div>
-
-</section>
-
-<!-- ================= TREE ================= -->
-<section id="tree" class="page">
-
-  <h1>🌳 市民政策ロジックツリー</h1>
-
-  <div class="placeholder-card">
-    <h2>ようこそ、ロジックツリーのページへ</h2>
-    <p>
-      このツリーでは、まず「大分類」を木の上に配置し、
-      詳しく見たい分野を選ぶと、中分類・小分類がアコーディオン形式で展開されます。
-    </p>
-    <p>
-      視覚的な全体像と、詳細な構造の両方を行き来しながら、
-      あなたの関心のある分野を深めていくことができます。
-    </p>
-  </div>
-
-  <div class="placeholder-card" style="border-left:6px solid #f59e0b;">
-    <h2>📌 現在のコンセプト案</h2>
-    <p style="font-weight:600;">
-      コストセンターからプロフィットセンターへ
-    </p>
-    <p>
-      市民のウェルビーイングと知財の集積による
-      投資型都市経営の実現を目指す。
-    </p>
-  </div>
-
-  <!-- 木の背景＋大分類ツリー -->
-  <div class="logic-tree-wrapper">
-
-    <div class="logic-tree-root-title">
-      🏛 政策提案ロジックツリー（大分類）
-    </div>
-
-    <div id="logicMainNodes" class="logic-tree-main">
-      <!-- JSで大分類ノードを生成 -->
-    </div>
-
-    <div class="logic-detail-wrapper">
-      <h2>詳しく見る（中分類・小分類）</h2>
-      <div id="logicDetailArea">
-        <!-- JSでアコーディオンツリーを生成 -->
-      </div>
-    </div>
-
-  </div>
-
-</section>
-
-<!-- ================= DETAIL VIEW ================= -->
-<section id="detail" class="page">
-  <div class="placeholder-card" id="detailBox">
-    <!-- JSで差し替え -->
-  </div>
-</section>
-
-<!-- ================= AI ================= -->
-<section id="assistant" class="page">
-
-  <h1>🤖 AI壁打ち</h1>
-
-  <div class="assistant-layout">
-
-    <div class="assistant-card">
-      <h2>あなたの考えを聞かせてください</h2>
-
-      <div class="category-bar" style="margin-bottom:12px;">
-        <button type="button" data-cat="① 芦屋市の価値向上" class="cat-btn active">① 価値向上</button>
-        <button type="button" data-cat="② 市民ベネフィット" class="cat-btn">② ベネフィット</button>
-        <button type="button" data-cat="③ 財政持続性" class="cat-btn">③ 財政</button>
-        <button type="button" data-cat="④ 戦略性" class="cat-btn">④ 戦略性</button>
-        <button type="button" data-cat="⑤ 都市強靭性" class="cat-btn">⑤ 都市強靭性</button>
-      </div>
-
-      <select id="categorySelect" style="display:none;">
-        <option value="① 芦屋市の価値向上" selected>① 芦屋市の価値向上</option>
-        <option value="② 市民ベネフィット">② 市民ベネフィット</option>
-        <option value="③ 財政持続性">③ 財政持続性</option>
-        <option value="④ 戦略性">④ 戦略性</option>
-        <option value="⑤ 都市強靭性">⑤ 都市強靭性</option>
-      </select>
-
-      <textarea id="ideaInput" placeholder="あなたの考えを自由に書いてください"></textarea>
-
-      <button class="big-button" onclick="runAI()">AI壁打ちを実行する</button>
-    </div>
-
-    <div class="assistant-card">
-      <h2>AIからの整理結果</h2>
-
-      <div id="aiBox" class="result-box">
-        結果はここに表示されます。（最大500文字）
-      </div>
-
-      <div id="decisionBox" style="display:none; margin-top:16px;">
-        <p>この内容で次のどちらに進みますか？</p>
-        <button class="big-button" onclick="confirmSummary()">A. 200字要約とタイトルをつくる</button>
-        <button class="big-button" style="background:#e5e7eb;color:#111;" onclick="backToAI()">B. この結果に意見する（書き直す）</button>
-      </div>
-
-      <div id="summaryBlock" style="display:none; margin-top:20px;">
-        <div class="placeholder-card">
-          <h3>200字要約</h3>
-          <p id="summaryBox"></p>
-        </div>
-
-        <div class="placeholder-card">
-          <h3>推奨タイトル</h3>
-          <p id="titleBox"></p>
-        </div>
-
-        <button class="big-button" onclick="sendToPR()">この内容でPULL REQUESTに投稿する</button>
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
-<!-- ================= RULES ================= -->
+    <!-- ================= RULES ================= -->
 <section id="rules" class="page">
 
   <h1>📊 分析ルール</h1>
@@ -661,7 +515,7 @@ textarea:focus{
 <!-- ================= PULL REQUEST ================= -->
 <section id="pullrequest" class="page">
 
-  <h1>📋 PULL REQUEST〚変更の反映依頼（提案）〗</h1>
+  <h1>📋 PULL REQUEST</h1>
 
   <div class="placeholder-card">
     <h2>カテゴリー別の提案一覧</h2>
