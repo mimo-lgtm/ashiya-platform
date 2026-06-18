@@ -1,308 +1,494 @@
-/* =========================================================
-   ページ切替
-========================================================= */
-function showPage(id){
-  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-  window.scrollTo(0,0);
+// app.js（完全版）
+// ※フロントエンド側はこのままで動きます。
+// ※GAS 側はこのファイルが送るパラメータ仕様に合わせて実装してください。
+
+// ======================= 設定 =======================
+const GAS_URL = "https://script.google.com/macros/s/AKfycbzopgSpPPozJ3Q6J2fDSrI8zE0iIlgK-VLqTixe4VL9dPtzvpOZ9UOyPjK8yPQSA6n7vg/exec";
+
+// 状態管理
+let currentCategory = "① 芦屋市の価値向上";
+let currentIdeaText = "";
+let currentAIResult = "";
+let currentSummary200 = "";
+let currentTitle = "";
+
+// ======================= ページ切り替え =======================
+function showPage(pageId) {
+  const pages = document.querySelectorAll(".page");
+  pages.forEach(p => p.classList.remove("active"));
+  const target = document.getElementById(pageId);
+  if (target) target.classList.add("active");
+
+  // PRページ表示時に一覧を更新
+  if (pageId === "pullrequest") {
+    loadPRList();
+  }
 }
 
-/* =========================================================
-   大分類
-========================================================= */
-const MAIN_CATEGORIES = [
-  "① 芦屋市の価値向上",
-  "② 市民ベネフィット",
-  "③ 財政持続可能性",
-  "④ 施設の戦略性",
-  "⑤ 都市の強靭性とガバナンス",
-  "その他"
-];
-
-/* =========================================================
-   CATEGORY_TREE（中分類・小分類）
-========================================================= */
-let CATEGORY_TREE = {
-  "① 芦屋市の価値向上": { "その他": ["その他"] },
-  "② 市民ベネフィット": { "その他": ["その他"] },
-  "③ 財政持続可能性": { "その他": ["その他"] },
-  "④ 施設の戦略性": { "その他": ["その他"] },
-  "⑤ 都市の強靭性とガバナンス": { "その他": ["その他"] },
-  "その他": { "その他": ["その他"] }
+// ======================= ロジックツリーデータ =======================
+// あなたが確定した大分類・中分類・小分類
+const logicTreeData = {
+  "① 芦屋市の価値向上（ブランド・移住促進）": {
+    "次世代教育ブランドの確立": [
+      "世界一の絵本図書館",
+      "EdTech企業連携"
+    ],
+    "街の魅力化・景観美化": [
+      "街の魅力化・景観美化"
+    ],
+    "公園芝生化": [
+      "公園芝生化"
+    ],
+    "市民協働": [
+      "市民協働"
+    ]
+  },
+  "② 市民へのベネフィット（ウェルビーイング）": {
+    "多世代交流・サードプレイス": [
+      "カフェ",
+      "コミュニティ運営"
+    ],
+    "知的探究・スキルアップ": [
+      "リスキリング",
+      "共同研究",
+      "コワーキング"
+    ]
+  },
+  "③ 財政的持続可能性": {
+    "施設の収益化": [
+      "SHARE LOUNGE",
+      "チャレンジショップ"
+    ],
+    "寄付・ふるさと納税": [
+      "寄付・ふるさと納税"
+    ],
+    "クラファン連動": [
+      "クラファン連動"
+    ],
+    "成果連動型事業": [
+      "成果連動型事業"
+    ]
+  },
+  "④ 施設の戦略性": {
+    "知のゲートウェイ化": [
+      "デジタルライブラリ",
+      "ITサポート"
+    ],
+    "イノベーション・起業支援": [
+      "ピッチアリーナ",
+      "サンドボックス"
+    ]
+  },
+  "⑤ 都市の強靭性とガバナンス": {
+    "デュアルユース": [
+      "デュアルユース"
+    ],
+    "災害シミュレーション": [
+      "災害シミュレーション"
+    ],
+    "都市指令室": [
+      "都市指令室"
+    ],
+    "DAO型住民自治": [
+      "DAO型住民自治"
+    ],
+    "投票": [
+      "投票"
+    ],
+    "トークン設計": [
+      "トークン設計"
+    ]
+  }
 };
 
-/* =========================================================
-   PRデータ保存
-========================================================= */
-let PR_DATA = [];
-
-/* =========================================================
-   ロジックツリー：大分類ノード描画
-========================================================= */
-function renderMainNodes(){
-  const area = document.getElementById("logicMainNodes");
-  area.innerHTML = "";
-
-  MAIN_CATEGORIES.forEach(cat => {
-    const div = document.createElement("div");
-    div.className = "logic-main-node";
-
-    div.innerHTML = `
-      <div class="logic-main-node-title">${cat}</div>
-      <button onclick="openCategoryDetail('${cat}')">詳しく見る</button>
-    `;
-
-    area.appendChild(div);
-  });
-}
-
-/* =========================================================
-   大分類クリック → 中分類・小分類アコーディオン生成
-========================================================= */
-function openCategoryDetail(mainCat){
+// ======================= ロジックツリー生成 =======================
+function initLogicTree() {
+  const mainArea = document.getElementById("logicMainNodes");
   const detailArea = document.getElementById("logicDetailArea");
+  if (!mainArea || !detailArea) return;
+
+  mainArea.innerHTML = "";
   detailArea.innerHTML = "";
 
-  const mids = CATEGORY_TREE[mainCat];
+  // 大分類ノード
+  Object.keys(logicTreeData).forEach((mainKey, index) => {
+    const node = document.createElement("div");
+    node.className = "logic-main-node";
 
-  Object.keys(mids).forEach(mid => {
+    const title = document.createElement("div");
+    title.className = "logic-main-node-title";
+    title.textContent = mainKey;
+
+    const btn = document.createElement("button");
+    btn.textContent = "この分野の詳細を見る";
+    btn.addEventListener("click", () => {
+      openLogicAccordion(mainKey);
+      showPage("tree");
+    });
+
+    node.appendChild(title);
+    node.appendChild(btn);
+    mainArea.appendChild(node);
+  });
+
+  // アコーディオン（中分類・小分類）
+  Object.keys(logicTreeData).forEach(mainKey => {
     const block = document.createElement("div");
     block.className = "logic-accordion-block";
 
-    block.innerHTML = `
-      <div class="logic-accordion-header" onclick="toggleAccordion(this)">
-        <h3>${mid}</h3>
-        <span>▼</span>
-      </div>
-      <div class="logic-accordion-body">
-        ${renderSmallList(mainCat, mid)}
-      </div>
-    `;
+    const header = document.createElement("div");
+    header.className = "logic-accordion-header";
 
+    const h3 = document.createElement("h3");
+    h3.textContent = mainKey;
+
+    const span = document.createElement("span");
+    span.textContent = "クリックして展開";
+
+    header.appendChild(h3);
+    header.appendChild(span);
+
+    const body = document.createElement("div");
+    body.className = "logic-accordion-body";
+
+    const subData = logicTreeData[mainKey];
+    Object.keys(subData).forEach(subKey => {
+      const subDiv = document.createElement("div");
+      subDiv.className = "logic-subcategory";
+
+      const subTitle = document.createElement("div");
+      subTitle.className = "logic-subcategory-title";
+      subTitle.textContent = subKey;
+
+      const ul = document.createElement("ul");
+      ul.className = "logic-subcategory-items";
+
+      subData[subKey].forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        li.addEventListener("click", () => {
+          showDetailFromTree(mainKey, subKey, item);
+        });
+        ul.appendChild(li);
+      });
+
+      subDiv.appendChild(subTitle);
+      subDiv.appendChild(ul);
+      body.appendChild(subDiv);
+    });
+
+    header.addEventListener("click", () => {
+      const isOpen = body.style.display === "block";
+      body.style.display = isOpen ? "none" : "block";
+      span.textContent = isOpen ? "クリックして展開" : "クリックして閉じる";
+    });
+
+    block.appendChild(header);
+    block.appendChild(body);
     detailArea.appendChild(block);
   });
-
-  showPage("tree");
 }
 
-/* =========================================================
-   小分類リスト生成
-========================================================= */
-function renderSmallList(mainCat, mid){
-  const smalls = CATEGORY_TREE[mainCat][mid];
+function openLogicAccordion(mainKey) {
+  const headers = document.querySelectorAll(".logic-accordion-header");
+  headers.forEach(header => {
+    const h3 = header.querySelector("h3");
+    const body = header.nextElementSibling;
+    const span = header.querySelector("span");
+    if (!h3 || !body || !span) return;
 
-  let html = `<ul class="logic-subcategory-items">`;
-
-  smalls.forEach(small => {
-    html += `
-      <li onclick="openSmallDetail('${mainCat}','${mid}','${small}')">
-        ${small}
-      </li>
-    `;
+    if (h3.textContent === mainKey) {
+      body.style.display = "block";
+      span.textContent = "クリックして閉じる";
+    } else {
+      body.style.display = "none";
+      span.textContent = "クリックして展開";
+    }
   });
-
-  html += `</ul>`;
-  return html;
 }
 
-/* =========================================================
-   アコーディオン開閉
-========================================================= */
-function toggleAccordion(header){
-  const body = header.nextElementSibling;
-  body.style.display = (body.style.display === "block") ? "none" : "block";
-}
-
-
-/* =========================================================
-   小分類クリック → 詳細ページ
-========================================================= */
-function openSmallDetail(mainCat, mid, small){
+// detail ページ表示（ツリーから）
+function showDetailFromTree(mainKey, subKey, item) {
   const box = document.getElementById("detailBox");
+  if (!box) return;
 
-  const mergedList = PR_DATA.filter(p =>
-    p.main === mainCat &&
-    p.mid === mid &&
-    p.small === small &&
-    p.merged === true
-  );
-
-  let html = `
-    <h2>${mainCat} ＞ ${mid} ＞ ${small}</h2>
-    <p>この小分類に統合された提案（200字要約）</p>
+  box.innerHTML = `
+    <div class="placeholder-card">
+      <h2>${item}</h2>
+      <p>大分類：${mainKey}</p>
+      <p>中分類：${subKey}</p>
+      <p>この小分類に紐づく市民提案や統合結果を、今後ここに表示していきます。</p>
+    </div>
   `;
-
-  if(mergedList.length === 0){
-    html += `<p>まだ統合された提案はありません。</p>`;
-  } else {
-    mergedList.forEach(item => {
-      html += `
-        <div class="placeholder-card">
-          <h3>${item.title}</h3>
-          <p>${item.summary}</p>
-        </div>
-      `;
-    });
-  }
-
-  box.innerHTML = html;
   showPage("detail");
 }
 
-/* =========================================================
-   AI壁打ち（500字分析）
-========================================================= */
-function runAI(){
-  const text = document.getElementById("userInput").value.trim();
-  const result = document.getElementById("aiResult");
+// ======================= カテゴリーボタン連動 =======================
+function initCategoryButtons() {
+  const buttons = document.querySelectorAll(".category-bar .cat-btn");
+  const select = document.getElementById("categorySelect");
+  if (!select) return;
 
-  if(!text){
+  buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      buttons.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      const cat = btn.getAttribute("data-cat");
+      currentCategory = cat || currentCategory;
+      select.value = currentCategory;
+    });
+  });
+
+  select.addEventListener("change", () => {
+    currentCategory = select.value;
+    buttons.forEach(b => {
+      if (b.getAttribute("data-cat") === currentCategory) {
+        b.classList.add("active");
+      } else {
+        b.classList.remove("active");
+      }
+    });
+  });
+}
+
+// ======================= AI壁打ち =======================
+async function runAI() {
+  const textarea = document.getElementById("ideaInput");
+  const aiBox = document.getElementById("aiBox");
+  const decisionBox = document.getElementById("decisionBox");
+  const summaryBlock = document.getElementById("summaryBlock");
+
+  if (!textarea || !aiBox || !decisionBox || !summaryBlock) return;
+
+  const text = textarea.value.trim();
+  if (!text) {
     alert("意見を入力してください。");
     return;
   }
 
-  result.innerHTML = "AIが分析中です…";
+  currentIdeaText = text;
+  aiBox.textContent = "AIが整理しています…";
+  decisionBox.style.display = "none";
+  summaryBlock.style.display = "none";
 
-  setTimeout(() => {
-    result.innerHTML = generateAnalysis(text);
-  }, 600);
+  try {
+    const res = await fetch(GAS_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        mode: "analyze",
+        text: text,
+        category: currentCategory
+      })
+    });
+    const data = await res.json();
+
+    // 期待するレスポンス例：
+    // { analysis: "整理結果...", suggestedCategory: "② 市民ベネフィット" }
+    currentAIResult = data.analysis || "AIからの整理結果を取得できませんでした。";
+    aiBox.textContent = currentAIResult;
+
+    if (data.suggestedCategory) {
+      currentCategory = data.suggestedCategory;
+      const select = document.getElementById("categorySelect");
+      if (select) select.value = currentCategory;
+      const buttons = document.querySelectorAll(".category-bar .cat-btn");
+      buttons.forEach(b => {
+        if (b.getAttribute("data-cat") === currentCategory) {
+          b.classList.add("active");
+        } else {
+          b.classList.remove("active");
+        }
+      });
+    }
+
+    decisionBox.style.display = "block";
+  } catch (e) {
+    console.error(e);
+    aiBox.textContent = "AIとの通信でエラーが発生しました。";
+  }
 }
 
-/* ダミー分析生成 */
-function generateAnalysis(text){
-  return `
-    <b>【AI整理結果】</b><br><br>
-    あなたの意見：「${text}」をもとに、以下の観点が重要だと整理されました。<br>
-    ・市民価値の向上<br>
-    ・市民ベネフィット<br>
-    ・財政持続可能性<br>
-    ・施設の戦略性<br><br>
-    これらを踏まえ、駅前公共施設を「投資型施設」として再定義する方向性が示唆されます。
-  `;
+// ======================= 200字要約・タイトル生成 =======================
+async function confirmSummary() {
+  const summaryBox = document.getElementById("summaryBox");
+  const titleBox = document.getElementById("titleBox");
+  const summaryBlock = document.getElementById("summaryBlock");
+  const decisionBox = document.getElementById("decisionBox");
+
+  if (!summaryBox || !titleBox || !summaryBlock || !decisionBox) return;
+
+  summaryBox.textContent = "200字要約を生成しています…";
+  titleBox.textContent = "タイトルを生成しています…";
+
+  try {
+    const res = await fetch(GAS_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        mode: "summarize",
+        text: currentIdeaText,
+        analysis: currentAIResult,
+        category: currentCategory
+      })
+    });
+    const data = await res.json();
+
+    // 期待するレスポンス例：
+    // { summary200: "200字要約...", title: "タイトル案" }
+    currentSummary200 = data.summary200 || "";
+    currentTitle = data.title || "";
+
+    summaryBox.textContent = currentSummary200 || "要約を取得できませんでした。";
+    titleBox.textContent = currentTitle || "タイトルを取得できませんでした。";
+
+    summaryBlock.style.display = "block";
+    decisionBox.style.display = "none";
+  } catch (e) {
+    console.error(e);
+    summaryBox.textContent = "要約生成でエラーが発生しました。";
+    titleBox.textContent = "";
+  }
 }
 
-/* =========================================================
-   PR投稿（200字要約＋タイトル）
-========================================================= */
-function sendToPR(){
-  const text = document.getElementById("userInput").value.trim();
-  if(!text){
-    alert("意見がありません。");
+function backToAI() {
+  const decisionBox = document.getElementById("decisionBox");
+  const summaryBlock = document.getElementById("summaryBlock");
+  if (decisionBox) decisionBox.style.display = "none";
+  if (summaryBlock) summaryBlock.style.display = "none";
+}
+
+// ======================= PR投稿 =======================
+async function sendToPR() {
+  if (!currentSummary200 || !currentTitle || !currentIdeaText) {
+    alert("AI壁打ちと要約・タイトル生成を完了してください。");
     return;
   }
 
-  const active = document.querySelector(".cat-btn.active");
-  const mainCat = active ? active.dataset.cat : "その他";
+  const ok = confirm("この内容でPULL REQUESTに投稿します。よろしいですか？");
+  if (!ok) return;
 
-  const summary = text.slice(0, 200);
-  const title = text.slice(0, 20);
+  try {
+    const res = await fetch(GAS_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        mode: "save",
+        category: currentCategory,
+        summary200: currentSummary200,
+        title: currentTitle,
+        fullText: currentIdeaText
+      })
+    });
+    const data = await res.json();
 
-  PR_DATA.push({
-    main: mainCat,
-    mid: "その他",
-    small: "その他",
-    summary: summary,
-    title: title,
-    merged: false
-  });
+    // 期待するレスポンス例：
+    // { status: "ok" }
+    if (data.status === "ok") {
+      alert("PULL REQUESTに投稿しました。PRページで確認できます。");
+      // 入力リセット
+      const textarea = document.getElementById("ideaInput");
+      const aiBox = document.getElementById("aiBox");
+      const decisionBox = document.getElementById("decisionBox");
+      const summaryBlock = document.getElementById("summaryBlock");
+      const summaryBox = document.getElementById("summaryBox");
+      const titleBox = document.getElementById("titleBox");
 
-  renderPRList(mainCat);
-  showPage("pullrequest");
-}
+      if (textarea) textarea.value = "";
+      if (aiBox) aiBox.textContent = "結果はここに表示されます。（最大500文字）";
+      if (decisionBox) decisionBox.style.display = "none";
+      if (summaryBlock) summaryBlock.style.display = "none";
+      if (summaryBox) summaryBox.textContent = "";
+      if (titleBox) titleBox.textContent = "";
 
-/* =========================================================
-   PR一覧表示
-========================================================= */
-function renderPRList(mainCat){
-  const area = document.getElementById("prList");
-  area.innerHTML = "";
-
-  const list = PR_DATA.filter(p => p.main === mainCat);
-
-  if(list.length === 0){
-    area.innerHTML = "まだ投稿がありません。";
-    return;
-  }
-
-  list.forEach((item, index) => {
-    const row = document.createElement("div");
-    row.className = "pr-row";
-
-    row.innerHTML = `
-      <div>
-        <b>${item.title}</b><br>
-        ${item.summary}
-      </div>
-      <button onclick="openPRDetail(${index})">詳細</button>
-    `;
-
-    area.appendChild(row);
-  });
-}
-
-
-/* =========================================================
-   PR詳細表示（統合ボタン付き）
-========================================================= */
-function openPRDetail(index){
-  const item = PR_DATA[index];
-
-  const box = document.getElementById("prDetail");
-  box.style.display = "block";
-
-  box.innerHTML = `
-    <h3>${item.title}</h3>
-    <p>${item.summary}</p>
-
-    <button class="big-button" onclick="mergePR(${index})">
-      この提案を統合する（小分類に追加）
-    </button>
-  `;
-}
-
-/* =========================================================
-   統合処理（小分類単位）
-========================================================= */
-function mergePR(index){
-  const item = PR_DATA[index];
-
-  PR_DATA[index].merged = true;
-
-  ensureCategoryExists(item.main, item.mid, item.small);
-
-  alert("この提案を統合しました。ロジックツリーに反映されます。");
-
-  showPage("tree");
-  renderMainNodes();
-}
-
-/* =========================================================
-   CATEGORY_TREE に存在しない場合は自動追加
-========================================================= */
-function ensureCategoryExists(mainCat, mid, small){
-  if(!CATEGORY_TREE[mainCat]){
-    CATEGORY_TREE[mainCat] = { "その他": ["その他"] };
-  }
-  if(!CATEGORY_TREE[mainCat][mid]){
-    CATEGORY_TREE[mainCat][mid] = [];
-  }
-  if(!CATEGORY_TREE[mainCat][mid].includes(small)){
-    CATEGORY_TREE[mainCat][mid].push(small);
+      // PRページを更新
+      loadPRList();
+      showPage("pullrequest");
+    } else {
+      alert("保存に失敗しました。GAS側のログを確認してください。");
+    }
+  } catch (e) {
+    console.error(e);
+    alert("GASとの通信でエラーが発生しました。");
   }
 }
 
-/* =========================================================
-   初期化
-========================================================= */
-function init(){
-  renderMainNodes();
+// ======================= PR一覧読み込み =======================
+async function loadPRList() {
+  const listBox = document.getElementById("prList");
+  const detailBox = document.getElementById("prDetail");
+  const detailTitle = document.getElementById("prDetailTitle");
+  const detailSummary = document.getElementById("prDetailSummary");
+
+  if (!listBox || !detailBox || !detailTitle || !detailSummary) return;
+
+  listBox.innerHTML = "読み込み中です…";
+  detailBox.style.display = "none";
+
+  try {
+    const res = await fetch(`${GAS_URL}?mode=list`);
+    const data = await res.json();
+
+    // 期待するレスポンス例：
+    // [
+    //   { timestamp: "...", category: "① 芦屋市の価値向上", summary200: "...", title: "...", fullText: "..." },
+    //   ...
+    // ]
+    if (!Array.isArray(data) || data.length === 0) {
+      listBox.innerHTML = "まだPULL REQUESTはありません。";
+      return;
+    }
+
+    // カテゴリー別にグルーピング
+    const grouped = {};
+    data.forEach(row => {
+      const cat = row.category || "未分類";
+      if (!grouped[cat]) grouped[cat] = [];
+      grouped[cat].push(row);
+    });
+
+    const container = document.createElement("div");
+    container.id = "prListContainer";
+
+    Object.keys(grouped).forEach(cat => {
+      const catTitle = document.createElement("h3");
+      catTitle.textContent = cat;
+      container.appendChild(catTitle);
+
+      grouped[cat].forEach((row, index) => {
+        const div = document.createElement("div");
+        div.className = "pr-row";
+        div.addEventListener("click", () => {
+          detailTitle.textContent = row.title || "(タイトルなし)";
+          detailSummary.textContent = row.summary200 || "";
+          detailBox.style.display = "block";
+        });
+
+        const left = document.createElement("div");
+        left.innerHTML = `<strong>${row.title || "(タイトルなし)"}</strong><br>${row.summary200 || ""}`;
+
+        const right = document.createElement("div");
+        right.style.fontSize = "12px";
+        right.style.color = "#6b7280";
+        right.textContent = row.timestamp || "";
+
+        div.appendChild(left);
+        div.appendChild(right);
+        container.appendChild(div);
+      });
+    });
+
+    listBox.innerHTML = "";
+    listBox.appendChild(container);
+  } catch (e) {
+    console.error(e);
+    listBox.innerHTML = "PR一覧の取得でエラーが発生しました。";
+  }
+}
+
+// ======================= 初期化 =======================
+document.addEventListener("DOMContentLoaded", () => {
+  initLogicTree();
+  initCategoryButtons();
   showPage("intro");
-}
-
-window.onload = init;
-
-
-
-
-
-
+});
