@@ -120,10 +120,7 @@ img{
 /* ================= CARD SYSTEM ================= */
 .placeholder-card,
 .assistant-card,
-.analysis-card,
-.feature-box,
-.info-card,
-.purpose-box{
+.analysis-card{
   background:rgba(255,255,255,.92);
   backdrop-filter:blur(12px);
   padding:24px;
@@ -256,7 +253,7 @@ textarea:focus{
   background:#eff6ff;
 }
 
-/* ================= LOGIC TREE（新レイアウト） ================= */
+/* ================= LOGIC TREE ================= */
 .logic-tree-wrapper{
   position:relative;
   padding:40px 20px;
@@ -265,32 +262,17 @@ textarea:focus{
   box-shadow:0 12px 30px rgba(0,0,0,.12);
   overflow:hidden;
 }
-.logic-tree-wrapper::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background-image:url('images/tree-bg.png');
-  background-repeat:no-repeat;
-  background-position:center top;
-  background-size:contain;
-  opacity:0.18;
-  pointer-events:none;
-}
 .logic-tree-root-title{
   text-align:center;
   font-size:24px;
   font-weight:700;
   margin-bottom:24px;
-  position:relative;
-  z-index:1;
 }
 .logic-tree-main{
   display:flex;
   justify-content:center;
   flex-wrap:wrap;
   gap:24px;
-  position:relative;
-  z-index:1;
 }
 .logic-main-node{
   width:220px;
@@ -320,8 +302,6 @@ textarea:focus{
 }
 .logic-detail-wrapper{
   margin-top:32px;
-  position:relative;
-  z-index:1;
 }
 .logic-accordion-block{
   margin-bottom:16px;
@@ -351,13 +331,6 @@ textarea:focus{
   border-top:1px solid #e5e7eb;
   display:none;
 }
-.logic-subcategory{
-  margin-bottom:12px;
-}
-.logic-subcategory-title{
-  font-weight:600;
-  margin-bottom:4px;
-}
 .logic-subcategory-items{
   padding-left:16px;
 }
@@ -384,16 +357,9 @@ textarea:focus{
   h1{
     font-size:26px;
   }
-  .logic-tree-wrapper::before{
-    opacity:0.08;
-  }
-  .logic-main-node{
-    width:100%;
-  }
 }
 </style>
 
-<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -458,8 +424,7 @@ textarea:focus{
 
 </section>
 
-
-  <!-- ================= LOGIC TREE ================= -->
+<!-- ================= LOGIC TREE ================= -->
 <section id="tree" class="page">
 
   <div class="placeholder-card">
@@ -578,11 +543,6 @@ textarea:focus{
     このカテゴリーにはまだ投稿がありません。
   </div>
 
-  <div id="prDetail" class="placeholder-card" style="display:none;">
-    <h3 id="prDetailTitle"></h3>
-    <p id="prDetailSummary"></p>
-  </div>
-
 </section>
 
 <!-- ================= CURRENT VISION ================= -->
@@ -621,3 +581,5 @@ textarea:focus{
 <script src="app.js"></script>
 </body>
 </html>
+
+  
