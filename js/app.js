@@ -314,15 +314,19 @@ async function confirmSummary() {
 
   try {
     const res = await fetch(GAS_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        mode: "summarize",
-        text: currentIdeaText,
-        analysis: currentAIResult,
-        category: currentCategory
-      })
-    });
+  method: "POST",
+  mode: "no-cors",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    mode: "summarize",
+    text: currentIdeaText,
+    analysis: currentAIResult,
+    category: currentCategory
+  })
+});
+
 
 const data = await res.json();
 const content = typeof data.content === "string"
@@ -362,19 +366,23 @@ async function sendToPR() {
 
   try {
     const res = await fetch(GAS_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        mode: "save",
-        category: currentCategory,
-        main: currentMain,
-        sub: currentSub,
-        item: currentItem,
-        summary200: currentSummary200,
-        title: currentTitle,
-        fullText: currentIdeaText
-      })
-    });
+  method: "POST",
+  mode: "no-cors",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    mode: "save",
+    category: currentCategory,
+    main: currentMain,
+    sub: currentSub,
+    item: currentItem,
+    summary200: currentSummary200,
+    title: currentTitle,
+    fullText: currentIdeaText
+  })
+});
+
 
     const data = await res.json();
 
