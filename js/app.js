@@ -460,3 +460,4 @@ document.addEventListener("DOMContentLoaded", () => {
   initCategoryButtons();
   showPage("intro");
 });
+
