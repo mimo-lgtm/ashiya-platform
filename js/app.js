@@ -277,8 +277,11 @@ async function runAI() {
       })
     });
 
-    const data = await res.json();
-    const content = JSON.parse(data.content || "{}");
+const data = await res.json();
+const content = typeof data.content === "string"
+  ? JSON.parse(data.content)
+  : data.content;
+
 
     currentAIResult = content.analysis || "";
     currentCategory = content.category || "";
@@ -317,8 +320,11 @@ async function confirmSummary() {
       })
     });
 
-    const data = await res.json();
-    const content = JSON.parse(data.content || "{}");
+const data = await res.json();
+const content = typeof data.content === "string"
+  ? JSON.parse(data.content)
+  : data.content;
+
 
     currentSummary200 = content.summary200 || "";
     currentTitle = content.title || "";
