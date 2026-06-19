@@ -3,7 +3,7 @@
 // ※GAS 側はこのファイルが送るパラメータ仕様に合わせて実装してください。
 
 // ======================= 設定 =======================
-const GAS_URL = "https://script.google.com/macros/s/AKfycbxc5JyQQ0d-f8kAGbpIhy6jXEsxdz68V4ZGvDRMaB-5ny1EINxeIGO049_frsugUgmS_Q/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbw-QzF1klSxQw3k4tny9AwAPyO0oTm1-0r6gv_7KriP4iOhrZL8D5YllPUV73e4X36j1A/exec";
 
 // 状態管理
 let currentCategory = "① 芦屋市の価値向上";
