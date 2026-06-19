@@ -269,7 +269,6 @@ async function runAI() {
   try {
     const res = await fetch(GAS_URL, {
   method: "POST",
-  mode: "no-cors",
   headers: {
     "Content-Type": "application/json"
   },
@@ -315,7 +314,6 @@ async function confirmSummary() {
   try {
     const res = await fetch(GAS_URL, {
   method: "POST",
-  mode: "no-cors",
   headers: {
     "Content-Type": "application/json"
   },
@@ -367,7 +365,6 @@ async function sendToPR() {
   try {
     const res = await fetch(GAS_URL, {
   method: "POST",
-  mode: "no-cors",
   headers: {
     "Content-Type": "application/json"
   },
