@@ -242,8 +242,19 @@ async function showDetailFromTree(mainKey, subKey, item) {
 // ======================= カテゴリーボタン連動 =======================
 function initCategoryButtons() {
   const buttons = document.querySelectorAll(".category-bar .cat-btn");
-  const select = document.getElementById("categorySelect");
-  if (!select) return;
+ function initCategoryButtons() {
+  const buttons = document.querySelectorAll(".category-bar .cat-btn");
+
+  buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      buttons.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      const cat = btn.getAttribute("data-cat");
+      currentCategory = cat || currentCategory;
+    });
+  });
+}
+
 
   buttons.forEach(btn => {
     btn.addEventListener("click", () => {
@@ -269,7 +280,7 @@ function initCategoryButtons() {
 
 // ======================= AI壁打ち =======================
 async function runAI() {
-  const textarea = document.getElementById("ideaInput");
+  const textarea = document.getElementById("userInput");
   const aiBox = document.getElementById("aiBox");
   const decisionBox = document.getElementById("decisionBox");
   const summaryBlock = document.getElementById("summaryBlock");
