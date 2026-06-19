@@ -268,14 +268,18 @@ async function runAI() {
 
   try {
     const res = await fetch(GAS_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        mode: "analyze",
-        text: text,
-        category: currentCategory
-      })
-    });
+  method: "POST",
+  mode: "no-cors",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    mode: "analyze",
+    text: text,
+    category: currentCategory
+  })
+});
+
 
 const data = await res.json();
 const content = typeof data.content === "string"
