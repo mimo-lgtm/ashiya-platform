@@ -1,7 +1,3 @@
-// app.js（完全版）
-// ※フロントエンド側はこのままで動きます。
-// ※GAS 側はこのファイルが送るパラメータ仕様に合わせて実装してください。
-
 // ======================= 設定 =======================
 const GAS_URL = "https://script.google.com/macros/s/AKfycbw-QzF1klSxQw3k4tny9AwAPyO0oTm1-0r6gv_7KriP4iOhrZL8D5YllPUV73e4X36j1A/exec";
 
@@ -11,6 +7,9 @@ let currentIdeaText = "";
 let currentAIResult = "";
 let currentSummary200 = "";
 let currentTitle = "";
+let currentMain = "";
+let currentSub = "";
+let currentItem = "";
 
 // ======================= ページ切り替え =======================
 function showPage(pageId) {
@@ -19,14 +18,12 @@ function showPage(pageId) {
   const target = document.getElementById(pageId);
   if (target) target.classList.add("active");
 
-  // PRページ表示時に一覧を更新
   if (pageId === "pullrequest") {
     loadPRList();
   }
 }
 
 // ======================= ロジックツリーデータ =======================
-// あなたが確定した大分類・中分類・小分類
 const logicTreeData = {
   "① 芦屋市の価値向上（ブランド・移住促進）": {
     "次世代教育ブランドの確立": [
@@ -110,8 +107,7 @@ function initLogicTree() {
   mainArea.innerHTML = "";
   detailArea.innerHTML = "";
 
-  // 大分類ノード
-  Object.keys(logicTreeData).forEach((mainKey, index) => {
+  Object.keys(logicTreeData).forEach(mainKey => {
     const node = document.createElement("div");
     node.className = "logic-main-node";
 
@@ -131,7 +127,6 @@ function initLogicTree() {
     mainArea.appendChild(node);
   });
 
-  // アコーディオン（中分類・小分類）
   Object.keys(logicTreeData).forEach(mainKey => {
     const block = document.createElement("div");
     block.className = "logic-accordion-block";
@@ -207,7 +202,7 @@ function openLogicAccordion(mainKey) {
   });
 }
 
-// detail ページ表示（ツリーから）
+// ======================= detail ページ表示 =======================
 async function showDetailFromTree(mainKey, subKey, item) {
   const box = document.getElementById("detailBox");
 
@@ -238,54 +233,27 @@ async function showDetailFromTree(mainKey, subKey, item) {
   showPage("detail");
 }
 
-
-// ======================= カテゴリーボタン連動 =======================
+// ======================= カテゴリーボタン =======================
 function initCategoryButtons() {
   const buttons = document.querySelectorAll(".category-bar .cat-btn");
- function initCategoryButtons() {
-  const buttons = document.querySelectorAll(".category-bar .cat-btn");
 
   buttons.forEach(btn => {
     btn.addEventListener("click", () => {
       buttons.forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
-      const cat = btn.getAttribute("data-cat");
-      currentCategory = cat || currentCategory;
-    });
-  });
-}
-
-
-  buttons.forEach(btn => {
-    btn.addEventListener("click", () => {
-      buttons.forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      const cat = btn.getAttribute("data-cat");
-      currentCategory = cat || currentCategory;
-      select.value = currentCategory;
-    });
-  });
-
-  select.addEventListener("change", () => {
-    currentCategory = select.value;
-    buttons.forEach(b => {
-      if (b.getAttribute("data-cat") === currentCategory) {
-        b.classList.add("active");
-      } else {
-        b.classList.remove("active");
-      }
+      currentCategory = btn.getAttribute("data-cat");
     });
   });
 }
 
 // ======================= AI壁打ち =======================
 async function runAI() {
-  const textarea = document.getElementById("userInput");
+  const textarea = document.getElementById("ideaInput");  // ← 修正済み
   const aiBox = document.getElementById("aiBox");
   const decisionBox = document.getElementById("decisionBox");
   const summaryBlock = document.getElementById("summaryBlock");
 
-  if (!textarea || !aiBox || !decisionBox || !summaryBlock) return;
+  if (!textarea) return;
 
   const text = textarea.value.trim();
   if (!text) {
@@ -308,9 +276,9 @@ async function runAI() {
         category: currentCategory
       })
     });
-    const data = await res.json();
 
-       const content = JSON.parse(data.content);
+    const data = await res.json();
+    const content = JSON.parse(data.content || "{}");
 
     currentAIResult = content.analysis || "";
     currentCategory = content.category || "";
@@ -327,14 +295,12 @@ async function runAI() {
   }
 }
 
-// ======================= 200字要約・タイトル生成 =======================
+// ======================= 200字要約 =======================
 async function confirmSummary() {
   const summaryBox = document.getElementById("summaryBox");
   const titleBox = document.getElementById("titleBox");
   const summaryBlock = document.getElementById("summaryBlock");
   const decisionBox = document.getElementById("decisionBox");
-
-  if (!summaryBox || !titleBox || !summaryBlock || !decisionBox) return;
 
   summaryBox.textContent = "200字要約を生成しています…";
   titleBox.textContent = "タイトルを生成しています…";
@@ -350,30 +316,28 @@ async function confirmSummary() {
         category: currentCategory
       })
     });
+
     const data = await res.json();
+    const content = JSON.parse(data.content || "{}");
 
-    // 期待するレスポンス例：
-    // { summary200: "200字要約...", title: "タイトル案" }
-    currentSummary200 = data.summary200 || "";
-    currentTitle = data.title || "";
+    currentSummary200 = content.summary200 || "";
+    currentTitle = content.title || "";
 
-    summaryBox.textContent = currentSummary200 || "要約を取得できませんでした。";
-    titleBox.textContent = currentTitle || "タイトルを取得できませんでした。";
+    summaryBox.textContent = currentSummary200;
+    titleBox.textContent = currentTitle;
 
     summaryBlock.style.display = "block";
     decisionBox.style.display = "none";
+
   } catch (e) {
     console.error(e);
     summaryBox.textContent = "要約生成でエラーが発生しました。";
-    titleBox.textContent = "";
   }
 }
 
 function backToAI() {
-  const decisionBox = document.getElementById("decisionBox");
-  const summaryBlock = document.getElementById("summaryBlock");
-  if (decisionBox) decisionBox.style.display = "none";
-  if (summaryBlock) summaryBlock.style.display = "none";
+  document.getElementById("decisionBox").style.display = "none";
+  document.getElementById("summaryBlock").style.display = "none";
 }
 
 // ======================= PR投稿 =======================
@@ -390,7 +354,7 @@ async function sendToPR() {
     const res = await fetch(GAS_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
+      body: JSON.stringify({
         mode: "save",
         category: currentCategory,
         main: currentMain,
@@ -400,49 +364,36 @@ async function sendToPR() {
         title: currentTitle,
         fullText: currentIdeaText
       })
-
     });
+
     const data = await res.json();
 
-    // 期待するレスポンス例：
-    // { status: "ok" }
     if (data.status === "ok") {
-      alert("PULL REQUESTに投稿しました。PRページで確認できます。");
-      // 入力リセット
-      const textarea = document.getElementById("ideaInput");
-      const aiBox = document.getElementById("aiBox");
-      const decisionBox = document.getElementById("decisionBox");
-      const summaryBlock = document.getElementById("summaryBlock");
-      const summaryBox = document.getElementById("summaryBox");
-      const titleBox = document.getElementById("titleBox");
+      alert("PULL REQUESTに投稿しました。");
 
-      if (textarea) textarea.value = "";
-      if (aiBox) aiBox.textContent = "結果はここに表示されます。（最大500文字）";
-      if (decisionBox) decisionBox.style.display = "none";
-      if (summaryBlock) summaryBlock.style.display = "none";
-      if (summaryBox) summaryBox.textContent = "";
-      if (titleBox) titleBox.textContent = "";
+      document.getElementById("ideaInput").value = "";
+      document.getElementById("aiBox").textContent = "結果はここに表示されます。（最大500文字）";
+      document.getElementById("decisionBox").style.display = "none";
+      document.getElementById("summaryBlock").style.display = "none";
+      document.getElementById("summaryBox").textContent = "";
+      document.getElementById("titleBox").textContent = "";
 
-      // PRページを更新
       loadPRList();
       showPage("pullrequest");
-    } else {
-      alert("保存に失敗しました。GAS側のログを確認してください。");
     }
+
   } catch (e) {
     console.error(e);
     alert("GASとの通信でエラーが発生しました。");
   }
 }
 
-// ======================= PR一覧読み込み =======================
+// ======================= PR一覧 =======================
 async function loadPRList() {
   const listBox = document.getElementById("prList");
   const detailBox = document.getElementById("prDetail");
   const detailTitle = document.getElementById("prDetailTitle");
   const detailSummary = document.getElementById("prDetailSummary");
-
-  if (!listBox || !detailBox || !detailTitle || !detailSummary) return;
 
   listBox.innerHTML = "読み込み中です…";
   detailBox.style.display = "none";
@@ -451,17 +402,11 @@ async function loadPRList() {
     const res = await fetch(`${GAS_URL}?mode=list`);
     const data = await res.json();
 
-    // 期待するレスポンス例：
-    // [
-    //   { timestamp: "...", category: "① 芦屋市の価値向上", summary200: "...", title: "...", fullText: "..." },
-    //   ...
-    // ]
     if (!Array.isArray(data) || data.length === 0) {
       listBox.innerHTML = "まだPULL REQUESTはありません。";
       return;
     }
 
-    // カテゴリー別にグルーピング
     const grouped = {};
     data.forEach(row => {
       const cat = row.category || "未分類";
@@ -477,22 +422,22 @@ async function loadPRList() {
       catTitle.textContent = cat;
       container.appendChild(catTitle);
 
-      grouped[cat].forEach((row, index) => {
+      grouped[cat].forEach(row => {
         const div = document.createElement("div");
         div.className = "pr-row";
         div.addEventListener("click", () => {
-          detailTitle.textContent = row.title || "(タイトルなし)";
-          detailSummary.textContent = row.summary200 || "";
+          detailTitle.textContent = row.title;
+          detailSummary.textContent = row.summary200;
           detailBox.style.display = "block";
         });
 
         const left = document.createElement("div");
-        left.innerHTML = `<strong>${row.title || "(タイトルなし)"}</strong><br>${row.summary200 || ""}`;
+        left.innerHTML = `<strong>${row.title}</strong><br>${row.summary200}`;
 
         const right = document.createElement("div");
         right.style.fontSize = "12px";
         right.style.color = "#6b7280";
-        right.textContent = row.timestamp || "";
+        right.textContent = row.timestamp;
 
         div.appendChild(left);
         div.appendChild(right);
@@ -502,6 +447,7 @@ async function loadPRList() {
 
     listBox.innerHTML = "";
     listBox.appendChild(container);
+
   } catch (e) {
     console.error(e);
     listBox.innerHTML = "PR一覧の取得でエラーが発生しました。";
