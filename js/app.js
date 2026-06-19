@@ -208,20 +208,36 @@ function openLogicAccordion(mainKey) {
 }
 
 // detail ページ表示（ツリーから）
-function showDetailFromTree(mainKey, subKey, item) {
+async function showDetailFromTree(mainKey, subKey, item) {
   const box = document.getElementById("detailBox");
-  if (!box) return;
 
-  box.innerHTML = `
+  const res = await fetch(`${GAS_URL}?mode=filter&item=${encodeURIComponent(item)}`);
+  const list = await res.json();
+
+  let html = `
     <div class="placeholder-card">
       <h2>${item}</h2>
       <p>大分類：${mainKey}</p>
       <p>中分類：${subKey}</p>
-      <p>この小分類に紐づく市民提案や統合結果を、今後ここに表示していきます。</p>
-    </div>
+      <h3>この小分類に紐づく提案一覧</h3>
   `;
+
+  list.forEach(r => {
+    html += `
+      <div style="margin-bottom:20px;padding:12px;border-left:4px solid #2563eb;background:#f8fafc;">
+        <strong>${r.title}</strong><br>
+        ${r.summary200}<br>
+        <span style="font-size:12px;color:#64748b;">${r.timestamp}</span>
+      </div>
+    `;
+  });
+
+  html += `</div>`;
+  box.innerHTML = html;
+
   showPage("detail");
 }
+
 
 // ======================= カテゴリーボタン連動 =======================
 function initCategoryButtons() {
@@ -283,26 +299,17 @@ async function runAI() {
     });
     const data = await res.json();
 
-    // 期待するレスポンス例：
-    // { analysis: "整理結果...", suggestedCategory: "② 市民ベネフィット" }
-    currentAIResult = data.analysis || "AIからの整理結果を取得できませんでした。";
+       const content = JSON.parse(data.content);
+
+    currentAIResult = content.analysis || "";
+    currentCategory = content.category || "";
+    currentMain = content.main || "";
+    currentSub = content.sub || "";
+    currentItem = content.item || "";
+
     aiBox.textContent = currentAIResult;
-
-    if (data.suggestedCategory) {
-      currentCategory = data.suggestedCategory;
-      const select = document.getElementById("categorySelect");
-      if (select) select.value = currentCategory;
-      const buttons = document.querySelectorAll(".category-bar .cat-btn");
-      buttons.forEach(b => {
-        if (b.getAttribute("data-cat") === currentCategory) {
-          b.classList.add("active");
-        } else {
-          b.classList.remove("active");
-        }
-      });
-    }
-
     decisionBox.style.display = "block";
+
   } catch (e) {
     console.error(e);
     aiBox.textContent = "AIとの通信でエラーが発生しました。";
@@ -372,13 +379,17 @@ async function sendToPR() {
     const res = await fetch(GAS_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
+            body: JSON.stringify({
         mode: "save",
         category: currentCategory,
+        main: currentMain,
+        sub: currentSub,
+        item: currentItem,
         summary200: currentSummary200,
         title: currentTitle,
         fullText: currentIdeaText
       })
+
     });
     const data = await res.json();
 
