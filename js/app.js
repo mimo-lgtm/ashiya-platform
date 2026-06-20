@@ -281,20 +281,26 @@ async function loadPRList() {
   }
 }
 
-// ======================= 初期化（最重要） =======================
+// ======================= 初期化 =======================
 window.onload = function() {
-  console.log("✅ JavaScript初期化開始");   // デバッグ用
+  console.log("✅ JavaScript 初期化開始");
 
-  initLogicTree();
-  initCategoryButtons();
-  
+  if (typeof initLogicTree === "function") initLogicTree();
+  if (typeof initCategoryButtons === "function") initCategoryButtons();
+
   // 強制的にホーム画面を表示
-  const homePage = document.getElementById("home");
-  if (homePage) {
-    document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-    homePage.classList.add("active");
-    console.log("✅ ホーム画面を表示しました");
+  document.querySelectorAll(".page").forEach(page => {
+    page.classList.remove("active");
+  });
+
+  const home = document.getElementById("home");
+  if (home) {
+    home.classList.add("active");
+    console.log("✅ ホーム画面を強制表示");
   } else {
-    console.error("❌ id='home' のページが見つかりません");
+    console.error("❌ id='home' が見つかりません。index.htmlを確認してください");
+    // 最初のpageを強制表示
+    const firstPage = document.querySelector(".page");
+    if (firstPage) firstPage.classList.add("active");
   }
 };
