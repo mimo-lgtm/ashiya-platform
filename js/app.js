@@ -248,25 +248,6 @@ function initCategoryButtons() {
 
 // ======================= AI壁打ち =======================
 async function runAI() {
-  const textarea = document.getElementById("ideaInput");  // ← 修正済み
-  const aiBox = document.getElementById("aiBox");
-  const decisionBox = document.getElementById("decisionBox");
-  const summaryBlock = document.getElementById("summaryBlock");
-
-  if (!textarea) return;
-
-  const text = textarea.value.trim();
-  if (!text) {
-    alert("意見を入力してください。");
-    return;
-  }
-
-  currentIdeaText = text;
-  aiBox.textContent = "AIが整理しています…";
-  decisionBox.style.display = "none";
-  summaryBlock.style.display = "none";
-
-  async function runAI() {
   const textarea = document.getElementById("ideaInput");
   const aiBox = document.getElementById("aiBox");
   const decisionBox = document.getElementById("decisionBox");
@@ -289,7 +270,7 @@ async function runAI() {
     const res = await fetch(GAS_URL, {
       method: "POST",
       headers: {
-        "Content-Type": "text/plain;charset=utf-8"   // ← CORS対策で変更
+        "Content-Type": "text/plain;charset=utf-8"
       },
       body: JSON.stringify({
         mode: "analyze",
@@ -298,9 +279,11 @@ async function runAI() {
       })
     });
 
+    if (!res.ok) throw new Error("HTTP error " + res.status);
+
     const data = await res.json();
-    const content = typeof data.content === "string"
-      ? JSON.parse(data.content)
+    const content = typeof data.content === "string" 
+      ? JSON.parse(data.content) 
       : data.content;
 
     currentAIResult = content.analysis || "";
@@ -317,39 +300,8 @@ async function runAI() {
     aiBox.textContent = "AIとの通信でエラーが発生しました。";
   }
 }
-
-const data = await res.json();
-const content = typeof data.content === "string"
-  ? JSON.parse(data.content)
-  : data.content;
-
-
-    currentAIResult = content.analysis || "";
-    currentCategory = content.category || "";
-    currentMain = content.main || "";
-    currentSub = content.sub || "";
-    currentItem = content.item || "";
-
-    aiBox.textContent = currentAIResult;
-    decisionBox.style.display = "block";
-
-  } catch (e) {
-    console.error(e);
-    aiBox.textContent = "AIとの通信でエラーが発生しました。";
-  }
-}
-
 // ======================= 200字要約 =======================
 async function confirmSummary() {
-  const summaryBox = document.getElementById("summaryBox");
-  const titleBox = document.getElementById("titleBox");
-  const summaryBlock = document.getElementById("summaryBlock");
-  const decisionBox = document.getElementById("decisionBox");
-
-  summaryBox.textContent = "200字要約を生成しています…";
-  titleBox.textContent = "タイトルを生成しています…";
-
- async function confirmSummary() {
   const summaryBox = document.getElementById("summaryBox");
   const titleBox = document.getElementById("titleBox");
   const summaryBlock = document.getElementById("summaryBlock");
@@ -362,7 +314,7 @@ async function confirmSummary() {
     const res = await fetch(GAS_URL, {
       method: "POST",
       headers: {
-        "Content-Type": "text/plain;charset=utf-8"   // ← CORS対策で変更
+        "Content-Type": "text/plain;charset=utf-8"
       },
       body: JSON.stringify({
         mode: "summarize",
@@ -372,9 +324,11 @@ async function confirmSummary() {
       })
     });
 
+    if (!res.ok) throw new Error("HTTP error " + res.status);
+
     const data = await res.json();
-    const content = typeof data.content === "string"
-      ? JSON.parse(data.content)
+    const content = typeof data.content === "string" 
+      ? JSON.parse(data.content) 
       : data.content;
 
     currentSummary200 = content.summary200 || "";
@@ -429,20 +383,11 @@ async function sendToPR() {
   const ok = confirm("この内容でPULL REQUESTに投稿します。よろしいですか？");
   if (!ok) return;
 
-  async function sendToPR() {
-  if (!currentSummary200 || !currentTitle || !currentIdeaText) {
-    alert("AI壁打ちと要約・タイトル生成を完了してください。");
-    return;
-  }
-
-  const ok = confirm("この内容でPULL REQUESTに投稿します。よろしいですか？");
-  if (!ok) return;
-
   try {
     const res = await fetch(GAS_URL, {
       method: "POST",
       headers: {
-        "Content-Type": "text/plain;charset=utf-8"   // ← CORS対策で変更
+        "Content-Type": "text/plain;charset=utf-8"
       },
       body: JSON.stringify({
         mode: "save",
@@ -455,6 +400,8 @@ async function sendToPR() {
         fullText: currentIdeaText
       })
     });
+
+    if (!res.ok) throw new Error("HTTP error " + res.status);
 
     const data = await res.json();
 
