@@ -405,8 +405,15 @@ async function loadPRList() {
   container.innerHTML = "<p>読み込み中...</p>";
 
   try {
-    const res = await fetch(`${GAS_URL}?mode=list`);
-    if (!res.ok) throw new Error("HTTP error");
+    const res = await fetch(`${GAS_URL}?mode=list`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8"
+      }
+    });
+
+    if (!res.ok) throw new Error("HTTP error " + res.status);
+
     const data = await res.json();
 
     let html = "";
