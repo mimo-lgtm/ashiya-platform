@@ -2,7 +2,7 @@
 const GAS_URL = "https://script.google.com/macros/s/AKfycbxgNn29XTgCi2i2DdYY-no2Kc91yn4kaUuksMUVfYEY_bB3rVHmeGBl8Rwcu9VhnDwqZA/exec";
 
 // ======================= 状態管理 =======================
-let currentCategory = "① 芦屋市の価値向上";
+let currentCategory = "① 芦屋市の価値向上（ブランド・移住促進）";
 let currentIdeaText = "";
 let currentAIResult = "";
 let currentSummary200 = "";
@@ -195,7 +195,7 @@ async function confirmSummary() {
   try {
     const res = await fetch(GAS_URL, {
       method: "POST",
-     headers: { "Content-Type": "text/plain;charset=utf-8" },
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify({
         mode: "summarize",
         text: currentIdeaText,
@@ -236,7 +236,7 @@ async function sendToPR() {
   try {
     const res = await fetch(GAS_URL, {
       method: "POST",
-     headers: { "Content-Type": "text/plain;charset=utf-8" },
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify({
         mode: "save",
         category: currentCategory,
@@ -276,7 +276,8 @@ async function loadPRList() {
   try {
     const res = await fetch(`${GAS_URL}?mode=list`, {
       method: "GET",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      headers: { "Content-Type": "text/plain;charset=utf-8" }
+    });
 
     const data = await res.json();
 
