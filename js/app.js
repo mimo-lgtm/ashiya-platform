@@ -266,19 +266,57 @@ async function runAI() {
   decisionBox.style.display = "none";
   summaryBlock.style.display = "none";
 
+  async function runAI() {
+  const textarea = document.getElementById("ideaInput");
+  const aiBox = document.getElementById("aiBox");
+  const decisionBox = document.getElementById("decisionBox");
+  const summaryBlock = document.getElementById("summaryBlock");
+
+  if (!textarea) return;
+
+  const text = textarea.value.trim();
+  if (!text) {
+    alert("意見を入力してください。");
+    return;
+  }
+
+  currentIdeaText = text;
+  aiBox.textContent = "AIが整理しています…";
+  decisionBox.style.display = "none";
+  summaryBlock.style.display = "none";
+
   try {
     const res = await fetch(GAS_URL, {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    mode: "analyze",
-    text: text,
-    category: currentCategory
-  })
-});
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8"   // ← CORS対策で変更
+      },
+      body: JSON.stringify({
+        mode: "analyze",
+        text: text,
+        category: currentCategory
+      })
+    });
 
+    const data = await res.json();
+    const content = typeof data.content === "string"
+      ? JSON.parse(data.content)
+      : data.content;
+
+    currentAIResult = content.analysis || "";
+    currentCategory = content.category || "";
+    currentMain = content.main || "";
+    currentSub = content.sub || "";
+    currentItem = content.item || "";
+
+    aiBox.textContent = currentAIResult;
+    decisionBox.style.display = "block";
+
+  } catch (e) {
+    console.error(e);
+    aiBox.textContent = "AIとの通信でエラーが発生しました。";
+  }
+}
 
 const data = await res.json();
 const content = typeof data.content === "string"
@@ -311,19 +349,48 @@ async function confirmSummary() {
   summaryBox.textContent = "200字要約を生成しています…";
   titleBox.textContent = "タイトルを生成しています…";
 
+ async function confirmSummary() {
+  const summaryBox = document.getElementById("summaryBox");
+  const titleBox = document.getElementById("titleBox");
+  const summaryBlock = document.getElementById("summaryBlock");
+  const decisionBox = document.getElementById("decisionBox");
+
+  summaryBox.textContent = "200字要約を生成しています…";
+  titleBox.textContent = "タイトルを生成しています…";
+
   try {
     const res = await fetch(GAS_URL, {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    mode: "summarize",
-    text: currentIdeaText,
-    analysis: currentAIResult,
-    category: currentCategory
-  })
-});
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8"   // ← CORS対策で変更
+      },
+      body: JSON.stringify({
+        mode: "summarize",
+        text: currentIdeaText,
+        analysis: currentAIResult,
+        category: currentCategory
+      })
+    });
+
+    const data = await res.json();
+    const content = typeof data.content === "string"
+      ? JSON.parse(data.content)
+      : data.content;
+
+    currentSummary200 = content.summary200 || "";
+    currentTitle = content.title || "";
+
+    summaryBox.textContent = currentSummary200;
+    titleBox.textContent = currentTitle;
+
+    summaryBlock.style.display = "block";
+    decisionBox.style.display = "none";
+
+  } catch (e) {
+    console.error(e);
+    summaryBox.textContent = "要約生成でエラーが発生しました。";
+  }
+}
 
 
 const data = await res.json();
@@ -362,23 +429,54 @@ async function sendToPR() {
   const ok = confirm("この内容でPULL REQUESTに投稿します。よろしいですか？");
   if (!ok) return;
 
+  async function sendToPR() {
+  if (!currentSummary200 || !currentTitle || !currentIdeaText) {
+    alert("AI壁打ちと要約・タイトル生成を完了してください。");
+    return;
+  }
+
+  const ok = confirm("この内容でPULL REQUESTに投稿します。よろしいですか？");
+  if (!ok) return;
+
   try {
     const res = await fetch(GAS_URL, {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    mode: "save",
-    category: currentCategory,
-    main: currentMain,
-    sub: currentSub,
-    item: currentItem,
-    summary200: currentSummary200,
-    title: currentTitle,
-    fullText: currentIdeaText
-  })
-});
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8"   // ← CORS対策で変更
+      },
+      body: JSON.stringify({
+        mode: "save",
+        category: currentCategory,
+        main: currentMain,
+        sub: currentSub,
+        item: currentItem,
+        summary200: currentSummary200,
+        title: currentTitle,
+        fullText: currentIdeaText
+      })
+    });
+
+    const data = await res.json();
+
+    if (data.status === "ok") {
+      alert("PULL REQUESTに投稿しました。");
+
+      document.getElementById("ideaInput").value = "";
+      document.getElementById("aiBox").textContent = "結果はここに表示されます。（最大500文字）";
+      document.getElementById("decisionBox").style.display = "none";
+      document.getElementById("summaryBlock").style.display = "none";
+      document.getElementById("summaryBox").textContent = "";
+      document.getElementById("titleBox").textContent = "";
+
+      loadPRList();
+      showPage("pullrequest");
+    }
+
+  } catch (e) {
+    console.error(e);
+    alert("GASとの通信でエラーが発生しました。");
+  }
+}
 
 
     const data = await res.json();
