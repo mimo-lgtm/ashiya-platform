@@ -511,13 +511,15 @@ textarea:focus{
 <section id="assistant" class="page">
 
   <h1>🤖 AI壁打ち</h1>
-<div class="placeholder-card" style="padding:0; margin-bottom:20px;">
-  <img src="images/aiWall.png" alt="AI壁打ち" class="responsive-img">
-</div>
 
+  <div class="placeholder-card" style="padding:0; margin-bottom:20px;">
+    <img src="images/aiWall.png" alt="AI壁打ち" class="responsive-img">
+  </div>
+
+  <!-- ★ 2カラムレイアウト開始 -->
   <div class="assistant-layout">
 
-    <!-- 入力エリア -->
+    <!-- 入力エリア（左カラム） -->
     <div class="assistant-card">
       <h2>あなたの考えを聞かせてください</h2>
 
@@ -536,42 +538,26 @@ textarea:focus{
       <button class="big-button" onclick="sendToPR()">PRに投稿する</button>
     </div>
 
-    <!-- 要約・タイトル生成エリア（2カラムの外側に置く） -->
-<div class="assistant-card summary-block">
-
-  <h3>200文字要約</h3>
-  <div id="summaryBox" class="summary-box">
-    （ここに要約が表示されます）
-  </div>
-
-  <h3>推奨タイトル</h3>
-  <div id="titleBox" class="title-box">
-    （ここにタイトルが表示されます）
-  </div>
-
-</div>
-
-
-    <!-- AI結果エリア -->
+    <!-- AI結果エリア（右カラム） -->
     <div class="assistant-card" id="aiBox">
       <h2>AIからの整理結果</h2>
       <p id="aiResult">結果はここに表示されます。（最大500文字）</p>
     </div>
-    <!-- 要約・タイトル生成エリア -->
-<div class="assistant-card summary-block">
 
-  <h3>200文字要約</h3>
-  <div id="summaryBox" class="summary-box">
-    （ここに要約が表示されます）
-  </div>
+  </div> <!-- ★ assistant-layout の閉じタグ（必要） -->
 
-  <h3>推奨タイトル</h3>
-  <div id="titleBox" class="title-box">
-    （ここにタイトルが表示されます）
-  </div>
+  <!-- ★ 要約・タイトル生成エリア（レイアウトの外側に置く） -->
+  <div class="assistant-card summary-block">
 
-</div>
+    <h3>200文字要約</h3>
+    <div id="summaryBox" class="summary-box">
+      （ここに要約が表示されます）
+    </div>
 
+    <h3>推奨タイトル</h3>
+    <div id="titleBox" class="title-box">
+      （ここにタイトルが表示されます）
+    </div>
 
   </div>
 
