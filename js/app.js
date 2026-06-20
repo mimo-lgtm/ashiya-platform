@@ -113,12 +113,11 @@ function initCategoryButtons() {
 async function runAI() {
   console.log("🚀 runAI関数が呼ばれました");
 
-  const textarea = document.getElementById("userInput");   // ← ここをuserInputに修正
+  const textarea = document.getElementById("userInput");
   const aiResult = document.getElementById("aiResult");
 
   if (!textarea) {
     console.error("❌ userInputが見つかりません");
-    alert("入力欄が見つかりません。ページを再読み込みしてください。");
     return;
   }
 
@@ -143,24 +142,47 @@ async function runAI() {
       })
     });
 
-    if (!res.ok) throw new Error("HTTP error " + res.status);
+    console.log("📥 ステータス:", res.status);
 
-    const data = await res.json();
-    console.log("📦 受信データ:", data);
+    const responseText = await res.text();   // ← 生のレスポンスを確認
+    console.log("📦 生のレスポンス:", responseText);
+
+    let data;
+    try {
+      data = JSON.parse(responseText);
+    } catch (e) {
+      console.error("JSONパース失敗:", e);
+      throw new Error("GASからの返事がJSON形式ではありません");
+    }
+
+    console.log("📦 解析後データ:", data);
+
+    // ここでエラーチェック
+    if (data.error) {
+      throw new Error(data.error);
+    }
+
+    if (!data.content) {
+      throw new Error("contentフィールドがありません: " + JSON.stringify(data));
+    }
 
     const content = typeof data.content === "string" 
       ? JSON.parse(data.content) 
       : data.content;
 
-    currentAIResult = content.analysis || "分析結果がありません";
+    currentAIResult = content.analysis || "分析結果が空です";
 
-    if (aiResult) aiResult.textContent = currentAIResult;
+    if (aiResult) {
+      aiResult.textContent = currentAIResult;
+    }
 
     console.log("✅ AI分析完了");
 
   } catch (e) {
     console.error("❌ AI壁打ちエラー:", e);
-    if (aiResult) aiResult.textContent = "エラーが発生しました: " + e.message;
+    if (aiResult) {
+      aiResult.textContent = "エラーが発生しました:\n" + e.message;
+    }
   }
 }
 // ======================= 200字要約 =======================
