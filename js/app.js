@@ -198,7 +198,7 @@ async function confirmSummary() {
   try {
     const res = await fetch(GAS_URL, {
       method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      headers: { "Content-Type": "application/json" }
       body: JSON.stringify({
         mode: "summarize",
         text: currentIdeaText,
@@ -227,6 +227,7 @@ async function confirmSummary() {
 }
 
 // ======================= PR投稿 =======================
+// ======================= PR投稿（修正版） =======================
 async function sendToPR() {
   if (!currentSummary200 || !currentTitle || !currentIdeaText) {
     alert("AI壁打ちと要約・タイトル生成を完了してください。");
@@ -239,28 +240,26 @@ async function sendToPR() {
   try {
     const res = await fetch(GAS_URL, {
       method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         mode: "save",
         category: currentCategory,
-        main: currentMain,
-        sub: currentSub,
-        item: currentItem,
-        summary200: currentSummary200,
         title: currentTitle,
-        fullText: currentIdeaText
+        summary200: currentSummary200,
+        fullText: currentIdeaText,
+        item: currentItem,
+        sub: currentSub
       })
     });
-
-    if (!res.ok) throw new Error("HTTP error " + res.status);
 
     const data = await res.json();
 
     if (data.status === "ok") {
       alert("PULL REQUESTに投稿しました。");
+
       // リセット処理
-      document.getElementById("ideaInput").value = "";
-      document.getElementById("aiBox").textContent = "結果はここに表示されます。（最大500文字）";
+      document.getElementById("userInput").value = "";
+      document.getElementById("aiResult").textContent = "結果はここに表示されます。（最大500文字）";
       document.getElementById("decisionBox").style.display = "none";
       document.getElementById("summaryBlock").style.display = "none";
       document.getElementById("summaryBox").textContent = "";
@@ -274,6 +273,7 @@ async function sendToPR() {
     alert("GASとの通信でエラーが発生しました。");
   }
 }
+
 
 // ======================= PR一覧読み込み =======================
 async function loadPRList() {
