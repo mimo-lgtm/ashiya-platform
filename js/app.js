@@ -347,11 +347,6 @@ async function confirmSummary() {
   }
 }
 
-function backToAI() {
-  document.getElementById("decisionBox").style.display = "none";
-  document.getElementById("summaryBlock").style.display = "none";
-}
-
 // ======================= PR投稿 =======================
 async function sendToPR() {
   if (!currentSummary200 || !currentTitle || !currentIdeaText) {
@@ -433,9 +428,15 @@ async function loadPRList() {
   }
 }
 
-// 初期化
+// 初期化（これが重要！）
 window.onload = function() {
   initLogicTree();
   initCategoryButtons();
-  showPage("home");
+  showPage("home");   // ← 最初にホームを表示
 };
+
+// backToAI関数も残す
+function backToAI() {
+  document.getElementById("decisionBox").style.display = "none";
+  document.getElementById("summaryBlock").style.display = "none";
+}
