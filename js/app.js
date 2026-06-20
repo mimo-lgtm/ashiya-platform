@@ -1,5 +1,5 @@
 // ======================= 設定 =======================
-const GAS_URL = "https://script.google.com/macros/s/AKfycbxSZRn3lDgFPMoWYAte6nUgBw8scMBuu2qpWc5GFnfhIv54d2wzsPZRvIPfTcpVFcvdXA/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbzmFB0y81037q9hglYa_fsrmYCNoSIUsvDSKkKI_kSFm-5xqFcIji-NRTbjqDY7JsbKuA/exec";
 
 // 状態管理
 let currentCategory = "① 芦屋市の価値向上";
