@@ -113,13 +113,14 @@ function initCategoryButtons() {
 async function runAI() {
   console.log("🚀 runAI関数が呼ばれました");
 
-  const textarea = document.getElementById("ideaInput");
-  const aiBox = document.getElementById("aiBox");
-  const decisionBox = document.getElementById("decisionBox");
-  const summaryBlock = document.getElementById("summaryBlock");
+  // HTMLのIDに合わせて修正
+  const textarea = document.getElementById("userInput");
+  const aiResult = document.getElementById("aiResult");
+  const decisionBox = document.getElementById("decisionBox"); // 必要なら後で追加
 
   if (!textarea) {
-    console.error("ideaInputが見つかりません");
+    console.error("❌ userInputが見つかりません");
+    alert("入力欄が見つかりません。ページを再読み込みしてください。");
     return;
   }
 
@@ -130,12 +131,10 @@ async function runAI() {
   }
 
   currentIdeaText = text;
-  aiBox.textContent = "AIが整理しています…";
-  decisionBox.style.display = "none";
-  if (summaryBlock) summaryBlock.style.display = "none";
+  if (aiResult) aiResult.textContent = "AIが整理しています…";
 
   try {
-    console.log("📡 GASにリクエスト送信中...");
+    console.log("📡 GASに送信中...");
     const res = await fetch(GAS_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
@@ -146,8 +145,6 @@ async function runAI() {
       })
     });
 
-    console.log("📥 レスポンス受信:", res.status);
-
     if (!res.ok) throw new Error("HTTP error " + res.status);
 
     const data = await res.json();
@@ -157,23 +154,23 @@ async function runAI() {
       ? JSON.parse(data.content) 
       : data.content;
 
-    currentAIResult = content.analysis || "";
+    currentAIResult = content.analysis || "分析結果がありません";
     currentCategory = content.category || currentCategory;
     currentMain = content.main || "";
     currentSub = content.sub || "";
     currentItem = content.item || "";
 
-    aiBox.textContent = currentAIResult || "分析結果が空です";
-    decisionBox.style.display = "block";
+    if (aiResult) {
+      aiResult.textContent = currentAIResult;
+    }
 
     console.log("✅ AI分析完了");
 
   } catch (e) {
     console.error("❌ AI壁打ちエラー:", e);
-    aiBox.textContent = "AIとの通信でエラーが発生しました。\n" + e.message;
+    if (aiResult) aiResult.textContent = "AIとの通信でエラーが発生しました。";
   }
 }
-
 // ======================= 200字要約 =======================
 async function confirmSummary() {
   const summaryBox = document.getElementById("summaryBox");
