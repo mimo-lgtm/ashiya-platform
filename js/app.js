@@ -262,14 +262,21 @@ async function loadPRList() {
 
     const data = await res.json();
 
+    // データが配列でない場合の安全対策
+    if (!Array.isArray(data)) {
+      console.warn("データが配列ではありません:", data);
+      container.innerHTML = "<p>まだ投稿がありません。</p>";
+      return;
+    }
+
     let html = "";
     data.forEach(item => {
       html += `
         <div class="pr-item">
-          <div class="pr-category">${item.category}</div>
-          <h3>${item.title}</h3>
-          <p>${item.summary200}</p>
-          <small>${item.timestamp}</small>
+          <div class="pr-category">${item.category || ''}</div>
+          <h3>${item.title || ''}</h3>
+          <p>${item.summary200 || ''}</p>
+          <small>${item.timestamp || ''}</small>
         </div>
       `;
     });
@@ -280,7 +287,6 @@ async function loadPRList() {
     container.innerHTML = "<p>一覧の読み込みに失敗しました。</p>";
   }
 }
-
 // ======================= 初期化 =======================
 window.onload = function() {
   console.log("✅ JavaScript 初期化開始");
@@ -288,19 +294,11 @@ window.onload = function() {
   if (typeof initLogicTree === "function") initLogicTree();
   if (typeof initCategoryButtons === "function") initCategoryButtons();
 
-  // 強制的にホーム画面を表示
-  document.querySelectorAll(".page").forEach(page => {
-    page.classList.remove("active");
-  });
-
-  const home = document.getElementById("home");
-  if (home) {
-    home.classList.add("active");
-    console.log("✅ ホーム画面を強制表示");
-  } else {
-    console.error("❌ id='home' が見つかりません。index.htmlを確認してください");
-    // 最初のpageを強制表示
-    const firstPage = document.querySelector(".page");
-    if (firstPage) firstPage.classList.add("active");
+  // ホーム画面（intro）を強制表示
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  const homePage = document.getElementById("intro");
+  if (homePage) {
+    homePage.classList.add("active");
+    console.log("✅ intro画面を表示");
   }
 };
