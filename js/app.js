@@ -113,10 +113,8 @@ function initCategoryButtons() {
 async function runAI() {
   console.log("🚀 runAI関数が呼ばれました");
 
-  // HTMLのIDに合わせて修正
-  const textarea = document.getElementById("userInput");
+  const textarea = document.getElementById("userInput");   // ← ここをuserInputに修正
   const aiResult = document.getElementById("aiResult");
-  const decisionBox = document.getElementById("decisionBox"); // 必要なら後で追加
 
   if (!textarea) {
     console.error("❌ userInputが見つかりません");
@@ -155,20 +153,14 @@ async function runAI() {
       : data.content;
 
     currentAIResult = content.analysis || "分析結果がありません";
-    currentCategory = content.category || currentCategory;
-    currentMain = content.main || "";
-    currentSub = content.sub || "";
-    currentItem = content.item || "";
 
-    if (aiResult) {
-      aiResult.textContent = currentAIResult;
-    }
+    if (aiResult) aiResult.textContent = currentAIResult;
 
     console.log("✅ AI分析完了");
 
   } catch (e) {
     console.error("❌ AI壁打ちエラー:", e);
-    if (aiResult) aiResult.textContent = "AIとの通信でエラーが発生しました。";
+    if (aiResult) aiResult.textContent = "エラーが発生しました: " + e.message;
   }
 }
 // ======================= 200字要約 =======================
