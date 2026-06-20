@@ -1,20 +1,18 @@
 // ======================= 設定 =======================
 const GAS_URL = "https://script.google.com/macros/s/AKfycby9xtyVtaMyPSllOV51tMlFhCB-1Z_6bFgFSdiSmdbxdr_gZbpefnbxKxwEKpto-cZW4A/exec";
 
-// 状態管理
+// ======================= 状態管理 =======================
 let currentCategory = "① 芦屋市の価値向上";
 let currentIdeaText = "";
 let currentAIResult = "";
 let currentSummary200 = "";
 let currentTitle = "";
-let currentMain = "";
 let currentSub = "";
 let currentItem = "";
 
 // ======================= ページ切り替え =======================
 function showPage(pageId) {
-  const pages = document.querySelectorAll(".page");
-  pages.forEach(p => p.classList.remove("active"));
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
   const target = document.getElementById(pageId);
   if (target) target.classList.add("active");
 
@@ -67,34 +65,70 @@ function initLogicTree() {
   Object.keys(logicTreeData).forEach(mainKey => {
     const node = document.createElement("div");
     node.className = "logic-main-node";
+
     const title = document.createElement("div");
     title.className = "logic-main-node-title";
     title.textContent = mainKey;
+
     const btn = document.createElement("button");
     btn.textContent = "この分野の詳細を見る";
     btn.addEventListener("click", () => {
       openLogicAccordion(mainKey);
       showPage("tree");
     });
+
     node.appendChild(title);
     node.appendChild(btn);
     mainArea.appendChild(node);
   });
+}
 
-  // 詳細アコーディオン
-  Object.keys(logicTreeData).forEach(mainKey => {
-    // （省略せず実装済みの部分は前のバージョンと同じ）
-    // ここは現在のあなたのファイルのinitLogicTreeの残りを保持したい場合は教えてください
+function openLogicAccordion(mainKey) {
+  const detailArea = document.getElementById("logicDetailArea");
+  detailArea.innerHTML = "";
+
+  const subData = logicTreeData[mainKey];
+
+  Object.keys(subData).forEach(subKey => {
+    const block = document.createElement("div");
+    block.className = "logic-accordion-block";
+
+    const header = document.createElement("div");
+    header.className = "logic-accordion-header";
+    header.innerHTML = `<h3>${subKey}</h3><span>▼</span>`;
+    header.addEventListener("click", () => {
+      body.style.display = body.style.display === "block" ? "none" : "block";
+    });
+
+    const body = document.createElement("div");
+    body.className = "logic-accordion-body";
+
+    const ul = document.createElement("ul");
+    ul.className = "logic-subcategory-items";
+
+    subData[subKey].forEach(item => {
+      const li = document.createElement("li");
+      li.textContent = item;
+      li.addEventListener("click", () => {
+        showDetailFromTree(mainKey, subKey, item);
+      });
+      ul.appendChild(li);
+    });
+
+    body.appendChild(ul);
+    block.appendChild(header);
+    block.appendChild(body);
+    detailArea.appendChild(block);
   });
 }
 
-// 簡易版（完全にするため他の関数も必要なら言ってください）
-function openLogicAccordion(mainKey) {
-  // 必要に応じて実装
-}
-
 async function showDetailFromTree(mainKey, subKey, item) {
-  // 現在のあなたのファイルのものを残す
+  const box = document.getElementById("detailBox");
+  box.innerHTML = `
+    <h2>${item}</h2>
+    <p>この小分類に統合された意見がここに表示されます。（今後実装）</p>
+  `;
+  showPage("detail");
 }
 
 // ======================= カテゴリーボタン =======================
@@ -111,15 +145,8 @@ function initCategoryButtons() {
 
 // ======================= AI壁打ち =======================
 async function runAI() {
-  console.log("🚀 runAI関数が呼ばれました");
-
   const textarea = document.getElementById("userInput");
   const aiResult = document.getElementById("aiResult");
-
-  if (!textarea) {
-    console.error("❌ userInputが見つかりません");
-    return;
-  }
 
   const text = textarea.value.trim();
   if (!text) {
@@ -128,63 +155,33 @@ async function runAI() {
   }
 
   currentIdeaText = text;
-  if (aiResult) aiResult.textContent = "AIが整理しています…";
+  aiResult.textContent = "AIが整理しています…";
 
   try {
-    console.log("📡 GASに送信中...");
     const res = await fetch(GAS_URL, {
       method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({ 
-        mode: "analyze", 
-        text: text, 
-        category: currentCategory 
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        mode: "analyze",
+        text: text,
+        category: currentCategory
       })
     });
 
-    console.log("📥 ステータス:", res.status);
+    const data = await res.json();
+    const content = JSON.parse(data.content);
 
-    const responseText = await res.text();   // ← 生のレスポンスを確認
-    console.log("📦 生のレスポンス:", responseText);
+    currentAIResult = content.analysis;
+    currentSub = content.sub;
+    currentItem = content.item;
 
-    let data;
-    try {
-      data = JSON.parse(responseText);
-    } catch (e) {
-      console.error("JSONパース失敗:", e);
-      throw new Error("GASからの返事がJSON形式ではありません");
-    }
-
-    console.log("📦 解析後データ:", data);
-
-    // ここでエラーチェック
-    if (data.error) {
-      throw new Error(data.error);
-    }
-
-    if (!data.content) {
-      throw new Error("contentフィールドがありません: " + JSON.stringify(data));
-    }
-
-    const content = typeof data.content === "string" 
-      ? JSON.parse(data.content) 
-      : data.content;
-
-    currentAIResult = content.analysis || "分析結果が空です";
-
-    if (aiResult) {
-      aiResult.textContent = currentAIResult;
-    }
-
-    console.log("✅ AI分析完了");
+    aiResult.textContent = currentAIResult;
 
   } catch (e) {
-    console.error("❌ AI壁打ちエラー:", e);
-    if (aiResult) {
-      aiResult.textContent = "エラーが発生しました:\n" + e.message;
-    }
+    aiResult.textContent = "エラーが発生しました:\n" + e.message;
   }
 }
+
 // ======================= 200字要約 =======================
 async function confirmSummary() {
   const summaryBox = document.getElementById("summaryBox");
@@ -198,36 +195,35 @@ async function confirmSummary() {
   try {
     const res = await fetch(GAS_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" }
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         mode: "summarize",
         text: currentIdeaText,
         analysis: currentAIResult,
-        category: currentCategory
+        category: currentCategory,
+        sub: currentSub,
+        item: currentItem
       })
     });
 
-    if (!res.ok) throw new Error("HTTP error " + res.status);
-
     const data = await res.json();
-    const content = typeof data.content === "string" ? JSON.parse(data.content) : data.content;
+    const content = JSON.parse(data.content);
 
-    currentSummary200 = content.summary200 || "";
-    currentTitle = content.title || "";
+    currentSummary200 = content.summary200;
+    currentTitle = content.title;
 
     summaryBox.textContent = currentSummary200;
     titleBox.textContent = currentTitle;
 
     summaryBlock.style.display = "block";
     decisionBox.style.display = "none";
+
   } catch (e) {
-    console.error(e);
     summaryBox.textContent = "要約生成でエラーが発生しました。";
   }
 }
 
 // ======================= PR投稿 =======================
-// ======================= PR投稿（修正版） =======================
 async function sendToPR() {
   if (!currentSummary200 || !currentTitle || !currentIdeaText) {
     alert("AI壁打ちと要約・タイトル生成を完了してください。");
@@ -257,10 +253,8 @@ async function sendToPR() {
     if (data.status === "ok") {
       alert("PULL REQUESTに投稿しました。");
 
-      // リセット処理
       document.getElementById("userInput").value = "";
       document.getElementById("aiResult").textContent = "結果はここに表示されます。（最大500文字）";
-      document.getElementById("decisionBox").style.display = "none";
       document.getElementById("summaryBlock").style.display = "none";
       document.getElementById("summaryBox").textContent = "";
       document.getElementById("titleBox").textContent = "";
@@ -268,36 +262,24 @@ async function sendToPR() {
       loadPRList();
       showPage("pullrequest");
     }
+
   } catch (e) {
-    console.error(e);
     alert("GASとの通信でエラーが発生しました。");
   }
 }
 
-
 // ======================= PR一覧読み込み =======================
 async function loadPRList() {
   const container = document.getElementById("prList");
-  if (!container) return;
-
   container.innerHTML = "<p>読み込み中...</p>";
 
   try {
     const res = await fetch(`${GAS_URL}?mode=list`, {
       method: "GET",
-      headers: { "Content-Type": "text/plain;charset=utf-8" }
+      headers: { "Content-Type": "application/json" }
     });
 
-    if (!res.ok) throw new Error("HTTP error " + res.status);
-
     const data = await res.json();
-
-    // データが配列でない場合の安全対策
-    if (!Array.isArray(data)) {
-      console.warn("データが配列ではありません:", data);
-      container.innerHTML = "<p>まだ投稿がありません。</p>";
-      return;
-    }
 
     let html = "";
     data.forEach(item => {
@@ -312,23 +294,17 @@ async function loadPRList() {
     });
 
     container.innerHTML = html || "<p>まだ投稿がありません。</p>";
+
   } catch (e) {
-    console.error(e);
     container.innerHTML = "<p>一覧の読み込みに失敗しました。</p>";
   }
 }
+
 // ======================= 初期化 =======================
 window.onload = function() {
-  console.log("✅ JavaScript 初期化開始");
+  initLogicTree();
+  initCategoryButtons();
 
-  if (typeof initLogicTree === "function") initLogicTree();
-  if (typeof initCategoryButtons === "function") initCategoryButtons();
-
-  // ホーム画面（intro）を強制表示
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-  const homePage = document.getElementById("intro");
-  if (homePage) {
-    homePage.classList.add("active");
-    console.log("✅ intro画面を表示");
-  }
+  document.getElementById("intro").classList.add("active");
 };
