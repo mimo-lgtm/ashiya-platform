@@ -281,9 +281,20 @@ async function loadPRList() {
   }
 }
 
-// ======================= 初期化 =======================
+// ======================= 初期化（最重要） =======================
 window.onload = function() {
+  console.log("✅ JavaScript初期化開始");   // デバッグ用
+
   initLogicTree();
   initCategoryButtons();
-  showPage("home");
+  
+  // 強制的にホーム画面を表示
+  const homePage = document.getElementById("home");
+  if (homePage) {
+    document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+    homePage.classList.add("active");
+    console.log("✅ ホーム画面を表示しました");
+  } else {
+    console.error("❌ id='home' のページが見つかりません");
+  }
 };
