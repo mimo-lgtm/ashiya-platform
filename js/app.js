@@ -111,12 +111,17 @@ function initCategoryButtons() {
 
 // ======================= AI壁打ち =======================
 async function runAI() {
+  console.log("🚀 runAI関数が呼ばれました");
+
   const textarea = document.getElementById("ideaInput");
   const aiBox = document.getElementById("aiBox");
   const decisionBox = document.getElementById("decisionBox");
   const summaryBlock = document.getElementById("summaryBlock");
 
-  if (!textarea) return;
+  if (!textarea) {
+    console.error("ideaInputが見つかりません");
+    return;
+  }
 
   const text = textarea.value.trim();
   if (!text) {
@@ -127,31 +132,45 @@ async function runAI() {
   currentIdeaText = text;
   aiBox.textContent = "AIが整理しています…";
   decisionBox.style.display = "none";
-  summaryBlock.style.display = "none";
+  if (summaryBlock) summaryBlock.style.display = "none";
 
   try {
+    console.log("📡 GASにリクエスト送信中...");
     const res = await fetch(GAS_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({ mode: "analyze", text: text, category: currentCategory })
+      body: JSON.stringify({ 
+        mode: "analyze", 
+        text: text, 
+        category: currentCategory 
+      })
     });
+
+    console.log("📥 レスポンス受信:", res.status);
 
     if (!res.ok) throw new Error("HTTP error " + res.status);
 
     const data = await res.json();
-    const content = typeof data.content === "string" ? JSON.parse(data.content) : data.content;
+    console.log("📦 受信データ:", data);
+
+    const content = typeof data.content === "string" 
+      ? JSON.parse(data.content) 
+      : data.content;
 
     currentAIResult = content.analysis || "";
-    currentCategory = content.category || "";
+    currentCategory = content.category || currentCategory;
     currentMain = content.main || "";
     currentSub = content.sub || "";
     currentItem = content.item || "";
 
-    aiBox.textContent = currentAIResult;
+    aiBox.textContent = currentAIResult || "分析結果が空です";
     decisionBox.style.display = "block";
+
+    console.log("✅ AI分析完了");
+
   } catch (e) {
-    console.error(e);
-    aiBox.textContent = "AIとの通信でエラーが発生しました。";
+    console.error("❌ AI壁打ちエラー:", e);
+    aiBox.textContent = "AIとの通信でエラーが発生しました。\n" + e.message;
   }
 }
 
