@@ -160,7 +160,7 @@ async function runAI() {
   try {
     const res = await fetch(GAS_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify({
         mode: "analyze",
         text: text,
@@ -195,7 +195,7 @@ async function confirmSummary() {
   try {
     const res = await fetch(GAS_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+     headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify({
         mode: "summarize",
         text: currentIdeaText,
@@ -236,7 +236,7 @@ async function sendToPR() {
   try {
     const res = await fetch(GAS_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+     headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify({
         mode: "save",
         category: currentCategory,
@@ -276,8 +276,7 @@ async function loadPRList() {
   try {
     const res = await fetch(`${GAS_URL}?mode=list`, {
       method: "GET",
-      headers: { "Content-Type": "application/json" }
-    });
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
 
     const data = await res.json();
 
