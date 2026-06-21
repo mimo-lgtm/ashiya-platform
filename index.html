@@ -520,33 +520,34 @@ textarea:focus{
   </div>
 
   <!-- ★ 2カラムレイアウト開始 -->
-  <div class="assistant-layout">
+<div class="assistant-layout">
+  <!-- 左側：入力エリア -->
+  <div class="assistant-card input-side">
+    <h2>あなたの考えを聞かせてください</h2>
+    <div class="category-bar">...</div>
+    <textarea id="userInput" rows="12" placeholder="芦屋市について思っていることを自由に書いてください..."></textarea>
 
-    <!-- 入力エリア（左カラム） -->
-<div class="assistant-card">
-  <h2>あなたの考えを聞かせてください</h2>
-  
-  <div class="category-bar">
-    <!-- カテゴリボタン（そのまま） -->
+    <div class="button-area" id="buttonArea">
+      <button class="big-button primary" onclick="runAI()">🤖 AI壁打ちを実行する</button>
+    </div>
   </div>
 
-  <textarea id="userInput" rows="10" placeholder="芦屋市について思っていることを自由に書いてください..."></textarea>
+  <!-- 右側：結果エリア -->
+  <div class="assistant-card result-side">
+    <h2>AIからの整理結果</h2>
+    <div id="aiResult" class="result-box"></div>
 
-  <!-- ボタンエリア（動的に制御） -->
-  <div class="button-area" id="buttonArea">
-    <!-- 最初はこれだけ表示 -->
-    <button class="big-button primary" onclick="runAI()">🤖 AI壁打ちを実行する</button>
-  </div>
-
-  <!-- AI分析結果 -->
-  <div id="aiResult" class="result-box"></div>
-
-  <!-- 要約・タイトル結果エリア -->
-  <div id="summaryArea" class="summary-block" style="display:none;">
-    <h3>200字要約</h3>
-    <div id="summaryBox" class="summary-box"></div>
-    <h3>推奨タイトル</h3>
-    <div id="titleBox" class="title-box"></div>
+    <!-- 要約・タイトルエリア -->
+    <div id="summaryArea" class="summary-block" style="display:none;">
+      <h3>200字要約</h3>
+      <div id="summaryBox" class="summary-box"></div>
+      
+      <h3>推奨タイトル</h3>
+      <div id="titleBox" class="title-box"></div>
+      
+      <h3>分類結果</h3>
+      <div id="categoryResult" class="category-result"></div>
+    </div>
   </div>
 </div>
 
