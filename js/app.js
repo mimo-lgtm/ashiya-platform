@@ -147,8 +147,10 @@ function initCategoryButtons() {
 async function runAI() {
   const textarea = document.getElementById("userInput");
   const aiResult = document.getElementById("aiResult");
+  const summaryArea = document.getElementById("summaryArea");
+  const buttonArea = document.getElementById("buttonArea");
 
-  if (!textarea || !aiResult) return;
+  if (!textarea) return;
 
   const text = textarea.value.trim();
   if (!text) {
@@ -158,6 +160,7 @@ async function runAI() {
 
   currentIdeaText = text;
   aiResult.textContent = "AIが分析しています…";
+  summaryArea.style.display = "none";
 
   try {
     const res = await fetch(GAS_URL, {
@@ -166,42 +169,41 @@ async function runAI() {
       body: JSON.stringify({ mode: "analyze", text: text, category: currentCategory })
     });
 
-    const responseText = await res.text();
-    let data = JSON.parse(responseText);
-
-    if (data.error) throw new Error(data.error);
-
-    let contentStr = data.content;
-    // 念のためコードブロック除去
-    contentStr = contentStr.replace(/```json\s*|\s*```/g, "").trim();
-
-    const content = JSON.parse(contentStr);
+    const data = await res.json();
+    const content = typeof data.content === "string" ? JSON.parse(data.content) : data.content;
 
     currentAIResult = content.analysis || "";
     currentSub = content.sub || "";
     currentItem = content.item || "";
 
-    aiResult.innerHTML = `<strong>【分析結果】</strong><br>${currentAIResult}`;
+    aiResult.innerHTML = `<strong>【AI分析結果】</strong><br>${currentAIResult}`;
+
+    // 分析完了後 → 200字要約ボタンを表示
+    buttonArea.innerHTML = `
+      <button class="big-button success" onclick="confirmSummary()">📝 200字要約を作成する</button>
+    `;
 
   } catch (e) {
     console.error(e);
-    aiResult.textContent = "エラーが発生しました: " + e.message;
+    aiResult.textContent = "エラーが発生しました。";
   }
 }
 
-// ======================= 200字要約 + タイトル =======================
+// ======================= 200字要約 =======================
 async function confirmSummary() {
+  const summaryArea = document.getElementById("summaryArea");
   const summaryBox = document.getElementById("summaryBox");
   const titleBox = document.getElementById("titleBox");
-  const aiResult = document.getElementById("aiResult");
+  const buttonArea = document.getElementById("buttonArea");
 
   if (!currentIdeaText || !currentAIResult) {
-    alert("まず「AI壁打ちを実行する」を押してください。");
+    alert("まずAI壁打ちを実行してください。");
     return;
   }
 
-  if (summaryBox) summaryBox.textContent = "AIが要約を生成しています...";
-  if (titleBox) titleBox.textContent = "タイトルを生成しています...";
+  summaryBox.textContent = "生成中...";
+  titleBox.textContent = "生成中...";
+  summaryArea.style.display = "block";
 
   try {
     const res = await fetch(GAS_URL, {
@@ -216,31 +218,44 @@ async function confirmSummary() {
     });
 
     const data = await res.json();
-    const content = typeof data.content === "string" 
-      ? JSON.parse(data.content) 
-      : data.content;
+    const content = typeof data.content === "string" ? JSON.parse(data.content) : data.content;
 
     currentSummary200 = content.summary200 || "";
     currentTitle = content.title || "";
 
-    if (summaryBox) summaryBox.textContent = currentSummary200;
-    if (titleBox) titleBox.textContent = currentTitle;
+    summaryBox.textContent = currentSummary200;
+    titleBox.textContent = currentTitle;
 
-    console.log("✅ 要約・タイトル生成完了");
+    // 要約完了後 → 最終分岐ボタン表示
+    buttonArea.innerHTML = `
+      <button class="big-button accent" onclick="sendToPR()">🚀 この内容でPRに登録する</button>
+      <button class="big-button" onclick="resetToInput()" style="background:#6b7280;">✍️ 再度意見を追加する</button>
+    `;
 
   } catch (e) {
     console.error(e);
     alert("要約生成でエラーが発生しました。");
   }
 }
+// ======================= リセット（再度意見追加） =======================
+function resetToInput() {
+  document.getElementById("userInput").value = currentIdeaText; // 前の入力内容を残す
+  document.getElementById("aiResult").innerHTML = "";
+  document.getElementById("summaryArea").style.display = "none";
+  
+  document.getElementById("buttonArea").innerHTML = `
+    <button class="big-button primary" onclick="runAI()">🤖 AI壁打ちを実行する</button>
+  `;
+}
+
 // ======================= PR投稿 =======================
 async function sendToPR() {
   if (!currentSummary200 || !currentTitle) {
-    alert("200字要約とタイトル生成を完了させてください。");
+    alert("要約まで完了させてください。");
     return;
   }
 
-  const ok = confirm("この内容でPRに投稿します。よろしいですか？");
+  const ok = confirm("この内容でPRに投稿しますか？");
   if (!ok) return;
 
   try {
@@ -262,21 +277,9 @@ async function sendToPR() {
 
     if (data.status === "ok") {
       alert("✅ PRに投稿しました！");
-
-      // リセット
-      document.getElementById("userInput").value = "";
-      if (document.getElementById("aiResult")) {
-        document.getElementById("aiResult").innerHTML = "結果はここに表示されます。（最大500文字）";
-      }
-      if (document.getElementById("summaryBox")) document.getElementById("summaryBox").textContent = "";
-      if (document.getElementById("titleBox")) document.getElementById("titleBox").textContent = "";
-
-      currentSummary200 = currentTitle = currentAIResult = "";
-
-      // PRページに移動して一覧を更新
-      showPage("pullrequest");
+      resetToInput(); // 入力画面に戻る
+      showPage("pullrequest"); // PRページへ移動
     }
-
   } catch (e) {
     console.error(e);
     alert("投稿に失敗しました。");
