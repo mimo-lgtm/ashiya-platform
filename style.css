@@ -542,3 +542,15 @@ textarea:focus{
   font-size: 0.95em;
   line-height: 1.5;
 }
+
+/* ================= PR 投稿ステータス（統合/未統合） ================= */
+.pr-title-unmerged {
+  color: #dc2626; /* 赤：未統合 */
+}
+.pr-title-merged {
+  color: #2563eb; /* 青：統合済み */
+}
+.category-result {
+  font-size: 0.95em;
+  line-height: 1.6;
+}
