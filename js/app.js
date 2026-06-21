@@ -1,5 +1,5 @@
 // ======================= 設定 =======================
-const GAS_URL = "https://script.google.com/macros/s/AKfycbwdcncpSc4JIxmZq2chvjO3XEN6MLGPFTM2-lwG4w7bzD3ijCM9p0z93ZnT3gtDl4vSjA/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbwosfdwlikSiO-IOW4o8OrJdk2nrpBTJXDCOz7emHXSa-J1got0QSeTkXp-ce45yLpa5Q/exec";
 
 // ======================= 状態管理 =======================
 let currentCategory = "① 芦屋市の価値向上（ブランド・移住促進）";
