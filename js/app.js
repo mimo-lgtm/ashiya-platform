@@ -1,6 +1,6 @@
 // ======================= 設定 =======================
 // ★修正点: URLの途中で改行が入っていたため構文エラーになっていました（1行に修正）
-const GAS_URL = "https://script.google.com/macros/s/AKfycbwTyVEty6HgulcxZNhN8RL384v06oWauQXU1IYcFtfbyMBXc21aH_fSQI1eXbxqoSRvXQ/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbxG6l3mlYY5txIL9OhsRBsIwrbYKG1AEBmnEiwTT4loQyBn8QrHAdOvdNLc1U-bwQ79/exec";
 
 // ======================= 分類タクソノミー（固定） =======================
 // 大分類は固定。中分類・小分類は一致しないものを「その他」に振り分けます。
@@ -427,19 +427,24 @@ function renderPRList(rows) {
       };
 
       items.forEach(row => {
-        const isMerged = row.status === "統合済み";
+        // status: "未統合"（通常）/ "統合済み"（他の投稿に統合された元投稿）/ "統合"（AIが生成した統合エントリ本体）
+        const isMergedSource = row.status === "統合済み";
+        const isMergedResult = row.status === "統合";
+        const isMerged = isMergedSource || isMergedResult;
+
         const itemBlock = document.createElement("div");
         itemBlock.className = "pr-item";
 
         const titleEl = document.createElement("div");
         titleEl.className = "pr-title " + (isMerged ? "pr-title-merged" : "pr-title-unmerged");
-        titleEl.textContent = (row.title || "(無題)") + (isMerged ? "（統合済み）" : "（未統合）");
+        const badge = isMergedSource ? "（統合済み）" : isMergedResult ? "（AIによる統合）" : "（未統合）";
+        titleEl.textContent = (row.title || "(無題)") + badge;
 
         const summaryEl = document.createElement("div");
         summaryEl.className = "pr-summary";
         summaryEl.style.display = "none";
         summaryEl.textContent = row.summary200 || "";
-        if (isMerged && row.mergedInto) {
+        if (isMergedSource && row.mergedInto) {
           const mergedNote = document.createElement("div");
           mergedNote.style.cssText = "margin-top:6px;font-size:0.85em;color:#2563eb;";
           mergedNote.textContent = "→ 統合先：" + row.mergedInto;
