@@ -1,6 +1,6 @@
 // ======================= 設定 =======================
 // ★修正点: URLの途中で改行が入っていたため構文エラーになっていました（1行に修正）
-const GAS_URL = "https://script.google.com/macros/s/AKfycbxG6l3mlYY5txIL9OhsRBsIwrbYKG1AEBmnEiwTT4loQyBn8QrHAdOvdNLc1U-bwQ79/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbwQAVSj_yqYLN_djNexwMAkt5vo45anO6RyTPgsJbbZNzJ17wGcfVDP_3XewYgZukbwZw/exec";
 
 // ======================= 分類タクソノミー（固定） =======================
 // 大分類は固定。中分類・小分類は一致しないものを「その他」に振り分けます。
