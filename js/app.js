@@ -1,5 +1,5 @@
 // ======================= 設定 =======================
-const GAS_URL = "https://script.google.com/macros/s/AKfycbzMyP8oWH9zul1lTkMO8dtyGltqHn5d5pMY2uNNsOqlVvgoo3TTUAku6PbmEc7fcIJXLg/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbzo6_4RHTO4IqhiAwghkBR6746Qidz4-wll7Efoe1FTXfoycQa9Y_mAhsaAdYfIsuF5Og/exec";
 
 // ======================= 状態管理 =======================
 let currentCategory = "① 芦屋市の価値向上（ブランド・移住促進）";
@@ -148,6 +148,8 @@ async function runAI() {
   const textarea = document.getElementById("userInput");
   const aiResult = document.getElementById("aiResult");
 
+  if (!textarea || !aiResult) return;
+
   const text = textarea.value.trim();
   if (!text) {
     alert("意見を入力してください。");
@@ -155,30 +157,35 @@ async function runAI() {
   }
 
   currentIdeaText = text;
-  aiResult.textContent = "AIが整理しています…";
+  aiResult.textContent = "AIが分析しています…";
 
   try {
     const res = await fetch(GAS_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({
-        mode: "analyze",
-        text: text,
-        category: currentCategory
-      })
+      body: JSON.stringify({ mode: "analyze", text: text, category: currentCategory })
     });
 
-    const data = await res.json();
-    const content = JSON.parse(data.content);
+    const responseText = await res.text();
+    let data = JSON.parse(responseText);
 
-    currentAIResult = content.analysis;
-    currentSub = content.sub;
-    currentItem = content.item;
+    if (data.error) throw new Error(data.error);
 
-    aiResult.textContent = currentAIResult;
+    let contentStr = data.content;
+    // 念のためコードブロック除去
+    contentStr = contentStr.replace(/```json\s*|\s*```/g, "").trim();
+
+    const content = JSON.parse(contentStr);
+
+    currentAIResult = content.analysis || "";
+    currentSub = content.sub || "";
+    currentItem = content.item || "";
+
+    aiResult.innerHTML = `<strong>【分析結果】</strong><br>${currentAIResult}`;
 
   } catch (e) {
-    aiResult.textContent = "エラーが発生しました:\n" + e.message;
+    console.error(e);
+    aiResult.textContent = "エラーが発生しました: " + e.message;
   }
 }
 
