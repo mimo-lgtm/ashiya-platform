@@ -470,4 +470,22 @@ textarea:focus{
     width:100%;
   }
 }
+.button-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.big-button {
+  flex: 1;
+  min-width: 220px;
+  padding: 14px 20px;
+  font-size: 1.1em;
+  border-radius: 8px;
+}
+
+.primary { background: #3b82f6; }
+.success { background: #10b981; }
+.accent { background: #8b5cf6; }
 
