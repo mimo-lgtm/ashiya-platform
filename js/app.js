@@ -361,3 +361,24 @@ window.onload = function() {
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
   document.getElementById("intro").classList.add("active");
 };
+
+// ======================= PR詳細表示 =======================
+let prDataCache = [];
+
+function showPRDetail(index) {
+  const item = prDataCache[index];
+  if (!item) return;
+
+  const detailHTML = `
+    <div style="padding:20px; background:white;">
+      <button onclick="loadPRList(); showPage('pullrequest')" style="margin-bottom:15px;">← 一覧に戻る</button>
+      <h2>${item.title || '無題'}</h2>
+      <p><strong>カテゴリ:</strong> ${item.category || ''}</p>
+      <p><strong>要約:</strong><br>${item.summary200 || ''}</p>
+      <p><strong>投稿日:</strong> ${item.timestamp ? new Date(item.timestamp).toLocaleString('ja-JP') : ''}</p>
+    </div>
+  `;
+
+  const container = document.getElementById("prList");
+  if (container) container.innerHTML = detailHTML;
+}
