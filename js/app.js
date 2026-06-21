@@ -145,12 +145,15 @@ function initCategoryButtons() {
 
 // ======================= AI壁打ち =======================
 async function runAI() {
+  console.log("🚀 runAI関数が呼ばれました");
+
   const textarea = document.getElementById("userInput");
   const aiResult = document.getElementById("aiResult");
-  const summaryArea = document.getElementById("summaryArea");
-  const buttonArea = document.getElementById("buttonArea");
 
-  if (!textarea) return;
+  if (!textarea) {
+    alert("入力欄が見つかりません");
+    return;
+  }
 
   const text = textarea.value.trim();
   if (!text) {
@@ -159,44 +162,66 @@ async function runAI() {
   }
 
   currentIdeaText = text;
-  aiResult.innerHTML = "<p>AIが分析しています…</p>";
-  summaryArea.style.display = "none";
+  if (aiResult) aiResult.textContent = "AIが整理しています…";
 
   try {
     const res = await fetch(GAS_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({ mode: "analyze", text: text, category: currentCategory })
+      body: JSON.stringify({ 
+        mode: "analyze", 
+        text: text, 
+        category: currentCategory 
+      })
     });
 
-    const data = await res.json();
-    const content = typeof data.content === "string" ? JSON.parse(data.content) : data.content;
+    const responseText = await res.text();
+    console.log("📦 AI分析 生レスポンス:", responseText);
 
-    currentAIResult = content.analysis || "";
-    currentSub = content.sub || "その他";
-    currentItem = content.item || "その他";
+    let data;
+    try {
+      data = JSON.parse(responseText);
+    } catch (e) {
+      throw new Error("GASからの返事がJSON形式ではありません");
+    }
 
-    // 右側に分析結果 + 分類を表示
-    aiResult.innerHTML = `
-      <strong>【AI分析結果】</strong><br>
-      ${currentAIResult}<br><br>
-      <strong>分類結果</strong><br>
-      大分類：${currentCategory}<br>
-      中分類：${currentSub}<br>
-      小分類：${currentItem}
-    `;
+    if (data.error) {
+      throw new Error(data.error);
+    }
 
-    // 200字要約ボタンを表示
-    buttonArea.innerHTML = `
-      <button class="big-button success" onclick="confirmSummary()">📝 200字要約を作成する</button>
-    `;
+    if (!data.content) {
+      throw new Error("AIからの応答がありません");
+    }
+
+    // 安全に解析
+    let content;
+    try {
+      content = typeof data.content === "string" 
+        ? JSON.parse(data.content) 
+        : data.content;
+    } catch (e) {
+      content = { analysis: data.content || "分析結果を取得できませんでした" };
+    }
+
+    currentAIResult = content.analysis || content || "分析結果が空です";
+    currentCategory = content.category || currentCategory;
+    currentMain = content.main || "";
+    currentSub = content.sub || "";
+    currentItem = content.item || "";
+
+    if (aiResult) {
+      aiResult.textContent = currentAIResult;
+    }
+
+    console.log("✅ AI分析完了");
 
   } catch (e) {
-    console.error(e);
-    aiResult.innerHTML = "<p>エラーが発生しました。</p>";
+    console.error("❌ AI壁打ちエラー:", e);
+    if (aiResult) {
+      aiResult.textContent = "エラーが発生しました:\n" + e.message;
+    }
   }
 }
-
 // ======================= 200字要約 =======================
 async function confirmSummary() {
   const summaryBox = document.getElementById("summaryBox");
