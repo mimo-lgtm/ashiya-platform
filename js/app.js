@@ -286,32 +286,73 @@ async function sendToPR() {
 // ======================= PR一覧読み込み =======================
 async function loadPRList() {
   const container = document.getElementById("prList");
+  if (!container) return;
+
   container.innerHTML = "<p>読み込み中...</p>";
 
   try {
-    const res = await fetch(`${GAS_URL}?mode=list`, {
-      method: "GET",
-      headers: { "Content-Type": "text/plain;charset=utf-8" }
-    });
-
+    const res = await fetch(`${GAS_URL}?mode=list`);
     const data = await res.json();
 
-    let html = "";
+    if (!Array.isArray(data)) {
+      container.innerHTML = "<p>投稿がありません。</p>";
+      return;
+    }
+
+    // 大分類ごとにグループ化
+    const grouped = {};
     data.forEach(item => {
-      html += `
-        <div class="pr-item">
-          <div class="pr-category">${item.category || ''}</div>
-          <h3>${item.title || ''}</h3>
-          <p>${item.summary200 || ''}</p>
-          <small>${item.timestamp || ''}</small>
-        </div>
-      `;
+      const cat = item.category || "その他";
+      if (!grouped[cat]) grouped[cat] = [];
+      grouped[cat].push(item);
     });
 
-    container.innerHTML = html || "<p>まだ投稿がありません。</p>";
+    let html = `<h2>すべての投稿一覧 (${data.length}件)</h2>`;
+
+    Object.keys(grouped).forEach(mainCat => {
+      const posts = grouped[mainCat];
+      html += `
+        <div class="accordion-main">
+          <div class="accordion-header" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'block' ? 'none' : 'block'">
+            <strong>${mainCat}</strong> <span class="count">(${posts.length}件)</span>
+          </div>
+          <div class="accordion-body">
+      `;
+
+      // 中分類でさらにグループ化
+      const subGrouped = {};
+      posts.forEach(p => {
+        const sub = p.sub || "その他";
+        if (!subGrouped[sub]) subGrouped[sub] = [];
+        subGrouped[sub].push(p);
+      });
+
+      Object.keys(subGrouped).forEach(subCat => {
+        html += `
+          <div class="sub-category">
+            <strong>${subCat}</strong> (${subGrouped[subCat].length}件)
+            <ul class="pr-items">
+        `;
+        subGrouped[subCat].forEach(item => {
+          html += `
+            <li>
+              <strong>${item.title}</strong><br>
+              ${item.summary200}<br>
+              <small>${item.timestamp}</small>
+            </li>
+          `;
+        });
+        html += `</ul></div>`;
+      });
+
+      html += `</div></div>`;
+    });
+
+    container.innerHTML = html;
 
   } catch (e) {
-    container.innerHTML = "<p>一覧の読み込みに失敗しました。</p>";
+    console.error(e);
+    container.innerHTML = "<p>読み込みに失敗しました。</p>";
   }
 }
 
