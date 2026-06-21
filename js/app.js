@@ -185,12 +185,16 @@ async function runAI() {
 // ======================= 200字要約 + タイトル =======================
 async function confirmSummary() {
   const aiResult = document.getElementById("aiResult");
-  const summaryArea = document.getElementById("summaryArea"); // 必要ならHTMLに追加
+  const summaryBox = document.getElementById("summaryBox");
+  const titleBox = document.getElementById("titleBox");
 
   if (!currentIdeaText || !currentAIResult) {
     alert("まずAI壁打ちを実行してください。");
     return;
   }
+
+  if (summaryBox) summaryBox.textContent = "生成中...";
+  if (titleBox) titleBox.textContent = "生成中...";
 
   try {
     const res = await fetch(GAS_URL, {
@@ -207,36 +211,37 @@ async function confirmSummary() {
     });
 
     const data = await res.json();
-    const content = typeof data.content === "string" ? JSON.parse(data.content) : data.content;
+    const content = typeof data.content === "string" 
+      ? JSON.parse(data.content) 
+      : data.content;
 
     currentSummary200 = content.summary200 || "";
     currentTitle = content.title || "";
 
-    // 結果を表示（HTMLに合わせる）
+    // HTMLのsummaryBoxとtitleBoxに表示
+    if (summaryBox) summaryBox.textContent = currentSummary200;
+    if (titleBox) titleBox.textContent = currentTitle;
+
+    // 分析結果も更新
     if (aiResult) {
-      aiResult.innerHTML = `
-        <strong>【分析結果】</strong><br>${currentAIResult}<br><br>
-        <strong>【200字要約】</strong><br>${currentSummary200}<br><br>
-        <strong>【推奨タイトル】</strong><br>${currentTitle}
-      `;
+      aiResult.innerHTML = `<strong>【分析結果】</strong><br>${currentAIResult}`;
     }
 
-    alert("200字要約とタイトルを生成しました！\n内容を確認して「PRに投稿する」を押してください。");
+    console.log("✅ 要約・タイトル生成完了");
 
   } catch (e) {
     console.error(e);
     alert("要約生成でエラーが発生しました。");
   }
 }
-
 // ======================= PR投稿 =======================
 async function sendToPR() {
   if (!currentSummary200 || !currentTitle) {
-    alert("200字要約まで完了させてください。");
+    alert("200字要約とタイトル生成を完了させてください。");
     return;
   }
 
-  const ok = confirm("この内容でPRに投稿しますか？");
+  const ok = confirm("この内容でPRに投稿します。よろしいですか？");
   if (!ok) return;
 
   try {
@@ -250,20 +255,29 @@ async function sendToPR() {
         summary200: currentSummary200,
         fullText: currentIdeaText,
         item: currentItem || "",
-        sub: currentSub || "",
-        userName: ""  // 必要なら追加
+        sub: currentSub || ""
       })
     });
 
     const data = await res.json();
 
     if (data.status === "ok") {
-      alert("投稿完了しました！");
-      // 入力欄リセット
+      alert("✅ PRに投稿しました！");
+
+      // リセット
       document.getElementById("userInput").value = "";
-      document.getElementById("aiResult").innerHTML = "結果はここに表示されます。";
-      currentSummary200 = currentTitle = "";
+      if (document.getElementById("aiResult")) {
+        document.getElementById("aiResult").innerHTML = "結果はここに表示されます。（最大500文字）";
+      }
+      if (document.getElementById("summaryBox")) document.getElementById("summaryBox").textContent = "";
+      if (document.getElementById("titleBox")) document.getElementById("titleBox").textContent = "";
+
+      currentSummary200 = currentTitle = currentAIResult = "";
+
+      // PRページに移動して一覧を更新
+      showPage("pullrequest");
     }
+
   } catch (e) {
     console.error(e);
     alert("投稿に失敗しました。");
