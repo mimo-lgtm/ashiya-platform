@@ -296,7 +296,7 @@ async function sendToPR() {
   }
 }
 
-// ======================= PR一覧（改善版） =======================
+// ======================= PR一覧読み込み（改善版） =======================
 async function loadPRList() {
   const container = document.getElementById("prList");
   if (!container) return;
@@ -304,77 +304,38 @@ async function loadPRList() {
   container.innerHTML = "<p>読み込み中...</p>";
 
   try {
-    const res = await fetch(`${GAS_URL}?mode=list`);
+    const res = await fetch(`${GAS_URL}?mode=list`, {
+      method: "GET",
+      headers: { "Content-Type": "text/plain;charset=utf-8" }
+    });
+
+    if (!res.ok) throw new Error("HTTP error " + res.status);
+
     const data = await res.json();
 
-    if (!Array.isArray(data) || data.length === 0) {
+    // データが配列でない場合の対策
+    if (!Array.isArray(data)) {
       container.innerHTML = "<p>まだ投稿がありません。</p>";
       return;
     }
 
-    // 大分類でグループ化
-    const groupedByMain = {};
-    data.forEach(item => {
-      const main = item.category || "その他の分類";
-      if (!groupedByMain[main]) groupedByMain[main] = [];
-      groupedByMain[main].push(item);
-    });
+    let html = `<div class="pr-list">`;
 
-    let html = `<h2>すべての市民提案 (${data.length}件)</h2>`;
-
-    Object.keys(groupedByMain).sort().forEach(mainCat => {
-      const postsInMain = groupedByMain[mainCat];
-      const mainCount = postsInMain.length;
-
+    data.forEach((item, index) => {
+      const timestamp = item.timestamp ? new Date(item.timestamp).toLocaleDateString('ja-JP') : '';
+      
       html += `
-        <div class="pr-main-category">
-          <div class="pr-main-header">
-            <strong>${mainCat}</strong>
-            <span class="count-badge">${mainCount}件</span>
-          </div>
-          <div class="pr-main-body">
+        <div class="pr-item" onclick="showPRDetail(${index})" style="cursor:pointer;">
+          <div class="pr-category">${item.category || '未分類'}</div>
+          <h3>${item.title || '無題'}</h3>
+          <p class="pr-summary">${item.summary200 || ''}</p>
+          <small>${timestamp}</small>
+        </div>
       `;
-
-      // 中分類でさらにグループ化
-      const groupedBySub = {};
-      postsInMain.forEach(post => {
-        const sub = post.sub || "その他";
-        if (!groupedBySub[sub]) groupedBySub[sub] = [];
-        groupedBySub[sub].push(post);
-      });
-
-      Object.keys(groupedBySub).forEach(subCat => {
-        const posts = groupedBySub[subCat];
-        html += `
-          <div class="pr-sub-category">
-            <div class="pr-sub-header" onclick="toggleAccordion(this)">
-              <span>${subCat}</span>
-              <span class="count-badge small">${posts.length}件</span>
-            </div>
-            <div class="pr-sub-body">
-        `;
-
-        posts.forEach(post => {
-          html += `
-            <div class="pr-item">
-              <div class="pr-title" onclick="toggleSummary(this)">
-                ${post.title}
-              </div>
-              <div class="pr-summary" style="display:none;">
-                ${post.summary200}
-                <small>${post.timestamp || ''}</small>
-              </div>
-            </div>
-          `;
-        });
-
-        html += `</div></div>`;
-      });
-
-      html += `</div></div>`;
     });
 
-    container.innerHTML = html;
+    html += `</div>`;
+    container.innerHTML = html || "<p>まだ投稿がありません。</p>";
 
   } catch (e) {
     console.error(e);
