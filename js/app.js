@@ -184,17 +184,17 @@ async function runAI() {
 
 // ======================= 200字要約 + タイトル =======================
 async function confirmSummary() {
-  const aiResult = document.getElementById("aiResult");
   const summaryBox = document.getElementById("summaryBox");
   const titleBox = document.getElementById("titleBox");
+  const aiResult = document.getElementById("aiResult");
 
   if (!currentIdeaText || !currentAIResult) {
-    alert("まずAI壁打ちを実行してください。");
+    alert("まず「AI壁打ちを実行する」を押してください。");
     return;
   }
 
-  if (summaryBox) summaryBox.textContent = "生成中...";
-  if (titleBox) titleBox.textContent = "生成中...";
+  if (summaryBox) summaryBox.textContent = "AIが要約を生成しています...";
+  if (titleBox) titleBox.textContent = "タイトルを生成しています...";
 
   try {
     const res = await fetch(GAS_URL, {
@@ -204,9 +204,7 @@ async function confirmSummary() {
         mode: "summarize",
         text: currentIdeaText,
         analysis: currentAIResult,
-        category: currentCategory,
-        sub: currentSub || "",
-        item: currentItem || ""
+        category: currentCategory
       })
     });
 
@@ -218,14 +216,8 @@ async function confirmSummary() {
     currentSummary200 = content.summary200 || "";
     currentTitle = content.title || "";
 
-    // HTMLのsummaryBoxとtitleBoxに表示
     if (summaryBox) summaryBox.textContent = currentSummary200;
     if (titleBox) titleBox.textContent = currentTitle;
-
-    // 分析結果も更新
-    if (aiResult) {
-      aiResult.innerHTML = `<strong>【分析結果】</strong><br>${currentAIResult}`;
-    }
 
     console.log("✅ 要約・タイトル生成完了");
 
