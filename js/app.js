@@ -159,7 +159,7 @@ async function runAI() {
   }
 
   currentIdeaText = text;
-  aiResult.textContent = "AIが分析しています…";
+  aiResult.innerHTML = "<p>AIが分析しています…</p>";
   summaryArea.style.display = "none";
 
   try {
@@ -173,19 +173,27 @@ async function runAI() {
     const content = typeof data.content === "string" ? JSON.parse(data.content) : data.content;
 
     currentAIResult = content.analysis || "";
-    currentSub = content.sub || "";
-    currentItem = content.item || "";
+    currentSub = content.sub || "その他";
+    currentItem = content.item || "その他";
 
-    aiResult.innerHTML = `<strong>【AI分析結果】</strong><br>${currentAIResult}`;
+    // 右側に分析結果 + 分類を表示
+    aiResult.innerHTML = `
+      <strong>【AI分析結果】</strong><br>
+      ${currentAIResult}<br><br>
+      <strong>分類結果</strong><br>
+      大分類：${currentCategory}<br>
+      中分類：${currentSub}<br>
+      小分類：${currentItem}
+    `;
 
-    // 分析完了後 → 200字要約ボタンを表示
+    // 200字要約ボタンを表示
     buttonArea.innerHTML = `
       <button class="big-button success" onclick="confirmSummary()">📝 200字要約を作成する</button>
     `;
 
   } catch (e) {
     console.error(e);
-    aiResult.textContent = "エラーが発生しました。";
+    aiResult.innerHTML = "<p>エラーが発生しました。</p>";
   }
 }
 
@@ -194,15 +202,9 @@ async function confirmSummary() {
   const summaryArea = document.getElementById("summaryArea");
   const summaryBox = document.getElementById("summaryBox");
   const titleBox = document.getElementById("titleBox");
+  const categoryResult = document.getElementById("categoryResult");
   const buttonArea = document.getElementById("buttonArea");
 
-  if (!currentIdeaText || !currentAIResult) {
-    alert("まずAI壁打ちを実行してください。");
-    return;
-  }
-
-  summaryBox.textContent = "生成中...";
-  titleBox.textContent = "生成中...";
   summaryArea.style.display = "block";
 
   try {
@@ -226,7 +228,15 @@ async function confirmSummary() {
     summaryBox.textContent = currentSummary200;
     titleBox.textContent = currentTitle;
 
-    // 要約完了後 → 最終分岐ボタン表示
+    // 分類結果も再表示
+    if (categoryResult) {
+      categoryResult.innerHTML = `
+        大分類：${currentCategory}<br>
+        中分類：${currentSub}<br>
+        小分類：${currentItem}
+      `;
+    }
+
     buttonArea.innerHTML = `
       <button class="big-button accent" onclick="sendToPR()">🚀 この内容でPRに登録する</button>
       <button class="big-button" onclick="resetToInput()" style="background:#6b7280;">✍️ 再度意見を追加する</button>
