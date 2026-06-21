@@ -296,7 +296,7 @@ async function sendToPR() {
   }
 }
 
-// ======================= PR一覧読み込み =======================
+// ======================= PR一覧（改善版） =======================
 async function loadPRList() {
   const container = document.getElementById("prList");
   if (!container) return;
@@ -307,55 +307,68 @@ async function loadPRList() {
     const res = await fetch(`${GAS_URL}?mode=list`);
     const data = await res.json();
 
-    if (!Array.isArray(data)) {
-      container.innerHTML = "<p>投稿がありません。</p>";
+    if (!Array.isArray(data) || data.length === 0) {
+      container.innerHTML = "<p>まだ投稿がありません。</p>";
       return;
     }
 
-    // 大分類ごとにグループ化
-    const grouped = {};
+    // 大分類でグループ化
+    const groupedByMain = {};
     data.forEach(item => {
-      const cat = item.category || "その他";
-      if (!grouped[cat]) grouped[cat] = [];
-      grouped[cat].push(item);
+      const main = item.category || "その他の分類";
+      if (!groupedByMain[main]) groupedByMain[main] = [];
+      groupedByMain[main].push(item);
     });
 
-    let html = `<h2>すべての投稿一覧 (${data.length}件)</h2>`;
+    let html = `<h2>すべての市民提案 (${data.length}件)</h2>`;
 
-    Object.keys(grouped).forEach(mainCat => {
-      const posts = grouped[mainCat];
+    Object.keys(groupedByMain).sort().forEach(mainCat => {
+      const postsInMain = groupedByMain[mainCat];
+      const mainCount = postsInMain.length;
+
       html += `
-        <div class="accordion-main">
-          <div class="accordion-header" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'block' ? 'none' : 'block'">
-            <strong>${mainCat}</strong> <span class="count">(${posts.length}件)</span>
+        <div class="pr-main-category">
+          <div class="pr-main-header">
+            <strong>${mainCat}</strong>
+            <span class="count-badge">${mainCount}件</span>
           </div>
-          <div class="accordion-body">
+          <div class="pr-main-body">
       `;
 
       // 中分類でさらにグループ化
-      const subGrouped = {};
-      posts.forEach(p => {
-        const sub = p.sub || "その他";
-        if (!subGrouped[sub]) subGrouped[sub] = [];
-        subGrouped[sub].push(p);
+      const groupedBySub = {};
+      postsInMain.forEach(post => {
+        const sub = post.sub || "その他";
+        if (!groupedBySub[sub]) groupedBySub[sub] = [];
+        groupedBySub[sub].push(post);
       });
 
-      Object.keys(subGrouped).forEach(subCat => {
+      Object.keys(groupedBySub).forEach(subCat => {
+        const posts = groupedBySub[subCat];
         html += `
-          <div class="sub-category">
-            <strong>${subCat}</strong> (${subGrouped[subCat].length}件)
-            <ul class="pr-items">
+          <div class="pr-sub-category">
+            <div class="pr-sub-header" onclick="toggleAccordion(this)">
+              <span>${subCat}</span>
+              <span class="count-badge small">${posts.length}件</span>
+            </div>
+            <div class="pr-sub-body">
         `;
-        subGrouped[subCat].forEach(item => {
+
+        posts.forEach(post => {
           html += `
-            <li>
-              <strong>${item.title}</strong><br>
-              ${item.summary200}<br>
-              <small>${item.timestamp}</small>
-            </li>
+            <div class="pr-item">
+              <div class="pr-title" onclick="toggleSummary(this)">
+                ${post.title}
+              </div>
+              <div class="pr-summary" style="display:none;">
+                ${post.summary200}
+                <small>${post.timestamp || ''}</small>
+              </div>
+            </div>
           `;
         });
-        html += `</ul></div>`;
+
+        html += `</div></div>`;
       });
 
       html += `</div></div>`;
@@ -365,10 +378,20 @@ async function loadPRList() {
 
   } catch (e) {
     console.error(e);
-    container.innerHTML = "<p>読み込みに失敗しました。</p>";
+    container.innerHTML = "<p>一覧の読み込みに失敗しました。</p>";
   }
 }
 
+// アコーディオン開閉用関数
+function toggleAccordion(el) {
+  const body = el.nextElementSibling;
+  body.style.display = body.style.display === "block" ? "none" : "block";
+}
+
+function toggleSummary(el) {
+  const summary = el.nextElementSibling;
+  summary.style.display = summary.style.display === "block" ? "none" : "block";
+}
 // ======================= 初期化 =======================
 window.onload = function() {
   initLogicTree();
