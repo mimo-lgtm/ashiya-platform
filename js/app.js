@@ -296,7 +296,7 @@ async function sendToPR() {
   }
 }
 
-// ======================= PR一覧読み込み（改善版） =======================
+// ======================= PR一覧読み込み（見やすく改善版） =======================
 async function loadPRList() {
   const container = document.getElementById("prList");
   if (!container) return;
@@ -309,33 +309,30 @@ async function loadPRList() {
       headers: { "Content-Type": "text/plain;charset=utf-8" }
     });
 
-    if (!res.ok) throw new Error("HTTP error " + res.status);
+    if (!res.ok) throw new Error("HTTP error");
 
     const data = await res.json();
+    prDataCache = Array.isArray(data) ? data : [];
 
-    // データが配列でない場合の対策
-    if (!Array.isArray(data)) {
+    if (prDataCache.length === 0) {
       container.innerHTML = "<p>まだ投稿がありません。</p>";
       return;
     }
 
-    let html = `<div class="pr-list">`;
-
-    data.forEach((item, index) => {
-      const timestamp = item.timestamp ? new Date(item.timestamp).toLocaleDateString('ja-JP') : '';
-      
+    let html = '<div class="pr-list">';
+    prDataCache.forEach((item, index) => {
+      const date = item.timestamp ? new Date(item.timestamp).toLocaleDateString('ja-JP') : '';
       html += `
-        <div class="pr-item" onclick="showPRDetail(${index})" style="cursor:pointer;">
-          <div class="pr-category">${item.category || '未分類'}</div>
-          <h3>${item.title || '無題'}</h3>
-          <p class="pr-summary">${item.summary200 || ''}</p>
-          <small>${timestamp}</small>
+        <div class="pr-item" onclick="showPRDetail(${index})" style="cursor: pointer; padding: 15px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 8px; background: #f9f9f9;">
+          <div style="color: #2563eb; font-weight: bold;">${item.category || '未分類'}</div>
+          <h3 style="margin: 8px 0;">${item.title || '無題'}</h3>
+          <p style="margin: 6px 0; line-height: 1.4;">${item.summary200 || ''}</p>
+          <small style="color: #666;">${date}</small>
         </div>
       `;
     });
-
-    html += `</div>`;
-    container.innerHTML = html || "<p>まだ投稿がありません。</p>";
+    html += '</div>';
+    container.innerHTML = html;
 
   } catch (e) {
     console.error(e);
@@ -369,16 +366,21 @@ function showPRDetail(index) {
   const item = prDataCache[index];
   if (!item) return;
 
+  const container = document.getElementById("prList");
+  if (!container) return;
+
   const detailHTML = `
-    <div style="padding:20px; background:white;">
-      <button onclick="loadPRList(); showPage('pullrequest')" style="margin-bottom:15px;">← 一覧に戻る</button>
-      <h2>${item.title || '無題'}</h2>
-      <p><strong>カテゴリ:</strong> ${item.category || ''}</p>
-      <p><strong>要約:</strong><br>${item.summary200 || ''}</p>
-      <p><strong>投稿日:</strong> ${item.timestamp ? new Date(item.timestamp).toLocaleString('ja-JP') : ''}</p>
+    <div style="padding: 20px; background: white; border-radius: 8px;">
+      <button onclick="loadPRList(); showPage('pullrequest')" style="padding: 8px 16px; margin-bottom: 20px;">← 一覧に戻る</button>
+      
+      <div style="color: #2563eb; font-weight: bold; margin-bottom: 10px;">${item.category || ''}</div>
+      <h2 style="margin-top: 0;">${item.title || '無題'}</h2>
+      
+      <p style="line-height: 1.6; font-size: 15px;">${item.summary200 || ''}</p>
+      
+      <small style="color: #666;">投稿日: ${item.timestamp ? new Date(item.timestamp).toLocaleString('ja-JP') : ''}</small>
     </div>
   `;
 
-  const container = document.getElementById("prList");
-  if (container) container.innerHTML = detailHTML;
+  container.innerHTML = detailHTML;
 }
