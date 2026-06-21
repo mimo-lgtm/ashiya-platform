@@ -523,29 +523,23 @@ textarea:focus{
   <div class="assistant-layout">
 
     <!-- 入力エリア（左カラム） -->
-    <div class="assistant-card">
-      <h2>あなたの考えを聞かせてください</h2>
+<div class="assistant-card">
+  <h2>あなたの考えを聞かせてください</h2>
+  
+  <!-- カテゴリーバー -->
+  <div class="category-bar">
+    <!-- 既存のカテゴリボタン -->
+  </div>
 
-      <div class="category-bar">
-        <button class="cat-btn" data-cat="① 芦屋市の価値向上">① 価値向上</button>
-        <button class="cat-btn" data-cat="② 市民ベネフィット">② ベネフィット</button>
-        <button class="cat-btn" data-cat="③ 財政持続可能性">③ 財政</button>
-        <button class="cat-btn" data-cat="④ 施設の戦略性">④ 戦略性</button>
-        <button class="cat-btn" data-cat="⑤ 都市の強靭性とガバナンス">⑤ 都市強靭性</button>
-      </div>
+  <textarea id="userInput" rows="8" placeholder="駅前公共施設について、思いついたことをそのまま書いてみてください。"></textarea>
 
-      <p>あなたの考えを自由に書いてください。</p>
-      <textarea id="userInput" placeholder="駅前公共施設について、思いついたことをそのまま書いてみてください。"></textarea>
-
-      <button class="big-button" onclick="runAI()">AI壁打ちを実行する</button>
-      <button class="big-button" onclick="runAI()">AI壁打ちを実行する</button>
-
-<!-- ★★★ ここに追加 ★★★ -->
-<button class="big-button" onclick="confirmSummary()" style="background:#10b981; margin-left:10px;">200字要約を作成する</button>
-
-<button class="big-button" onclick="sendToPR()">PRに投稿する</button>
-      <button class="big-button" onclick="sendToPR()">PRに投稿する</button>
-    </div>
+  <!-- ボタンエリア（改善版） -->
+  <div class="button-group">
+    <button class="big-button primary" onclick="runAI()">🤖 AI壁打ちを実行する</button>
+    <button class="big-button success" onclick="confirmSummary()">📝 200字要約を作成する</button>
+    <button class="big-button accent" onclick="sendToPR()">🚀 PRに投稿する</button>
+  </div>
+</div>
 
     <!-- AI結果エリア（右カラム） -->
     <div class="assistant-card" id="aiBox">
