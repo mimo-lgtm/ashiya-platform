@@ -199,15 +199,16 @@ async function runAI() {
 
 // ======================= 200字要約 =======================
 async function confirmSummary() {
-  const summaryArea = document.getElementById("summaryArea");
   const summaryBox = document.getElementById("summaryBox");
   const titleBox = document.getElementById("titleBox");
-  const categoryResult = document.getElementById("categoryResult");
-  const buttonArea = document.getElementById("buttonArea");
+  const summaryBlock = document.getElementById("summaryBlock");
 
-  summaryArea.style.display = "block";
+  if (summaryBox) summaryBox.textContent = "200字要約を生成しています…";
+  if (titleBox) titleBox.textContent = "タイトルを生成しています…";
 
   try {
+    console.log("📡 要約生成リクエスト送信中...");
+
     const res = await fetch(GAS_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
@@ -219,32 +220,41 @@ async function confirmSummary() {
       })
     });
 
-    const data = await res.json();
-    const content = typeof data.content === "string" ? JSON.parse(data.content) : data.content;
+    const responseText = await res.text();
+    console.log("📦 要約 生レスポンス:", responseText);
 
-    currentSummary200 = content.summary200 || "";
-    currentTitle = content.title || "";
-
-    summaryBox.textContent = currentSummary200;
-    titleBox.textContent = currentTitle;
-
-    // 分類結果も再表示
-    if (categoryResult) {
-      categoryResult.innerHTML = `
-        大分類：${currentCategory}<br>
-        中分類：${currentSub}<br>
-        小分類：${currentItem}
-      `;
+    let data;
+    try {
+      data = JSON.parse(responseText);
+    } catch (e) {
+      throw new Error("GASからの返事がJSONではありません");
     }
 
-    buttonArea.innerHTML = `
-      <button class="big-button accent" onclick="sendToPR()">🚀 この内容でPRに登録する</button>
-      <button class="big-button" onclick="resetToInput()" style="background:#6b7280;">✍️ 再度意見を追加する</button>
-    `;
+    if (data.error) {
+      throw new Error(data.error);
+    }
+
+    if (!data.content) {
+      throw new Error("contentがありません");
+    }
+
+    const content = typeof data.content === "string" 
+      ? JSON.parse(data.content) 
+      : data.content;
+
+    currentSummary200 = content.summary200 || "要約生成に失敗しました";
+    currentTitle = content.title || "タイトル生成に失敗しました";
+
+    if (summaryBox) summaryBox.textContent = currentSummary200;
+    if (titleBox) titleBox.textContent = currentTitle;
+
+    if (summaryBlock) summaryBlock.style.display = "block";
+
+    console.log("✅ 要約生成完了");
 
   } catch (e) {
-    console.error(e);
-    alert("要約生成でエラーが発生しました。");
+    console.error("❌ 要約生成エラー:", e);
+    if (summaryBox) summaryBox.textContent = "要約生成でエラーが発生しました。\n" + e.message;
   }
 }
 // ======================= リセット（再度意見追加） =======================
