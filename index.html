@@ -526,18 +526,27 @@ textarea:focus{
 <div class="assistant-card">
   <h2>あなたの考えを聞かせてください</h2>
   
-  <!-- カテゴリーバー -->
   <div class="category-bar">
-    <!-- 既存のカテゴリボタン -->
+    <!-- カテゴリボタン（そのまま） -->
   </div>
 
-  <textarea id="userInput" rows="8" placeholder="駅前公共施設について、思いついたことをそのまま書いてみてください。"></textarea>
+  <textarea id="userInput" rows="10" placeholder="芦屋市について思っていることを自由に書いてください..."></textarea>
 
-  <!-- ボタンエリア（改善版） -->
-  <div class="button-group">
+  <!-- ボタンエリア（動的に制御） -->
+  <div class="button-area" id="buttonArea">
+    <!-- 最初はこれだけ表示 -->
     <button class="big-button primary" onclick="runAI()">🤖 AI壁打ちを実行する</button>
-    <button class="big-button success" onclick="confirmSummary()">📝 200字要約を作成する</button>
-    <button class="big-button accent" onclick="sendToPR()">🚀 PRに投稿する</button>
+  </div>
+
+  <!-- AI分析結果 -->
+  <div id="aiResult" class="result-box"></div>
+
+  <!-- 要約・タイトル結果エリア -->
+  <div id="summaryArea" class="summary-block" style="display:none;">
+    <h3>200字要約</h3>
+    <div id="summaryBox" class="summary-box"></div>
+    <h3>推奨タイトル</h3>
+    <div id="titleBox" class="title-box"></div>
   </div>
 </div>
 
