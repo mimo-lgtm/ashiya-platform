@@ -1,5 +1,5 @@
 // ======================= 設定 =======================
-const GAS_URL = "https://script.google.com/macros/s/AKfycbxFFYUURkfaCdlNOML3xnFU5kIdUTmJxZ8amJ0a1ExRrYw8cQyvktBnRGjAPWtpyp2ZLA/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbxHLO8tNslKuVIfO_TXvTGBykcmZZll0tWSUULEIVuDHhaMx3GtgXnCEf6Ba3xzn8nRSg/exec";
 
 // ======================= 状態管理 =======================
 let currentCategory = "① 芦屋市の価値向上（ブランド・移住促進）";
@@ -145,15 +145,8 @@ function initCategoryButtons() {
 
 // ======================= AI壁打ち =======================
 async function runAI() {
-  console.log("🚀 runAI関数が呼ばれました");
-
   const textarea = document.getElementById("userInput");
   const aiResult = document.getElementById("aiResult");
-
-  if (!textarea) {
-    alert("入力欄が見つかりません");
-    return;
-  }
 
   const text = textarea.value.trim();
   if (!text) {
@@ -162,78 +155,44 @@ async function runAI() {
   }
 
   currentIdeaText = text;
-  if (aiResult) aiResult.textContent = "AIが整理しています…";
+  aiResult.textContent = "AIが整理しています…";
 
   try {
     const res = await fetch(GAS_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({ 
-        mode: "analyze", 
-        text: text, 
-        category: currentCategory 
+      body: JSON.stringify({
+        mode: "analyze",
+        text: text,
+        category: currentCategory
       })
     });
 
-    const responseText = await res.text();
-    console.log("📦 AI分析 生レスポンス:", responseText);
+    const data = await res.json();
+    const content = JSON.parse(data.content);
 
-    let data;
-    try {
-      data = JSON.parse(responseText);
-    } catch (e) {
-      throw new Error("GASからの返事がJSON形式ではありません");
-    }
+    currentAIResult = content.analysis;
+    currentSub = content.sub;
+    currentItem = content.item;
 
-    if (data.error) {
-      throw new Error(data.error);
-    }
-
-    if (!data.content) {
-      throw new Error("AIからの応答がありません");
-    }
-
-    // 安全に解析
-    let content;
-    try {
-      content = typeof data.content === "string" 
-        ? JSON.parse(data.content) 
-        : data.content;
-    } catch (e) {
-      content = { analysis: data.content || "分析結果を取得できませんでした" };
-    }
-
-    currentAIResult = content.analysis || content || "分析結果が空です";
-    currentCategory = content.category || currentCategory;
-    currentMain = content.main || "";
-    currentSub = content.sub || "";
-    currentItem = content.item || "";
-
-    if (aiResult) {
-      aiResult.textContent = currentAIResult;
-    }
-
-    console.log("✅ AI分析完了");
+    aiResult.textContent = currentAIResult;
 
   } catch (e) {
-    console.error("❌ AI壁打ちエラー:", e);
-    if (aiResult) {
-      aiResult.textContent = "エラーが発生しました:\n" + e.message;
-    }
+    aiResult.textContent = "エラーが発生しました:\n" + e.message;
   }
 }
+
 // ======================= 200字要約 =======================
 async function confirmSummary() {
   const summaryBox = document.getElementById("summaryBox");
   const titleBox = document.getElementById("titleBox");
   const summaryBlock = document.getElementById("summaryBlock");
+  const decisionBox = document.getElementById("decisionBox");
 
-  if (summaryBox) summaryBox.textContent = "200字要約を生成しています…";
-  if (titleBox) titleBox.textContent = "タイトルを生成しています…";
+  summaryBox.textContent = "200字要約を生成しています…";
+  titleBox.textContent = "タイトルを生成しています…";
 
   try {
-    console.log("📡 要約生成リクエスト送信中...");
-
     const res = await fetch(GAS_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
@@ -241,66 +200,37 @@ async function confirmSummary() {
         mode: "summarize",
         text: currentIdeaText,
         analysis: currentAIResult,
-        category: currentCategory
+        category: currentCategory,
+        sub: currentSub,
+        item: currentItem
       })
     });
 
-    const responseText = await res.text();
-    console.log("📦 要約 生レスポンス:", responseText);
+    const data = await res.json();
+    const content = JSON.parse(data.content);
 
-    let data;
-    try {
-      data = JSON.parse(responseText);
-    } catch (e) {
-      throw new Error("GASからの返事がJSONではありません");
-    }
+    currentSummary200 = content.summary200;
+    currentTitle = content.title;
 
-    if (data.error) {
-      throw new Error(data.error);
-    }
+    summaryBox.textContent = currentSummary200;
+    titleBox.textContent = currentTitle;
 
-    if (!data.content) {
-      throw new Error("contentがありません");
-    }
-
-    const content = typeof data.content === "string" 
-      ? JSON.parse(data.content) 
-      : data.content;
-
-    currentSummary200 = content.summary200 || "要約生成に失敗しました";
-    currentTitle = content.title || "タイトル生成に失敗しました";
-
-    if (summaryBox) summaryBox.textContent = currentSummary200;
-    if (titleBox) titleBox.textContent = currentTitle;
-
-    if (summaryBlock) summaryBlock.style.display = "block";
-
-    console.log("✅ 要約生成完了");
+    summaryBlock.style.display = "block";
+    decisionBox.style.display = "none";
 
   } catch (e) {
-    console.error("❌ 要約生成エラー:", e);
-    if (summaryBox) summaryBox.textContent = "要約生成でエラーが発生しました。\n" + e.message;
+    summaryBox.textContent = "要約生成でエラーが発生しました。";
   }
-}
-// ======================= リセット（再度意見追加） =======================
-function resetToInput() {
-  document.getElementById("userInput").value = currentIdeaText; // 前の入力内容を残す
-  document.getElementById("aiResult").innerHTML = "";
-  document.getElementById("summaryArea").style.display = "none";
-  
-  document.getElementById("buttonArea").innerHTML = `
-    <button class="big-button primary" onclick="runAI()">🤖 AI壁打ちを実行する</button>
-  `;
 }
 
 // ======================= PR投稿 =======================
 async function sendToPR() {
-  if (!currentSummary200 || !currentTitle) {
-    alert("要約まで完了させてください。");
+  if (!currentSummary200 || !currentTitle || !currentIdeaText) {
+    alert("AI壁打ちと要約・タイトル生成を完了してください。");
     return;
   }
 
-  const ok = confirm("この内容でPRに投稿しますか？");
+  const ok = confirm("この内容でPULL REQUESTに投稿します。よろしいですか？");
   if (!ok) return;
 
   try {
@@ -313,89 +243,63 @@ async function sendToPR() {
         title: currentTitle,
         summary200: currentSummary200,
         fullText: currentIdeaText,
-        item: currentItem || "",
-        sub: currentSub || ""
+        item: currentItem,
+        sub: currentSub
       })
     });
 
     const data = await res.json();
 
     if (data.status === "ok") {
-      alert("✅ PRに投稿しました！");
-      resetToInput(); // 入力画面に戻る
-      showPage("pullrequest"); // PRページへ移動
+      alert("PULL REQUESTに投稿しました。");
+
+      document.getElementById("userInput").value = "";
+      document.getElementById("aiResult").textContent = "結果はここに表示されます。（最大500文字）";
+      document.getElementById("summaryBlock").style.display = "none";
+      document.getElementById("summaryBox").textContent = "";
+      document.getElementById("titleBox").textContent = "";
+
+      loadPRList();
+      showPage("pullrequest");
     }
+
   } catch (e) {
-    console.error(e);
-    alert("投稿に失敗しました。");
+    alert("GASとの通信でエラーが発生しました。");
   }
 }
 
-// ======================= PR一覧（大分類→中分類アコーディオン形式） =======================
+// ======================= PR一覧読み込み =======================
 async function loadPRList() {
   const container = document.getElementById("prList");
-  if (!container) return;
-
   container.innerHTML = "<p>読み込み中...</p>";
 
   try {
-    const res = await fetch(`${GAS_URL}?mode=list`);
-    if (!res.ok) throw new Error("HTTP error");
+    const res = await fetch(`${GAS_URL}?mode=list`, {
+      method: "GET",
+      headers: { "Content-Type": "text/plain;charset=utf-8" }
+    });
 
     const data = await res.json();
-    if (!Array.isArray(data) || data.length === 0) {
-      container.innerHTML = "<p>まだ投稿がありません。</p>";
-      return;
-    }
 
-    // 大分類ごとにグループ化
-    const grouped = {};
+    let html = "";
     data.forEach(item => {
-      const main = item.category || "その他";
-      if (!grouped[main]) grouped[main] = [];
-      grouped[main].push(item);
-    });
-
-    let html = '<div class="pr-tree">';
-
-    Object.keys(grouped).forEach(mainCat => {
       html += `
-        <div class="pr-main-category">
-          <div class="pr-main-header" onclick="toggleAccordion(this)">
-            <strong>${mainCat}</strong> (${grouped[mainCat].length}件)
-          </div>
-          <div class="pr-main-body" style="display:none;">`;
-
-      grouped[mainCat].forEach(item => {
-        html += `
-          <div class="pr-item" style="margin:8px 0; padding:12px; border-left:4px solid #2563eb;">
-            <h4>${item.title || '無題'}</h4>
-            <p>${item.summary200 || ''}</p>
-            <small>投稿日: ${item.timestamp ? new Date(item.timestamp).toLocaleDateString('ja-JP') : ''}</small>
-          </div>`;
-      });
-
-      html += `</div></div>`;
+        <div class="pr-item">
+          <div class="pr-category">${item.category || ''}</div>
+          <h3>${item.title || ''}</h3>
+          <p>${item.summary200 || ''}</p>
+          <small>${item.timestamp || ''}</small>
+        </div>
+      `;
     });
 
-    html += '</div>';
-    container.innerHTML = html;
+    container.innerHTML = html || "<p>まだ投稿がありません。</p>";
 
   } catch (e) {
-    console.error(e);
-    container.innerHTML = "<p>読み込みに失敗しました。</p>";
+    container.innerHTML = "<p>一覧の読み込みに失敗しました。</p>";
   }
 }
-// アコーディオン開閉用関数
-function toggleAccordion(el) {
-  const body = el.nextElementSibling;
-  body.style.display = body.style.display === "block" ? "none" : "block";
-}
 
-function toggleSummary(el) {
-  const summary = el.nextElementSibling;
-  summary.style.display = summary.style.display === "block" ? "none" : "block";
-}
 // ======================= 初期化 =======================
 window.onload = function() {
   initLogicTree();
@@ -404,29 +308,3 @@ window.onload = function() {
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
   document.getElementById("intro").classList.add("active");
 };
-
-// ======================= PR詳細表示 =======================
-let prDataCache = [];
-
-function showPRDetail(index) {
-  const item = prDataCache[index];
-  if (!item) return;
-
-  const container = document.getElementById("prList");
-  if (!container) return;
-
-  const detailHTML = `
-    <div style="padding: 20px; background: white; border-radius: 8px;">
-      <button onclick="loadPRList(); showPage('pullrequest')" style="padding: 8px 16px; margin-bottom: 20px;">← 一覧に戻る</button>
-      
-      <div style="color: #2563eb; font-weight: bold; margin-bottom: 10px;">${item.category || ''}</div>
-      <h2 style="margin-top: 0;">${item.title || '無題'}</h2>
-      
-      <p style="line-height: 1.6; font-size: 15px;">${item.summary200 || ''}</p>
-      
-      <small style="color: #666;">投稿日: ${item.timestamp ? new Date(item.timestamp).toLocaleString('ja-JP') : ''}</small>
-    </div>
-  `;
-
-  container.innerHTML = detailHTML;
-}
