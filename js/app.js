@@ -296,7 +296,7 @@ async function sendToPR() {
   }
 }
 
-// ======================= PR一覧読み込み（見やすく改善版） =======================
+// ======================= PR一覧（大分類→中分類アコーディオン形式） =======================
 async function loadPRList() {
   const container = document.getElementById("prList");
   if (!container) return;
@@ -304,42 +304,53 @@ async function loadPRList() {
   container.innerHTML = "<p>読み込み中...</p>";
 
   try {
-    const res = await fetch(`${GAS_URL}?mode=list`, {
-      method: "GET",
-      headers: { "Content-Type": "text/plain;charset=utf-8" }
-    });
-
+    const res = await fetch(`${GAS_URL}?mode=list`);
     if (!res.ok) throw new Error("HTTP error");
 
     const data = await res.json();
-    prDataCache = Array.isArray(data) ? data : [];
-
-    if (prDataCache.length === 0) {
+    if (!Array.isArray(data) || data.length === 0) {
       container.innerHTML = "<p>まだ投稿がありません。</p>";
       return;
     }
 
-    let html = '<div class="pr-list">';
-    prDataCache.forEach((item, index) => {
-      const date = item.timestamp ? new Date(item.timestamp).toLocaleDateString('ja-JP') : '';
-      html += `
-        <div class="pr-item" onclick="showPRDetail(${index})" style="cursor: pointer; padding: 15px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 8px; background: #f9f9f9;">
-          <div style="color: #2563eb; font-weight: bold;">${item.category || '未分類'}</div>
-          <h3 style="margin: 8px 0;">${item.title || '無題'}</h3>
-          <p style="margin: 6px 0; line-height: 1.4;">${item.summary200 || ''}</p>
-          <small style="color: #666;">${date}</small>
-        </div>
-      `;
+    // 大分類ごとにグループ化
+    const grouped = {};
+    data.forEach(item => {
+      const main = item.category || "その他";
+      if (!grouped[main]) grouped[main] = [];
+      grouped[main].push(item);
     });
+
+    let html = '<div class="pr-tree">';
+
+    Object.keys(grouped).forEach(mainCat => {
+      html += `
+        <div class="pr-main-category">
+          <div class="pr-main-header" onclick="toggleAccordion(this)">
+            <strong>${mainCat}</strong> (${grouped[mainCat].length}件)
+          </div>
+          <div class="pr-main-body" style="display:none;">`;
+
+      grouped[mainCat].forEach(item => {
+        html += `
+          <div class="pr-item" style="margin:8px 0; padding:12px; border-left:4px solid #2563eb;">
+            <h4>${item.title || '無題'}</h4>
+            <p>${item.summary200 || ''}</p>
+            <small>投稿日: ${item.timestamp ? new Date(item.timestamp).toLocaleDateString('ja-JP') : ''}</small>
+          </div>`;
+      });
+
+      html += `</div></div>`;
+    });
+
     html += '</div>';
     container.innerHTML = html;
 
   } catch (e) {
     console.error(e);
-    container.innerHTML = "<p>一覧の読み込みに失敗しました。</p>";
+    container.innerHTML = "<p>読み込みに失敗しました。</p>";
   }
 }
-
 // アコーディオン開閉用関数
 function toggleAccordion(el) {
   const body = el.nextElementSibling;
