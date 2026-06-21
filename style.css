@@ -489,3 +489,56 @@ textarea:focus{
 .success { background: #10b981; }
 .accent { background: #8b5cf6; }
 
+.pr-main-category {
+  margin-bottom: 20px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.pr-main-header {
+  background: #f1f5f9;
+  padding: 14px 18px;
+  font-size: 1.1em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.count-badge {
+  background: #3b82f6;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 0.9em;
+}
+
+.pr-sub-header {
+  background: #f8fafc;
+  padding: 12px 18px;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  border-top: 1px solid #e2e8f0;
+}
+
+.pr-item {
+  padding: 12px 18px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.pr-title {
+  font-weight: bold;
+  color: #1e40af;
+  cursor: pointer;
+}
+
+.pr-summary {
+  margin-top: 8px;
+  padding: 10px;
+  background: #f8fafc;
+  border-radius: 6px;
+  font-size: 0.95em;
+  line-height: 1.5;
+}
