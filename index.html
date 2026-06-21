@@ -524,7 +524,7 @@ textarea:focus{
   <!-- 左側：入力エリア -->
   <div class="assistant-card input-side">
     <h2>あなたの考えを聞かせてください</h2>
-    <div class="category-bar">...</div>
+    <div class="category-bar" id="categoryBar"></div>
     <textarea id="userInput" rows="12" placeholder="芦屋市について思っていることを自由に書いてください..."></textarea>
 
     <div class="button-area" id="buttonArea">
@@ -535,40 +535,35 @@ textarea:focus{
   <!-- 右側：結果エリア -->
   <div class="assistant-card result-side">
     <h2>AIからの整理結果</h2>
-    <div id="aiResult" class="result-box"></div>
+    <p id="aiResult" class="ai-result-box">結果はここに表示されます。（最大500文字）</p>
+
+    <!-- 200字要約ボタン（壁打ち結果が出たら表示） -->
+    <div id="summarizeBtnBox" style="display:none; margin-top:16px;">
+      <button class="big-button accent" onclick="confirmSummary()">📝 200字要約する</button>
+    </div>
 
     <!-- 要約・タイトルエリア -->
     <div id="summaryArea" class="summary-block" style="display:none;">
-      <h3>200字要約</h3>
+      <h3>200文字要約</h3>
       <div id="summaryBox" class="summary-box"></div>
-      
+
       <h3>推奨タイトル</h3>
       <div id="titleBox" class="title-box"></div>
-      
+
       <h3>分類結果</h3>
       <div id="categoryResult" class="category-result"></div>
+
+      <!-- 投稿確認エリア -->
+      <div id="postDecision" style="display:none; margin-top:20px; padding-top:16px; border-top:1px solid #e5e7eb;">
+        <p>この内容でPRに投稿しますか？</p>
+        <div class="button-group">
+          <button class="big-button success" onclick="postToPR()">✅ PRページへ投稿する</button>
+          <button class="big-button" onclick="continueEditing()">✍️ 引き続き意見する</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
-
-    <!-- AI結果エリア（右カラム） -->
-    <div class="assistant-card" id="aiBox">
-      <h2>AIからの整理結果</h2>
-      <p id="aiResult">結果はここに表示されます。（最大500文字）</p>
-    </div>
-
-  </div> <!-- ★ assistant-layout の閉じタグ（重要） -->
-
-  <!-- ★ 要約・タイトル生成エリア（レイアウトの外側に置く） -->
-  <div class="assistant-card summary-block">
-
-    <h3>200文字要約</h3>
-    <div id="summaryBox" class="summary-box"></div>
-
-    <h3>推奨タイトル</h3>
-    <div id="titleBox" class="title-box"></div>
-
-  </div>
 
 </section>
 
@@ -637,8 +632,8 @@ textarea:focus{
 <h1>🔮 ビジョン変遷</h1>
 
 <div class="placeholder-card" style="padding:0; margin-bottom:20px;">
- 
-   <img src="/ashiya-platform/images/future5.png" alt="未来ビジョン"" class="responsive-img">
+   <img src="/ashiya-platform/images/future5.png" alt="未来ビジョン" class="responsive-img">
+</div>
 
   <div class="placeholder-card">
     <div class="vision-date">2026年7月</div>
