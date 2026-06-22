@@ -527,7 +527,9 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
   .analysis-bar-row { grid-template-columns: 120px 1fr 44px; }
   .update-step::after { display: none; }
 }
-</style>
+
+/* =====================================================
+   RULES — フローチャート共通
    ===================================================== */
 .rules-tab-bar{ display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap; }
 .rules-tab-btn{
@@ -611,15 +613,16 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
 
 <!-- ================= INTRO ================= -->
 <section id="intro" class="page active">
-  <div class="card">
-    <h1>駅前公共施設について皆で考えよう</h1>
-    <h2>このプラットフォームについて</h2>
-    <p>このプラットフォームは、駅前の公共施設について、みなさんの声を自由に投稿できる場所です。投稿された意見は、AIが公平に整理し、誰もが見える形にしていきます。</p>
-    <p style="margin-top:10px;">設問はありません。自由に書いた声を、AIが公正な手法で整理し、誰もが確認できる形に残します。</p>
-  </div>
+  <h1>駅前公共施設について皆で考えよう</h1>
   <div class="card" style="padding:0;overflow:hidden;">
     <img src="images/comic-all.png" alt="市民政策AIプラットフォーム">
   </div>
+  <div class="card">
+        <h2>このプラットフォームについて</h2>
+    <p>このプラットフォームは、駅前の公共施設について、みなさんの声を自由に投稿できる場所です。投稿された意見は、AIが公平に整理し、誰もが見える形にしていきます。</p>
+    <p style="margin-top:10px;">設問はありません。自由に書いた声を、AIが公正な手法で整理し、誰もが確認できる形に残します。</p>
+  </div>
+ 
   <div class="card">
     <h2>特徴</h2>
     <ul class="feature-list">
@@ -641,6 +644,9 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
 
 <!-- ================= LOGIC TREE ================= -->
 <section id="tree" class="page">
+    <div class="placeholder-card" style="padding:0; margin-bottom:20px;">
+  <img src="/ashiya-platform/images/log.tree4.jpg" alt="ロジツリー" class="responsive-img">
+</div>
   <div class="tree-page-wrap">
     <div class="tree-vision-card">
       <h2>🏛 政策提案ロジックツリー</h2>
@@ -701,24 +707,12 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
 
 <!-- ================= RULES ================= -->
 <section id="rules" class="page">
-  <h1>📊 分析ルール</h1>
+  <h1>📊 分析統合ルール</h1>
   <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px;">
     <img src="images/ai-labo.png" alt="分析ラボ">
   </div>
 
-  <!-- 基本分類ルール -->
-  <div class="card">
-    <h2>📌 分類の基本ルール</h2>
-    <p>大分類は5つで固定されています。AIは大分類を増やしません。中分類・小分類は固定項目のほかに「<strong>その他</strong>」が常に存在します。</p>
-    <div class="score-grid" style="margin-top:16px;">
-      <div class="score-card"><h4>価値向上</h4><div class="score-value">25%</div></div>
-      <div class="score-card"><h4>ベネフィット</h4><div class="score-value">25%</div></div>
-      <div class="score-card"><h4>財政的持続</h4><div class="score-value">20%</div></div>
-      <div class="score-card"><h4>施設の戦略性</h4><div class="score-value">15%</div></div>
-      <div class="score-card"><h4>ガバナンス</h4><div class="score-value">15%</div></div>
-    </div>
-  </div>
-
+ 
   <!-- ===================== 統合ルール ===================== -->
   <div class="card">
     <h2>🔀 統合ルール</h2>
@@ -831,6 +825,18 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
         <div class="ex-down">↓</div>
         <div class="ex-node ex-se">■ End</div>
       </div>
+    </div>
+  </div>
+ <!-- 基本分類ルール -->
+  <div class="card">
+    <h2>📌 分類の基本ルール</h2>
+    <p>大分類は5つで固定されています。AIは大分類を増やしません。中分類・小分類は固定項目のほかに「<strong>その他</strong>」が常に存在します。</p>
+    <div class="score-grid" style="margin-top:16px;">
+      <div class="score-card"><h4>価値向上</h4><div class="score-value">25%</div></div>
+      <div class="score-card"><h4>ベネフィット</h4><div class="score-value">25%</div></div>
+      <div class="score-card"><h4>財政的持続</h4><div class="score-value">20%</div></div>
+      <div class="score-card"><h4>施設の戦略性</h4><div class="score-value">15%</div></div>
+      <div class="score-card"><h4>ガバナンス</h4><div class="score-value">15%</div></div>
     </div>
   </div>
 
