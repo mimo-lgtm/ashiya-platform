@@ -583,6 +583,21 @@ function resetForm() {
   currentIdeaText = currentAIResult = currentSummary200 = currentTitle = currentMain = currentSub = currentItem = "";
 }
 
+// ======================= ルールページ タブ切り替え =======================
+function switchTab(group, panel) {
+  // パネル切り替え
+  document.getElementById(group + "-easy").classList.toggle("active", panel === "easy");
+  document.getElementById(group + "-expert").classList.toggle("active", panel === "expert");
+  // ボタン active 切り替え
+  const bar = document.getElementById(group + "-easy").parentElement
+    .querySelector(".rules-tab-bar");
+  if (bar) {
+    bar.querySelectorAll(".rules-tab-btn").forEach((btn, i) => {
+      btn.classList.toggle("active", (i === 0 && panel === "easy") || (i === 1 && panel === "expert"));
+    });
+  }
+}
+
 // ======================= 初期化 =======================
 window.onload = function() {
   initCategoryButtons();
