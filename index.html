@@ -4,418 +4,302 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>市民提案AIプラットフォーム</title>
-
 <style>
 /* ================= RESET ================= */
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  overflow-wrap:break-word;
-}
-
+*{ margin:0; padding:0; box-sizing:border-box; overflow-wrap:break-word; }
 body{
   font-family:"Yu Gothic","Meiryo",sans-serif;
   background:linear-gradient(135deg,#edf4ff,#f7fffb,#fff8ef);
-  color:#1e293b;
-  line-height:1.6;
-  margin:0;
-  padding:12px;
-  font-size:16px;
+  color:#1e293b; line-height:1.6; padding:0; font-size:16px;
 }
 
 /* ================= HEADER ================= */
 .topbar{
-  position:sticky;
-  top:0;
-  z-index:999;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:16px 24px;
-  background:rgba(15,23,42,.92);
-  backdrop-filter:blur(12px);
+  position:sticky; top:0; z-index:999;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:14px 24px;
+  background:rgba(15,23,42,.95); backdrop-filter:blur(12px);
   box-shadow:0 4px 20px rgba(0,0,0,.15);
 }
 .topbar::after{
-  content:"";
-  position:absolute;
-  left:0;
-  bottom:0;
-  width:100%;
-  height:4px;
+  content:""; position:absolute; left:0; bottom:0; width:100%; height:3px;
   background:linear-gradient(90deg,#2563eb,#06b6d4,#10b981,#84cc16,#f59e0b,#ef4444,#8b5cf6);
 }
-
-.logo{
-  font-size:22px;
-  font-weight:700;
-  color:#fff;
-}
-
-nav{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-
+.logo{ font-size:20px; font-weight:700; color:#fff; }
+nav{ display:flex; gap:8px; flex-wrap:wrap; }
 nav button{
-  border:none;
-  padding:10px 16px;
-  border-radius:12px;
-  font-weight:700;
-  cursor:pointer;
-  background:#fff;
-  transition:.25s;
+  border:none; padding:9px 14px; border-radius:10px;
+  font-weight:700; cursor:pointer; background:rgba(255,255,255,.15);
+  color:#fff; font-size:13px; transition:.2s;
 }
-
-nav button:hover{
-  transform:translateY(-2px);
-  box-shadow:0 8px 20px rgba(0,0,0,.15);
-}
+nav button:hover{ background:rgba(255,255,255,.3); transform:translateY(-1px); }
 
 /* ================= PAGE ================= */
-.page{
-  display:none;
-  padding:40px 24px;
-  max-width:1400px;
-  margin:auto;
-  animation:fade .3s ease;
-}
-.page.active{
-  display:block;
-}
-@keyframes fade{
-  from{opacity:0;}
-  to{opacity:1;}
-}
+.page{ display:none; padding:32px 24px; max-width:1200px; margin:auto; animation:fade .3s ease; }
+.page.active{ display:block; }
+@keyframes fade{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
 
-/* ================= TITLES ================= */
-h1{
-  font-size:32px;
-  margin-bottom:20px;
-  text-align:center;
-  color:#0f172a;
+/* ================= COMMON CARD ================= */
+.card{
+  background:rgba(255,255,255,.95); backdrop-filter:blur(8px);
+  padding:24px; border-radius:20px; margin-bottom:20px;
+  box-shadow:0 8px 28px rgba(0,0,0,.08); border:1px solid rgba(255,255,255,.6);
 }
-h2{
-  margin-bottom:15px;
-  color:#0f172a;
-}
-h3{
-  margin-top:20px;
-  margin-bottom:10px;
-  color:#1d4ed8;
-}
-h1,h2,h3{
-  word-break:break-word;
-}
-
-/* ================= IMAGES ================= */
-img{
-  max-width:100%;
-  height:auto;
-  display:block;
-}
-
-/* ================= CARD SYSTEM ================= */
-.placeholder-card,
-.assistant-card,
-.analysis-card,
-.feature-box,
-.info-card,
-.purpose-box{
-  background:rgba(255,255,255,.92);
-  backdrop-filter:blur(12px);
-  padding:24px;
-  border-radius:20px;
-  margin-bottom:24px;
-  box-shadow:0 10px 30px rgba(0,0,0,.08);
-  border:1px solid rgba(255,255,255,.5);
-}
-
-/* ================= SCORE GRID ================= */
-.score-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-  gap:12px;
-  margin:25px 0;
-}
-.score-card{
-  background:white;
-  padding:12px;
-  border-radius:16px;
-  box-shadow:0 8px 18px rgba(0,0,0,.08);
-  border-top:4px solid #2563eb;
-}
-.score-value{
-  font-size:20px;
-  font-weight:bold;
-  color:#2563eb;
-}
-
-/* ================= ANALYSIS LAYOUT ================= */
-.analysis-bottom{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:20px;
-  margin:30px 0;
-}
-@media(max-width:900px){
-  .analysis-bottom{
-    grid-template-columns:1fr;
-  }
-}
+h1{ font-size:30px; margin-bottom:16px; text-align:center; color:#0f172a; }
+h2{ font-size:20px; margin-bottom:12px; color:#0f172a; }
+h3{ font-size:16px; margin-top:16px; margin-bottom:8px; color:#1d4ed8; }
 
 /* ================= BUTTON SYSTEM ================= */
-button{
-  cursor:pointer;
+button{ cursor:pointer; }
+.big-button{
+  display:inline-block; padding:14px 28px; font-size:16px; font-weight:800;
+  background:linear-gradient(135deg,#2563eb,#06b6d4); color:white;
+  border-radius:12px; text-align:center; box-shadow:0 8px 20px rgba(0,0,0,.15);
+  transition:.2s; border:none;
 }
-
-.big-button,
-.tree-btn{
-  display:inline-block;
-  padding:18px 32px;
-  font-size:20px;
-  font-weight:800;
-  background:linear-gradient(135deg,#2563eb,#06b6d4);
-  color:white;
-  border-radius:14px;
-  text-align:center;
-  box-shadow:0 10px 25px rgba(0,0,0,.15);
-  transition:.2s;
-  text-decoration:none;
-  border:none;
-}
-
-.big-button:hover,
-.tree-btn:hover{
-  transform:translateY(-2px);
-  box-shadow:0 15px 30px rgba(0,0,0,.2);
-}
+.big-button:hover{ transform:translateY(-2px); box-shadow:0 14px 28px rgba(0,0,0,.2); }
+.big-button.success{ background:linear-gradient(135deg,#10b981,#059669); }
+.big-button.accent{ background:linear-gradient(135deg,#8b5cf6,#6d28d9); }
+.big-button:disabled{ opacity:.5; cursor:not-allowed; transform:none; }
+.button-group{ display:flex; gap:12px; flex-wrap:wrap; margin-top:12px; }
 
 /* ================= AI LAYOUT ================= */
-.assistant-layout{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:24px;
-}
-
+.assistant-layout{ display:grid; grid-template-columns:1fr 1fr; gap:20px; }
 textarea{
-  width:100%;
-  height:260px;
-  padding:15px;
-  font-size:16px;
-  border-radius:15px;
-  border:1px solid #dbeafe;
-  background:#fff;
+  width:100%; height:240px; padding:14px; font-size:15px;
+  border-radius:14px; border:1.5px solid #dbeafe; background:#fff;
+  font-family:inherit; resize:vertical;
 }
-textarea:focus{
-  outline:none;
-  border-color:#3b82f6;
+textarea:focus{ outline:none; border-color:#3b82f6; }
+.ai-result-box{
+  min-height:120px; padding:14px; background:#f8fafc;
+  border-radius:12px; border:1px solid #e2e8f0; line-height:1.7; font-size:15px;
 }
-
-#aiBox{
-  min-height:300px;
+.summary-block{ margin-top:16px; }
+.summary-box, .title-box{
+  padding:12px 16px; background:#f0f9ff; border-radius:10px;
+  border:1px solid #bae6fd; margin-bottom:8px; line-height:1.7;
+}
+.title-box{ background:#f0fdf4; border-color:#bbf7d0; font-weight:700; }
+.category-result{
+  padding:10px 14px; background:#fefce8; border-radius:10px;
+  border:1px solid #fde68a; font-size:14px; line-height:1.8;
 }
 
 /* ================= CATEGORY BAR ================= */
-.category-bar{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin-bottom:8px;
+.category-bar{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; }
+.cat-btn{
+  border:none; padding:6px 12px; border-radius:999px;
+  background:#e5e7eb; cursor:pointer; font-size:13px; transition:.2s;
 }
-.category-bar .cat-btn{
-  border:none;
-  padding:8px 12px;
-  border-radius:999px;
-  background:#e5e7eb;
-  cursor:pointer;
-  font-size:14px;
+.cat-btn.active{ background:#2563eb; color:#fff; }
+.cat-btn:hover{ background:#cbd5e1; }
+.cat-btn.active:hover{ background:#1d4ed8; }
+
+/* =====================================================
+   PR PAGE — アコーデオン構造
+   ===================================================== */
+
+/* ── 大分類ボード ── */
+.pr-main-board{
+  background:linear-gradient(135deg,#1e3a5f,#0f2442);
+  color:#fff; border-radius:18px; margin-bottom:16px;
+  box-shadow:0 8px 24px rgba(0,0,0,.2); overflow:hidden;
 }
-.category-bar .cat-btn.active{
-  background:#2563eb;
-  color:#fff;
+.pr-main-header{
+  display:flex; justify-content:space-between; align-items:center;
+  padding:18px 22px; cursor:pointer; user-select:none; transition:.2s;
+}
+.pr-main-header:hover{ background:rgba(255,255,255,.06); }
+.pr-main-title{ font-size:17px; font-weight:700; }
+.pr-main-meta{ display:flex; align-items:center; gap:10px; }
+.pr-main-meta .count-badge{
+  background:#f59e0b; color:#fff; font-weight:700;
+  border-radius:999px; padding:2px 10px; font-size:13px; min-width:28px; text-align:center;
+}
+.pr-accordion-arrow{ font-size:16px; transition:transform .25s; }
+.pr-accordion-arrow.open{ transform:rotate(180deg); }
+
+/* ── 中分類ボード群コンテナ ── */
+.pr-sub-area{
+  display:none; padding:14px 16px; background:rgba(255,255,255,.05);
+  border-top:1px solid rgba(255,255,255,.1);
+}
+.pr-sub-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:10px; }
+
+/* ── 中分類ボード ── */
+.pr-sub-board{
+  background:rgba(255,255,255,.92); color:#0f172a;
+  border-radius:14px; overflow:hidden;
+  box-shadow:0 4px 14px rgba(0,0,0,.12); cursor:pointer; transition:.2s;
+  border:2px solid transparent;
+}
+.pr-sub-board:hover{ border-color:#3b82f6; transform:translateY(-2px); box-shadow:0 8px 20px rgba(0,0,0,.16); }
+.pr-sub-board.has-posts{ border-left:4px solid #3b82f6; }
+.pr-sub-header-inner{
+  display:flex; justify-content:space-between; align-items:flex-start;
+  padding:12px 14px;
+}
+.pr-sub-name{ font-size:14px; font-weight:700; flex:1; }
+.count-badge{
+  background:#2563eb; color:#fff; border-radius:999px;
+  padding:1px 8px; font-size:12px; font-weight:700; margin-left:6px;
+  min-width:22px; text-align:center; flex-shrink:0;
+}
+.count-badge.zero{ background:#94a3b8; }
+.pr-sub-hint{ font-size:11px; color:#64748b; padding:0 14px 10px; }
+
+/* ── 小分類エリア（中分類クリックで展開） ── */
+.pr-item-area{
+  display:none; background:#f8fafc;
+  border-top:1px solid #e2e8f0; padding:10px 12px;
+}
+.pr-item-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:8px; margin-bottom:8px; }
+
+/* ── 小分類ボード ── */
+.pr-item-board{
+  background:#fff; border-radius:10px; padding:10px 12px;
+  border:1.5px solid #e2e8f0; cursor:pointer; transition:.2s;
+  display:flex; justify-content:space-between; align-items:center;
+}
+.pr-item-board:hover{ border-color:#2563eb; background:#eff6ff; }
+.pr-item-board.active{ border-color:#2563eb; background:#eff6ff; }
+.pr-item-name{ font-size:13px; font-weight:600; }
+
+/* ── 投稿タイトル一覧 ── */
+.pr-posts-area{ margin-top:8px; }
+.pr-post-card{
+  background:#fff; border-radius:10px; padding:12px 16px; margin-bottom:8px;
+  border-left:4px solid #dc2626; cursor:pointer; transition:.2s;
+  box-shadow:0 2px 8px rgba(0,0,0,.06);
+  display:flex; justify-content:space-between; align-items:flex-start; gap:10px;
+}
+.pr-post-card:hover{ box-shadow:0 4px 14px rgba(0,0,0,.12); transform:translateX(2px); }
+.pr-post-card.merged-source{ border-left-color:#94a3b8; opacity:.75; }
+.pr-post-card.merged-result{ border-left-color:#2563eb; background:#eff6ff; }
+.pr-post-title{ font-size:14px; font-weight:700; flex:1; }
+.pr-post-status{
+  font-size:11px; font-weight:700; padding:2px 8px; border-radius:999px; flex-shrink:0;
+}
+.status-unmerged{ background:#fee2e2; color:#dc2626; }
+.status-merged-source{ background:#e2e8f0; color:#64748b; }
+.status-merged-result{ background:#dbeafe; color:#1d4ed8; }
+
+/* ── 200字要約（展開） ── */
+.pr-post-summary{
+  display:none; margin-top:10px; padding:12px; background:#f8fafc;
+  border-radius:8px; font-size:14px; line-height:1.7; color:#334155;
+  border:1px solid #e2e8f0;
+}
+.pr-post-summary .merged-note{
+  margin-top:8px; padding:8px 12px; background:#eff6ff; border-radius:8px;
+  font-size:13px; color:#1d4ed8; border-left:3px solid #3b82f6;
 }
 
-/* ================= PR LIST ================= */
-#prList{
-  display:block;
-}
-.pr-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:12px 16px;
-  margin-bottom:8px;
-  border-radius:12px;
-  background:#f9fafb;
-  cursor:pointer;
-}
-.pr-row:hover{
-  background:#eff6ff;
-}
+/* =====================================================
+   LOGIC TREE PAGE
+   ===================================================== */
+.tree-page-wrap{ max-width:960px; margin:auto; }
 
-  /* ================= LOGIC TREE（新レイアウト） ================= */
-.logic-tree-wrapper{
+/* ── ビジョン文 ── */
+.tree-vision-card{
+  background:linear-gradient(135deg,#0f2442,#1e3a5f); color:#fff;
+  border-radius:20px; padding:22px 28px; margin-bottom:28px;
+  box-shadow:0 10px 30px rgba(0,0,0,.2);
+}
+.tree-vision-card h2{ color:#93c5fd; margin-bottom:8px; }
+.tree-vision-card p{ color:#cbd5e1; font-size:15px; }
+
+/* ── 大分類ボード群 ── */
+.tree-main-boards{
+  display:grid; grid-template-columns:repeat(5,1fr); gap:16px; margin-bottom:28px;
+}
+.tree-board{
+  background:#fff; border-radius:16px; padding:16px 12px;
+  text-align:center; cursor:pointer; transition:.25s;
+  box-shadow:0 6px 20px rgba(0,0,0,.1); border:2px solid transparent;
   position:relative;
-  padding:40px 20px;
-  border-radius:24px;
-  background:rgba(255,255,255,.9);
-  box-shadow:0 12px 30px rgba(0,0,0,.12);
-  overflow:hidden;
+}
+.tree-board:hover{ transform:translateY(-4px); box-shadow:0 14px 30px rgba(0,0,0,.15); border-color:#3b82f6; }
+.tree-board.active{ border-color:#2563eb; background:#eff6ff; }
+.tree-board-icon{ font-size:28px; margin-bottom:8px; }
+.tree-board-key{ font-size:18px; font-weight:900; color:#2563eb; margin-bottom:4px; }
+.tree-board-label{ font-size:12px; font-weight:700; color:#0f172a; line-height:1.4; }
+.tree-board-count{
+  position:absolute; top:-6px; right:-6px;
+  background:#f59e0b; color:#fff; border-radius:999px;
+  padding:2px 8px; font-size:12px; font-weight:700;
+}
+.tree-connector{
+  width:3px; height:24px; background:#cbd5e1; margin:0 auto 4px;
 }
 
-.logic-tree-wrapper::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background-image:url('images/tree-bg.png');
-  background-repeat:no-repeat;
-  background-position:center top;
-  background-size:contain;
-  opacity:0.18;
-  pointer-events:none;
+/* ── 中分類・小分類アコーデオン（ツリー詳細） ── */
+.tree-detail-area{ background:#fff; border-radius:20px; padding:24px; box-shadow:0 8px 24px rgba(0,0,0,.08); }
+.tree-detail-title{ font-size:18px; font-weight:700; color:#0f172a; margin-bottom:16px; padding-bottom:12px; border-bottom:2px solid #e2e8f0; }
+.tree-sub-block{ margin-bottom:12px; border-radius:14px; overflow:hidden; border:1.5px solid #e2e8f0; }
+.tree-sub-header{
+  padding:12px 16px; background:#f8fafc;
+  display:flex; justify-content:space-between; align-items:center;
+  cursor:pointer; font-weight:700; font-size:15px; transition:.15s;
 }
+.tree-sub-header:hover{ background:#eff6ff; }
+.tree-item-list{ display:none; padding:12px 16px; border-top:1px solid #e2e8f0; }
+.tree-item-chips{ display:flex; flex-wrap:wrap; gap:8px; }
+.tree-item-chip{
+  padding:6px 14px; background:#dbeafe; color:#1d4ed8;
+  border-radius:999px; font-size:13px; font-weight:600; cursor:pointer; transition:.15s;
+}
+.tree-item-chip:hover{ background:#bfdbfe; }
+.tree-item-chip.other{ background:#fee2e2; color:#dc2626; }
+.tree-item-chip.merged{ background:#dcfce7; color:#15803d; }
 
-.logic-tree-root-title{
-  text-align:center;
-  font-size:24px;
-  font-weight:700;
-  margin-bottom:24px;
-  position:relative;
-  z-index:1;
+/* =====================================================
+   RULES PAGE
+   ===================================================== */
+.rules-merge-flow{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin:20px 0; }
+.rules-step-card{
+  background:#fff; border-radius:16px; padding:18px; text-align:center;
+  box-shadow:0 4px 14px rgba(0,0,0,.08); border-top:4px solid #2563eb;
 }
+.rules-step-num{ font-size:28px; font-weight:900; color:#2563eb; margin-bottom:8px; }
+.rules-step-title{ font-weight:700; margin-bottom:8px; font-size:15px; }
+.rules-step-desc{ font-size:13px; color:#475569; line-height:1.6; }
+.rules-merge-example{
+  background:#f8fafc; border-radius:14px; padding:18px; margin:16px 0;
+  border-left:4px solid #8b5cf6;
+}
+.score-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:12px; margin:16px 0; }
+.score-card{ background:white; padding:14px; border-radius:14px; box-shadow:0 4px 14px rgba(0,0,0,.08); border-top:3px solid #2563eb; }
+.score-value{ font-size:22px; font-weight:800; color:#2563eb; }
 
-.logic-tree-main{
-  display:flex;
-  justify-content:center;
-  flex-wrap:wrap;
-  gap:24px;
-  position:relative;
-  z-index:1;
-}
+/* ================= INTRO ================= */
+.feature-list{ list-style:none; }
+.feature-list li{ padding:8px 0; border-bottom:1px solid #f1f5f9; font-size:15px; }
+.feature-list li::before{ content:"✓ "; color:#10b981; font-weight:700; }
 
-.logic-main-node{
-  width:220px;
-  padding:16px;
-  border-radius:18px;
-  background:rgba(15,23,42,.9);
-  color:#fff;
-  text-align:center;
-  box-shadow:0 10px 25px rgba(0,0,0,.18);
-}
-
-.logic-main-node-title{
-  font-weight:700;
-  margin-bottom:8px;
-}
-
-.logic-main-node button{
-  margin-top:8px;
-  padding:8px 12px;
-  border-radius:999px;
-  border:none;
-  background:#f97316;
-  color:#fff;
-  font-size:14px;
-  cursor:pointer;
-}
-.logic-main-node button:hover{
-  background:#fb923c;
-}
-
-.logic-detail-wrapper{
-  margin-top:32px;
-  position:relative;
-  z-index:1;
-}
-
-.logic-accordion-block{
-  margin-bottom:16px;
-  border-radius:16px;
-  background:#f9fafb;
-  overflow:hidden;
-  border:1px solid #e5e7eb;
-}
-
-.logic-accordion-header{
-  padding:12px 16px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  cursor:pointer;
-}
-.logic-accordion-header h3{
-  margin:0;
-  font-size:16px;
-  color:#0f172a;
-}
-.logic-accordion-header span{
-  font-size:14px;
-  color:#64748b;
-}
-
-.logic-accordion-body{
-  padding:12px 16px;
-  border-top:1px solid #e5e7eb;
-  display:none;
-}
-
-.logic-subcategory{
-  margin-bottom:12px;
-}
-.logic-subcategory-title{
-  font-weight:600;
-  margin-bottom:4px;
-}
-.logic-subcategory-items{
-  padding-left:16px;
-}
-.logic-subcategory-items li{
-  margin-bottom:4px;
-  cursor:pointer;
-}
-.logic-subcategory-items li:hover{
-  text-decoration:underline;
-}
+/* ================= IMAGES ================= */
+img{ max-width:100%; height:auto; display:block; border-radius:14px; }
 
 /* ================= MOBILE ================= */
 @media(max-width:900px){
-
-  .assistant-layout{
-    grid-template-columns:1fr;
-  }
-
-  .topbar{
-    flex-direction:column;
-    gap:12px;
-  }
-
-  nav{
-    justify-content:center;
-  }
-
-  h1{
-    font-size:26px;
-  }
-
-  .logic-tree-wrapper::before{
-    opacity:0.08;
-  }
-
-  .logic-main-node{
-    width:100%;
-  }
+  .assistant-layout{ grid-template-columns:1fr; }
+  .topbar{ flex-direction:column; gap:10px; }
+  nav{ justify-content:center; }
+  h1{ font-size:24px; }
+  .tree-main-boards{ grid-template-columns:repeat(2,1fr); }
+  .rules-merge-flow{ grid-template-columns:1fr; }
+}
+@media(max-width:600px){
+  .tree-main-boards{ grid-template-columns:1fr 1fr; }
+  .pr-sub-grid{ grid-template-columns:1fr 1fr; }
 }
 </style>
-
 </head>
 <body>
-市民の声を未来のまちづくりに活かしましょう
+
 <header class="topbar">
   <div class="logo">🏛 市民提案AIプラットフォーム</div>
-
   <nav>
     <button onclick="showPage('intro')">ホーム</button>
     <button onclick="showPage('tree')">ロジックツリー</button>
@@ -430,238 +314,215 @@ textarea:focus{
 
 <!-- ================= INTRO ================= -->
 <section id="intro" class="page active">
-
-  <div class="placeholder-card">
+  <div class="card">
     <h1>駅前公共施設について皆で考えよう</h1>
-
-  <div class="placeholder-card" style="padding:0;overflow:hidden;">
-    <img src="images/intro.png" alt="市民政策AIプラットフォーム">
-  </div>
-
     <h2>このプラットフォームについて</h2>
-    <p>
-      このプラットフォームは、駅前の公共施設について、みなさんの声を自由に投稿できる場所です。投稿された意見は、AIが公平に整理し、誰もが見える形にしていきます。
-    </p>
-    <p>
-      これまでの行政アンケートは、設問の立て方によって答えが左右されがちで、意見を出しても、それがどう扱われたかも見えませんでした。このプラットフォームに設問はありません。自由に書いた声を、AIが公正な手法で整理し、誰もが確認できる形に残します。
-    </p>
+    <p>このプラットフォームは、駅前の公共施設について、みなさんの声を自由に投稿できる場所です。投稿された意見は、AIが公平に整理し、誰もが見える形にしていきます。</p>
+    <p style="margin-top:10px;">設問はありません。自由に書いた声を、AIが公正な手法で整理し、誰もが確認できる形に残します。</p>
   </div>
-
-
-  <div class="placeholder-card">
+  <div class="card" style="padding:0;overflow:hidden;">
+    <img src="images/comic-all.png" alt="市民政策AIプラットフォーム">
+  </div>
+  <div class="card">
     <h2>特徴</h2>
-    <ul>
-      <li>思いついたまま、自由に書き込めます！</li>
+    <ul class="feature-list">
+      <li>思いついたまま、自由に書き込めます</li>
       <li>AIがあなたの声を読み取り、わかりやすく整理します</li>
       <li>整理された意見は、ツリーの形で誰でも見られます</li>
       <li>どう整理されたか、その過程もすべて公開されます</li>
       <li>みんなの声が、少しずつ積み重なっていく仕組みです</li>
     </ul>
   </div>
-
-  <div class="placeholder-card">
+  <div class="card">
     <h2>投稿の流れ</h2>
-    <p>自由に投稿する → AIが公平に整理する → ロジックツリーにまとまる → みんなで眺められる形になる</p>
-    <h3>この仕組みの目的</h3>
-    <p>
-      どんな意見も、選んだり誘導したりせずに受け止めます。AIはただ公正なルールに沿って整理するだけ。あなたの声が、そのままの形でみんなの知恵になります。
-    </p>
-    <p>
-      他の市民の意見や提案を見てみましょう。投稿された意見はロジックツリー上で整理・統合されています。
-    </p>
-    <button class="big-button" onclick="showPage('tree')">🌳 ロジックツリーを見る</button>
+    <p>自由に投稿する → AIが整理する → ロジックツリーにまとまる → みんなで眺められる</p>
+    <div style="margin-top:16px;">
+      <button class="big-button" onclick="showPage('tree')">🌳 ロジックツリーを見る</button>
+    </div>
   </div>
-
 </section>
 
 <!-- ================= LOGIC TREE ================= -->
 <section id="tree" class="page">
-
-  <div class="placeholder-card">
-    <h1>🏛 意見提案ロジックツリー</h1>
-    <div class="placeholder-card" style="padding:0; margin-bottom:20px;">
-  <img src="/ashiya-platform/images/log.tree3.png" alt="ロジツリー" class="responsive-img">
-</div>
-    <p>
-      このツリーは、大きなテーマから始まります。気になる分野を選ぶと、より詳しいテーマが下に開いていきます。
-    </p>
-    <p>
-      全体を眺めながら、気になるところだけ深掘りすることができます。
-    </p>
-  </div>
-
-  <div class="logic-tree-wrapper">
-    <div class="logic-tree-root-title">🏛 政策提案ロジックツリー（大分類）</div>
-
-    <div id="logicMainNodes" class="logic-tree-main">
-      <!-- app.js が大分類ノードを描画 -->
+  <div class="tree-page-wrap">
+    <div class="tree-vision-card">
+      <h2>🏛 政策提案ロジックツリー</h2>
+      <p>コストセンターからプロフィットセンターへ：市民のウェルビーイングと知財の集積による投資型都市経営の実現</p>
     </div>
 
-    <div class="logic-detail-wrapper">
-      <div id="logicDetailArea">
-        <!-- app.js が中分類・小分類アコーディオンを描画 -->
-      </div>
+    <!-- 5つの大分類ボード -->
+    <div id="treeMainBoards" class="tree-main-boards">
+      <!-- JS で描画 -->
+    </div>
+
+    <!-- 中分類・小分類アコーデオン詳細 -->
+    <div id="treeDetailArea" class="tree-detail-area" style="display:none;">
+      <!-- JS で描画 -->
     </div>
   </div>
-
-</section>
-
-<!-- ================= DETAIL PAGE ================= -->
-<section id="detail" class="page">
-  <div id="detailBox" class="placeholder-card"></div>
-  <button class="big-button" onclick="showPage('assistant')">AI壁打ちへ戻る</button>
 </section>
 
 <!-- ================= ASSISTANT ================= -->
 <section id="assistant" class="page">
-
   <h1>🤖 AI壁打ち</h1>
-
-  <div class="placeholder-card" style="padding:0; margin-bottom:20px;">
-    <img src="images/aiWall.png" alt="AI壁打ち" class="responsive-img">
+  <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px;">
+    <img src="images/aiWall.png" alt="AI壁打ち">
   </div>
-
-  <!-- ★ 2カラムレイアウト開始 -->
-<div class="assistant-layout">
-  <!-- 左側：入力エリア -->
-  <div class="assistant-card input-side">
-    <h2>あなたの考えを聞かせてください</h2>
-    <div class="category-bar" id="categoryBar"></div>
-    <textarea id="userInput" rows="12" placeholder="芦屋市について思っていることを自由に書いてください..."></textarea>
-
-    <div class="button-area" id="buttonArea">
-      <button class="big-button primary" onclick="runAI()">🤖 AI壁打ちを実行する</button>
+  <div class="assistant-layout">
+    <div class="card">
+      <h2>あなたの考えを聞かせてください</h2>
+      <div class="category-bar" id="categoryBar"></div>
+      <textarea id="userInput" rows="12" placeholder="芦屋市について思っていることを自由に書いてください..."></textarea>
+      <div style="margin-top:14px;">
+        <button class="big-button" onclick="runAI()">🤖 AI壁打ちを実行する</button>
+      </div>
     </div>
-  </div>
-
-  <!-- 右側：結果エリア -->
-  <div class="assistant-card result-side">
-    <h2>AIからの整理結果</h2>
-    <p id="aiResult" class="ai-result-box">結果はここに表示されます。（最大500文字）</p>
-
-    <!-- 200字要約ボタン（壁打ち結果が出たら表示） -->
-    <div id="summarizeBtnBox" style="display:none; margin-top:16px;">
-      <button class="big-button accent" onclick="confirmSummary()">📝 200字要約する</button>
-    </div>
-
-    <!-- 要約・タイトルエリア -->
-    <div id="summaryArea" class="summary-block" style="display:none;">
-      <h3>200文字要約</h3>
-      <div id="summaryBox" class="summary-box"></div>
-
-      <h3>推奨タイトル</h3>
-      <div id="titleBox" class="title-box"></div>
-
-      <h3>分類結果</h3>
-      <div id="categoryResult" class="category-result"></div>
-
-      <!-- 投稿確認エリア -->
-      <div id="postDecision" style="display:none; margin-top:20px; padding-top:16px; border-top:1px solid #e5e7eb;">
-        <p>この内容でPRに投稿しますか？</p>
-        <div class="button-group">
-          <button class="big-button success" onclick="postToPR()">✅ PRページへ投稿する</button>
-          <button class="big-button" onclick="continueEditing()">✍️ 引き続き意見する</button>
+    <div class="card">
+      <h2>AIからの整理結果</h2>
+      <p id="aiResult" class="ai-result-box">結果はここに表示されます。</p>
+      <div id="summarizeBtnBox" style="display:none; margin-top:14px;">
+        <button class="big-button accent" onclick="confirmSummary()">📝 200字要約する</button>
+      </div>
+      <div id="summaryArea" class="summary-block" style="display:none;">
+        <h3>200文字要約</h3>
+        <div id="summaryBox" class="summary-box"></div>
+        <h3>推奨タイトル</h3>
+        <div id="titleBox" class="title-box"></div>
+        <h3>分類結果</h3>
+        <div id="categoryResult" class="category-result"></div>
+        <div id="postDecision" style="display:none; margin-top:18px; padding-top:16px; border-top:1px solid #e5e7eb;">
+          <p style="font-weight:700; margin-bottom:10px;">この内容でPRに投稿しますか？</p>
+          <div class="button-group">
+            <button class="big-button success" onclick="postToPR()">✅ PRページへ投稿する</button>
+            <button class="big-button" style="background:linear-gradient(135deg,#64748b,#475569);" onclick="continueEditing()">✍️ 引き続き意見する</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-
 </section>
 
-
-  <!-- ================= RULES ================= -->
+<!-- ================= RULES ================= -->
 <section id="rules" class="page">
-
-  <h1>📊 分析統合ルール</h1>
-<div class="placeholder-card" style="padding:0; margin-bottom:20px;">
-  <img src="images/ai-labo.png" alt="分析ラボ" class="responsive-img">
-</div>
-
-  <div class="placeholder-card">
-    <h2>評価について</h2>
-    <p>
-      市民提案は、AIによって一定の基準で分類・構造化され、定量的に可視化されます。
-    </p>
+  <h1>📊 分析ルール</h1>
+  <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px;">
+    <img src="images/ai-labo.png" alt="分析ラボ">
   </div>
 
-  <div class="score-grid">
-    <div class="score-card"><h4>価値向上</h4><div class="score-value">25%</div></div>
-    <div class="score-card"><h4>ベネフィット</h4><div class="score-value">25%</div></div>
-    <div class="score-card"><h4>交流</h4><div class="score-value">20%</div></div>
-    <div class="score-card"><h4>マルチユース</h4><div class="score-value">15%</div></div>
-    <div class="score-card"><h4>運営効率</h4><div class="score-value">15%</div></div>
-  </div>
-
-  <div class="analysis-bottom">
-    <div class="analysis-card">
-      <h2>ルール変更</h2>
-      <p>ルールの変更は市民が提案し、その影響をAIが分析します。</p>
-    </div>
-    <div class="analysis-card">
-      <h2>AIの役割</h2>
-      <p>AIは、人が定めたルールに従い、データとエビデンスに基づいて意見を整理・分析します。判断や選別は行わず、構造化と可視化のみを担います。</p>
+  <div class="card">
+    <h2>📌 分類の基本ルール</h2>
+    <p>大分類は5つで固定されています。AIは大分類を増やしません。中分類・小分類は固定項目のほかに「<strong>その他</strong>」が常に存在します。</p>
+    <div class="score-grid" style="margin-top:16px;">
+      <div class="score-card"><h4>価値向上</h4><div class="score-value">25%</div></div>
+      <div class="score-card"><h4>ベネフィット</h4><div class="score-value">25%</div></div>
+      <div class="score-card"><h4>財政的持続</h4><div class="score-value">20%</div></div>
+      <div class="score-card"><h4>施設の戦略性</h4><div class="score-value">15%</div></div>
+      <div class="score-card"><h4>ガバナンス</h4><div class="score-value">15%</div></div>
     </div>
   </div>
 
+  <div class="card">
+    <h2>🆕 新しい中分類ができる仕組み</h2>
+    <p>「その他」に集まった投稿が<strong>10件以上</strong>になり、かつそれらが新しい1つのテーマとして10件以上まとまると判断された場合、AIが新しい中分類名を提案します。</p>
+    <ul style="margin-top:12px; padding-left:20px; line-height:2;">
+      <li>「その他」に入った投稿がいくつ溜まっても、<strong>新テーマの候補が10件に満たない間は新分類を作りません</strong></li>
+      <li>新テーマに当てはまると判断された投稿だけが新分類に移動し、残りは引き続き「その他」に残ります</li>
+      <li>新しい中分類はロジックツリーにも自動追記されます</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>🔀 統合の仕組みと流れ</h2>
+    <p>統合は<strong>小分類</strong>単位で行われます。小分類内の投稿が増えた際、AIが内容の近い投稿をまとめ、新しい統合記事を生成します。</p>
+
+    <div class="rules-merge-flow">
+      <div class="rules-step-card">
+        <div class="rules-step-num">①</div>
+        <div class="rules-step-title">新しい投稿が届く</div>
+        <div class="rules-step-desc">市民がAI壁打ちで意見を整理・投稿します</div>
+      </div>
+      <div class="rules-step-card" style="border-top-color:#8b5cf6;">
+        <div class="rules-step-num" style="color:#8b5cf6;">②</div>
+        <div class="rules-step-title">既存の統合候補と比較</div>
+        <div class="rules-step-desc">AIが新投稿と既存の「統合済み記事A」の内容を比較・分析します</div>
+      </div>
+      <div class="rules-step-card" style="border-top-color:#10b981;">
+        <div class="rules-step-num" style="color:#10b981;">③</div>
+        <div class="rules-step-title">再統合 → タイトルCが誕生</div>
+        <div class="rules-step-desc">BのXX要素をAに加え、新しい統合記事「タイトルC」が生成されます</div>
+      </div>
+    </div>
+
+    <div class="rules-merge-example">
+      <strong>例：</strong><br>
+      既存の統合記事 <span style="color:#1d4ed8; font-weight:700;">A「図書館のデジタル化推進」</span> に、<br>
+      新投稿 <span style="color:#dc2626;">B「ITサポート窓口を常設してほしい」</span> が届く<br>
+      ↓ AIが「ITサポート窓口」の要素をAに加えて再統合<br>
+      新しい統合記事 <span style="color:#15803d; font-weight:700;">C「デジタルライブラリとITサポート常設の一体的推進」</span> が誕生
+    </div>
+
+    <h3>統合後の見え方</h3>
+    <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:8px;">
+      <span style="background:#fee2e2; color:#dc2626; padding:4px 12px; border-radius:8px; font-size:13px; font-weight:700;">🔴 未統合</span>
+      <span>投稿されたがまだ統合処理がされていない</span>
+    </div>
+    <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:8px;">
+      <span style="background:#e2e8f0; color:#64748b; padding:4px 12px; border-radius:8px; font-size:13px; font-weight:700;">⚫ 処理済み</span>
+      <span>統合されて新記事に吸収された元の投稿（クリックで統合先へ誘導）</span>
+    </div>
+    <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:8px;">
+      <span style="background:#dbeafe; color:#1d4ed8; padding:4px 12px; border-radius:8px; font-size:13px; font-weight:700;">🔵 統合済み</span>
+      <span>AIが生成した統合記事（ロジックツリーにも記載）</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🤖 AIの役割と透明性</h2>
+    <p>AIは人が定めたルールに従い、データとエビデンスに基づいて意見を整理・分析します。判断や選別は行わず、構造化と可視化のみを担います。統合の過程はすべてこのページで確認できます。</p>
+  </div>
 </section>
 
 <!-- ================= PULL REQUEST ================= -->
 <section id="pullrequest" class="page">
-
-  <h1>📋 PULL REQUEST（修正提案申請）</h1>
-<div class="placeholder-card" style="padding:0; margin-bottom:20px;">
-  <img src="images/bib.png" alt="プルリク" class="responsive-img">
-</div>
-  <div class="placeholder-card">
+  <h1>📋 PULL REQUEST</h1>
+  <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px;">
+    <img src="images/bib.png" alt="プルリク">
+  </div>
+  <div class="card">
     <h2>カテゴリー別の提案一覧</h2>
-    <p>AI壁打ちから投稿された提案が、カテゴリー別に200字要約のタイトルが一覧表示されます。</p>
+    <p>大分類ボードをクリックすると中分類が展開されます。中分類をクリックすると、格納された投稿が表示されます。</p>
   </div>
-
-  <div id="prList" class="placeholder-card">
-    まだ投稿がありません。
+  <div id="prList">
+    <div style="text-align:center; padding:40px; color:#64748b;">読み込み中…</div>
   </div>
-
-  <div id="prDetail" class="placeholder-card" style="display:none;">
-    <h3 id="prDetailTitle"></h3>
-    <p id="prDetailSummary"></p>
-  </div>
-
 </section>
 
-<!-- ================= CURRENT VISION ================= -->
+<!-- ================= VISION ================= -->
 <section id="vision" class="page">
-<h1>🔮 ビジョン、コンセプトの変遷</h1>
-
-<div class="placeholder-card" style="padding:0; margin-bottom:20px;">
- <img src="images/futue5.png" alt="未来ビジョン" class="responsive-img">
-</div>
-
-  <div class="placeholder-card">
-    <div class="vision-date">2026年7月</div>
-    <h3>初期ビジョン</h3>
-    <div class="vision-tags">
-      <span>芦屋の価値向上</span>
-      <span>市民ウェルビーイング</span>
-      <span>市民交流</span>
-      <span>コスト最適化</span>
-    </div>
-    <p>
-      公共施設を、費用のかかる場所としてではなく、市民の価値を生み出す場所として捉え直す。
-    </p>
+  <h1>🔮 ビジョン変遷</h1>
+  <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px;">
+    <img src="/ashiya-platform/images/future5.png" alt="未来ビジョン">
   </div>
-
-  <div class="placeholder-card">
+  <div class="card">
+    <div style="color:#64748b; font-size:14px; margin-bottom:6px;">2026年7月</div>
+    <h3 style="margin-top:0;">初期ビジョン</h3>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin:10px 0;">
+      <span style="background:#dbeafe; color:#1d4ed8; padding:3px 10px; border-radius:999px; font-size:13px;">芦屋の価値向上</span>
+      <span style="background:#dbeafe; color:#1d4ed8; padding:3px 10px; border-radius:999px; font-size:13px;">市民ウェルビーイング</span>
+      <span style="background:#dbeafe; color:#1d4ed8; padding:3px 10px; border-radius:999px; font-size:13px;">コスト最適化</span>
+    </div>
+    <p>公共施設を、費用のかかる場所としてではなく、市民の価値を生み出す場所として捉え直す。</p>
+  </div>
+  <div class="card">
     <h2>次回ビジョン（検討中）</h2>
     <p>このエリアは今後、市民提案とAI分析によって更新されます。</p>
-    <div style="margin-top:15px;padding:15px;border-left:5px solid #2563eb;background:#f8fafc;border-radius:12px;">
-      <b>現在の仮テーマ：</b><br><br>
+    <div style="margin-top:12px; padding:14px; border-left:4px solid #2563eb; background:#f8fafc; border-radius:10px;">
+      <strong>現在の仮テーマ：</strong><br><br>
       ・市民データ駆動型都市運営<br>
       ・公共施設の収益モデル化<br>
-      ・AI共同意思決定プロセスの導入<br>
+      ・AI共同意思決定プロセスの導入
     </div>
   </div>
-
 </section>
 
 </main>
