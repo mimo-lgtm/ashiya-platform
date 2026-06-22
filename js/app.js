@@ -1,5 +1,5 @@
 // ======================= 設定 =======================
-const GAS_URL = "https://script.google.com/macros/s/AKfycbwQAVSj_yqYLN_djNexwMAkt5vo45anO6RyTPgsJbbZNzJ17wGcfVDP_3XewYgZukbwZw/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbwl2Q62rD85oflFr5nvkbpKUntquZniU3ML4Rr-2xqwkF5gmmA7HMFq456akVy6IXV2/exec";
 
 // ======================= タクソノミー定義 =======================
 const OTHER_LABEL = "その他";
