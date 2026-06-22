@@ -294,6 +294,303 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
   .tree-main-boards{ grid-template-columns:1fr 1fr; }
   .pr-sub-grid{ grid-template-columns:1fr 1fr; }
 }
+
+/* =====================================================
+   VISION / CITY COMPASS PAGE
+   ===================================================== */
+
+/* ── ヒーローセクション ── */
+.compass-hero {
+  background: linear-gradient(160deg, #0a1628 0%, #0f2442 50%, #1a1035 100%);
+  border-radius: 24px; padding: 48px 36px; margin-bottom: 24px;
+  text-align: center; position: relative; overflow: hidden;
+}
+.compass-hero::before {
+  content: "";
+  position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
+  width: 400px; height: 400px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(37,99,235,.18) 0%, transparent 70%);
+  pointer-events: none;
+}
+.compass-ring {
+  width: 100px; height: 100px; border-radius: 50%; margin: 0 auto 20px;
+  background: conic-gradient(
+    #2563eb 0deg 90deg, #06b6d4 90deg 180deg,
+    #10b981 180deg 270deg, #f59e0b 270deg 360deg
+  );
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 40px rgba(37,99,235,.4);
+}
+.compass-ring-inner {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: #0f2442; display: flex; align-items: center;
+  justify-content: center; font-size: 28px;
+}
+.compass-badge {
+  display: inline-block; background: rgba(37,99,235,.25);
+  border: 1px solid rgba(37,99,235,.5); color: #93c5fd;
+  padding: 4px 14px; border-radius: 999px; font-size: 12px;
+  font-weight: 700; letter-spacing: .05em; margin-bottom: 16px;
+}
+.compass-version {
+  display: inline-block; background: #f59e0b; color: #fff;
+  padding: 3px 12px; border-radius: 999px; font-size: 12px;
+  font-weight: 700; margin-bottom: 10px;
+}
+.compass-hero h2 {
+  color: #f0f9ff; font-size: 22px; margin-bottom: 8px; line-height: 1.4;
+}
+.compass-hero .compass-sub {
+  color: #7dd3fc; font-size: 15px; line-height: 1.7; max-width: 600px; margin: 0 auto;
+}
+.compass-pillars {
+  display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 24px;
+}
+.compass-pillar {
+  padding: 8px 18px; border-radius: 12px; font-size: 13px; font-weight: 700;
+  border: 1px solid rgba(255,255,255,.2);
+}
+.live-dot {
+  display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+  background: #10b981; margin-right: 6px;
+  box-shadow: 0 0 0 0 rgba(16,185,129,.4);
+  animation: livepulse 2s infinite;
+}
+@keyframes livepulse {
+  0%   { box-shadow: 0 0 0 0 rgba(16,185,129,.4); }
+  70%  { box-shadow: 0 0 0 8px rgba(16,185,129,0); }
+  100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
+}
+
+/* ── なぜ大事か説明 ── */
+.why-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px;
+}
+.why-card {
+  border-radius: 14px; padding: 18px;
+}
+.why-card.old-way {
+  background: #fef2f2; border-left: 4px solid #dc2626;
+}
+.why-card.new-way {
+  background: #f0fdf4; border-left: 4px solid #16a34a;
+}
+.why-card h4 { margin-bottom: 8px; font-size: 14px; }
+.why-card ul { padding-left: 18px; font-size: 13px; color: #475569; line-height: 2; }
+
+/* ── 3層モデル ── */
+.three-layer { max-width: 600px; margin: 20px auto 0; }
+.layer-box {
+  border-radius: 14px; padding: 16px 20px; position: relative;
+}
+.layer-box.layer-top {
+  background: linear-gradient(135deg, #1e3a5f, #0f2442);
+  color: #fff; text-align: center;
+}
+.layer-box.layer-mid {
+  background: #eff6ff; border: 2px solid #bfdbfe;
+  margin: 0 24px; text-align: center;
+}
+.layer-box.layer-bot {
+  background: #f0fdf4; border: 2px solid #bbf7d0;
+  margin: 0 48px; text-align: center;
+}
+.layer-label {
+  font-size: 11px; font-weight: 700; letter-spacing: .08em;
+  margin-bottom: 4px; opacity: .7;
+}
+.layer-title { font-size: 15px; font-weight: 700; }
+.layer-desc { font-size: 12px; margin-top: 4px; opacity: .75; }
+.layer-arrow {
+  text-align: center; padding: 4px 0; font-size: 13px; color: #64748b;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.layer-arrow-line {
+  width: 2px; height: 32px; background: linear-gradient(#2563eb, #10b981);
+  margin: 0 auto; position: relative;
+}
+.layer-arrow-bi {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 2px; font-size: 18px; color: #2563eb; margin: 4px auto;
+}
+.layer-who {
+  font-size: 11px; font-weight: 700; padding: 2px 10px;
+  border-radius: 999px; margin-top: 6px; display: inline-block;
+}
+.who-human { background: #fde68a; color: #92400e; }
+.who-ai    { background: #ddd6fe; color: #4c1d95; }
+.who-all   { background: #d1fae5; color: #065f46; }
+
+/* ── AI分析サマリー ── */
+.analysis-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px; margin-top: 16px;
+}
+.analysis-card {
+  background: #fff; border-radius: 14px; padding: 14px 16px;
+  box-shadow: 0 3px 10px rgba(0,0,0,.07); border-top: 3px solid #2563eb;
+}
+.analysis-card h4 { font-size: 12px; color: #64748b; margin-bottom: 4px; }
+.analysis-num { font-size: 24px; font-weight: 900; color: #0f172a; }
+.analysis-bar-wrap { margin-top: 16px; }
+.analysis-bar-row {
+  display: grid; grid-template-columns: 160px 1fr 52px;
+  align-items: center; gap: 10px; margin-bottom: 10px;
+}
+.analysis-bar-label { font-size: 13px; font-weight: 600; }
+.analysis-bar-bg {
+  background: #e2e8f0; border-radius: 999px; height: 12px; overflow: hidden;
+}
+.analysis-bar-fill {
+  height: 100%; border-radius: 999px;
+  background: linear-gradient(90deg, #2563eb, #06b6d4);
+  position: relative;
+  transition: width .8s ease;
+}
+.analysis-bar-fill.over { background: linear-gradient(90deg, #10b981, #059669); }
+.analysis-bar-fill.under { background: linear-gradient(90deg, #f59e0b, #d97706); }
+.analysis-bar-pct { font-size: 13px; font-weight: 700; text-align: right; }
+.analysis-diff {
+  font-size: 11px; font-weight: 700; padding: 1px 6px;
+  border-radius: 999px; margin-left: 4px;
+}
+.diff-up { background: #dcfce7; color: #15803d; }
+.diff-dn { background: #fee2e2; color: #dc2626; }
+
+/* ── 整合性インサイト ── */
+.insight-list { list-style: none; margin-top: 12px; }
+.insight-list li {
+  padding: 12px 16px; border-radius: 10px; margin-bottom: 8px;
+  font-size: 14px; display: flex; gap: 10px; align-items: flex-start;
+}
+.insight-list li.ins-ok { background: #f0fdf4; border-left: 3px solid #16a34a; }
+.insight-list li.ins-warn { background: #fffbeb; border-left: 3px solid #f59e0b; }
+.insight-list li.ins-flag { background: #fef2f2; border-left: 3px solid #dc2626; }
+
+/* ── 変遷タイムライン ── */
+.timeline { position: relative; padding-left: 32px; margin-top: 20px; }
+.timeline::before {
+  content: ""; position: absolute; left: 10px; top: 0; bottom: 0;
+  width: 3px; background: linear-gradient(#e2e8f0, #2563eb, #10b981);
+  border-radius: 3px;
+}
+.tl-item { position: relative; margin-bottom: 28px; }
+.tl-dot {
+  position: absolute; left: -28px; top: 4px;
+  width: 16px; height: 16px; border-radius: 50%; border: 3px solid #fff;
+  box-shadow: 0 0 0 2px currentColor;
+}
+.tl-dot.dot-done  { background: #2563eb; color: #2563eb; }
+.tl-dot.dot-now   { background: #10b981; color: #10b981; box-shadow: 0 0 0 2px #10b981, 0 0 0 5px rgba(16,185,129,.3); }
+.tl-dot.dot-next  { background: #e2e8f0; color: #94a3b8; }
+.tl-date { font-size: 12px; color: #64748b; font-weight: 700; margin-bottom: 4px; }
+.tl-card {
+  background: #fff; border-radius: 14px; padding: 16px 20px;
+  box-shadow: 0 3px 12px rgba(0,0,0,.08); border: 1.5px solid #e2e8f0;
+}
+.tl-card.tl-current { border-color: #10b981; box-shadow: 0 4px 16px rgba(16,185,129,.15); }
+.tl-card.tl-future  { opacity: .6; border-style: dashed; }
+.tl-ver { display: inline-block; font-size: 11px; font-weight: 700;
+  padding: 2px 8px; border-radius: 999px; margin-bottom: 8px; }
+.tl-ver.v-old { background: #e2e8f0; color: #64748b; }
+.tl-ver.v-now { background: #dcfce7; color: #15803d; }
+.tl-ver.v-next { background: #ede9fe; color: #5b21b6; }
+.tl-card h4 { font-size: 15px; margin-bottom: 6px; }
+.tl-card p  { font-size: 13px; color: #475569; line-height: 1.7; margin: 0; }
+.tl-change-reason {
+  margin-top: 10px; padding: 8px 12px; background: #f8fafc;
+  border-radius: 8px; font-size: 12px; color: #64748b;
+}
+.tl-change-reason strong { color: #0f172a; }
+
+/* ── how-to-update ── */
+.update-process {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 16px;
+}
+.update-step {
+  background: #fff; border-radius: 14px; padding: 14px;
+  text-align: center; box-shadow: 0 3px 10px rgba(0,0,0,.07);
+  position: relative;
+}
+.update-step::after {
+  content: "→"; position: absolute; right: -12px; top: 50%;
+  transform: translateY(-50%); font-size: 16px; color: #94a3b8;
+}
+.update-step:last-child::after { display: none; }
+.update-icon { font-size: 24px; margin-bottom: 6px; }
+.update-step h4 { font-size: 12px; font-weight: 700; margin-bottom: 4px; }
+.update-step p  { font-size: 11px; color: #64748b; margin: 0; }
+
+@media(max-width:900px){
+  .why-grid { grid-template-columns: 1fr; }
+  .update-process { grid-template-columns: 1fr 1fr; }
+  .analysis-bar-row { grid-template-columns: 120px 1fr 44px; }
+  .update-step::after { display: none; }
+}
+</style>
+   ===================================================== */
+.rules-tab-bar{ display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap; }
+.rules-tab-btn{
+  padding:10px 20px; border-radius:10px; border:2px solid #e2e8f0;
+  background:#fff; font-weight:700; font-size:14px; cursor:pointer; transition:.2s;
+}
+.rules-tab-btn.active{ background:#1e3a5f; color:#fff; border-color:#1e3a5f; }
+.rules-panel{ display:none; }
+.rules-panel.active{ display:block; }
+
+/* ── やさしい図解 ── */
+.easy-flow{ max-width:540px; }
+.easy-step{
+  background:#fff; border-radius:14px; padding:14px 18px;
+  display:flex; align-items:flex-start; gap:14px;
+  box-shadow:0 3px 10px rgba(0,0,0,.07); border-left:5px solid #2563eb; margin-bottom:2px;
+}
+.easy-step.es-ai   { border-left-color:#7c3aed; background:#f5f3ff; }
+.easy-step.es-ok   { border-left-color:#16a34a; background:#f0fdf4; }
+.easy-step.es-warn { border-left-color:#ea580c; background:#fff7ed; }
+.easy-step.es-red  { border-left-color:#dc2626; background:#fff1f2; }
+.easy-num{
+  width:32px; height:32px; border-radius:50%; background:#2563eb;
+  color:#fff; font-weight:900; font-size:14px;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px;
+}
+.easy-step.es-ai   .easy-num{ background:#7c3aed; }
+.easy-step.es-ok   .easy-num{ background:#16a34a; }
+.easy-step.es-warn .easy-num{ background:#ea580c; }
+.easy-step.es-red  .easy-num{ background:#dc2626; }
+.easy-text h4{ margin:0 0 3px; font-size:14px; }
+.easy-text p { margin:0; font-size:12px; color:#64748b; line-height:1.5; }
+.flow-down{ text-align:center; font-size:22px; color:#94a3b8; line-height:1.3; }
+.flow-branch-row{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.flow-branch-col{}
+.lbl-yes{ display:inline-block; background:#dcfce7; color:#15803d; font-size:11px; font-weight:700; padding:2px 8px; border-radius:999px; margin-bottom:5px; }
+.lbl-no { display:inline-block; background:#fee2e2; color:#dc2626;  font-size:11px; font-weight:700; padding:2px 8px; border-radius:999px; margin-bottom:5px; }
+
+/* ── 専門家向けフローチャート ── */
+.expert-wrap{ background:#f8fafc; border-radius:16px; padding:20px; }
+.ex-node{
+  background:#fff; border:2px solid #e2e8f0; border-radius:10px;
+  padding:9px 14px; margin-bottom:3px; font-size:13px; line-height:1.5;
+  box-shadow:0 2px 6px rgba(0,0,0,.05);
+}
+.ex-node.ex-se  { border-radius:999px; border-color:#2563eb; background:#eff6ff; text-align:center; font-weight:700; }
+.ex-node.ex-dec { border-style:dashed; border-color:#d97706; background:#fffbeb; font-weight:600; }
+.ex-node.ex-act { border-color:#7c3aed; background:#f5f3ff; }
+.ex-node.ex-g   { border-color:#16a34a; background:#f0fdf4; }
+.ex-node.ex-r   { border-color:#dc2626; background:#fff1f2; }
+.ex-down{ text-align:center; color:#94a3b8; font-size:18px; margin:2px 0; line-height:1; }
+.ex-branch{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:4px 0; }
+.ex-branch-col{}
+.ex-lbl-y{ display:inline-block; background:#dcfce7; color:#15803d; font-size:11px; font-weight:700; padding:2px 8px; border-radius:999px; margin-bottom:4px; }
+.ex-lbl-n{ display:inline-block; background:#fee2e2; color:#dc2626;  font-size:11px; font-weight:700; padding:2px 8px; border-radius:999px; margin-bottom:4px; }
+.ex-indent{ padding-left:12px; border-left:2px dashed #e2e8f0; }
+
+/* ── 凡例 ── */
+.status-legend{ display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+.status-pill{
+  display:flex; align-items:center; gap:8px;
+  padding:6px 14px; border-radius:999px; font-size:13px; font-weight:700;
+}
 </style>
 </head>
 <body>
@@ -306,7 +603,7 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
     <button onclick="showPage('assistant')">AI壁打ち</button>
     <button onclick="showPage('rules')">分析ルール</button>
     <button onclick="showPage('pullrequest')">PULL REQUEST</button>
-    <button onclick="showPage('vision')">ビジョン変遷</button>
+    <button onclick="showPage('vision')">🧭 City Compass</button>
   </nav>
 </header>
 
@@ -316,15 +613,13 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
 <section id="intro" class="page active">
   <div class="card">
     <h1>駅前公共施設について皆で考えよう</h1>
-<div class="card" style="padding:0;overflow:hidden;">
-    <img src="images/intro.jpg" alt="市民政策AIプラットフォーム">
-  </div>
-    
     <h2>このプラットフォームについて</h2>
     <p>このプラットフォームは、駅前の公共施設について、みなさんの声を自由に投稿できる場所です。投稿された意見は、AIが公平に整理し、誰もが見える形にしていきます。</p>
     <p style="margin-top:10px;">設問はありません。自由に書いた声を、AIが公正な手法で整理し、誰もが確認できる形に残します。</p>
   </div>
-  
+  <div class="card" style="padding:0;overflow:hidden;">
+    <img src="images/comic-all.png" alt="市民政策AIプラットフォーム">
+  </div>
   <div class="card">
     <h2>特徴</h2>
     <ul class="feature-list">
@@ -349,10 +644,6 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
   <div class="tree-page-wrap">
     <div class="tree-vision-card">
       <h2>🏛 政策提案ロジックツリー</h2>
-
-        <div class="placeholder-card" style="padding:0; margin-bottom:20px;">
-  <img src="/ashiya-platform/images/log.tree3.jpg" alt="ロジツリー" class="responsive-img">
-</div>
       <p>コストセンターからプロフィットセンターへ：市民のウェルビーイングと知財の集積による投資型都市経営の実現</p>
     </div>
 
@@ -372,7 +663,7 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
 <section id="assistant" class="page">
   <h1>🤖 AI壁打ち</h1>
   <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px;">
-    <img src="images/aiWall.jpg" alt="AI壁打ち">
+    <img src="images/aiWall.png" alt="AI壁打ち">
   </div>
   <div class="assistant-layout">
     <div class="card">
@@ -412,9 +703,10 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
 <section id="rules" class="page">
   <h1>📊 分析ルール</h1>
   <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px;">
-    <img src="images/ai-labo.jpg" alt="分析ラボ">
+    <img src="images/ai-labo.png" alt="分析ラボ">
   </div>
 
+  <!-- 基本分類ルール -->
   <div class="card">
     <h2>📌 分類の基本ルール</h2>
     <p>大分類は5つで固定されています。AIは大分類を増やしません。中分類・小分類は固定項目のほかに「<strong>その他</strong>」が常に存在します。</p>
@@ -427,58 +719,240 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
     </div>
   </div>
 
+  <!-- ===================== 統合ルール ===================== -->
   <div class="card">
-    <h2>🆕 新しい中分類ができる仕組み</h2>
-    <p>「その他」に集まった投稿が<strong>10件以上</strong>になり、かつそれらが新しい1つのテーマとして10件以上まとまると判断された場合、AIが新しい中分類名を提案します。</p>
-    <ul style="margin-top:12px; padding-left:20px; line-height:2;">
-      <li>「その他」に入った投稿がいくつ溜まっても、<strong>新テーマの候補が10件に満たない間は新分類を作りません</strong></li>
-      <li>新テーマに当てはまると判断された投稿だけが新分類に移動し、残りは引き続き「その他」に残ります</li>
-      <li>新しい中分類はロジックツリーにも自動追記されます</li>
-    </ul>
+    <h2>🔀 統合ルール</h2>
+    <p style="margin-bottom:16px;">投稿が届くたびに、同じ小分類内の既存記事とAIが比較・統合します。統合の透明性を確保するため、どの要素を採用・不採用にしたか理由も記録されます。</p>
+
+    <div class="rules-tab-bar">
+      <button class="rules-tab-btn active" onclick="switchTab('merge','easy')">A. やさしい図解</button>
+      <button class="rules-tab-btn"        onclick="switchTab('merge','expert')">B. 専門家向けフローチャート</button>
+    </div>
+
+    <!-- A: やさしい -->
+    <div id="merge-easy" class="rules-panel active">
+      <div class="easy-flow">
+
+        <div class="easy-step">
+          <div class="easy-num">①</div>
+          <div class="easy-text"><h4>新しい投稿Bが届く</h4><p>市民がAI壁打ちで意見を整理し、PRページへ投稿します</p></div>
+        </div>
+        <div class="flow-down">↓</div>
+
+        <div class="easy-step">
+          <div class="easy-num">②</div>
+          <div class="easy-text"><h4>同じ小分類に「統合済み記事A」があるか確認</h4><p>投稿Bの大分類→中分類→小分類と同じ場所に既存の統合記事が存在するかチェックします</p></div>
+        </div>
+        <div class="flow-down">↓</div>
+
+        <div class="flow-branch-row">
+          <div class="flow-branch-col">
+            <span class="lbl-yes">✓ ある場合</span>
+            <div class="easy-step es-warn">
+              <div class="easy-num">③</div>
+              <div class="easy-text"><h4>BをAのグループに仮置き</h4><p>確定前にAとBを一時的にまとめて比較の準備をします</p></div>
+            </div>
+            <div class="flow-down">↓</div>
+            <div class="easy-step es-ai">
+              <div class="easy-num">④</div>
+              <div class="easy-text"><h4>AIがAとBを比較・分析</h4><p>主張の重複・新規性・矛盾・テーマとの整合性を自動チェック</p></div>
+            </div>
+            <div class="flow-down">↓</div>
+            <div class="easy-step es-ai">
+              <div class="easy-num">⑤</div>
+              <div class="easy-text"><h4>新しい統合記事Cを生成</h4><p>200字要約＋新タイトルが自動で作られます</p></div>
+            </div>
+            <div class="flow-down">↓</div>
+            <div class="easy-step">
+              <div class="easy-num">⑥</div>
+              <div class="easy-text"><h4>透明性説明文を付与</h4><p>「Bの○○は採用した理由」「Bの△△は採用しなかった理由」を自動生成</p></div>
+            </div>
+            <div class="flow-down">↓</div>
+            <div class="easy-step es-ok">
+              <div class="easy-num">⑦</div>
+              <div class="easy-text">
+                <h4>各投稿のステータスが更新される</h4>
+                <p>
+                  <span style="color:#1d4ed8;font-weight:700;">投稿A → 🔵 統合済み（青）</span><br>
+                  <span style="color:#dc2626;font-weight:700;">投稿B → 🔴 処理済み（赤）</span><br>
+                  <span style="color:#15803d;font-weight:700;">投稿C → 🟢 新しい統合記事（青・ロジックツリーにも記載）</span>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="flow-branch-col">
+            <span class="lbl-no">✗ ない場合</span>
+            <div class="easy-step es-red">
+              <div class="easy-num">③'</div>
+              <div class="easy-text"><h4>Bを単独投稿として登録</h4><p>🔴 未統合 のまま小分類に格納されます。次の投稿が来たとき、Bが「統合候補A」の役割を担います</p></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:16px; padding:14px; background:#fefce8; border-radius:12px; border-left:4px solid #d97706; font-size:13px;">
+          <strong>📌 具体例：</strong><br>
+          既存の統合記事 <span style="color:#1d4ed8;font-weight:700;">A「図書館のデジタル化推進」</span> に
+          新投稿 <span style="color:#dc2626;">B「ITサポート窓口を常設してほしい」</span> が届く<br>
+          → AIが「ITサポート窓口」の要素をAに追加して再統合<br>
+          → 新統合記事 <span style="color:#15803d;font-weight:700;">C「デジタルライブラリとITサポート常設の一体的推進」</span> が誕生
+        </div>
+      </div>
+    </div>
+
+    <!-- B: 専門家 -->
+    <div id="merge-expert" class="rules-panel">
+      <div class="expert-wrap">
+        <div class="ex-node ex-se">▶ Start：新規投稿Bを受信</div>
+        <div class="ex-down">↓</div>
+        <div class="ex-node ex-act">① 大分類・中分類・小分類をAIで分類（タクソノミーに正規化）</div>
+        <div class="ex-down">↓</div>
+        <div class="ex-node ex-dec">② 同じ小分類に「統合済み投稿A」が存在するか？</div>
+        <div class="ex-down">↓</div>
+        <div class="ex-branch">
+          <div class="ex-branch-col">
+            <span class="ex-lbl-y">Yes → 統合フロー</span>
+            <div class="ex-indent">
+              <div class="ex-node">③ 統合候補A群にBを仮置き</div>
+              <div class="ex-down">↓</div>
+              <div class="ex-node ex-act">④ A群とBの内容比較<br>・主張の重複 ・新規性<br>・矛盾点 ・テーマ整合性</div>
+              <div class="ex-down">↓</div>
+              <div class="ex-node ex-act">⑤ 統合ルールに基づき統合文Cを生成<br>・200字要約 ・新タイトル ・透明性説明文<br>（採用/不採用の理由）</div>
+              <div class="ex-down">↓</div>
+              <div class="ex-node ex-g">⑥ A → 統合済（青）<br>　 B → 処理済み（赤）<br>　 C → 新統合投稿（青・ツリー更新）</div>
+            </div>
+          </div>
+          <div class="ex-branch-col">
+            <span class="ex-lbl-n">No → 単独登録フロー</span>
+            <div class="ex-indent">
+              <div class="ex-node ex-r">③' Bを単独投稿として登録<br>（未統合・赤）<br>次の投稿到着時にAとなる</div>
+            </div>
+          </div>
+        </div>
+        <div class="ex-down">↓</div>
+        <div class="ex-node ex-se">■ End</div>
+      </div>
+    </div>
   </div>
 
+  <!-- ===================== 新規カテゴリルール ===================== -->
   <div class="card">
-    <h2>🔀 統合の仕組みと流れ</h2>
-    <p>統合は<strong>小分類</strong>単位で行われます。小分類内の投稿が増えた際、AIが内容の近い投稿をまとめ、新しい統合記事を生成します。</p>
+    <h2>🆕 新規カテゴリ作成ルール</h2>
+    <p style="margin-bottom:16px;">大分類は固定で変わりません。中分類・小分類に「その他」の投稿が増え、一定の条件を満たしたとき、AIが新しいカテゴリ名を提案・生成します。</p>
 
-    <div class="rules-merge-flow">
-      <div class="rules-step-card">
-        <div class="rules-step-num">①</div>
-        <div class="rules-step-title">新しい投稿が届く</div>
-        <div class="rules-step-desc">市民がAI壁打ちで意見を整理・投稿します</div>
-      </div>
-      <div class="rules-step-card" style="border-top-color:#8b5cf6;">
-        <div class="rules-step-num" style="color:#8b5cf6;">②</div>
-        <div class="rules-step-title">既存の統合候補と比較</div>
-        <div class="rules-step-desc">AIが新投稿と既存の「統合済み記事A」の内容を比較・分析します</div>
-      </div>
-      <div class="rules-step-card" style="border-top-color:#10b981;">
-        <div class="rules-step-num" style="color:#10b981;">③</div>
-        <div class="rules-step-title">再統合 → タイトルCが誕生</div>
-        <div class="rules-step-desc">BのXX要素をAに加え、新しい統合記事「タイトルC」が生成されます</div>
-      </div>
+    <div class="rules-tab-bar">
+      <button class="rules-tab-btn active" onclick="switchTab('newcat','easy')">A. やさしい図解</button>
+      <button class="rules-tab-btn"        onclick="switchTab('newcat','expert')">B. 専門家向けフローチャート</button>
     </div>
 
-    <div class="rules-merge-example">
-      <strong>例：</strong><br>
-      既存の統合記事 <span style="color:#1d4ed8; font-weight:700;">A「図書館のデジタル化推進」</span> に、<br>
-      新投稿 <span style="color:#dc2626;">B「ITサポート窓口を常設してほしい」</span> が届く<br>
-      ↓ AIが「ITサポート窓口」の要素をAに加えて再統合<br>
-      新しい統合記事 <span style="color:#15803d; font-weight:700;">C「デジタルライブラリとITサポート常設の一体的推進」</span> が誕生
+    <!-- A: やさしい -->
+    <div id="newcat-easy" class="rules-panel active">
+      <div class="easy-flow">
+
+        <div class="easy-step">
+          <div class="easy-num">①</div>
+          <div class="easy-text"><h4>「その他」に投稿が集まり始める</h4><p>既存の小分類に当てはまらない投稿が「その他」へ格納されます</p></div>
+        </div>
+        <div class="flow-down">↓</div>
+
+        <div class="easy-step">
+          <div class="easy-num">②</div>
+          <div class="easy-text"><h4>AIが「その他」の内容を常時分析</h4><p>投稿が届くたびに、その他の全投稿をAIが眺め、似たテーマが集まっていないかチェックします</p></div>
+        </div>
+        <div class="flow-down">↓</div>
+
+        <div class="easy-step es-warn">
+          <div class="easy-num">③</div>
+          <div class="easy-text"><h4>同じテーマの候補が10件以上に達したか？</h4><p>「その他」全体の件数ではなく、<strong>同じ新テーマに分類できる投稿が10件以上</strong>かどうかで判定します</p></div>
+        </div>
+        <div class="flow-down">↓</div>
+
+        <div class="flow-branch-row">
+          <div class="flow-branch-col">
+            <span class="lbl-yes">✓ 10件以上</span>
+            <div class="easy-step es-ai">
+              <div class="easy-num">④</div>
+              <div class="easy-text"><h4>AIが新しいカテゴリ名を提案</h4><p>10件の投稿の共通テーマをAIが分析し、適切な新しい中分類名または小分類名を自動生成します</p></div>
+            </div>
+            <div class="flow-down">↓</div>
+            <div class="easy-step es-ok">
+              <div class="easy-num">⑤</div>
+              <div class="easy-text"><h4>既存の「その他」投稿が再分類される</h4><p>新テーマに当てはまる投稿のみが新分類に移動。残りはそのまま「その他」に残ります。ロジックツリーにも自動追記。</p></div>
+            </div>
+          </div>
+          <div class="flow-branch-col">
+            <span class="lbl-no">✗ 10件未満</span>
+            <div class="easy-step es-red">
+              <div class="easy-num">④'</div>
+              <div class="easy-text"><h4>引き続き「その他」に保持</h4><p>まだ新分類を作りません。次の投稿が来るたびに再チェックします</p></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:16px; padding:14px; background:#fefce8; border-radius:12px; border-left:4px solid #d97706; font-size:13px;">
+          <strong>📌 具体例：</strong><br>
+          「その他」に「子ども向けプログラミング教室」「AI工作ワークショップ」「ロボット体験」など<br>
+          <strong>デジタル体験・STEM教育系の投稿が10件以上</strong>集まった場合<br>
+          → AI が「<span style="color:#15803d;font-weight:700;">デジタル体験・STEM教育</span>」という新しい小分類を提案<br>
+          → 該当する投稿が自動移動 → ロジックツリーに追記
+        </div>
+      </div>
     </div>
 
-    <h3>統合後の見え方</h3>
-    <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:8px;">
-      <span style="background:#fee2e2; color:#dc2626; padding:4px 12px; border-radius:8px; font-size:13px; font-weight:700;">🔴 未統合</span>
-      <span>投稿されたがまだ統合処理がされていない</span>
+    <!-- B: 専門家 -->
+    <div id="newcat-expert" class="rules-panel">
+      <div class="expert-wrap">
+        <div class="ex-node ex-se">▶ Start：新規投稿を受信・保存後</div>
+        <div class="ex-down">↓</div>
+        <div class="ex-node ex-dec">⑨ 投稿の小分類が「その他」か？</div>
+        <div class="ex-down">↓</div>
+        <div class="ex-branch">
+          <div class="ex-branch-col">
+            <span class="ex-lbl-y">Yes → 新分類チェック</span>
+            <div class="ex-indent">
+              <div class="ex-node ex-act">⑩ その他内の全投稿をAIが分析<br>（テーマ・キーワードのクラスタリング）</div>
+              <div class="ex-down">↓</div>
+              <div class="ex-node ex-dec">⑪ 同一テーマの候補が10件以上？<br><span style="font-size:11px;color:#92400e;">※その他合計ではなく同テーマ候補数でカウント</span></div>
+              <div class="ex-down">↓</div>
+              <div class="ex-branch">
+                <div class="ex-branch-col">
+                  <span class="ex-lbl-y">Yes</span>
+                  <div class="ex-indent">
+                    <div class="ex-node ex-act">⑫ 新カテゴリ名をAIが生成</div>
+                    <div class="ex-down">↓</div>
+                    <div class="ex-node ex-act">⑬ その他の投稿を再分類<br>（新テーマ該当→新分類/非該当→その他に残留）</div>
+                    <div class="ex-down">↓</div>
+                    <div class="ex-node ex-g">⑭ ロジックツリー・PR一覧を更新</div>
+                  </div>
+                </div>
+                <div class="ex-branch-col">
+                  <span class="ex-lbl-n">No</span>
+                  <div class="ex-indent">
+                    <div class="ex-node ex-r">⑮ その他に保持<br>（次回投稿時に再チェック）</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="ex-branch-col">
+            <span class="ex-lbl-n">No → 既存小分類に保持</span>
+            <div class="ex-indent">
+              <div class="ex-node">⑯ 既存の小分類にそのまま格納</div>
+            </div>
+          </div>
+        </div>
+        <div class="ex-down">↓</div>
+        <div class="ex-node ex-se">■ End</div>
+      </div>
     </div>
-    <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:8px;">
-      <span style="background:#e2e8f0; color:#64748b; padding:4px 12px; border-radius:8px; font-size:13px; font-weight:700;">⚫ 処理済み</span>
-      <span>統合されて新記事に吸収された元の投稿（クリックで統合先へ誘導）</span>
-    </div>
-    <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:8px;">
-      <span style="background:#dbeafe; color:#1d4ed8; padding:4px 12px; border-radius:8px; font-size:13px; font-weight:700;">🔵 統合済み</span>
-      <span>AIが生成した統合記事（ロジックツリーにも記載）</span>
+  </div>
+
+  <!-- ステータス凡例 -->
+  <div class="card">
+    <h2>📎 投稿ステータスの見え方</h2>
+    <div class="status-legend">
+      <span class="status-pill" style="background:#fee2e2; color:#dc2626;">🔴 未統合 — 投稿されたばかりで未処理</span>
+      <span class="status-pill" style="background:#e2e8f0; color:#64748b;">⚫ 処理済み — 統合されて新記事に吸収（クリックで統合先へ）</span>
+      <span class="status-pill" style="background:#dbeafe; color:#1d4ed8;">🔵 統合済み — AIが生成した統合記事（ロジックツリーにも掲載）</span>
     </div>
   </div>
 
@@ -492,7 +966,7 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
 <section id="pullrequest" class="page">
   <h1>📋 PULL REQUEST</h1>
   <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px;">
-    <img src="images/bib.jpg" alt="プルリク">
+    <img src="images/bib.png" alt="プルリク">
   </div>
   <div class="card">
     <h2>カテゴリー別の提案一覧</h2>
@@ -503,111 +977,267 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
   </div>
 </section>
 
- 
-
-<!-- ================= CITY COMPASS ================= -->
+<!-- ================= VISION / CITY COMPASS ================= -->
 <section id="vision" class="page">
-  <h1>🧭 City Compass,Guiding Principle（芦屋市のよりどころ）の変遷</h1>
 
-  <!-- メインビジュアル -->
-  <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px;">
-    <img src="images/future5.jpg" alt="未来ビジョン">
-  </div>
-
-  <!-- 説明 -->
-  <div class="card">
-    <p>
-      <strong>City Compass（基本的な方向性）</strong> は、駅前公共施設に関して「何を大切にし、どこへ向かうのか」を示す最上位の考え方です。<br>
-      市民の声（Evidence Base）と AI が抽出する方向性（Pillars）を踏まえ、<br>
-      <strong>人間が最終判断する領域</strong>です。
+  <!-- ① ヒーロー：現在の羅針盤 -->
+  <div class="compass-hero">
+    <div class="compass-ring">
+      <div class="compass-ring-inner">🧭</div>
+    </div>
+    <div class="compass-badge">CITY COMPASS — 芦屋市の羅針盤</div>
+    <div>
+      <span class="compass-version">Ver. 1.0　2026年7月 設定</span>
+      &nbsp;
+      <span style="font-size:12px; color:#6ee7b7;"><span class="live-dot"></span>市民の声を受けて更新中</span>
+    </div>
+    <h2>コストセンターからプロフィットセンターへ</h2>
+    <p class="compass-sub">
+      芦屋市の公共施設を、維持費がかかる「コスト」としてではなく、<br>
+      市民のウェルビーイング・知・経済価値を生み出す<strong style="color:#7dd3fc;">投資型の都市拠点</strong>として再定義する。<br>
+      市民の自由なアイデアと最先端テクノロジーが交わり、街全体の価値を上げ続ける場所へ。
     </p>
-  </div>
-
-  <!-- 図解：4層構造（カード風） -->
-  <div class="card" style="background:#f8fafc;">
-    <h3 style="margin-top:0;">【City Compass を支える4層構造】</h3>
-
-    <div style="padding:10px 0; line-height:1.8;">
-      <div><strong>🧭 City Compass（芦屋市のよりどころ）</strong> — 人間が判断</div>
-      <div style="margin-left:20px;">▲</div>
-
-      <div><strong>🏛 Pillars（芦屋市の方向性）</strong> — AIが市民の総意から抽出</div>
-      <div style="margin-left:20px;">▲</div>
-
-      <div><strong>💎 Value Drivers（市民の価値観）</strong> — 小分類</div>
-      <div style="margin-left:20px;">▲</div>
-
-      <div><strong>📚 Evidence Base（市民投稿データ）</strong></div>
+    <div class="compass-pillars">
+      <span class="compass-pillar" style="background:rgba(37,99,235,.3); color:#93c5fd;">🏫 価値向上</span>
+      <span class="compass-pillar" style="background:rgba(16,185,129,.2); color:#6ee7b7;">❤️ ウェルビーイング</span>
+      <span class="compass-pillar" style="background:rgba(245,158,11,.2); color:#fcd34d;">💰 財政的持続</span>
+      <span class="compass-pillar" style="background:rgba(139,92,246,.2); color:#c4b5fd;">🏛 施設の戦略性</span>
+      <span class="compass-pillar" style="background:rgba(239,68,68,.2); color:#fca5a5;">🛡 強靭性</span>
     </div>
   </div>
 
-  <!-- 図解：変遷モデル（カード風） -->
-  <div class="card" style="background:#f8fafc;">
-    <h3 style="margin-top:0;">【City Compass（芦屋市のよりどころ）の変遷モデル】</h3>
+  <!-- ② なぜこのページが最も大事か -->
+  <div class="card">
+    <h2>🎯 なぜ「City Compass」が最も大切か</h2>
+    <p>民間のプロジェクトには必ず「原点」があります。進行中も原点に立ち返ることが目的達成の最短距離です。<br>
+    このプラットフォームは、行政における意思決定プロセスにその考え方を持ち込みます。</p>
 
-    <div style="padding:10px 0; line-height:1.8;">
-      <div>📚 市民投稿（Evidence Base）</div>
-      <div style="margin-left:20px;">│</div>
-      <div style="margin-left:20px;">▼</div>
-
-      <div>💎 Value Drivers（市民の価値観）</div>
-      <div style="margin-left:20px;">│ AI統合・新カテゴリ生成</div>
-      <div style="margin-left:20px;">▼</div>
-
-      <div>🏛 Pillars（芦屋市の方向性）</div>
-      <div style="margin-left:20px;">│ 市民の総意の変化</div>
-      <div style="margin-left:20px;">▼</div>
-
-      <div>🧭 City Compass（芦屋市のよりどころ）</div>
-      <div style="margin-left:20px;">│ 人間が判断して更新</div>
-      <div style="margin-left:20px;">▼</div>
-
-      <div>🔮 都市の未来像（ビジョン）</div>
+    <div class="why-grid">
+      <div class="why-card old-way">
+        <h4>❌ 従来の行政プロセス</h4>
+        <ul>
+          <li>計画を立てたら計画通りに進めることが第一義</li>
+          <li>意見収集は「聴いた」という実績づくりが優先</li>
+          <li>ビジョンの見直しは例外的・消極的</li>
+          <li>市民の声とビジョンの整合性は不可視</li>
+        </ul>
+      </div>
+      <div class="why-card new-way">
+        <h4>✅ このプラットフォームの試み</h4>
+        <ul>
+          <li>市民の声がAIで分析・構造化され続ける</li>
+          <li>ビジョンとの「ずれ」が定量的に可視化される</li>
+          <li>ずれが大きければビジョン変更の議論ができる</li>
+          <li>変更の理由と根拠がすべて記録される</li>
+        </ul>
+      </div>
     </div>
   </div>
 
-  <!-- 初期 City Compass -->
+  <!-- ③ 3層モデル（双方向の矢印） -->
   <div class="card">
-    <div style="color:#64748b; font-size:14px; margin-bottom:6px;">2026年7月</div>
-    <h3 style="margin-top:0;">🌱 初期 City Compass（芦屋市のよりどころ）</h3>
+    <h2>🔺 3層の構造と役割</h2>
+    <p>このプラットフォームは3層で構成されます。上から下へ「方向づけ」が流れ、下から上へ「市民の声」が積み上がる双方向の仕組みです。</p>
 
-    <div style="display:flex; gap:8px; flex-wrap:wrap; margin:10px 0;">
-      <span style="background:#dbeafe; color:#1d4ed8; padding:3px 10px; border-radius:999px; font-size:13px;">創造性</span>
-      <span style="background:#dbeafe; color:#1d4ed8; padding:3px 10px; border-radius:999px; font-size:13px;">ウェルビーイング</span>
-      <span style="background:#dbeafe; color:#1d4ed8; padding:3px 10px; border-radius:999px; font-size:13px;">未来への投資</span>
+    <div class="three-layer">
+      <div class="layer-box layer-top">
+        <div class="layer-label">LEVEL 1 — 人間が設定・判断する</div>
+        <div class="layer-title">🧭 City Compass（羅針盤）</div>
+        <div class="layer-desc">「投資型都市経営の実現」という最上位のミッション</div>
+        <span class="layer-who who-human">👤 市・議会・市民代表が判断</span>
+      </div>
+
+      <div style="text-align:center; padding:6px 0;">
+        <div style="font-size:18px; color:#2563eb;">↕</div>
+        <div style="font-size:11px; color:#64748b;">方向づけ ／ 市民の総意が反映</div>
+      </div>
+
+      <div class="layer-box layer-mid">
+        <div class="layer-label">LEVEL 2 — AIが構造化・可視化する</div>
+        <div class="layer-title">🌳 Policy Logic Tree</div>
+        <div class="layer-desc">大分類 → 中分類 → 小分類（膨大なエビデンスから最適解を導出）</div>
+        <span class="layer-who who-ai">🤖 AIが分析・分類・統合</span>
+      </div>
+
+      <div style="text-align:center; padding:6px 0;">
+        <div style="font-size:18px; color:#10b981;">↕</div>
+        <div style="font-size:11px; color:#64748b;">意見の集積 ／ AI壁打ちで整理</div>
+      </div>
+
+      <div class="layer-box layer-bot">
+        <div class="layer-label">LEVEL 3 — 市民が自由に生み出す</div>
+        <div class="layer-title">💬 個々の投稿・AI壁打ちの結果</div>
+        <div class="layer-desc">市民一人ひとりの声・アイデア・経験</div>
+        <span class="layer-who who-all">👥 すべての市民が参加</span>
+      </div>
     </div>
 
-    <p>
-      <strong>「市民の創造性とウェルビーイングを最大化し、未来に投資する都市をつくる」</strong><br><br>
-      駅前公共施設を、市民の知的資本と創造性を育てる拠点として捉える考え方です。
+    <p style="margin-top:20px; font-size:13px; color:#64748b; text-align:center;">
+      Level 3 が積み重なると Level 2（ツリー）が育ち、<br>
+      Level 2 の傾向が Level 1（羅針盤）の見直しを促す。これが「生きた政策立案」です。
     </p>
   </div>
 
-  <!-- 次回 City Compass -->
+  <!-- ④ AI分析サマリー（模擬データ） -->
   <div class="card">
-    <h2>🔮 次回 City Compass（更新候補）</h2>
-    <p>
-      市民投稿の傾向が変化し、AI が抽出する Pillars が変わると、City Compass も見直しのタイミングを迎えます。
+    <h2>📊 現在の市民の声 — AI分析サマリー</h2>
+    <p style="font-size:13px; color:#64748b; margin-bottom:4px;">
+      ※ 以下は模擬データです。投稿が積み重なると自動更新されます。
     </p>
 
-    <div style="margin-top:12px; padding:14px; border-left:4px solid #2563eb; background:#f8fafc; border-radius:10px;">
-      <strong>現在の仮テーマ：</strong><br><br>
-      ・学び・創造・共創を中心に据えた「知の都市」<br>
-      ・安全・レジリエンス・市民自治を軸にした「しなやかな都市」<br>
-      ・市民データ駆動型都市運営<br>
-      ・AI共同意思決定プロセスの導入
+    <div class="analysis-grid">
+      <div class="analysis-card">
+        <h4>総投稿数</h4>
+        <div class="analysis-num">20<span style="font-size:14px; font-weight:400; color:#64748b;">件</span></div>
+      </div>
+      <div class="analysis-card" style="border-top-color:#10b981;">
+        <h4>統合済み記事</h4>
+        <div class="analysis-num" style="color:#10b981;">0<span style="font-size:14px; font-weight:400; color:#64748b;">件</span></div>
+      </div>
+      <div class="analysis-card" style="border-top-color:#f59e0b;">
+        <h4>City Compassとの整合性</h4>
+        <div class="analysis-num" style="color:#f59e0b;">84<span style="font-size:14px; font-weight:400; color:#64748b;">%</span></div>
+      </div>
+      <div class="analysis-card" style="border-top-color:#8b5cf6;">
+        <h4>ビジョン更新の必要性</h4>
+        <div class="analysis-num" style="color:#8b5cf6; font-size:18px; font-weight:700;">要検討</div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:24px;">大分類別の投稿割合 vs. 当初想定</h3>
+    <div class="analysis-bar-wrap">
+      <div class="analysis-bar-row">
+        <div class="analysis-bar-label">🏫 価値向上</div>
+        <div class="analysis-bar-bg"><div class="analysis-bar-fill over" style="width:28%;"></div></div>
+        <div class="analysis-bar-pct">28% <span class="analysis-diff diff-up">+3%</span></div>
+      </div>
+      <div class="analysis-bar-row">
+        <div class="analysis-bar-label">❤️ ベネフィット</div>
+        <div class="analysis-bar-bg"><div class="analysis-bar-fill over" style="width:30%;"></div></div>
+        <div class="analysis-bar-pct">30% <span class="analysis-diff diff-up">+5%</span></div>
+      </div>
+      <div class="analysis-bar-row">
+        <div class="analysis-bar-label">💰 財政的持続</div>
+        <div class="analysis-bar-bg"><div class="analysis-bar-fill" style="width:22%;"></div></div>
+        <div class="analysis-bar-pct">22% <span class="analysis-diff diff-up">+2%</span></div>
+      </div>
+      <div class="analysis-bar-row">
+        <div class="analysis-bar-label">🏛 施設の戦略性</div>
+        <div class="analysis-bar-bg"><div class="analysis-bar-fill under" style="width:12%;"></div></div>
+        <div class="analysis-bar-pct">12% <span class="analysis-diff diff-dn">−3%</span></div>
+      </div>
+      <div class="analysis-bar-row">
+        <div class="analysis-bar-label">🛡 強靭性</div>
+        <div class="analysis-bar-bg"><div class="analysis-bar-fill under" style="width:8%;"></div></div>
+        <div class="analysis-bar-pct">8% <span class="analysis-diff diff-dn">−7%</span></div>
+      </div>
     </div>
   </div>
 
-  <!-- まとめ -->
+  <!-- ⑤ 整合性インサイト -->
   <div class="card">
-    <h2>📌 まとめ</h2>
-    <p>
-      City Compass（都市のよりどころ）は、芦屋市の未来を導く最上位の考え方です。<br>
-      その下位にある Pillars（都市の方向性）、Value Drivers（市民の価値観）、Evidence Base（投稿データ）が連動し、<br>
-      市民参加型の都市経営を実現します。
-    </p>
+    <h2>🔍 City Compassとの整合性評価</h2>
+    <p>市民の声のパターンを現在の City Compass と照合した結果、以下のインサイトが得られています。</p>
+    <ul class="insight-list">
+      <li class="ins-ok">
+        <span>✅</span>
+        <span><strong>「市民のウェルビーイング向上」への関心は想定以上（+5%）。</strong>カフェ・コミュニティ・リスキリング系の投稿が多く、City Compassの方向性と高く整合している。</span>
+      </li>
+      <li class="ins-ok">
+        <span>✅</span>
+        <span><strong>「価値向上・移住促進」も想定を上回る（+3%）。</strong>絵本図書館・EdTech・公園芝生化の関心が高く、子育て世代へのアピールポイントとして機能しそう。</span>
+      </li>
+      <li class="ins-warn">
+        <span>⚠️</span>
+        <span><strong>「施設の戦略性（デジタル・起業支援）」は想定より低い（−3%）。</strong>デジタルライブラリ・ピッチアリーナ等への言及はあるが、関心の絶対数が少ない。認知度向上の施策が必要かもしれない。</span>
+      </li>
+      <li class="ins-flag">
+        <span>🚩</span>
+        <span><strong>「都市の強靭性・ガバナンス」が想定を大きく下回る（−7%）。</strong>DAO型投票・トークン設計等への市民関心は現時点では低い。City Compassにおける本大分類の優先度を見直す議論が必要。</span>
+      </li>
+    </ul>
   </div>
+
+  <!-- ⑥ 変遷タイムライン -->
+  <div class="card">
+    <h2>📜 City Compass の変遷記録</h2>
+    <p>変更するたびに「なぜ変えたか」の理由と根拠をここに記録します。これがプロジェクトの透明性と説明責任の核心です。</p>
+
+    <div class="timeline">
+
+      <!-- v0 -->
+      <div class="tl-item">
+        <div class="tl-dot dot-done"></div>
+        <div class="tl-date">2026年 4月　構想段階</div>
+        <div class="tl-card">
+          <span class="tl-ver v-old">v0.1 — 廃案</span>
+          <h4>「駅前施設の維持費を最小化する」</h4>
+          <p>当初は「いかに安く運営するか」というコスト削減の発想が出発点だった。しかし市民討議の中で「それでは施設の可能性を狭める」という指摘が相次ぎ廃案となった。</p>
+          <div class="tl-change-reason">
+            <strong>変更理由：</strong>コスト削減を主目的にすると、施設の価値創造機能と矛盾する。発想の転換が必要との市民意見を受けて再設計。
+          </div>
+        </div>
+      </div>
+
+      <!-- v1 (現在) -->
+      <div class="tl-item">
+        <div class="tl-dot dot-now"></div>
+        <div class="tl-date">2026年 7月　現在の羅針盤</div>
+        <div class="tl-card tl-current">
+          <span class="tl-ver v-now">v1.0 — 現在</span>
+          <h4>「コストセンターからプロフィットセンターへ：投資型都市経営の実現」</h4>
+          <p>公共施設を「費用のかかる箱モノ」から、市民のウェルビーイング・知財・経済価値を生み出す「投資型拠点」に転換する。AI壁打ちを通じた市民意見の収集と可視化を開始。5つの大分類を設定してPolicy Logic Treeを運用中。</p>
+          <div class="tl-change-reason">
+            <strong>設定根拠：</strong>国内外の先進事例（コペンハーゲン・シンガポール等）の公共施設収益化モデルと、初期市民ヒアリング30件の分析結果をもとに策定。
+          </div>
+        </div>
+      </div>
+
+      <!-- v2 (予定) -->
+      <div class="tl-item">
+        <div class="tl-dot dot-next"></div>
+        <div class="tl-date">2027年 予定（投稿100件到達後に議論）</div>
+        <div class="tl-card tl-future">
+          <span class="tl-ver v-next">v2.0 — 予定</span>
+          <h4>市民の声を反映した改訂版（未確定）</h4>
+          <p>現時点では「都市の強靭性・ガバナンス」への市民関心が想定を下回っている。投稿100件到達時点でAI分析を実施し、City Compassの5つの大分類の優先順位や記述を見直す議論を市民参加型で実施予定。</p>
+          <div class="tl-change-reason">
+            <strong>議論のトリガー：</strong>投稿100件 または 整合性スコアが70%を下回った時点
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ⑦ 更新プロセス -->
+  <div class="card">
+    <h2>🔄 City Compassの更新プロセス</h2>
+    <p>羅針盤は「固定」ではなく「生きたもの」です。市民の声が一定数集まると、以下のプロセスで見直しが行われます。</p>
+    <div class="update-process">
+      <div class="update-step">
+        <div class="update-icon">💬</div>
+        <h4>市民が投稿</h4>
+        <p>AI壁打ちを通じて意見が蓄積される</p>
+      </div>
+      <div class="update-step">
+        <div class="update-icon">🤖</div>
+        <h4>AIが分析</h4>
+        <p>傾向・整合性スコアを自動算出</p>
+      </div>
+      <div class="update-step">
+        <div class="update-icon">🔍</div>
+        <h4>ずれを可視化</h4>
+        <p>Compassとのギャップを定量的に表示</p>
+      </div>
+      <div class="update-step">
+        <div class="update-icon">👤</div>
+        <h4>人間が判断</h4>
+        <p>市・議会・市民代表がCompassを改訂。理由を記録して次バージョンへ</p>
+      </div>
+    </div>
+  </div>
+
 </section>
 
 </main>
