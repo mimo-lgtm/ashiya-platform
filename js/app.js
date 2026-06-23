@@ -1,7 +1,6 @@
 // ======================= 設定 =======================
 const GAS_URL = "https://script.google.com/macros/s/AKfycbzhfNpYe6FEysPfdZPsy9cZFRgaCeB5PmkVBMGAr3OBNl7nOmD0XzbYKNm0MuiiYh4pTw/exec";
 
-// ======================= タクソノミー =======================
 const OTHER_LABEL = "その他";
 
 const MAIN_CATEGORIES = [
@@ -22,7 +21,6 @@ function findMain(text) {
   for (const m of MAIN_CATEGORIES) {
     if (text.includes(m.keyword) || text.includes(m.label)) return m;
   }
-  // キーで検索
   for (const m of MAIN_CATEGORIES) {
     if (text.includes(m.key)) return m;
   }
@@ -30,23 +28,26 @@ function findMain(text) {
 }
 
 // ======================= 状態管理 =======================
-let currentCategory = "①";
-let currentIdeaText = "";
-let currentAIResult = "";
+let currentIdeaText  = "";
+let currentAIResult  = "";
 let currentSummary200 = "";
-let currentTitle = "";
-let currentMain = "";
-let currentSub = "";
-let cachedRows = [];
+let currentTitle     = "";
+let currentMain      = "";
+let currentSub       = "";
+let cachedRows       = [];
 
-// ======================= ページ切り替え =======================
+// ======================= ★ページ切り替え（常にトップへ） =======================
 function showPage(pageId) {
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
   const target = document.getElementById(pageId);
   if (target) target.classList.add("active");
+
+  // ★ 常にページトップへスクロール
+  window.scrollTo({ top: 0, behavior: "smooth" });
+
   if (pageId === "pullrequest") loadPRList();
-  if (pageId === "tree") { initTreeBoards(); loadTreeData(); }
-  if (pageId === "rules") loadRulesSummary();
+  if (pageId === "tree")        { initTreeBoards(); loadTreeData(); }
+  if (pageId === "rules")       loadRulesSummary();
 }
 
 // ======================= 分析ページ サマリー =======================
@@ -59,15 +60,14 @@ async function loadRulesSummary() {
 
   try {
     if (cachedRows.length === 0) {
-      const res = await fetch(GAS_URL + "?mode=list");
+      const res  = await fetch(GAS_URL + "?mode=list");
       const data = await res.json();
       if (Array.isArray(data)) cachedRows = data;
     }
-    const rows = cachedRows;
+    const rows   = cachedRows;
     const total  = rows.length;
     const merged = rows.filter(r => r.status === "統合" || r.status === "新分類統合").length;
 
-    // 大分類ごとの件数
     const counts = {};
     MAIN_CATEGORIES.forEach(m => counts[m.label] = 0);
     rows.forEach(r => {
@@ -93,48 +93,28 @@ async function loadRulesSummary() {
           '</div>';
       });
     }
-  } catch(e) {
-    console.error("サマリー読み込み失敗", e);
-  }
-}
-
-// ======================= カテゴリーバー =======================
-function initCategoryButtons() {
-  const bar = document.getElementById("categoryBar");
-  if (!bar) return;
-  bar.innerHTML = "";
-  MAIN_CATEGORIES.forEach(m => {
-    const btn = document.createElement("button");
-    btn.className = "cat-btn" + (currentCategory === m.key ? " active" : "");
-    btn.textContent = m.key + " " + m.label;
-    btn.onclick = () => {
-      currentCategory = m.key;
-      bar.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-    };
-    bar.appendChild(btn);
-  });
+  } catch(e) { console.error("サマリー読み込み失敗", e); }
 }
 
 // =====================================================================
-//   LOGIC TREE — クリッカブルボード
+//   LOGIC TREE — ★ボードクリックで詳細展開（スクロール修正）
 // =====================================================================
 function initTreeBoards() {
   const area = document.getElementById("treeMainBoards");
   if (!area) return;
-  area.dataset.built = "";  // 毎回再描画
   area.innerHTML = "";
 
   MAIN_CATEGORIES.forEach((m, idx) => {
     const board = document.createElement("div");
     board.className = "tree-board";
-    board.id = "treeBoard_" + idx;
-    board.title = "クリックして詳細を見る";
+    board.id        = "treeBoard_" + idx;
+    board.title     = "クリックして詳細を見る";
     board.innerHTML =
       '<div class="tree-board-icon">' + m.icon + '</div>' +
-      '<div class="tree-board-key">' + m.key + '</div>' +
+      '<div class="tree-board-key">'  + m.key  + '</div>' +
       '<div class="tree-board-label">' + m.label + '</div>' +
       '<span class="tree-board-count" id="treeBoardCount_' + idx + '">0</span>';
+
     board.onclick = () => showTreeDetail(idx);
     area.appendChild(board);
   });
@@ -142,41 +122,42 @@ function initTreeBoards() {
 
 async function loadTreeData() {
   try {
-    const res = await fetch(GAS_URL + "?mode=list");
+    const res  = await fetch(GAS_URL + "?mode=list");
     const data = await res.json();
     if (Array.isArray(data)) cachedRows = data;
   } catch(e) { console.error("ツリーデータ取得失敗", e); }
 
   MAIN_CATEGORIES.forEach((m, idx) => {
-    const count = cachedRows.filter(r => findMain(r.main || r.category).key === m.key).length;
+    const cnt   = cachedRows.filter(r => findMain(r.main || r.category).key === m.key).length;
     const badge = document.getElementById("treeBoardCount_" + idx);
-    if (badge) badge.textContent = count;
+    if (badge) badge.textContent = cnt;
   });
 }
 
 function showTreeDetail(mainIndex) {
-  document.querySelectorAll(".tree-board").forEach((b, i) => b.classList.toggle("active", i === mainIndex));
+  // ボードのアクティブ表示
+  document.querySelectorAll(".tree-board").forEach((b, i) =>
+    b.classList.toggle("active", i === mainIndex));
 
-  const m = MAIN_CATEGORIES[mainIndex];
+  const m    = MAIN_CATEGORIES[mainIndex];
   const area = document.getElementById("treeDetailArea");
   if (!area) return;
-  area.style.display = "block";
 
-  // このメインに属する投稿
+  area.style.display = "block";
   const mainPosts = cachedRows.filter(r => findMain(r.main || r.category).key === m.key);
 
   area.innerHTML =
     '<div class="tree-detail-title">' + m.icon + ' ' + m.key + ' ' + m.label +
-    ' <span style="font-size:13px; font-weight:400; color:#64748b; margin-left:8px;">計' + mainPosts.length + '件の投稿</span></div>';
+    ' <span style="font-size:13px;font-weight:400;color:#64748b;margin-left:8px;">計' + mainPosts.length + '件の投稿</span></div>';
 
-  // 中分類ごとにアコーデオン（固定分類 + 動的に追加されたもの）
+  // 中分類リスト（固定 + 動的）
   const allSubs = new Set([...m.subs.map(s => s.label), OTHER_LABEL]);
   mainPosts.forEach(r => { if (r.sub) allSubs.add(r.sub); });
 
   allSubs.forEach(subLabel => {
     const subPosts = mainPosts.filter(r => (r.sub || OTHER_LABEL) === subLabel);
 
-    const block = document.createElement("div");
+    const block  = document.createElement("div");
     block.className = "tree-sub-block";
 
     const header = document.createElement("div");
@@ -190,36 +171,51 @@ function showTreeDetail(mainIndex) {
 
     const body = document.createElement("div");
     body.className = "tree-item-list";
+    body.style.display = "none";
 
-    if (subPosts.length === 0) {
+    if (!subPosts.length) {
       body.innerHTML = '<p style="font-size:13px;color:#94a3b8;padding:8px 0;">まだ投稿がありません</p>';
     } else {
-      // 投稿カードを並べる（小分類＝投稿記事）
       subPosts.forEach(r => {
+        const borderColor = r.status === "統合" ? "#2563eb"
+          : r.status === "新分類統合" ? "#8b5cf6"
+          : r.status === "統合済み"   ? "#94a3b8" : "#dc2626";
+        const statusLabel = r.status === "統合" ? "🔵 統合済み"
+          : r.status === "新分類統合" ? "🟣 新分類"
+          : r.status === "統合済み"   ? "⚫ 処理済み" : "🔴 未統合";
+
         const chip = document.createElement("div");
-        chip.style.cssText = "margin-bottom:8px; padding:10px 14px; background:#fff; border-radius:10px; border-left:4px solid " +
-          (r.status === "統合" ? "#2563eb" : r.status === "新分類統合" ? "#8b5cf6" : r.status === "統合済み" ? "#94a3b8" : "#dc2626") +
-          "; font-size:13px; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,.06);";
+        chip.style.cssText =
+          "margin-bottom:8px;padding:10px 14px;background:#fff;border-radius:10px;" +
+          "border-left:4px solid " + borderColor + ";font-size:13px;cursor:pointer;" +
+          "box-shadow:0 2px 8px rgba(0,0,0,.06);transition:.15s;";
 
-        const statusColor = r.status === "統合" ? "#1d4ed8" : r.status === "新分類統合" ? "#6d28d9" : r.status === "統合済み" ? "#64748b" : "#dc2626";
-        const statusLabel = r.status === "統合" ? "🔵統合済" : r.status === "新分類統合" ? "🟣新分類" : r.status === "統合済み" ? "⚫処理済" : "🔴未統合";
+        const titleRow = document.createElement("div");
+        titleRow.style.cssText = "display:flex;justify-content:space-between;align-items:center;";
+        titleRow.innerHTML =
+          '<strong>' + (r.title || "(無題)") + '</strong>' +
+          '<span style="font-size:11px;font-weight:700;color:' + borderColor + ';">' + statusLabel + '</span>';
 
-        chip.innerHTML =
-          '<div style="display:flex;justify-content:space-between;align-items:center;">' +
-            '<strong>' + (r.title || "(無題)") + '</strong>' +
-            '<span style="font-size:11px;font-weight:700;color:' + statusColor + ';">' + statusLabel + '</span>' +
-          '</div>';
-
+        // ★ 要約はクリックで広いボックスに展開
         const sumDiv = document.createElement("div");
-        sumDiv.style.cssText = "display:none; margin-top:8px; padding:8px; background:#f8fafc; border-radius:6px; font-size:13px; color:#475569; line-height:1.6;";
+        sumDiv.style.cssText =
+          "display:none;margin-top:10px;padding:12px 14px;background:#f8fafc;" +
+          "border-radius:8px;font-size:14px;color:#334155;line-height:1.8;border:1px solid #e2e8f0;";
         sumDiv.textContent = r.summary200 || "(要約なし)";
         if (r.mergedInto) {
-          sumDiv.innerHTML += '<div style="margin-top:6px;color:#2563eb;font-size:12px;">→ 統合先：' + r.mergedInto + '</div>';
+          const note = document.createElement("div");
+          note.style.cssText = "margin-top:8px;padding:8px 12px;background:#eff6ff;border-radius:6px;font-size:13px;color:#1d4ed8;border-left:3px solid #3b82f6;";
+          note.innerHTML = "📎 この投稿は「<strong>" + r.mergedInto + "</strong>」に統合されました";
+          sumDiv.appendChild(note);
         }
 
+        chip.appendChild(titleRow);
         chip.appendChild(sumDiv);
-        chip.onclick = () => { sumDiv.style.display = sumDiv.style.display === "none" ? "block" : "none"; };
-
+        chip.onclick = () => {
+          const open = sumDiv.style.display === "block";
+          body.querySelectorAll("div > div:last-child").forEach(d => d.style.display = "none");
+          sumDiv.style.display = open ? "none" : "block";
+        };
         body.appendChild(chip);
       });
     }
@@ -235,11 +231,14 @@ function showTreeDetail(mainIndex) {
     area.appendChild(block);
   });
 
-  area.scrollIntoView({ behavior: "smooth", block: "start" });
+  // ★ treeDetailArea のトップへスクロール（ページトップではなく詳細エリアの先頭）
+  setTimeout(() => {
+    area.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, 50);
 }
 
 // =====================================================================
-//   PR PAGE — アコーデオン
+//   PR PAGE — 中分類クリック→タイトル一覧、タイトルクリック→広い要約
 // =====================================================================
 async function loadPRList() {
   const prList = document.getElementById("prList");
@@ -247,7 +246,7 @@ async function loadPRList() {
   prList.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b;">読み込み中…</div>';
 
   try {
-    const res = await fetch(GAS_URL + "?mode=list");
+    const res  = await fetch(GAS_URL + "?mode=list");
     if (!res.ok) throw new Error("HTTP " + res.status);
     const rows = await res.json();
     if (rows.error) throw new Error(rows.error);
@@ -262,11 +261,11 @@ function renderPRList(rows) {
   const prList = document.getElementById("prList");
   prList.innerHTML = "";
 
-  MAIN_CATEGORIES.forEach((m) => {
-    const mainPosts = rows.filter(r => findMain(r.main || r.category).key === m.key);
+  MAIN_CATEGORIES.forEach(m => {
+    const mainPosts  = rows.filter(r => findMain(r.main || r.category).key === m.key);
     const totalCount = mainPosts.length;
 
-    const mainBoard = document.createElement("div");
+    const mainBoard  = document.createElement("div");
     mainBoard.className = "pr-main-board";
 
     const mainHeader = document.createElement("div");
@@ -280,7 +279,6 @@ function renderPRList(rows) {
     const subGrid = document.createElement("div");
     subGrid.className = "pr-sub-grid";
 
-    // 中分類リスト（固定 + 動的に追加されたもの）
     const allSubs = new Set([...m.subs.map(s => s.label), OTHER_LABEL]);
     mainPosts.forEach(r => { if (r.sub) allSubs.add(r.sub); });
 
@@ -298,25 +296,63 @@ function renderPRList(rows) {
 
       const subHint = document.createElement("div");
       subHint.className = "pr-sub-hint";
-      subHint.textContent = subPosts.length ? "クリックして投稿を見る ▼" : "まだ投稿がありません";
+      subHint.textContent = subPosts.length ? "クリックして投稿一覧を見る ▼" : "まだ投稿がありません";
 
-      // 投稿エリア（フル幅で開く）
-      const postArea = document.createElement("div");
-      postArea.className = "pr-post-area-full";
-      postArea.style.display = "none";
-      renderPostCardsFull(postArea, subPosts);
+      // ★ タイトル一覧エリア（中分類クリックで展開）
+      const titleListArea = document.createElement("div");
+      titleListArea.style.display = "none";
 
-      subBoard.onclick = () => {
+      // ★ 要約表示エリア（タイトルクリックで展開・フル幅）
+      const summaryPanel = document.createElement("div");
+      summaryPanel.className = "pr-summary-panel";
+      summaryPanel.style.display = "none";
+
+      // タイトルボタンを生成
+      subPosts.forEach(row => {
+        const isMergedSource = row.status === "統合済み" || row.status === "新分類統合";
+        const isMergedResult = row.status === "統合";
+        const borderColor = isMergedResult ? "#2563eb" : isMergedSource ? "#94a3b8" : "#dc2626";
+        const statusLabel = isMergedResult ? "🔵 統合済み" : isMergedSource ? "⚫ 処理済み" : "🔴 未統合";
+
+        const titleBtn = document.createElement("div");
+        titleBtn.className = "pr-title-btn";
+        titleBtn.style.borderLeftColor = borderColor;
+        titleBtn.innerHTML =
+          '<span class="pr-title-btn-text">' + (row.title || "(無題)") + '</span>' +
+          '<span class="pr-title-btn-status" style="color:' + borderColor + ';">' + statusLabel + '</span>';
+
+        titleBtn.onclick = (ev) => {
+          ev.stopPropagation();
+          // ★ 要約パネルに内容を表示
+          let html = '<div class="pr-summary-close" onclick="this.parentElement.style.display=\'none\'">✕ 閉じる</div>';
+          html += '<h3 class="pr-summary-title">' + (row.title || "(無題)") + '</h3>';
+          html += '<div class="pr-summary-body">' + (row.summary200 || "（要約なし）") + '</div>';
+          if (isMergedSource && row.mergedInto) {
+            html += '<div class="pr-merged-note">📎 この投稿は「<strong>' + row.mergedInto + '</strong>」に統合されました</div>';
+          }
+          summaryPanel.innerHTML = html;
+          summaryPanel.style.display = "block";
+          // アクティブ表示
+          titleListArea.querySelectorAll(".pr-title-btn").forEach(b => b.classList.remove("active"));
+          titleBtn.classList.add("active");
+        };
+
+        titleListArea.appendChild(titleBtn);
+      });
+
+      subBoard.onclick = (ev) => {
         if (!subPosts.length) return;
-        const open = postArea.style.display === "block";
-        postArea.style.display = open ? "none" : "block";
-        subHint.textContent = open ? "クリックして投稿を見る ▼" : "閉じる ▲";
+        const open = titleListArea.style.display === "block";
+        titleListArea.style.display  = open ? "none" : "block";
+        summaryPanel.style.display   = "none";
+        subHint.textContent = open ? "クリックして投稿一覧を見る ▼" : "閉じる ▲";
         subBoard.classList.toggle("active", !open);
       };
 
       subBoard.appendChild(subInner);
       subBoard.appendChild(subHint);
-      subBoard.appendChild(postArea);
+      subBoard.appendChild(titleListArea);
+      subBoard.appendChild(summaryPanel);
       subGrid.appendChild(subBoard);
     });
 
@@ -335,74 +371,32 @@ function renderPRList(rows) {
   });
 }
 
-// ★ フル幅で投稿を表示（200字要約を広いボックスで）
-function renderPostCardsFull(container, posts) {
-  container.innerHTML = "";
-  if (!posts.length) {
-    container.innerHTML = '<div style="padding:12px;color:#64748b;font-size:14px;">この分類にはまだ投稿がありません</div>';
-    return;
-  }
-
-  posts.forEach(row => {
-    const isMergedSource = row.status === "統合済み" || row.status === "新分類統合";
-    const isMergedResult = row.status === "統合";
-
-    const statusText  = isMergedSource ? "処理済み" : isMergedResult ? "🔵 統合済み" : "🔴 未統合";
-    const statusClass = isMergedSource ? "status-merged-source" : isMergedResult ? "status-merged-result" : "status-unmerged";
-    const borderColor = isMergedSource ? "#94a3b8" : isMergedResult ? "#2563eb" : "#dc2626";
-
-    const card = document.createElement("div");
-    card.className = "pr-post-card-full";
-    card.style.borderLeftColor = borderColor;
-
-    const titleRow = document.createElement("div");
-    titleRow.className = "pr-post-title-row";
-    titleRow.innerHTML =
-      '<span class="pr-post-title-text">' + (row.title || "(無題)") + '</span>' +
-      '<span class="pr-post-status ' + statusClass + '">' + statusText + '</span>';
-
-    // ★ 200字要約：フル幅ボックス（最初から表示）
-    const summaryBox = document.createElement("div");
-    summaryBox.className = "pr-summary-fullbox";
-    summaryBox.innerHTML = row.summary200
-      ? '<p>' + row.summary200 + '</p>'
-      : '<p style="color:#94a3b8;font-style:italic;">（要約なし）</p>';
-
-    if (isMergedSource && row.mergedInto) {
-      summaryBox.innerHTML += '<div class="pr-merged-note">📎 この投稿は「<strong>' + row.mergedInto + '</strong>」に統合されました</div>';
-    }
-
-    card.appendChild(titleRow);
-    card.appendChild(summaryBox);
-    container.appendChild(card);
-  });
-}
-
 // =====================================================================
-//   AI壁打ち
+//   AI壁打ち — ★カテゴリーボタン廃止・AIが自動分類
 // =====================================================================
 async function runAI() {
-  const textarea = document.getElementById("userInput");
-  const aiResult = document.getElementById("aiResult");
+  const textarea    = document.getElementById("userInput");
+  const aiResult    = document.getElementById("aiResult");
   const summarizeBtnBox = document.getElementById("summarizeBtnBox");
-  const summaryArea = document.getElementById("summaryArea");
-  const deepDiveArea = document.getElementById("deepDiveArea");
+  const summaryArea     = document.getElementById("summaryArea");
+  const deepDiveArea    = document.getElementById("deepDiveArea");
 
   if (!textarea) return;
   const text = textarea.value.trim();
   if (!text) { alert("意見を入力してください。"); return; }
 
   currentIdeaText = text;
-  aiResult.innerHTML = '<div style="color:#64748b;padding:16px;">🤖 AIが分析しています…少々お待ちください</div>';
+  aiResult.innerHTML = '<div style="color:#64748b;padding:16px;">🤖 AIが読み込んでいます…少々お待ちください</div>';
   if (summarizeBtnBox) summarizeBtnBox.style.display = "none";
-  if (summaryArea) summaryArea.style.display = "none";
-  if (deepDiveArea) deepDiveArea.style.display = "none";
+  if (summaryArea)     summaryArea.style.display     = "none";
+  if (deepDiveArea)    deepDiveArea.style.display    = "none";
 
   try {
+    // ★ category を送らない（AIが全文から自動分類）
     const res = await fetch(GAS_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({ mode: "analyze", text, category: currentCategory })
+      body: JSON.stringify({ mode: "analyze", text })
     });
     if (!res.ok) throw new Error("HTTP error " + res.status);
     const data = await res.json();
@@ -410,35 +404,34 @@ async function runAI() {
 
     const content = typeof data.content === "string" ? JSON.parse(data.content) : data.content;
     currentAIResult = content.analysis || "";
-    currentMain = content.main || "";
-    currentSub  = content.sub  || "";
+    currentMain     = content.main || "";
+    currentSub      = content.sub  || "";
 
-    // ── 深掘り表示 ──
     aiResult.innerHTML = '<div class="ai-result-summary">' + (content.analysis || "") + '</div>';
 
     if (deepDiveArea) {
       deepDiveArea.style.display = "block";
-      deepDiveArea.innerHTML = `
-        <div class="deep-item">
-          <div class="deep-label">💡 この意見の核心</div>
-          <div class="deep-body">${content.core || "―"}</div>
-        </div>
-        <div class="deep-item">
-          <div class="deep-label">🌱 実現したら、どう変わる？</div>
-          <div class="deep-body">${content.impact || "―"}</div>
-        </div>
-        <div class="deep-item">
-          <div class="deep-label">🌍 似た成功事例</div>
-          <div class="deep-body">${content.example || "―"}</div>
-        </div>
-        <div class="deep-item">
-          <div class="deep-label">⚠️ 懸念点・乗り越え方</div>
-          <div class="deep-body">${content.concern || "―"}</div>
-        </div>
-        <div class="deep-item deep-next">
-          <div class="deep-label">🚀 さらに考えてみよう</div>
-          <div class="deep-body">${content.nextStep || "―"}</div>
-        </div>`;
+      deepDiveArea.innerHTML =
+        '<div class="deep-item">' +
+          '<div class="deep-label">💡 この意見の核心</div>' +
+          '<div class="deep-body">' + (content.core || "―") + '</div>' +
+        '</div>' +
+        '<div class="deep-item">' +
+          '<div class="deep-label">🌱 実現したら、どう変わる？</div>' +
+          '<div class="deep-body">' + (content.impact || "―") + '</div>' +
+        '</div>' +
+        '<div class="deep-item">' +
+          '<div class="deep-label">🌍 似た成功事例</div>' +
+          '<div class="deep-body">' + (content.example || "―") + '</div>' +
+        '</div>' +
+        '<div class="deep-item">' +
+          '<div class="deep-label">⚠️ 懸念点・乗り越え方</div>' +
+          '<div class="deep-body">' + (content.concern || "―") + '</div>' +
+        '</div>' +
+        '<div class="deep-item deep-next">' +
+          '<div class="deep-label">🚀 さらに考えてみよう</div>' +
+          '<div class="deep-body">' + (content.nextStep || "―") + '</div>' +
+        '</div>';
     }
 
     if (summarizeBtnBox) summarizeBtnBox.style.display = "block";
@@ -449,24 +442,24 @@ async function runAI() {
 }
 
 async function confirmSummary() {
-  const summaryBox  = document.getElementById("summaryBox");
-  const titleBox    = document.getElementById("titleBox");
-  const catResult   = document.getElementById("categoryResult");
-  const summaryArea = document.getElementById("summaryArea");
+  const summaryBox      = document.getElementById("summaryBox");
+  const titleBox        = document.getElementById("titleBox");
+  const catResult       = document.getElementById("categoryResult");
+  const summaryArea     = document.getElementById("summaryArea");
   const summarizeBtnBox = document.getElementById("summarizeBtnBox");
   const postDecision    = document.getElementById("postDecision");
 
-  summaryArea.style.display = "block";
-  summaryBox.textContent = "200字要約を生成しています…";
-  titleBox.textContent   = "タイトルを生成しています…";
-  if (catResult)    catResult.textContent = "";
+  summaryArea.style.display    = "block";
+  summaryBox.textContent       = "200字要約を生成しています…";
+  titleBox.textContent         = "タイトルを生成しています…";
+  if (catResult)    catResult.textContent  = "";
   if (postDecision) postDecision.style.display = "none";
 
   try {
     const res = await fetch(GAS_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({ mode:"summarize", text:currentIdeaText, analysis:currentAIResult, category:currentCategory })
+      body: JSON.stringify({ mode:"summarize", text:currentIdeaText, analysis:currentAIResult })
     });
     if (!res.ok) throw new Error("HTTP error " + res.status);
     const data = await res.json();
@@ -474,17 +467,16 @@ async function confirmSummary() {
 
     const content = typeof data.content === "string" ? JSON.parse(data.content) : data.content;
     currentSummary200 = content.summary200 || "";
-    currentTitle      = content.title || "";
+    currentTitle      = content.title      || "";
 
     summaryBox.textContent = currentSummary200;
     titleBox.textContent   = currentTitle;
     if (catResult) {
       catResult.innerHTML =
-        "大分類：" + (currentMain || "―") + "<br>" +
-        "中分類：" + (currentSub  || OTHER_LABEL);
+        "大分類：" + (currentMain || "―") + "<br>中分類：" + (currentSub || OTHER_LABEL);
     }
     if (summarizeBtnBox) summarizeBtnBox.style.display = "none";
-    if (postDecision) postDecision.style.display = "block";
+    if (postDecision)    postDecision.style.display    = "block";
   } catch(e) {
     summaryBox.textContent = "要約生成でエラーが発生しました（" + e.message + "）。";
     titleBox.textContent   = "";
@@ -499,16 +491,15 @@ async function postToPR() {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify({
-        mode:"save", main:currentMain, category:currentMain,
-        sub:currentSub, title:currentTitle,
-        summary200:currentSummary200, fullText:currentIdeaText
+        mode:"save", main:currentMain, category:currentMain, sub:currentSub,
+        title:currentTitle, summary200:currentSummary200, fullText:currentIdeaText
       })
     });
     if (!res.ok) throw new Error("HTTP error " + res.status);
     const data = await res.json();
     if (data.error) throw new Error(data.error);
     cachedRows = [];
-    alert("PRページに投稿しました。ご意見ありがとうございました！");
+    alert("PRページに投稿しました。ありがとうございました！");
     resetForm();
     showPage("pullrequest");
   } catch(e) {
@@ -523,14 +514,13 @@ function continueEditing() { resetForm(); }
 function resetForm() {
   const ta = document.getElementById("userInput");
   const ar = document.getElementById("aiResult");
-  if (ta) ta.value = "";
+  if (ta) { ta.value = ""; ta.focus(); }
   if (ar) ar.innerHTML = '<p style="color:#94a3b8;">結果はここに表示されます。</p>';
   ["summarizeBtnBox","summaryArea","postDecision","deepDiveArea"].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.style.display = "none";
   });
   currentIdeaText = currentAIResult = currentSummary200 = currentTitle = currentMain = currentSub = "";
-  if (ta) ta.focus();
 }
 
 // ======================= ルールページ タブ切り替え =======================
@@ -538,14 +528,13 @@ function switchTab(group, panel) {
   document.getElementById(group + "-easy").classList.toggle("active", panel === "easy");
   document.getElementById(group + "-expert").classList.toggle("active", panel === "expert");
   const panels = document.getElementById(group + "-easy").parentElement;
-  const bar = panels.querySelector(".rules-tab-bar");
+  const bar    = panels.querySelector(".rules-tab-bar");
   if (bar) bar.querySelectorAll(".rules-tab-btn").forEach((btn, i) => {
-    btn.classList.toggle("active", (i === 0 && panel === "easy") || (i === 1 && panel === "expert"));
+    btn.classList.toggle("active", (i===0 && panel==="easy") || (i===1 && panel==="expert"));
   });
 }
 
 // ======================= 初期化 =======================
 window.onload = function() {
-  initCategoryButtons();
   showPage("intro");
 };
