@@ -296,7 +296,7 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
 }
 
 /* =====================================================
-   VISION / CITY COMPASS PAGE
+   VISION / CIVIC VISION PAGE
    ===================================================== */
 
 /* ── ヒーローセクション ── */
@@ -593,6 +593,47 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
   display:flex; align-items:center; gap:8px;
   padding:6px 14px; border-radius:999px; font-size:13px; font-weight:700;
 }
+/* ── AI 深掘り表示 ── */
+.ai-result-summary{
+  font-size:15px; line-height:1.7; padding:4px 0; color:#0f172a;
+}
+#deepDiveArea{
+  margin-top:16px; border-top:2px dashed #e2e8f0; padding-top:16px;
+}
+.deep-item{
+  background:#f8fafc; border-radius:12px; padding:12px 16px; margin-bottom:10px;
+  border-left:4px solid #2563eb;
+}
+.deep-item:nth-child(2){ border-left-color:#10b981; }
+.deep-item:nth-child(3){ border-left-color:#f59e0b; }
+.deep-item:nth-child(4){ border-left-color:#ef4444; }
+.deep-item.deep-next   { border-left-color:#8b5cf6; background:#f5f3ff; }
+.deep-label{
+  font-size:12px; font-weight:700; color:#64748b; margin-bottom:6px; letter-spacing:.03em;
+}
+.deep-body{ font-size:14px; line-height:1.7; color:#1e293b; }
+
+/* ── PR フル幅投稿カード ── */
+.pr-post-area-full{ padding:12px 4px; }
+.pr-post-card-full{
+  background:#fff; border-radius:12px; margin-bottom:12px;
+  border-left:5px solid #dc2626;
+  box-shadow:0 3px 12px rgba(0,0,0,.08); overflow:hidden;
+}
+.pr-post-title-row{
+  display:flex; justify-content:space-between; align-items:center;
+  padding:12px 16px; border-bottom:1px solid #f1f5f9; gap:10px;
+}
+.pr-post-title-text{ font-size:15px; font-weight:700; flex:1; }
+.pr-summary-fullbox{
+  padding:14px 18px; font-size:14px; line-height:1.8; color:#334155;
+  background:#fafafa;
+}
+.pr-summary-fullbox p{ margin:0; }
+.pr-merged-note{
+  margin-top:10px; padding:8px 12px; background:#eff6ff; border-radius:8px;
+  font-size:13px; color:#1d4ed8; border-left:3px solid #3b82f6;
+}
 </style>
 </head>
 <body>
@@ -605,7 +646,7 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
     <button onclick="showPage('assistant')">AI壁打ち</button>
     <button onclick="showPage('rules')">分析ルール</button>
     <button onclick="showPage('pullrequest')">PULL REQUEST</button>
-    <button onclick="showPage('vision')">🧭 City Compass</button>
+    <button onclick="showPage('vision')">🧭 Civic Vision</button>
   </nav>
 </header>
 
@@ -613,16 +654,15 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
 
 <!-- ================= INTRO ================= -->
 <section id="intro" class="page active">
-  <h1>駅前公共施設について皆で考えよう</h1>
-  <div class="card" style="padding:0;overflow:hidden;">
-    <img src="images/intro.jpg" alt="市民政策AIプラットフォーム">
-  </div>
   <div class="card">
-        <h2>このプラットフォームについて</h2>
+    <h1>駅前公共施設について皆で考えよう</h1>
+    <h2>このプラットフォームについて</h2>
     <p>このプラットフォームは、駅前の公共施設について、みなさんの声を自由に投稿できる場所です。投稿された意見は、AIが公平に整理し、誰もが見える形にしていきます。</p>
     <p style="margin-top:10px;">設問はありません。自由に書いた声を、AIが公正な手法で整理し、誰もが確認できる形に残します。</p>
   </div>
- 
+  <div class="card" style="padding:0;overflow:hidden;">
+    <img src="images/comic-all.png" alt="市民政策AIプラットフォーム">
+  </div>
   <div class="card">
     <h2>特徴</h2>
     <ul class="feature-list">
@@ -644,9 +684,6 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
 
 <!-- ================= LOGIC TREE ================= -->
 <section id="tree" class="page">
-    <div class="placeholder-card" style="padding:0; margin-bottom:20px;">
-  <img src="/ashiya-platform/images/log.tree4.jpg" alt="ロジツリー" class="responsive-img">
-</div>
   <div class="tree-page-wrap">
     <div class="tree-vision-card">
       <h2>🏛 政策提案ロジックツリー</h2>
@@ -669,7 +706,7 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
 <section id="assistant" class="page">
   <h1>🤖 AI壁打ち</h1>
   <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px;">
-    <img src="images/aiWall.jpg" alt="AI壁打ち">
+    <img src="images/aiWall.png" alt="AI壁打ち">
   </div>
   <div class="assistant-layout">
     <div class="card">
@@ -682,7 +719,8 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
     </div>
     <div class="card">
       <h2>AIからの整理結果</h2>
-      <p id="aiResult" class="ai-result-box">結果はここに表示されます。</p>
+      <div id="aiResult" class="ai-result-box"><p style="color:#94a3b8;">結果はここに表示されます。</p></div>
+      <div id="deepDiveArea" style="display:none;"></div>
       <div id="summarizeBtnBox" style="display:none; margin-top:14px;">
         <button class="big-button accent" onclick="confirmSummary()">📝 200字要約する</button>
       </div>
@@ -707,18 +745,102 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
 
 <!-- ================= RULES ================= -->
 <section id="rules" class="page">
-  <h1>📊 分析統合ルール</h1>
-  <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px;">
-    <img src="images/ai-labo.jpg" alt="分析ラボ">
+  <h1>📊 分析のしくみ</h1>
+
+  <!-- ① 4コマ漫画（超初心者向け） -->
+  <div class="card">
+    <h2>まずはこの4コマをどうぞ！</h2>
+    <p style="margin-bottom:16px; color:#475569;">「私の意見、ちゃんと届いてるの？」という疑問にお答えします。</p>
+    <img src="images/bunseki.jpg" alt="分析の仕組みを説明する4コマ漫画" style="width:100%; max-width:560px; margin:0 auto; display:block; border-radius:16px; box-shadow:0 8px 24px rgba(0,0,0,.12);">
+
+    <div style="margin-top:20px; display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+      <div style="background:#eff6ff; border-radius:12px; padding:14px; border-left:4px solid #2563eb;">
+        <div style="font-weight:700; margin-bottom:6px;">📝 コマ①②</div>
+        <p style="font-size:14px; margin:0; color:#1e40af;">「私の意見、ちゃんと活かされてるのかな？」→「もちろん、PRページで見れるよ！」</p>
+      </div>
+      <div style="background:#f0fdf4; border-radius:12px; padding:14px; border-left:4px solid #16a34a;">
+        <div style="font-weight:700; margin-bottom:6px;">🤖 コマ③④</div>
+        <p style="font-size:14px; margin:0; color:#15803d;">AIが整理してまとめた結果を画面で確認。「すごい、ちゃんと届くんだね！」</p>
+      </div>
+    </div>
   </div>
 
- 
+  <!-- ② かんたん3ステップ -->
+  <div class="card">
+    <h2>🌟 かんたん3ステップで完結します</h2>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-top:12px;">
+      <div style="text-align:center; padding:20px 16px; background:linear-gradient(135deg,#eff6ff,#dbeafe); border-radius:16px;">
+        <div style="font-size:36px; margin-bottom:8px;">✍️</div>
+        <div style="font-weight:700; margin-bottom:6px; font-size:15px;">STEP 1</div>
+        <div style="font-size:13px; color:#1e40af;">自由に書く<br>難しいことは考えなくてOK</div>
+      </div>
+      <div style="text-align:center; padding:20px 16px; background:linear-gradient(135deg,#f0fdf4,#dcfce7); border-radius:16px;">
+        <div style="font-size:36px; margin-bottom:8px;">🤖</div>
+        <div style="font-weight:700; margin-bottom:6px; font-size:15px;">STEP 2</div>
+        <div style="font-size:13px; color:#15803d;">AIが整理する<br>カテゴリに自動で分類</div>
+      </div>
+      <div style="text-align:center; padding:20px 16px; background:linear-gradient(135deg,#fefce8,#fef9c3); border-radius:16px;">
+        <div style="font-size:36px; margin-bottom:8px;">📋</div>
+        <div style="font-weight:700; margin-bottom:6px; font-size:15px;">STEP 3</div>
+        <div style="font-size:13px; color:#92400e;">PRページに掲載<br>みんなが見られる形に</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ③ 現在の市民の声サマリー（Civic Visionページから移動） -->
+  <div class="card">
+    <h2>📊 現在の市民の声 — AI分析サマリー</h2>
+    <p style="font-size:13px; color:#64748b; margin-bottom:16px;">投稿が集まるほど、このサマリーが育っていきます。</p>
+
+    <div class="analysis-grid">
+      <div class="analysis-card">
+        <h4>総投稿数</h4>
+        <div class="analysis-num" id="summaryTotal">―</div>
+      </div>
+      <div class="analysis-card" style="border-top-color:#10b981;">
+        <h4>統合済み記事</h4>
+        <div class="analysis-num" style="color:#10b981;" id="summaryMerged">―</div>
+      </div>
+      <div class="analysis-card" style="border-top-color:#f59e0b;">
+        <h4>最も多い大分類</h4>
+        <div class="analysis-num" style="font-size:14px; font-weight:700;" id="summaryTop">―</div>
+      </div>
+    </div>
+
+    <div class="analysis-bar-wrap" id="summaryBarWrap" style="margin-top:20px;">
+      <p style="color:#94a3b8; font-size:13px;">投稿を読み込み中…</p>
+    </div>
+  </div>
+
+  <!-- 詳しい仕組みへの誘導 -->
+  <div style="text-align:center; margin: 8px 0 24px;">
+    <button class="big-button" style="background:linear-gradient(135deg,#64748b,#475569); font-size:14px; padding:10px 24px;"
+      onclick="document.getElementById('rules-detail').style.display='block'; this.style.display='none';">
+      📖 詳しい仕組みはこちら ▼
+    </button>
+  </div>
+
+  <!-- 詳細（既存コンテンツ） -->
+  <div id="rules-detail" style="display:none;">
+
+  <!-- 基本分類ルール -->
+  <div class="card">
+    <h2>📌 分類の基本ルール</h2>
+    <p>大分類は5つで固定されています。AIは大分類を増やしません。中分類・小分類は固定項目のほかに「<strong>その他</strong>」が常に存在します。</p>
+    <div class="score-grid" style="margin-top:16px;">
+      <div class="score-card"><h4>価値向上</h4><div class="score-value">25%</div></div>
+      <div class="score-card"><h4>ベネフィット</h4><div class="score-value">25%</div></div>
+      <div class="score-card"><h4>財政的持続</h4><div class="score-value">20%</div></div>
+      <div class="score-card"><h4>施設の戦略性</h4><div class="score-value">15%</div></div>
+      <div class="score-card"><h4>ガバナンス</h4><div class="score-value">15%</div></div>
+    </div>
+  </div>
+
   <!-- ===================== 統合ルール ===================== -->
   <div class="card">
     <h2>🔀 統合ルール</h2>
     <p style="margin-bottom:16px;">投稿が届くたびに、同じ小分類内の既存記事とAIが比較・統合します。統合の透明性を確保するため、どの要素を採用・不採用にしたか理由も記録されます。</p>
-  <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px;">
-    <img src="images/bunseki.jpg" alt="分析漫画">
+
     <div class="rules-tab-bar">
       <button class="rules-tab-btn active" onclick="switchTab('merge','easy')">A. やさしい図解</button>
       <button class="rules-tab-btn"        onclick="switchTab('merge','expert')">B. 専門家向けフローチャート</button>
@@ -826,18 +948,6 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
         <div class="ex-down">↓</div>
         <div class="ex-node ex-se">■ End</div>
       </div>
-    </div>
-  </div>
- <!-- 基本分類ルール -->
-  <div class="card">
-    <h2>📌 分類の基本ルール</h2>
-    <p>大分類は5つで固定されています。AIは大分類を増やしません。中分類・小分類は固定項目のほかに「<strong>その他</strong>」が常に存在します。</p>
-    <div class="score-grid" style="margin-top:16px;">
-      <div class="score-card"><h4>価値向上</h4><div class="score-value">25%</div></div>
-      <div class="score-card"><h4>ベネフィット</h4><div class="score-value">25%</div></div>
-      <div class="score-card"><h4>財政的持続</h4><div class="score-value">20%</div></div>
-      <div class="score-card"><h4>施設の戦略性</h4><div class="score-value">15%</div></div>
-      <div class="score-card"><h4>ガバナンス</h4><div class="score-value">15%</div></div>
     </div>
   </div>
 
@@ -952,7 +1062,141 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
       </div>
     </div>
   </div>
-<!-- ④ AI分析サマリー（模擬データ） -->
+
+  <!-- ステータス凡例 -->
+  <div class="card">
+    <h2>📎 投稿ステータスの見え方</h2>
+    <div class="status-legend">
+      <span class="status-pill" style="background:#fee2e2; color:#dc2626;">🔴 未統合 — 投稿されたばかりで未処理</span>
+      <span class="status-pill" style="background:#e2e8f0; color:#64748b;">⚫ 処理済み — 統合されて新記事に吸収（クリックで統合先へ）</span>
+      <span class="status-pill" style="background:#dbeafe; color:#1d4ed8;">🔵 統合済み — AIが生成した統合記事（ロジックツリーにも掲載）</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🤖 AIの役割と透明性</h2>
+    <p>AIは人が定めたルールに従い、データとエビデンスに基づいて意見を整理・分析します。判断や選別は行わず、構造化と可視化のみを担います。統合の過程はすべてこのページで確認できます。</p>
+  </div>
+  </div><!-- /rules-detail -->
+</section>
+
+<!-- ================= PULL REQUEST ================= -->
+<section id="pullrequest" class="page">
+  <h1>📋 PULL REQUEST</h1>
+  <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px;">
+    <img src="images/bib.png" alt="プルリク">
+  </div>
+  <div class="card">
+    <h2>カテゴリー別の提案一覧</h2>
+    <p>大分類ボードをクリックすると中分類が展開されます。中分類をクリックすると、格納された投稿が表示されます。</p>
+  </div>
+  <div id="prList">
+    <div style="text-align:center; padding:40px; color:#64748b;">読み込み中…</div>
+  </div>
+</section>
+
+<!-- ================= VISION / CIVIC VISION ================= -->
+<section id="vision" class="page">
+
+  <!-- ① ヒーロー：現在の羅針盤 -->
+  <div class="compass-hero">
+    <div class="compass-ring">
+      <div class="compass-ring-inner">🧭</div>
+    </div>
+    <div class="compass-badge">CIVIC VISION — 芦屋市の羅針盤</div>
+    <div>
+      <span class="compass-version">Ver. 1.0　2026年7月 設定</span>
+      &nbsp;
+      <span style="font-size:12px; color:#6ee7b7;"><span class="live-dot"></span>市民の声を受けて更新中</span>
+    </div>
+    <h2>コストセンターからプロフィットセンターへ</h2>
+    <p class="compass-sub">
+      芦屋市の公共施設を、維持費がかかる「コスト」としてではなく、<br>
+      市民のウェルビーイング・知・経済価値を生み出す<strong style="color:#7dd3fc;">投資型の都市拠点</strong>として再定義する。<br>
+      市民の自由なアイデアと最先端テクノロジーが交わり、街全体の価値を上げ続ける場所へ。
+    </p>
+    <div class="compass-pillars">
+      <span class="compass-pillar" style="background:rgba(37,99,235,.3); color:#93c5fd;">🏫 価値向上</span>
+      <span class="compass-pillar" style="background:rgba(16,185,129,.2); color:#6ee7b7;">❤️ ウェルビーイング</span>
+      <span class="compass-pillar" style="background:rgba(245,158,11,.2); color:#fcd34d;">💰 財政的持続</span>
+      <span class="compass-pillar" style="background:rgba(139,92,246,.2); color:#c4b5fd;">🏛 施設の戦略性</span>
+      <span class="compass-pillar" style="background:rgba(239,68,68,.2); color:#fca5a5;">🛡 強靭性</span>
+    </div>
+  </div>
+
+  <!-- ② なぜこのページが最も大事か -->
+  <div class="card">
+    <h2>🎯 なぜ「Civic Vision」が最も大切か</h2>
+    <p>民間のプロジェクトには必ず「原点」があります。進行中も原点に立ち返ることが目的達成の最短距離です。<br>
+    このプラットフォームは、行政における意思決定プロセスにその考え方を持ち込みます。</p>
+
+    <div class="why-grid">
+      <div class="why-card old-way">
+        <h4>❌ 従来の行政プロセス</h4>
+        <ul>
+          <li>計画を立てたら計画通りに進めることが第一義</li>
+          <li>意見収集は「聴いた」という実績づくりが優先</li>
+          <li>ビジョンの見直しは例外的・消極的</li>
+          <li>市民の声とビジョンの整合性は不可視</li>
+        </ul>
+      </div>
+      <div class="why-card new-way">
+        <h4>✅ このプラットフォームの試み</h4>
+        <ul>
+          <li>市民の声がAIで分析・構造化され続ける</li>
+          <li>ビジョンとの「ずれ」が定量的に可視化される</li>
+          <li>ずれが大きければビジョン変更の議論ができる</li>
+          <li>変更の理由と根拠がすべて記録される</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ③ 3層モデル（双方向の矢印） -->
+  <div class="card">
+    <h2>🔺 3層の構造と役割</h2>
+    <p>このプラットフォームは3層で構成されます。上から下へ「方向づけ」が流れ、下から上へ「市民の声」が積み上がる双方向の仕組みです。</p>
+
+    <div class="three-layer">
+      <div class="layer-box layer-top">
+        <div class="layer-label">LEVEL 1 — 人間が設定・判断する</div>
+        <div class="layer-title">🧭 Civic Vision（羅針盤）</div>
+        <div class="layer-desc">「投資型都市経営の実現」という最上位のミッション</div>
+        <span class="layer-who who-human">👤 市・議会・市民代表が判断</span>
+      </div>
+
+      <div style="text-align:center; padding:6px 0;">
+        <div style="font-size:18px; color:#2563eb;">↕</div>
+        <div style="font-size:11px; color:#64748b;">方向づけ ／ 市民の総意が反映</div>
+      </div>
+
+      <div class="layer-box layer-mid">
+        <div class="layer-label">LEVEL 2 — AIが構造化・可視化する</div>
+        <div class="layer-title">🌳 Policy Logic Tree</div>
+        <div class="layer-desc">大分類 → 中分類 → 小分類（膨大なエビデンスから最適解を導出）</div>
+        <span class="layer-who who-ai">🤖 AIが分析・分類・統合</span>
+      </div>
+
+      <div style="text-align:center; padding:6px 0;">
+        <div style="font-size:18px; color:#10b981;">↕</div>
+        <div style="font-size:11px; color:#64748b;">意見の集積 ／ AI壁打ちで整理</div>
+      </div>
+
+      <div class="layer-box layer-bot">
+        <div class="layer-label">LEVEL 3 — 市民が自由に生み出す</div>
+        <div class="layer-title">💬 個々の投稿・AI壁打ちの結果</div>
+        <div class="layer-desc">市民一人ひとりの声・アイデア・経験</div>
+        <span class="layer-who who-all">👥 すべての市民が参加</span>
+      </div>
+    </div>
+
+    <p style="margin-top:20px; font-size:13px; color:#64748b; text-align:center;">
+      Level 3 が積み重なると Level 2（ツリー）が育ち、<br>
+      Level 2 の傾向が Level 1（羅針盤）の見直しを促す。これが「生きた政策立案」です。
+    </p>
+  </div>
+
+  <!-- ④ AI分析サマリー（模擬データ） -->
   <div class="card">
     <h2>📊 現在の市民の声 — AI分析サマリー</h2>
     <p style="font-size:13px; color:#64748b; margin-bottom:4px;">
@@ -969,7 +1213,7 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
         <div class="analysis-num" style="color:#10b981;">0<span style="font-size:14px; font-weight:400; color:#64748b;">件</span></div>
       </div>
       <div class="analysis-card" style="border-top-color:#f59e0b;">
-        <h4>City Compassとの整合性</h4>
+        <h4>Civic Visionとの整合性</h4>
         <div class="analysis-num" style="color:#f59e0b;">84<span style="font-size:14px; font-weight:400; color:#64748b;">%</span></div>
       </div>
       <div class="analysis-card" style="border-top-color:#8b5cf6;">
@@ -1010,12 +1254,12 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
 
   <!-- ⑤ 整合性インサイト -->
   <div class="card">
-    <h2>🔍 City Compassとの整合性評価</h2>
-    <p>市民の声のパターンを現在の City Compass と照合した結果、以下のインサイトが得られています。</p>
+    <h2>🔍 Civic Visionとの整合性評価</h2>
+    <p>市民の声のパターンを現在の Civic Vision と照合した結果、以下のインサイトが得られています。</p>
     <ul class="insight-list">
       <li class="ins-ok">
         <span>✅</span>
-        <span><strong>「市民のウェルビーイング向上」への関心は想定以上（+5%）。</strong>カフェ・コミュニティ・リスキリング系の投稿が多く、City Compassの方向性と高く整合している。</span>
+        <span><strong>「市民のウェルビーイング向上」への関心は想定以上（+5%）。</strong>カフェ・コミュニティ・リスキリング系の投稿が多く、Civic Visionの方向性と高く整合している。</span>
       </li>
       <li class="ins-ok">
         <span>✅</span>
@@ -1027,148 +1271,14 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
       </li>
       <li class="ins-flag">
         <span>🚩</span>
-        <span><strong>「都市の強靭性・ガバナンス」が想定を大きく下回る（−7%）。</strong>DAO型投票・トークン設計等への市民関心は現時点では低い。City Compassにおける本大分類の優先度を見直す議論が必要。</span>
+        <span><strong>「都市の強靭性・ガバナンス」が想定を大きく下回る（−7%）。</strong>DAO型投票・トークン設計等への市民関心は現時点では低い。Civic Visionにおける本大分類の優先度を見直す議論が必要。</span>
       </li>
     </ul>
   </div>
 
-  <!-- ステータス凡例 -->
-  <div class="card">
-    <h2>📎 投稿ステータスの見え方</h2>
-    <div class="status-legend">
-      <span class="status-pill" style="background:#fee2e2; color:#dc2626;">🔴 未統合 — 投稿されたばかりで未処理</span>
-      <span class="status-pill" style="background:#e2e8f0; color:#64748b;">⚫ 処理済み — 統合されて新記事に吸収（クリックで統合先へ）</span>
-      <span class="status-pill" style="background:#dbeafe; color:#1d4ed8;">🔵 統合済み — AIが生成した統合記事（ロジックツリーにも掲載）</span>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>🤖 AIの役割と透明性</h2>
-    <p>AIは人が定めたルールに従い、データとエビデンスに基づいて意見を整理・分析します。判断や選別は行わず、構造化と可視化のみを担います。統合の過程はすべてこのページで確認できます。</p>
-  </div>
-</section>
-
-<!-- ================= PULL REQUEST ================= -->
-<section id="pullrequest" class="page">
-  <h1>📋 PULL REQUEST</h1>
-  <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px;">
-    <img src="images/bib.jpg" alt="プルリク">
-  </div>
-  <div class="card">
-    <h2>カテゴリー別の提案一覧</h2>
-    <p>大分類ボードをクリックすると中分類が展開されます。中分類をクリックすると、格納された投稿が表示されます。</p>
-  </div>
-  <div id="prList">
-    <div style="text-align:center; padding:40px; color:#64748b;">読み込み中…</div>
-  </div>
-</section>
-
-<!-- ================= VISION / CITY COMPASS ================= -->
-<section id="vision" class="page">
-  <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px;">
-    <img src="images/futue5.jpg" alt="civicCompass">
-  <!-- ① ヒーロー：現在の羅針盤 -->
-  <div class="compass-hero">
-    <div class="compass-ring">
-      <div class="compass-ring-inner">🧭</div>
-    </div>
-    <div class="compass-badge">CITY COMPASS — プロジェクトの羅針盤</div>
-    <div>
-      <span class="compass-version">Ver. 1.0　2026年7月 設定</span>
-      &nbsp;
-      <span style="font-size:12px; color:#6ee7b7;"><span class="live-dot"></span>市民の声を受けて更新中</span>
-    </div>
-    <h2>コストセンターからプロフィットセンターへ</h2>
-    <p class="compass-sub">
-      芦屋市の公共施設を、維持費がかかる「コスト」としてではなく、<br>
-      市民のウェルビーイング・知・経済価値を生み出す<strong style="color:#7dd3fc;">投資型の都市拠点</strong>として再定義する。<br>
-      市民の自由なアイデアと最先端テクノロジーが交わり、街全体の価値を上げ続ける場所へ。
-    </p>
-    <div class="compass-pillars">
-      <span class="compass-pillar" style="background:rgba(37,99,235,.3); color:#93c5fd;">🏫 価値向上</span>
-      <span class="compass-pillar" style="background:rgba(16,185,129,.2); color:#6ee7b7;">❤️ ウェルビーイング</span>
-      <span class="compass-pillar" style="background:rgba(245,158,11,.2); color:#fcd34d;">💰 財政的持続</span>
-      <span class="compass-pillar" style="background:rgba(139,92,246,.2); color:#c4b5fd;">🏛 施設の戦略性</span>
-      <span class="compass-pillar" style="background:rgba(239,68,68,.2); color:#fca5a5;">🛡 強靭性</span>
-    </div>
-  </div>
-
-  <!-- ② なぜこのページが最も大事か -->
-  <div class="card">
-    <h2>🎯 なぜ「City Compass」が最も大切か</h2>
-    <p>民間のプロジェクトには必ず「原点」があります。進行中も原点に立ち返ることが目的達成の最短距離です。<br>
-    このプラットフォームは、行政における意思決定プロセスにその考え方を持ち込みます。</p>
-
-    <div class="why-grid">
-      <div class="why-card old-way">
-        <h4>❌ 従来の行政プロセス</h4>
-        <ul>
-          <li>計画を立てたら計画通りに進めることが第一義</li>
-          <li>意見収集は「聴いた」という実績づくりが優先</li>
-          <li>ビジョンの見直しは例外的・消極的</li>
-          <li>市民の声とビジョンの整合性は不可視</li>
-        </ul>
-      </div>
-      <div class="why-card new-way">
-        <h4>✅ このプラットフォームの試み</h4>
-        <ul>
-          <li>市民の声がAIで分析・構造化され続ける</li>
-          <li>ビジョンとの「ずれ」が定量的に可視化される</li>
-          <li>ずれが大きければビジョン変更の議論ができる</li>
-          <li>変更の理由と根拠がすべて記録される</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <!-- ③ 3層モデル（双方向の矢印） -->
-  <div class="card">
-    <h2>🔺 3層の構造と役割</h2>
-    <p>このプラットフォームは3層で構成されます。上から下へ「方向づけ」が流れ、下から上へ「市民の声」が積み上がる双方向の仕組みです。</p>
-
-    <div class="three-layer">
-      <div class="layer-box layer-top">
-        <div class="layer-label">LEVEL 1 — 人間が設定・判断する</div>
-        <div class="layer-title">🧭 City Compass（羅針盤）</div>
-        <div class="layer-desc">「投資型都市経営の実現」という最上位のミッション</div>
-        <span class="layer-who who-human">👤 市・議会・市民代表が判断</span>
-      </div>
-
-      <div style="text-align:center; padding:6px 0;">
-        <div style="font-size:18px; color:#2563eb;">↕</div>
-        <div style="font-size:11px; color:#64748b;">方向づけ ／ 市民の総意が反映</div>
-      </div>
-
-      <div class="layer-box layer-mid">
-        <div class="layer-label">LEVEL 2 — AIが構造化・可視化する</div>
-        <div class="layer-title">🌳 Policy Logic Tree</div>
-        <div class="layer-desc">大分類 → 中分類 → 小分類（膨大なエビデンスから最適解を導出）</div>
-        <span class="layer-who who-ai">🤖 AIが分析・分類・統合</span>
-      </div>
-
-      <div style="text-align:center; padding:6px 0;">
-        <div style="font-size:18px; color:#10b981;">↕</div>
-        <div style="font-size:11px; color:#64748b;">意見の集積 ／ AI壁打ちで整理</div>
-      </div>
-
-      <div class="layer-box layer-bot">
-        <div class="layer-label">LEVEL 3 — 市民が自由に生み出す</div>
-        <div class="layer-title">💬 個々の投稿・AI壁打ちの結果</div>
-        <div class="layer-desc">市民一人ひとりの声・アイデア・経験</div>
-        <span class="layer-who who-all">👥 すべての市民が参加</span>
-      </div>
-    </div>
-
-    <p style="margin-top:20px; font-size:13px; color:#64748b; text-align:center;">
-      Level 3 が積み重なると Level 2（ツリー）が育ち、<br>
-      Level 2 の傾向が Level 1（羅針盤）の見直しを促す。これが「生きた政策立案」です。
-    </p>
-  </div>
-
-  
   <!-- ⑥ 変遷タイムライン -->
   <div class="card">
-    <h2>📜 City Compass の変遷記録</h2>
+    <h2>📜 Civic Vision の変遷記録</h2>
     <p>変更するたびに「なぜ変えたか」の理由と根拠をここに記録します。これがプロジェクトの透明性と説明責任の核心です。</p>
 
     <div class="timeline">
@@ -1208,7 +1318,7 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
         <div class="tl-card tl-future">
           <span class="tl-ver v-next">v2.0 — 予定</span>
           <h4>市民の声を反映した改訂版（未確定）</h4>
-          <p>現時点では「都市の強靭性・ガバナンス」への市民関心が想定を下回っている。投稿100件到達時点でAI分析を実施し、City Compassの5つの大分類の優先順位や記述を見直す議論を市民参加型で実施予定。</p>
+          <p>現時点では「都市の強靭性・ガバナンス」への市民関心が想定を下回っている。投稿100件到達時点でAI分析を実施し、Civic Visionの5つの大分類の優先順位や記述を見直す議論を市民参加型で実施予定。</p>
           <div class="tl-change-reason">
             <strong>議論のトリガー：</strong>投稿100件 または 整合性スコアが70%を下回った時点
           </div>
@@ -1220,7 +1330,7 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
 
   <!-- ⑦ 更新プロセス -->
   <div class="card">
-    <h2>🔄 City Compassの更新プロセス</h2>
+    <h2>🔄 Civic Visionの更新プロセス</h2>
     <p>羅針盤は「固定」ではなく「生きたもの」です。市民の声が一定数集まると、以下のプロセスで見直しが行われます。</p>
     <div class="update-process">
       <div class="update-step">
