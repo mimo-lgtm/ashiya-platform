@@ -1,5 +1,5 @@
 // ======================= 設定 =======================
-const GAS_URL = "https://script.google.com/macros/s/AKfycbzhfNpYe6FEysPfdZPsy9cZFRgaCeB5PmkVBMGAr3OBNl7nOmD0XzbYKNm0MuiiYh4pTw/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbymx19ORq63wrfnsScaM_Ma380eSNrTjRc1maCCtwDQdeOSKXESuh8iRcAKFm1D78LBpQ/exec";
 
 const OTHER_LABEL = "その他";
 
