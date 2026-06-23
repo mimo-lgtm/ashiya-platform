@@ -845,30 +845,7 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
     </div>
   </div>
 
-  <!-- ③ 現在の市民の声サマリー（Civic Visionページから移動） -->
-  <div class="card">
-    <h2>📊 現在の市民の声 — AI分析サマリー</h2>
-    <p style="font-size:13px; color:#64748b; margin-bottom:16px;">投稿が集まるほど、このサマリーが育っていきます。</p>
-
-    <div class="analysis-grid">
-      <div class="analysis-card">
-        <h4>総投稿数</h4>
-        <div class="analysis-num" id="summaryTotal">―</div>
-      </div>
-      <div class="analysis-card" style="border-top-color:#10b981;">
-        <h4>統合済み記事</h4>
-        <div class="analysis-num" style="color:#10b981;" id="summaryMerged">―</div>
-      </div>
-      <div class="analysis-card" style="border-top-color:#f59e0b;">
-        <h4>最も多い大分類</h4>
-        <div class="analysis-num" style="font-size:14px; font-weight:700;" id="summaryTop">―</div>
-      </div>
-    </div>
-
-    <div class="analysis-bar-wrap" id="summaryBarWrap" style="margin-top:20px;">
-      <p style="color:#94a3b8; font-size:13px;">投稿を読み込み中…</p>
-    </div>
-  </div>
+  
 
   <!-- 詳しい仕組みへの誘導 -->
   <div style="text-align:center; margin: 8px 0 24px;">
@@ -877,7 +854,85 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
       📖 詳しい仕組みはこちら ▼
     </button>
   </div>
+<!-- ④ AI分析サマリー（模擬データ） -->
+  <div class="card">
+    <h2>📊 現在の市民の声 — AI分析サマリー</h2>
+    <p style="font-size:13px; color:#64748b; margin-bottom:4px;">
+      ※ 以下は模擬データです。投稿が積み重なると自動更新されます。
+    </p>
 
+    <div class="analysis-grid">
+      <div class="analysis-card">
+        <h4>総投稿数</h4>
+        <div class="analysis-num">20<span style="font-size:14px; font-weight:400; color:#64748b;">件</span></div>
+      </div>
+      <div class="analysis-card" style="border-top-color:#10b981;">
+        <h4>統合済み記事</h4>
+        <div class="analysis-num" style="color:#10b981;">0<span style="font-size:14px; font-weight:400; color:#64748b;">件</span></div>
+      </div>
+      <div class="analysis-card" style="border-top-color:#f59e0b;">
+        <h4>Civic Visionとの整合性</h4>
+        <div class="analysis-num" style="color:#f59e0b;">84<span style="font-size:14px; font-weight:400; color:#64748b;">%</span></div>
+      </div>
+      <div class="analysis-card" style="border-top-color:#8b5cf6;">
+        <h4>ビジョン更新の必要性</h4>
+        <div class="analysis-num" style="color:#8b5cf6; font-size:18px; font-weight:700;">要検討</div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:24px;">大分類別の投稿割合 vs. 当初想定</h3>
+    <div class="analysis-bar-wrap">
+      <div class="analysis-bar-row">
+        <div class="analysis-bar-label">🏫 価値向上</div>
+        <div class="analysis-bar-bg"><div class="analysis-bar-fill over" style="width:28%;"></div></div>
+        <div class="analysis-bar-pct">28% <span class="analysis-diff diff-up">+3%</span></div>
+      </div>
+      <div class="analysis-bar-row">
+        <div class="analysis-bar-label">❤️ ベネフィット</div>
+        <div class="analysis-bar-bg"><div class="analysis-bar-fill over" style="width:30%;"></div></div>
+        <div class="analysis-bar-pct">30% <span class="analysis-diff diff-up">+5%</span></div>
+      </div>
+      <div class="analysis-bar-row">
+        <div class="analysis-bar-label">💰 財政的持続</div>
+        <div class="analysis-bar-bg"><div class="analysis-bar-fill" style="width:22%;"></div></div>
+        <div class="analysis-bar-pct">22% <span class="analysis-diff diff-up">+2%</span></div>
+      </div>
+      <div class="analysis-bar-row">
+        <div class="analysis-bar-label">🏛 施設の戦略性</div>
+        <div class="analysis-bar-bg"><div class="analysis-bar-fill under" style="width:12%;"></div></div>
+        <div class="analysis-bar-pct">12% <span class="analysis-diff diff-dn">−3%</span></div>
+      </div>
+      <div class="analysis-bar-row">
+        <div class="analysis-bar-label">🛡 強靭性</div>
+        <div class="analysis-bar-bg"><div class="analysis-bar-fill under" style="width:8%;"></div></div>
+        <div class="analysis-bar-pct">8% <span class="analysis-diff diff-dn">−7%</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⑤ 整合性インサイト -->
+  <div class="card">
+    <h2>🔍 Civic Visionとの整合性評価</h2>
+    <p>市民の声のパターンを現在の Civic Vision と照合した結果、以下のインサイトが得られています。</p>
+    <ul class="insight-list">
+      <li class="ins-ok">
+        <span>✅</span>
+        <span><strong>「市民のウェルビーイング向上」への関心は想定以上（+5%）。</strong>カフェ・コミュニティ・リスキリング系の投稿が多く、Civic Visionの方向性と高く整合している。</span>
+      </li>
+      <li class="ins-ok">
+        <span>✅</span>
+        <span><strong>「価値向上・移住促進」も想定を上回る（+3%）。</strong>絵本図書館・EdTech・公園芝生化の関心が高く、子育て世代へのアピールポイントとして機能しそう。</span>
+      </li>
+      <li class="ins-warn">
+        <span>⚠️</span>
+        <span><strong>「施設の戦略性（デジタル・起業支援）」は想定より低い（−3%）。</strong>デジタルライブラリ・ピッチアリーナ等への言及はあるが、関心の絶対数が少ない。認知度向上の施策が必要かもしれない。</span>
+      </li>
+      <li class="ins-flag">
+        <span>🚩</span>
+        <span><strong>「都市の強靭性・ガバナンス」が想定を大きく下回る（−7%）。</strong>DAO型投票・トークン設計等への市民関心は現時点では低い。Civic Visionにおける本大分類の優先度を見直す議論が必要。</span>
+      </li>
+    </ul>
+  </div>
   <!-- 詳細（既存コンテンツ） -->
   <div id="rules-detail" style="display:none;">
 
@@ -1155,17 +1210,14 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
 
 <!-- ================= VISION / CIVIC VISION ================= -->
 <section id="vision" class="page">
-
+<h1>🧭 CIVIC VISION — プロジェクトの羅針盤</h1>
   <!-- ① ヒーロー：現在の羅針盤 -->
 
   <!-- タイトル -->
-  <div style="text-align:center; margin-bottom:16px;">
-    <span class="compass-badge" style="font-size:15px; padding:8px 22px;">🧭 CIVIC VISION — プロジェクトの羅針盤</span>
-  </div>
-
-  <!-- 画像 -->
-  <div style="padding:0; margin-bottom:14px; border-radius:16px; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,.15);">
-    <img src="images/future5.jpg" alt="未来ビジョン" style="width:100%; display:block;">
+   <!-- 画像 -->
+  <div class="placeholder-card" style="padding:0; margin-bottom:20px;">
+  <img src="images/future5.jpg" alt="未来ビジョン"class="responsive-img">
+</div>
   </div>
 
   <!-- バージョン・更新中バー -->
@@ -1265,85 +1317,7 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
     </p>
   </div>
 
-  <!-- ④ AI分析サマリー（模擬データ） -->
-  <div class="card">
-    <h2>📊 現在の市民の声 — AI分析サマリー</h2>
-    <p style="font-size:13px; color:#64748b; margin-bottom:4px;">
-      ※ 以下は模擬データです。投稿が積み重なると自動更新されます。
-    </p>
-
-    <div class="analysis-grid">
-      <div class="analysis-card">
-        <h4>総投稿数</h4>
-        <div class="analysis-num">20<span style="font-size:14px; font-weight:400; color:#64748b;">件</span></div>
-      </div>
-      <div class="analysis-card" style="border-top-color:#10b981;">
-        <h4>統合済み記事</h4>
-        <div class="analysis-num" style="color:#10b981;">0<span style="font-size:14px; font-weight:400; color:#64748b;">件</span></div>
-      </div>
-      <div class="analysis-card" style="border-top-color:#f59e0b;">
-        <h4>Civic Visionとの整合性</h4>
-        <div class="analysis-num" style="color:#f59e0b;">84<span style="font-size:14px; font-weight:400; color:#64748b;">%</span></div>
-      </div>
-      <div class="analysis-card" style="border-top-color:#8b5cf6;">
-        <h4>ビジョン更新の必要性</h4>
-        <div class="analysis-num" style="color:#8b5cf6; font-size:18px; font-weight:700;">要検討</div>
-      </div>
-    </div>
-
-    <h3 style="margin-top:24px;">大分類別の投稿割合 vs. 当初想定</h3>
-    <div class="analysis-bar-wrap">
-      <div class="analysis-bar-row">
-        <div class="analysis-bar-label">🏫 価値向上</div>
-        <div class="analysis-bar-bg"><div class="analysis-bar-fill over" style="width:28%;"></div></div>
-        <div class="analysis-bar-pct">28% <span class="analysis-diff diff-up">+3%</span></div>
-      </div>
-      <div class="analysis-bar-row">
-        <div class="analysis-bar-label">❤️ ベネフィット</div>
-        <div class="analysis-bar-bg"><div class="analysis-bar-fill over" style="width:30%;"></div></div>
-        <div class="analysis-bar-pct">30% <span class="analysis-diff diff-up">+5%</span></div>
-      </div>
-      <div class="analysis-bar-row">
-        <div class="analysis-bar-label">💰 財政的持続</div>
-        <div class="analysis-bar-bg"><div class="analysis-bar-fill" style="width:22%;"></div></div>
-        <div class="analysis-bar-pct">22% <span class="analysis-diff diff-up">+2%</span></div>
-      </div>
-      <div class="analysis-bar-row">
-        <div class="analysis-bar-label">🏛 施設の戦略性</div>
-        <div class="analysis-bar-bg"><div class="analysis-bar-fill under" style="width:12%;"></div></div>
-        <div class="analysis-bar-pct">12% <span class="analysis-diff diff-dn">−3%</span></div>
-      </div>
-      <div class="analysis-bar-row">
-        <div class="analysis-bar-label">🛡 強靭性</div>
-        <div class="analysis-bar-bg"><div class="analysis-bar-fill under" style="width:8%;"></div></div>
-        <div class="analysis-bar-pct">8% <span class="analysis-diff diff-dn">−7%</span></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ⑤ 整合性インサイト -->
-  <div class="card">
-    <h2>🔍 Civic Visionとの整合性評価</h2>
-    <p>市民の声のパターンを現在の Civic Vision と照合した結果、以下のインサイトが得られています。</p>
-    <ul class="insight-list">
-      <li class="ins-ok">
-        <span>✅</span>
-        <span><strong>「市民のウェルビーイング向上」への関心は想定以上（+5%）。</strong>カフェ・コミュニティ・リスキリング系の投稿が多く、Civic Visionの方向性と高く整合している。</span>
-      </li>
-      <li class="ins-ok">
-        <span>✅</span>
-        <span><strong>「価値向上・移住促進」も想定を上回る（+3%）。</strong>絵本図書館・EdTech・公園芝生化の関心が高く、子育て世代へのアピールポイントとして機能しそう。</span>
-      </li>
-      <li class="ins-warn">
-        <span>⚠️</span>
-        <span><strong>「施設の戦略性（デジタル・起業支援）」は想定より低い（−3%）。</strong>デジタルライブラリ・ピッチアリーナ等への言及はあるが、関心の絶対数が少ない。認知度向上の施策が必要かもしれない。</span>
-      </li>
-      <li class="ins-flag">
-        <span>🚩</span>
-        <span><strong>「都市の強靭性・ガバナンス」が想定を大きく下回る（−7%）。</strong>DAO型投票・トークン設計等への市民関心は現時点では低い。Civic Visionにおける本大分類の優先度を見直す議論が必要。</span>
-      </li>
-    </ul>
-  </div>
+  
 
   <!-- ⑥ 変遷タイムライン -->
   <div class="card">
