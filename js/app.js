@@ -677,3 +677,10 @@ window.onload = function() {
     updateBtn.addEventListener("click", handleFinalPlanUpdate);
   }
 };
+// app.js内のfetch部分
+const response = await fetch(GAS_URL, {
+  method: "POST",
+  // mode: 'cors' を明示せず、ヘッダーを text/plain のみに絞る
+  headers: { "Content-Type": "text/plain" }, 
+  body: JSON.stringify({ mode: "analyze", text })
+});
