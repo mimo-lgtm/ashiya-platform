@@ -465,11 +465,13 @@ async function handleFinalPlanUpdate() {
   if (textOutput) textOutput.innerHTML = "<p class='loading-text'>最新の市民意見から施設ビジョン(300字)を再構築中...</p>";
 
   try {
-    const response = await fetch(GAS_URL, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({ mode: "generate_final_plan" })
-    });
+    const response =await fetch(GAS_URL, {
+  method: "POST",
+  body: JSON.stringify(payload),
+  headers: {
+    "Content-Type": "text/plain;charset=utf-8"
+  }
+});
     const result = await response.json();
 
     if (result && result.finalPlan) {
