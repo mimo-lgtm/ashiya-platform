@@ -1,61 +1,1684 @@
-公園芝生化で　模擬投稿した。
-ところが、PRでは元の投稿、統合した投稿、何をどのように統合したのがの表示がない
-ロジックツリーの中の投稿文を読む方法がわからない。2件ある場合、1件目を読んだ後、もどるともう表示されてない。
-保存件数と表示件数に差がある。
-PRページにとんだときは、その時の投稿が追えるようにしてください。
-自分の投稿がどこに分類されたのかがわからない。
-PRページでの小分類の投稿の表示はまだ、縦長です。
-2. ロジックツリーのページ
-都市の強靭性とガバナンス の分類の中の中分類
-DAO型住民自治投票 を削除
-３．新たに分析ページをつくる
-そこには、分析統合ページの
-現在の市民の声 — AI分析サマリー
-Civic Visionとの整合性評価
-の２項目をいれる。
-そして、分析の意義
-そもそもの話ですが、最初に設定したシビックビジョンと投稿意見の総意の違いをどのように捉えるかがポイントだと思う。
-つまり、投稿数の数の多さに引きずられるとポピュリスト的な分析結果になる。一方でAIのアルゴリズムで決めるのなら、市民の投稿は無意味になる。
-そのバランスをうまく調整した分析にしていく。（この点は未だ試行錯誤の段階）海外の事例などを参考にベターな分析をしていく。
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>市民提案AIプラットフォーム</title>
+<style>
+/* ================= RESET ================= */
+*{ margin:0; padding:0; box-sizing:border-box; overflow-wrap:break-word; }
+body{
+  font-family:"Yu Gothic","Meiryo",sans-serif;
+  background:linear-gradient(135deg,#edf4ff,#f7fffb,#fff8ef);
+  color:#1e293b; line-height:1.6; padding:0; font-size:16px;
+}
 
-このような趣旨の内容を付け加えてください。
+/* ================= HEADER ================= */
+.topbar{
+  position:sticky; top:0; z-index:999;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:14px 24px;
+  background:rgba(15,23,42,.95); backdrop-filter:blur(12px);
+  box-shadow:0 4px 20px rgba(0,0,0,.15);
+}
+.topbar::after{
+  content:""; position:absolute; left:0; bottom:0; width:100%; height:3px;
+  background:linear-gradient(90deg,#2563eb,#06b6d4,#10b981,#84cc16,#f59e0b,#ef4444,#8b5cf6);
+}
+.logo{ font-size:20px; font-weight:700; color:#fff; }
+nav{ display:flex; gap:8px; flex-wrap:wrap; }
+nav button{
+  border:none; padding:9px 14px; border-radius:10px;
+  font-weight:700; cursor:pointer; background:rgba(255,255,255,.15);
+  color:#fff; font-size:13px; transition:.2s;
+}
+nav button:hover{ background:rgba(255,255,255,.3); transform:translateY(-1px); }
 
-そして、統合分析のページは統合のページとする。
-４．
-言葉の定義
-最上位の理念は
+/* ================= PAGE ================= */
+.page{ display:none; padding:32px 24px; max-width:1200px; margin:auto; animation:fade .3s ease; }
+.page.active{ display:block; }
+@keyframes fade{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
 
-芦屋市の公共施設を、維持費がかかる「コスト」としてではなく、市民のウェルビーイング・知・経済価値を生み出す投資型の都市拠点として再定義する。市民の自由なアイデアと最先端テクノロジーが交わり、街全体の価値を上げ続ける場所
-そのキャッチフレーズは
-コストセンターからプロフィットセンターへ：市民のウェルビーイングと知財の集積による投資型都市経営の実現 
-この理念は不変で、
-その下位レイアーに大分類があり、それも不変
-大分類は項目名だけが５つありますが、それを文章化すれば
+/* ================= COMMON CARD ================= */
+.card{
+  background:rgba(255,255,255,.95); backdrop-filter:blur(8px);
+  padding:24px; border-radius:20px; margin-bottom:20px;
+  box-shadow:0 8px 28px rgba(0,0,0,.08); border:1px solid rgba(255,255,255,.6);
+}
+h1{ font-size:30px; margin-bottom:16px; text-align:center; color:#0f172a; }
+h2{ font-size:20px; margin-bottom:12px; color:#0f172a; }
+h3{ font-size:16px; margin-top:16px; margin-bottom:8px; color:#1d4ed8; }
 
-駅前公共施設を、単なる利用の場ではなく、市民の学び・挑戦・交流が自然に芽生え、広がり、街の魅力を育てていく“成長する拠点”へと転換する。ここでは、子どもから大人まで、多様な人が自分の興味や得意を持ち寄り、新しい活動やつながりが生まれる。小さなアイデアが形になり、誰かの挑戦が次の挑戦を呼び、街全体の活力へとつながっていく。行政が一方的に提供する施設ではなく、市民とともに育て、市民の力が循環し、芦屋の価値が静かに、しかし確実に積み上がっていく“まちの育ち場”として再構築する。 
+/* ================= BUTTON SYSTEM ================= */
+button{ cursor:pointer; }
+.big-button{
+  display:inline-block; padding:14px 28px; font-size:16px; font-weight:800;
+  background:linear-gradient(135deg,#2563eb,#06b6d4); color:white;
+  border-radius:12px; text-align:center; box-shadow:0 8px 20px rgba(0,0,0,.15);
+  transition:.2s; border:none;
+}
+.big-button:hover{ transform:translateY(-2px); box-shadow:0 14px 28px rgba(0,0,0,.2); }
+.big-button.success{ background:linear-gradient(135deg,#10b981,#059669); }
+.big-button.accent{ background:linear-gradient(135deg,#8b5cf6,#6d28d9); }
+.big-button:disabled{ opacity:.5; cursor:not-allowed; transform:none; }
+.button-group{ display:flex; gap:12px; flex-wrap:wrap; margin-top:12px; }
 
-その下に中分類があり、これは投稿によって、新しいカテゴリが追加される。
+/* ================= AI LAYOUT ================= */
+.assistant-layout{ display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+textarea{
+  width:100%; height:240px; padding:14px; font-size:15px;
+  border-radius:14px; border:1.5px solid #dbeafe; background:#fff;
+  font-family:inherit; resize:vertical;
+}
+textarea:focus{ outline:none; border-color:#3b82f6; }
+.ai-result-box{
+  min-height:120px; padding:14px; background:#f8fafc;
+  border-radius:12px; border:1px solid #e2e8f0; line-height:1.7; font-size:15px;
+}
+.summary-block{ margin-top:16px; }
+.summary-box, .title-box{
+  padding:12px 16px; background:#f0f9ff; border-radius:10px;
+  border:1px solid #bae6fd; margin-bottom:8px; line-height:1.7;
+}
+.title-box{ background:#f0fdf4; border-color:#bbf7d0; font-weight:700; }
+.category-result{
+  padding:10px 14px; background:#fefce8; border-radius:10px;
+  border:1px solid #fde68a; font-size:14px; line-height:1.8;
+}
 
-上記の理念、大分類、中分類の　呼び方を再度、ご提案ください。
-現在は、理念に相当する名称がなく、大分類の項目を文章化したものが、civic visionになってます。
-中分類と小分類がPolicy Logic Tree という名称です。
-理念をcivic compassで良いでしょうか？
+/* ================= CATEGORY BAR ================= */
+.category-bar{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; }
+.cat-btn{
+  border:none; padding:6px 12px; border-radius:999px;
+  background:#e5e7eb; cursor:pointer; font-size:13px; transition:.2s;
+}
+.cat-btn.active{ background:#2563eb; color:#fff; }
+.cat-btn:hover{ background:#cbd5e1; }
+.cat-btn.active:hover{ background:#1d4ed8; }
 
-それに応じた名前をつけて文章を修正してください。
+/* =====================================================
+   PR PAGE — アコーデオン構造
+===================================================== */
 
-５．
-civic visionのページのメインは　
+/* ── PRページ 投稿追跡バナー ── */
+.pr-track-banner {
+  background: linear-gradient(135deg,#0f2442,#1e3a5f);
+  color:#fff; border-radius:16px; padding:16px 20px; margin-bottom:20px;
+  display:flex; align-items:center; gap:14px;
+  box-shadow:0 4px 16px rgba(0,0,0,.18);
+}
+.pr-track-icon { font-size:28px; flex-shrink:0; }
+.pr-track-info { flex:1; }
+.pr-track-info h3 { color:#93c5fd; font-size:15px; margin-bottom:4px; }
+.pr-track-info p  { font-size:13px; color:#cbd5e1; margin:0; }
 
-現在の大分類の　内容（３００字）
-駅前公共施設を、単なる利用の場ではなく、市民の学び・挑戦・交流が自然に芽生え、広がり、街の魅力を育てていく“成長する拠点”へと転換する。ここでは、子どもから大人まで、多様な人が自分の興味や得意を持ち寄り、新しい活動やつながりが生まれる。小さなアイデアが形になり、誰かの挑戦が次の挑戦を呼び、街全体の活力へとつながっていく。行政が一方的に提供する施設ではなく、市民とともに育て、市民の力が循環し、芦屋の価値が静かに、しかし確実に積み上がっていく“まちの育ち場”として再構築する。
+/* ── 大分類ボード ── */
+.pr-main-board{
+  background:linear-gradient(135deg,#1e3a5f,#0f2442);
+  color:#fff; border-radius:18px; margin-bottom:16px;
+  box-shadow:0 8px 24px rgba(0,0,0,.2); overflow:hidden;
+}
+.pr-main-header{
+  display:flex; justify-content:space-between; align-items:center;
+  padding:18px 22px; cursor:pointer; user-select:none; transition:.2s;
+}
+.pr-main-header:hover{ background:rgba(255,255,255,.06); }
+.pr-main-title{ font-size:17px; font-weight:700; }
+.pr-main-meta{ display:flex; align-items:center; gap:10px; }
+.pr-main-meta .count-badge{
+  background:#f59e0b; color:#fff; font-weight:700;
+  border-radius:999px; padding:2px 10px; font-size:13px; min-width:28px; text-align:center;
+}
+.pr-accordion-arrow{ font-size:16px; transition:transform .25s; }
+.pr-accordion-arrow.open{ transform:rotate(180deg); }
 
-それに見合った　イラストを表示
+/* ── 中分類ボード群コンテナ ── */
+.pr-sub-area{
+  display:none; padding:14px 16px; background:rgba(255,255,255,.05);
+  border-top:1px solid rgba(255,255,255,.1);
+}
+/* ★ 中分類を横並びグリッドで表示 */
+.pr-sub-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:10px;
+  align-items:start;
+}
 
-次に　現段階での投稿の総意をくみ上げた大分類の内容と　イメージイラストの表示スペースがある。
+/* ── 中分類ボード ── */
+.pr-sub-board{
+  background:rgba(255,255,255,.92); color:#0f172a;
+  border-radius:14px; overflow:hidden;
+  box-shadow:0 4px 14px rgba(0,0,0,.12); cursor:pointer; transition:.2s;
+  border:2px solid transparent;
+}
+.pr-sub-board:hover{ border-color:#3b82f6; transform:translateY(-2px); box-shadow:0 8px 20px rgba(0,0,0,.16); }
+.pr-sub-board.has-posts{ border-left:4px solid #3b82f6; }
+.pr-sub-board.active { border-color:#2563eb; }
+.pr-sub-header-inner{
+  display:flex; justify-content:space-between; align-items:flex-start;
+  padding:12px 14px;
+}
+.pr-sub-name{ font-size:14px; font-weight:700; flex:1; }
+.count-badge{
+  background:#2563eb; color:#fff; border-radius:999px;
+  padding:1px 8px; font-size:12px; font-weight:700; margin-left:6px;
+  min-width:22px; text-align:center; flex-shrink:0;
+}
+.count-badge.zero{ background:#94a3b8; }
+.pr-sub-hint{ font-size:11px; color:#64748b; padding:0 14px 10px; }
 
-市民の意見の総意を反映した　駅前公共施設のあり方です　との誘導文と
-最新アップデートのcivic vision（芦屋駅前公共施設を見る）をクリックしたらリアルタイムのcivic visionとイラストを閲覧できる。
+/* ── 投稿タイトル一覧（中分類内・横長カード） ── */
+.pr-title-list-area { padding:8px 0; }
 
-これが最大の演出になると思います
+.pr-title-btn {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:10px 14px; margin-bottom:6px;
+  background:#fff; border-radius:10px; cursor:pointer;
+  border-left:4px solid #dc2626;
+  box-shadow:0 2px 8px rgba(0,0,0,.06); transition:.15s; gap:10px;
+  /* ★ 横長表示のため width:100% */
+  width:100%;
+}
+.pr-title-btn:hover { box-shadow:0 4px 14px rgba(0,0,0,.12); transform:translateX(2px); }
+.pr-title-btn.active { background:#eff6ff; }
+.pr-title-btn-text { font-size:14px; font-weight:700; flex:1; text-align:left; }
+.pr-title-btn-status { font-size:11px; font-weight:700; flex-shrink:0; }
 
-そうすることでこのツールも目的を達成することが出来ます
+/* ── 要約パネル（タイトルクリックで展開） ── */
+.pr-summary-panel {
+  margin-top:10px; background:#fff; border-radius:14px;
+  padding:20px 24px; box-shadow:0 4px 16px rgba(0,0,0,.1);
+  border:1.5px solid #e2e8f0;
+}
+.pr-summary-close {
+  float:right; cursor:pointer; font-size:13px; color:#64748b;
+  padding:2px 8px; border-radius:6px; border:1px solid #e2e8f0;
+  margin-bottom:8px;
+}
+.pr-summary-close:hover{ background:#f1f5f9; }
+.pr-summary-title {
+  font-size:17px; font-weight:700; margin-bottom:12px; color:#0f172a;
+  clear:both; padding-top:4px;
+}
+.pr-summary-body {
+  font-size:15px; line-height:1.9; color:#334155;
+  background:#f8fafc; border-radius:10px; padding:16px 18px;
+  border:1px solid #e2e8f0;
+}
+/* ── 統合情報の表示 ── */
+.pr-merge-detail {
+  margin-top:14px; border-radius:10px; overflow:hidden;
+  border:1.5px solid #bfdbfe;
+}
+.pr-merge-detail-header {
+  background:#dbeafe; color:#1e3a8a; font-weight:700; font-size:13px;
+  padding:8px 14px; display:flex; gap:8px; align-items:center;
+}
+.pr-merge-detail-body {
+  background:#eff6ff; padding:12px 14px; font-size:13px;
+  color:#1d4ed8; line-height:1.7;
+}
+.pr-merge-row {
+  display:flex; gap:10px; margin-bottom:8px; align-items:flex-start;
+}
+.pr-merge-label {
+  font-size:11px; font-weight:700; padding:2px 8px; border-radius:999px;
+  flex-shrink:0; background:#bfdbfe; color:#1e40af;
+}
+.pr-merge-text { font-size:13px; color:#1e293b; line-height:1.6; }
+.pr-merged-note{
+  margin-top:10px; padding:8px 12px; background:#eff6ff; border-radius:8px;
+  font-size:13px; color:#1d4ed8; border-left:3px solid #3b82f6;
+}
+
+/* ── PRページ フル幅コンテナ ── */
+.pr-full-area { margin-top:8px; }
+
+/* =====================================================
+   LOGIC TREE PAGE
+===================================================== */
+.tree-page-wrap{ max-width:960px; margin:auto; }
+
+/* ── ビジョン文 ── */
+.tree-vision-card{
+  background:linear-gradient(135deg,#0f2442,#1e3a5f); color:#fff;
+  border-radius:20px; padding:22px 28px; margin-bottom:28px;
+  box-shadow:0 10px 30px rgba(0,0,0,.2);
+}
+.tree-vision-card h2{ color:#93c5fd; margin-bottom:8px; }
+.tree-vision-card p{ color:#cbd5e1; font-size:15px; }
+
+/* ── 大分類ボード群 ── */
+.tree-main-boards{
+  display:grid; grid-template-columns:repeat(5,1fr); gap:16px; margin-bottom:28px;
+}
+.tree-board{
+  background:#fff; border-radius:16px; padding:16px 12px;
+  text-align:center; cursor:pointer; transition:.25s;
+  box-shadow:0 6px 20px rgba(0,0,0,.1); border:2px solid transparent;
+  position:relative;
+}
+.tree-board:hover{ transform:translateY(-4px); box-shadow:0 14px 30px rgba(0,0,0,.15); border-color:#3b82f6; }
+.tree-board.active{ border-color:#2563eb; background:#eff6ff; }
+.tree-board-icon{ font-size:28px; margin-bottom:8px; }
+.tree-board-key{ font-size:18px; font-weight:900; color:#2563eb; margin-bottom:4px; }
+.tree-board-label{ font-size:12px; font-weight:700; color:#0f172a; line-height:1.4; }
+.tree-board-count{
+  position:absolute; top:-6px; right:-6px;
+  background:#f59e0b; color:#fff; border-radius:999px;
+  padding:2px 8px; font-size:12px; font-weight:700;
+}
+
+/* ── 中分類・小分類アコーデオン（ツリー詳細） ── */
+.tree-detail-area{ background:#fff; border-radius:20px; padding:24px; box-shadow:0 8px 24px rgba(0,0,0,.08); }
+.tree-detail-title{ font-size:18px; font-weight:700; color:#0f172a; margin-bottom:16px; padding-bottom:12px; border-bottom:2px solid #e2e8f0; }
+.tree-sub-block{ margin-bottom:12px; border-radius:14px; overflow:hidden; border:1.5px solid #e2e8f0; }
+.tree-sub-header{
+  padding:12px 16px; background:#f8fafc;
+  display:flex; justify-content:space-between; align-items:center;
+  cursor:pointer; font-weight:700; font-size:15px; transition:.15s;
+}
+.tree-sub-header:hover{ background:#eff6ff; }
+.tree-item-list{ display:none; padding:12px 16px; border-top:1px solid #e2e8f0; }
+.tree-item-chips{ display:flex; flex-wrap:wrap; gap:8px; }
+.tree-item-chip{
+  padding:6px 14px; background:#dbeafe; color:#1d4ed8;
+  border-radius:999px; font-size:13px; font-weight:600; cursor:pointer; transition:.15s;
+}
+.tree-item-chip:hover{ background:#bfdbfe; }
+.tree-item-chip.other{ background:#fee2e2; color:#dc2626; }
+.tree-item-chip.merged{ background:#dcfce7; color:#15803d; }
+
+/* =====================================================
+   RULES PAGE
+===================================================== */
+.rules-merge-flow{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin:20px 0; }
+.rules-step-card{
+  background:#fff; border-radius:16px; padding:18px; text-align:center;
+  box-shadow:0 4px 14px rgba(0,0,0,.08); border-top:4px solid #2563eb;
+}
+.rules-step-num{ font-size:28px; font-weight:900; color:#2563eb; margin-bottom:8px; }
+.rules-step-title{ font-weight:700; margin-bottom:8px; font-size:15px; }
+.rules-step-desc{ font-size:13px; color:#475569; line-height:1.6; }
+.score-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:12px; margin:16px 0; }
+.score-card{ background:white; padding:14px; border-radius:14px; box-shadow:0 4px 14px rgba(0,0,0,.08); border-top:3px solid #2563eb; }
+.score-value{ font-size:22px; font-weight:800; color:#2563eb; }
+
+/* ================= INTRO ================= */
+.feature-list{ list-style:none; }
+.feature-list li{ padding:8px 0; border-bottom:1px solid #f1f5f9; font-size:15px; }
+.feature-list li::before{ content:"✓ "; color:#10b981; font-weight:700; }
+
+/* ================= IMAGES ================= */
+img{ max-width:100%; height:auto; display:block; border-radius:14px; }
+
+/* ================= MOBILE ================= */
+@media(max-width:900px){
+  .assistant-layout{ grid-template-columns:1fr; }
+  .topbar{ flex-direction:column; gap:10px; }
+  nav{ justify-content:center; }
+  h1{ font-size:24px; }
+  .tree-main-boards{ grid-template-columns:repeat(2,1fr); }
+  .rules-merge-flow{ grid-template-columns:1fr; }
+}
+@media(max-width:600px){
+  .tree-main-boards{ grid-template-columns:1fr 1fr; }
+  .pr-sub-grid{ grid-template-columns:1fr; }
+}
+
+/* =====================================================
+   CIVIC COMPASS / CIVIC VISION PAGE
+===================================================== */
+
+/* ── ヒーローセクション（Civic Compass） ── */
+.compass-hero {
+  background:linear-gradient(160deg,#0a1628 0%,#0f2442 50%,#1a1035 100%);
+  border-radius:24px; padding:48px 36px; margin-bottom:24px;
+  text-align:center; position:relative; overflow:hidden;
+}
+.compass-hero::before {
+  content:"";
+  position:absolute; top:-60px; left:50%; transform:translateX(-50%);
+  width:400px; height:400px; border-radius:50%;
+  background:radial-gradient(circle,rgba(37,99,235,.18) 0%,transparent 70%);
+  pointer-events:none;
+}
+.compass-ring {
+  width:100px; height:100px; border-radius:50%; margin:0 auto 20px;
+  background:conic-gradient(
+    #2563eb 0deg 90deg,#06b6d4 90deg 180deg,
+    #10b981 180deg 270deg,#f59e0b 270deg 360deg
+  );
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 0 40px rgba(37,99,235,.4);
+}
+.compass-ring-inner {
+  width:72px; height:72px; border-radius:50%;
+  background:#0f2442; display:flex; align-items:center;
+  justify-content:center; font-size:28px;
+}
+.compass-badge {
+  display:inline-block; background:rgba(37,99,235,.25);
+  border:1px solid rgba(37,99,235,.5); color:#93c5fd;
+  padding:4px 14px; border-radius:999px; font-size:12px;
+  font-weight:700; letter-spacing:.05em; margin-bottom:16px;
+}
+.compass-version {
+  display:inline-block; background:#f59e0b; color:#fff;
+  padding:3px 12px; border-radius:999px; font-size:12px;
+  font-weight:700; margin-bottom:10px;
+}
+.compass-hero h2 {
+  color:#f0f9ff; font-size:22px; margin-bottom:8px; line-height:1.4;
+}
+.compass-hero .compass-sub {
+  color:#7dd3fc; font-size:15px; line-height:1.7; max-width:600px; margin:0 auto;
+}
+.compass-pillars {
+  display:flex; justify-content:center; flex-wrap:wrap; gap:10px; margin-top:24px;
+}
+.compass-pillar {
+  padding:8px 18px; border-radius:12px; font-size:13px; font-weight:700;
+  border:1px solid rgba(255,255,255,.2);
+}
+.live-dot {
+  display:inline-block; width:8px; height:8px; border-radius:50%;
+  background:#10b981; margin-right:6px;
+  box-shadow:0 0 0 0 rgba(16,185,129,.4);
+  animation:livepulse 2s infinite;
+}
+@keyframes livepulse {
+  0%  { box-shadow:0 0 0 0 rgba(16,185,129,.4); }
+  70% { box-shadow:0 0 0 8px rgba(16,185,129,0); }
+  100%{ box-shadow:0 0 0 0 rgba(16,185,129,0); }
+}
+
+/* ── Civic Visionメインビジュアル ── */
+.vision-main-block {
+  background:#fff; border-radius:20px; overflow:hidden;
+  box-shadow:0 8px 28px rgba(0,0,0,.1); margin-bottom:20px;
+}
+.vision-main-header {
+  background:linear-gradient(135deg,#1e3a5f,#0f2442);
+  color:#fff; padding:20px 24px;
+}
+.vision-main-header h3 { color:#93c5fd; font-size:14px; letter-spacing:.06em; margin-bottom:6px; }
+.vision-main-text {
+  padding:20px 24px; font-size:15px; line-height:1.9; color:#1e293b;
+  border-bottom:1px solid #e2e8f0;
+}
+.vision-illust-area {
+  background:#f8fafc; padding:16px 24px; text-align:center;
+  font-size:13px; color:#64748b;
+}
+.vision-illust-placeholder {
+  width:100%; max-width:560px; height:220px; margin:0 auto 10px;
+  background:linear-gradient(135deg,#dbeafe,#e0f2fe);
+  border-radius:14px; display:flex; align-items:center; justify-content:center;
+  font-size:48px; color:#93c5fd;
+}
+
+/* ── 市民総意ブロック ── */
+.vision-consensus-block {
+  background:#fff; border-radius:20px; overflow:hidden;
+  box-shadow:0 8px 28px rgba(0,0,0,.1); margin-bottom:20px;
+  border:2px solid #10b981;
+}
+.vision-consensus-header {
+  background:linear-gradient(135deg,#064e3b,#065f46);
+  color:#fff; padding:16px 24px; display:flex; align-items:center; gap:12px;
+}
+.vision-consensus-header h3 { font-size:16px; margin:0; }
+.vision-consensus-body { padding:20px 24px; }
+.vision-consensus-body p { font-size:14px; color:#64748b; margin-bottom:12px; }
+.vision-live-text {
+  font-size:15px; line-height:1.9; color:#1e293b;
+  background:#f0fdf4; border-radius:12px; padding:16px 18px;
+  border:1px solid #bbf7d0; margin-bottom:14px;
+  min-height:80px;
+}
+.vision-live-illust {
+  width:100%; max-width:560px; height:180px; margin:0 auto;
+  background:linear-gradient(135deg,#d1fae5,#a7f3d0);
+  border-radius:14px; display:flex; align-items:center; justify-content:center;
+  font-size:40px; color:#059669;
+}
+.vision-cta {
+  text-align:center; margin-top:16px; padding:16px;
+  background:#f0fdf4; border-radius:12px; border:1px solid #bbf7d0;
+}
+.vision-cta p { font-size:13px; color:#065f46; margin-bottom:10px; font-weight:600; }
+
+/* ── 構造図（3層） ── */
+.three-layer{ max-width:600px; margin:20px auto 0; }
+.layer-box{
+  border-radius:14px; padding:16px 20px; position:relative;
+}
+.layer-box.layer-top{
+  background:linear-gradient(135deg,#1e3a5f,#0f2442);
+  color:#fff; text-align:center;
+}
+.layer-box.layer-mid{
+  background:#eff6ff; border:2px solid #bfdbfe;
+  margin:0 24px; text-align:center;
+}
+.layer-box.layer-bot{
+  background:#f0fdf4; border:2px solid #bbf7d0;
+  margin:0 48px; text-align:center;
+}
+.layer-label{
+  font-size:11px; font-weight:700; letter-spacing:.08em;
+  margin-bottom:4px; opacity:.7;
+}
+.layer-title{ font-size:15px; font-weight:700; }
+.layer-desc{ font-size:12px; margin-top:4px; opacity:.75; }
+.layer-arrow-line{
+  width:2px; height:32px; background:linear-gradient(#2563eb,#10b981);
+  margin:0 auto; position:relative;
+}
+
+/* ── AI分析サマリー ── */
+.analysis-grid{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:12px; margin-top:16px;
+}
+.analysis-card{
+  background:#fff; border-radius:14px; padding:14px 16px;
+  box-shadow:0 3px 10px rgba(0,0,0,.07); border-top:3px solid #2563eb;
+}
+.analysis-card h4{ font-size:12px; color:#64748b; margin-bottom:4px; }
+.analysis-num{ font-size:24px; font-weight:900; color:#0f172a; }
+.analysis-bar-wrap{ margin-top:16px; }
+.analysis-bar-row{
+  display:grid; grid-template-columns:160px 1fr 52px;
+  align-items:center; gap:10px; margin-bottom:10px;
+}
+.analysis-bar-label{ font-size:13px; font-weight:600; }
+.analysis-bar-bg{
+  background:#e2e8f0; border-radius:999px; height:12px; overflow:hidden;
+}
+.analysis-bar-fill{
+  height:100%; border-radius:999px;
+  background:linear-gradient(90deg,#2563eb,#06b6d4);
+  transition:width .8s ease;
+}
+
+/* =====================================================
+   ANALYSIS PAGE（新設）
+===================================================== */
+.analysis-page-hero {
+  background:linear-gradient(135deg,#0f172a,#1e293b);
+  border-radius:20px; padding:32px 28px; margin-bottom:20px; color:#fff;
+}
+.analysis-page-hero h2 { color:#93c5fd; margin-bottom:8px; font-size:22px; }
+.analysis-page-hero p  { color:#cbd5e1; font-size:14px; line-height:1.8; }
+.analysis-significance {
+  background:linear-gradient(135deg,#fefce8,#fef9c3);
+  border-radius:16px; padding:20px 24px; margin-top:16px;
+  border-left:5px solid #d97706;
+}
+.analysis-significance h3 { color:#92400e; margin-bottom:10px; font-size:16px; }
+.analysis-significance p  { font-size:14px; color:#78350f; line-height:1.9; margin-bottom:10px; }
+.analysis-significance p:last-child { margin-bottom:0; }
+.insight-list{ list-style:none; margin-top:12px; }
+.insight-list li{
+  padding:12px 16px; border-radius:10px; margin-bottom:8px;
+  font-size:14px; display:flex; gap:10px; align-items:flex-start;
+}
+.insight-list li.ins-ok   { background:#f0fdf4; border-left:3px solid #16a34a; }
+.insight-list li.ins-warn { background:#fffbeb; border-left:3px solid #f59e0b; }
+.insight-list li.ins-flag { background:#fef2f2; border-left:3px solid #dc2626; }
+
+/* ── 整合性バーチャート ── */
+.alignment-bar-section { margin-top:20px; }
+.alignment-bar-row {
+  display:grid; grid-template-columns:180px 1fr 70px;
+  align-items:center; gap:10px; margin-bottom:12px;
+}
+.alignment-bar-label { font-size:13px; font-weight:600; }
+.alignment-bar-bg {
+  background:#e2e8f0; border-radius:999px; height:14px; overflow:hidden;
+}
+.alignment-bar-fill {
+  height:100%; border-radius:999px;
+  background:linear-gradient(90deg,#10b981,#059669);
+  transition:width .8s ease;
+}
+.alignment-pct { font-size:13px; font-weight:700; text-align:right; }
+
+/* =====================================================
+   RULES — フローチャート共通
+===================================================== */
+.rules-tab-bar{ display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap; }
+.rules-tab-btn{
+  padding:10px 20px; border-radius:10px; border:2px solid #e2e8f0;
+  background:#fff; font-weight:700; font-size:14px; cursor:pointer; transition:.2s;
+}
+.rules-tab-btn.active{ background:#1e3a5f; color:#fff; border-color:#1e3a5f; }
+.rules-panel{ display:none; }
+.rules-panel.active{ display:block; }
+
+/* ── やさしい図解 ── */
+.easy-flow{ max-width:540px; }
+.easy-step{
+  background:#fff; border-radius:14px; padding:14px 18px;
+  display:flex; align-items:flex-start; gap:14px;
+  box-shadow:0 3px 10px rgba(0,0,0,.07); border-left:5px solid #2563eb; margin-bottom:2px;
+}
+.easy-step.es-ai  { border-left-color:#7c3aed; background:#f5f3ff; }
+.easy-step.es-ok  { border-left-color:#16a34a; background:#f0fdf4; }
+.easy-step.es-warn{ border-left-color:#ea580c; background:#fff7ed; }
+.easy-step.es-red { border-left-color:#dc2626; background:#fff1f2; }
+.easy-num{
+  width:32px; height:32px; border-radius:50%; background:#2563eb;
+  color:#fff; font-weight:900; font-size:14px;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px;
+}
+.easy-step.es-ai  .easy-num{ background:#7c3aed; }
+.easy-step.es-ok  .easy-num{ background:#16a34a; }
+.easy-step.es-warn .easy-num{ background:#ea580c; }
+.easy-step.es-red .easy-num{ background:#dc2626; }
+.easy-text h4{ margin:0 0 3px; font-size:14px; }
+.easy-text p { margin:0; font-size:12px; color:#64748b; line-height:1.5; }
+.flow-down{ text-align:center; font-size:22px; color:#94a3b8; line-height:1.3; }
+.flow-branch-row{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.lbl-yes{ display:inline-block; background:#dcfce7; color:#15803d; font-size:11px; font-weight:700; padding:2px 8px; border-radius:999px; margin-bottom:5px; }
+.lbl-no { display:inline-block; background:#fee2e2; color:#dc2626; font-size:11px; font-weight:700; padding:2px 8px; border-radius:999px; margin-bottom:5px; }
+
+/* ── AI 深掘り表示 ── */
+.ai-result-summary{ font-size:15px; line-height:1.7; padding:4px 0; color:#0f172a; }
+#deepDiveArea{ margin-top:16px; border-top:2px dashed #e2e8f0; padding-top:16px; }
+.deep-item{
+  background:#f8fafc; border-radius:12px; padding:12px 16px; margin-bottom:10px;
+  border-left:4px solid #2563eb;
+}
+.deep-item:nth-child(2){ border-left-color:#10b981; }
+.deep-item:nth-child(3){ border-left-color:#f59e0b; }
+.deep-item:nth-child(4){ border-left-color:#ef4444; }
+.deep-item.deep-next{ border-left-color:#8b5cf6; background:#f5f3ff; }
+.deep-label{ font-size:12px; font-weight:700; color:#64748b; margin-bottom:6px; letter-spacing:.03em; }
+.deep-body{ font-size:14px; line-height:1.7; color:#1e293b; }
+
+/* why-grid */
+.why-grid{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px; }
+.why-card{ border-radius:14px; padding:18px; }
+.why-card.old-way{ background:#fef2f2; border-left:4px solid #dc2626; }
+.why-card.new-way{ background:#f0fdf4; border-left:4px solid #16a34a; }
+.why-card h4{ margin-bottom:8px; font-size:14px; }
+.why-card ul{ padding-left:18px; font-size:13px; color:#475569; line-height:2; }
+
+@media(max-width:900px){
+  .why-grid{ grid-template-columns:1fr; }
+  .analysis-bar-row{ grid-template-columns:120px 1fr 44px; }
+  .alignment-bar-row{ grid-template-columns:140px 1fr 60px; }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="logo">🏛 市民提案AIプラットフォーム</div>
+  <nav>
+    <button onclick="showPage('intro')">ホーム</button>
+    <button onclick="showPage('tree')">Policy Logic Tree</button>
+    <button onclick="showPage('assistant')">AI壁打ち</button>
+    <button onclick="showPage('merge')">統合</button>
+    <button onclick="showPage('analysis')">📊 分析</button>
+    <button onclick="showPage('pullrequest')">PULL REQUEST</button>
+    <button onclick="showPage('vision')">🧭 Civic Vision</button>
+  </nav>
+</header>
+
+<main>
+
+<!-- ================= INTRO ================= -->
+<section id="intro" class="page active">
+  <div class="card">
+    <h1>駅前公共施設について皆で考えよう</h1>
+    <h2>このプラットフォームについて</h2>
+    <p>このプラットフォームは、駅前の公共施設について、みなさんの声を自由に投稿できる場所です。投稿された意見は、AIが公平に整理し、誰もが見える形にしていきます。</p>
+    <p style="margin-top:10px;">設問はありません。自由に書いた声を、AIが公正な手法で整理し、誰もが確認できる形に残します。</p>
+  </div>
+  <div class="card" style="padding:0;overflow:hidden;">
+    <img src="images/intro.jpg" alt="市民政策AIプラットフォーム">
+  </div>
+  <div class="card">
+    <h2>特徴</h2>
+    <ul class="feature-list">
+      <li>思いついたまま、自由に書き込めます</li>
+      <li>AIがあなたの声を読み取り、わかりやすく整理します</li>
+      <li>整理された意見は、Policy Logic Treeの形で誰でも見られます</li>
+      <li>どう整理されたか、その過程もすべて公開されます</li>
+      <li>みんなの声が、少しずつ積み重なっていく仕組みです</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h2>投稿の流れ</h2>
+    <p>自由に投稿する → AIが整理する → Policy Logic Treeにまとまる → みんなで眺められる</p>
+    <div style="margin-top:16px;">
+      <button class="big-button" onclick="showPage('tree')">🌳 Policy Logic Treeを見る</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= POLICY LOGIC TREE ================= -->
+<section id="tree" class="page">
+  <div class="tree-page-wrap">
+    <div class="tree-vision-card">
+      <h2>🌳 Policy Logic Tree</h2>
+      <p>コストセンターからプロフィットセンターへ：市民のウェルビーイングと知財の集積による投資型都市経営の実現</p>
+      <p style="font-size:12px; color:#64748b; margin-top:8px;">中分類・小分類は市民の投稿によって動的に追加されます。</p>
+    </div>
+    <div style="padding:0; margin-bottom:20px;">
+      <img src="/ashiya-platform/images/log.tree4.jpg" alt="ロジツリー" style="width:100%; border-radius:14px; margin-bottom:16px;">
+      <!-- 5つの大分類ボード -->
+      <div id="treeMainBoards" class="tree-main-boards">
+        <!-- JS で描画 -->
+      </div>
+      <!-- 中分類・小分類アコーデオン詳細 -->
+      <div id="treeDetailArea" class="tree-detail-area" style="display:none;">
+        <!-- JS で描画 -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ASSISTANT ================= -->
+<section id="assistant" class="page">
+  <h1>🤖 AI壁打ち</h1>
+  <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px;">
+    <img src="images/aiWall.jpg" alt="AI壁打ち">
+  </div>
+  <div class="assistant-layout">
+    <div class="card">
+      <h2>あなたの考えを聞かせてください</h2>
+      <p style="font-size:13px; color:#64748b; margin-bottom:12px;">思っていることを自由に書いてください。AIが内容を読んで自動的に分類します。</p>
+      <textarea id="userInput" rows="12" placeholder="芦屋市について思っていることを自由に書いてください..."></textarea>
+      <div style="margin-top:14px;">
+        <button class="big-button" onclick="runAI()">🤖 AI壁打ちを実行する</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2>AIからの整理結果</h2>
+      <div id="aiResult" class="ai-result-box"><p style="color:#94a3b8;">結果はここに表示されます。</p></div>
+      <div id="deepDiveArea" style="display:none;"></div>
+      <div id="summarizeBtnBox" style="display:none; margin-top:14px;">
+        <button class="big-button accent" onclick="confirmSummary()">📝 200字要約する</button>
+      </div>
+      <div id="summaryArea" class="summary-block" style="display:none;">
+        <h3>200文字要約</h3>
+        <div id="summaryBox" class="summary-box"></div>
+        <h3>推奨タイトル</h3>
+        <div id="titleBox" class="title-box"></div>
+        <h3>分類結果</h3>
+        <div id="categoryResult" class="category-result"></div>
+        <div id="postDecision" style="display:none; margin-top:18px; padding-top:16px; border-top:1px solid #e5e7eb;">
+          <p style="font-weight:700; margin-bottom:10px;">この内容でPRに投稿しますか？</p>
+          <div class="button-group">
+            <button class="big-button success" onclick="postToPR()">✅ PRページへ投稿する</button>
+            <button class="big-button" style="background:linear-gradient(135deg,#64748b,#475569);" onclick="continueEditing()">✍️ 引き続き意見する</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MERGE（旧：統合分析ページ → 統合ページ） ================= -->
+<section id="merge" class="page">
+  <h1>🔗 統合</h1>
+  <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px;">
+    <img src="images/ai-labo.jpg" alt="統合" style="border-radius:14px;">
+  </div>
+
+  <div class="card">
+    <h2>まずはこの4コマをどうぞ！</h2>
+    <p style="margin-bottom:16px; color:#475569;">「私の意見、ちゃんと届いてるの？」という疑問にお答えします。</p>
+    <img src="images/bunseki.jpg" alt="分析の仕組みを説明する4コマ漫画" style="width:100%; max-width:560px; margin:0 auto; display:block; border-radius:16px; box-shadow:0 8px 24px rgba(0,0,.12);">
+
+    <div style="margin-top:24px; display:grid; grid-template-columns:1fr; gap:12px;">
+      <div style="background:linear-gradient(135deg,#eff6ff,#dbeafe); border-radius:16px; padding:20px 22px; border-left:5px solid #2563eb;">
+        <div style="font-size:20px; margin-bottom:8px;">✅ あなたの投稿は、ちゃんと届いています</div>
+        <p style="font-size:15px; color:#1e40af; margin:0; line-height:1.8;">書いた意見は、AIが内容を読み取り、テーマに合ったカテゴリに自動で整理されます。PRページを見ると、あなたの意見がしっかり反映されているのが確認できます。</p>
+      </div>
+      <div style="background:linear-gradient(135deg,#f0fdf4,#dcfce7); border-radius:16px; padding:20px 22px; border-left:5px solid #16a34a;">
+        <div style="font-size:20px; margin-bottom:8px;">🤝 似た意見は、いっしょに育っていきます</div>
+        <p style="font-size:15px; color:#15803d; margin:0; line-height:1.8;">同じテーマの投稿が集まると、AIがそれらをまとめて「ひとつの提案」として整理します。あなたの意見は、他の市民の声と合わさって、より力強い提案へと成長していきます。</p>
+      </div>
+      <div style="background:linear-gradient(135deg,#fefce8,#fef9c3); border-radius:16px; padding:20px 22px; border-left:5px solid #d97706;">
+        <div style="font-size:20px; margin-bottom:8px;">🌳 どんな意見も、Policy Logic Treeに残ります</div>
+        <p style="font-size:15px; color:#92400e; margin:0; line-height:1.8;">投稿された意見はすべて、このプラットフォームの「Policy Logic Tree」に記録されます。小さな一言も、まちの未来を考える大切なデータです。どうぞ遠慮なく投稿してください。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🌟 かんたん3ステップで完結します</h2>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-top:12px;">
+      <div style="text-align:center; padding:20px 16px; background:linear-gradient(135deg,#eff6ff,#dbeafe); border-radius:16px;">
+        <div style="font-size:36px; margin-bottom:8px;">✍️</div>
+        <div style="font-weight:700; margin-bottom:6px; font-size:15px;">STEP 1</div>
+        <div style="font-size:13px; color:#1e40af;">自由に書く<br>難しいことは考えなくてOK</div>
+      </div>
+      <div style="text-align:center; padding:20px 16px; background:linear-gradient(135deg,#f0fdf4,#dcfce7); border-radius:16px;">
+        <div style="font-size:36px; margin-bottom:8px;">🤖</div>
+        <div style="font-weight:700; margin-bottom:6px; font-size:15px;">STEP 2</div>
+        <div style="font-size:13px; color:#15803d;">AIが整理する<br>カテゴリに自動で分類</div>
+      </div>
+      <div style="text-align:center; padding:20px 16px; background:linear-gradient(135deg,#fefce8,#fef9c3); border-radius:16px;">
+        <div style="font-size:36px; margin-bottom:8px;">📋</div>
+        <div style="font-weight:700; margin-bottom:6px; font-size:15px;">STEP 3</div>
+        <div style="font-size:13px; color:#92400e;">PRページに掲載<br>みんなが見られる形に</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ANALYSIS（新設） ================= -->
+<section id="analysis" class="page">
+  <h1>📊 分析</h1>
+
+  <!-- AI分析サマリー（リアルタイム） -->
+  <div class="card">
+    <h2>📊 現在の市民の声 — AI分析サマリー</h2>
+    <p style="font-size:13px; color:#64748b; margin-bottom:4px;">
+      投稿データをリアルタイムに集計しています。
+    </p>
+    <div class="analysis-grid">
+      <div class="analysis-card">
+        <h4>総投稿数</h4>
+        <div class="analysis-num" id="analysisTotalCount">―<span style="font-size:14px; font-weight:400; color:#64748b;">件</span></div>
+      </div>
+      <div class="analysis-card" style="border-top-color:#10b981;">
+        <h4>統合済み記事</h4>
+        <div class="analysis-num" style="color:#10b981;" id="analysisMergedCount">―<span style="font-size:14px; font-weight:400; color:#64748b;">件</span></div>
+      </div>
+      <div class="analysis-card" style="border-top-color:#f59e0b;">
+        <h4>Civic Visionとの整合性</h4>
+        <div class="analysis-num" style="color:#f59e0b;">―<span style="font-size:14px; font-weight:400; color:#64748b;">%</span></div>
+      </div>
+      <div class="analysis-card" style="border-top-color:#8b5cf6;">
+        <h4>最多テーマ</h4>
+        <div style="font-size:15px; font-weight:700; color:#5b21b6; margin-top:6px;" id="analysisTopTheme">―</div>
+      </div>
+    </div>
+
+    <!-- 大分類別バー -->
+    <div class="analysis-bar-wrap" id="analysisBarsArea" style="margin-top:20px;">
+      <div style="text-align:center; color:#94a3b8; padding:20px;">読み込み中…</div>
+    </div>
+  </div>
+
+  <!-- Civic Visionとの整合性評価 -->
+  <div class="card">
+    <h2>🎯 Civic Visionとの整合性評価</h2>
+    <p style="font-size:14px; color:#475569; line-height:1.8; margin-bottom:16px;">
+      最初に設定した「Civic Vision（大分類）」と、市民投稿の総意の整合性を大分類ごとに評価します。
+    </p>
+
+    <div class="alignment-bar-section" id="alignmentBarsArea">
+      <!-- JS で描画 -->
+      <div style="text-align:center; color:#94a3b8; padding:20px;">読み込み中…</div>
+    </div>
+
+    <ul class="insight-list" style="margin-top:20px;">
+      <li class="ins-ok">✅ <div><strong>高整合エリア：</strong>市民の声がCivic Visionと一致している分野は、施策を加速させるシグナルです。</div></li>
+      <li class="ins-warn">⚠️ <div><strong>乖離エリア：</strong>投稿が少ない分野や想定外の方向性が集まっている場合は、Visionの再考または市民への情報提供が必要かもしれません。</div></li>
+      <li class="ins-flag">🔴 <div><strong>新興テーマ：</strong>既存の分類に収まらない「その他」の投稿が増えた場合、新しい中分類の創設を検討します。</div></li>
+    </ul>
+  </div>
+
+  <!-- 分析の意義 -->
+  <div class="card">
+    <h2>💡 分析の意義と考え方</h2>
+
+    <div class="analysis-significance">
+      <h3>そもそも、この分析は何のためにあるのか</h3>
+      <p>
+        このプラットフォームの最初に設定した「Civic Vision（大分類）」と、市民の投稿意見の総意のズレや一致をどのように捉えるか——それがこの分析の核心です。
+      </p>
+      <p>
+        <strong>投稿数の多さに引きずられると、ポピュリスト的な分析結果になりかねません。</strong>
+        一方で、AIのアルゴリズムだけで判断するなら、市民の投稿そのものが無意味になってしまいます。
+      </p>
+      <p>
+        そのバランスをうまく調整した分析を目指します。現時点では試行錯誤の段階ですが、海外の市民参加型プラットフォームの事例（vTaiwan、Decidim、Pol.isなど）を参考にしながら、より良い分析手法を模索していきます。
+      </p>
+    </div>
+
+    <div style="margin-top:16px; display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+      <div class="why-card old-way">
+        <h4>⚠️ 避けたいアプローチ</h4>
+        <ul>
+          <li>投稿数だけで多数決的に決める</li>
+          <li>AIアルゴリズムのブラックボックス化</li>
+          <li>市民の声を数値に還元しすぎる</li>
+        </ul>
+      </div>
+      <div class="why-card new-way">
+        <h4>✅ 目指すアプローチ</h4>
+        <ul>
+          <li>質と量のバランスある評価</li>
+          <li>分析プロセスの透明な開示</li>
+          <li>海外事例を参考にした継続的改善</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PULL REQUEST ================= -->
+<section id="pullrequest" class="page">
+  <h1>📋 PULL REQUEST</h1>
+
+  <!-- ★ 投稿追跡バナー -->
+  <div class="pr-track-banner" id="prTrackBanner" style="display:none;">
+    <div class="pr-track-icon">📍</div>
+    <div class="pr-track-info">
+      <h3>あなたの最新投稿</h3>
+      <p id="prTrackText">投稿を確認中…</p>
+    </div>
+    <button onclick="scrollToMyPost()" style="background:rgba(255,255,255,.2); border:1px solid rgba(255,255,255,.4); color:#fff; padding:8px 16px; border-radius:8px; font-size:13px; cursor:pointer;">表示する</button>
+  </div>
+
+  <div class="card" style="padding:14px 20px; margin-bottom:16px; background:#f0f9ff; border:1px solid #bae6fd;">
+    <p style="font-size:13px; color:#0369a1; margin:0;">
+      💡 <strong>見方のガイド：</strong>
+      🔵 統合済み = 複数の投稿がAIによって統合された記事 ／
+      ⚫ 処理済み = 統合元になった元の投稿 ／
+      🔴 未統合 = まだ単独の投稿（次の類似投稿が来ると統合されます）<br>
+      大分類をクリック → 中分類を選択 → タイトルをクリックして要約を確認できます。
+    </p>
+  </div>
+
+  <div id="prList"></div>
+</section>
+
+<!-- ================= CIVIC VISION ================= -->
+<section id="vision" class="page">
+
+  <!-- ── Civic Compass（理念） ── -->
+  <div class="compass-hero">
+    <div class="compass-ring">
+      <div class="compass-ring-inner">🧭</div>
+    </div>
+    <div class="compass-badge">CIVIC COMPASS — 不変の理念</div>
+    <h2>芦屋市の公共施設を、<br>コストから投資へ</h2>
+    <p class="compass-sub">
+      芦屋市の公共施設を、維持費がかかる「コスト」としてではなく、市民のウェルビーイング・知・経済価値を生み出す投資型の都市拠点として再定義する。市民の自由なアイデアと最先端テクノロジーが交わり、街全体の価値を上げ続ける場所。
+    </p>
+    <div class="compass-pillars">
+      <span class="compass-pillar" style="background:rgba(37,99,235,.2);">コストセンターからプロフィットセンターへ</span>
+      <span class="compass-pillar" style="background:rgba(16,185,129,.2);">市民のウェルビーイングと知財の集積</span>
+      <span class="compass-pillar" style="background:rgba(245,158,11,.2);">投資型都市経営の実現</span>
+    </div>
+  </div>
+
+  <!-- ── 構造図（3層） ── -->
+  <div class="card">
+    <h2>🏗 プラットフォームの3層構造</h2>
+    <p style="font-size:14px; color:#475569; margin-bottom:16px;">このプラットフォームは、理念から実際の議論まで3つの層で構成されています。</p>
+    <div class="three-layer">
+      <div class="layer-box layer-top">
+        <div class="layer-label">LAYER 1 — 不変の理念</div>
+        <div class="layer-title">🧭 Civic Compass</div>
+        <div class="layer-desc">コストセンターからプロフィットセンターへ（固定・変更なし）</div>
+      </div>
+      <div style="text-align:center;"><div class="layer-arrow-line" style="margin:0 auto;"></div></div>
+      <div class="layer-box layer-mid">
+        <div class="layer-label">LAYER 2 — 不変の大分類</div>
+        <div class="layer-title">🎯 Civic Vision</div>
+        <div class="layer-desc">5つの大分類（固定）。市民投稿の総意を反映してアップデートされる文章</div>
+      </div>
+      <div style="text-align:center;"><div class="layer-arrow-line" style="margin:0 auto;"></div></div>
+      <div class="layer-box layer-bot">
+        <div class="layer-label">LAYER 3 — 動的な議論</div>
+        <div class="layer-title">🌳 Policy Logic Tree</div>
+        <div class="layer-desc">中分類・小分類。市民の投稿により動的に追加・更新される</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Civic Vision（大分類）メインビジュアル ── -->
+  <div class="vision-main-block">
+    <div class="vision-main-header">
+      <h3>🎯 CIVIC VISION — 大分類（不変）</h3>
+      <p style="color:#93c5fd; font-size:14px; margin:0;">芦屋駅前公共施設に関する5つの大分類の根幹となるビジョン</p>
+    </div>
+    <div class="vision-main-text">
+      駅前公共施設を、単なる利用の場ではなく、市民の学び・挑戦・交流が自然に芽生え、広がり、街の魅力を育てていく"成長する拠点"へと転換する。ここでは、子どもから大人まで、多様な人が自分の興味や得意を持ち寄り、新しい活動やつながりが生まれる。小さなアイデアが形になり、誰かの挑戦が次の挑戦を呼び、街全体の活力へとつながっていく。行政が一方的に提供する施設ではなく、市民とともに育て、市民の力が循環し、芦屋の価値が静かに、しかし確実に積み上がっていく"まちの育ち場"として再構築する。
+    </div>
+    <div class="vision-illust-area">
+      <div class="vision-illust-placeholder">🏛</div>
+      <p>Civic Vision イメージイラスト（画像を差し替えてください：images/civic-vision.jpg）</p>
+    </div>
+  </div>
+
+  <!-- ── 市民の総意（リアルタイム更新） ── -->
+  <div class="vision-consensus-block">
+    <div class="vision-consensus-header">
+      <span class="live-dot"></span>
+      <h3>市民の投稿総意を反映した 駅前公共施設のあり方</h3>
+    </div>
+    <div class="vision-consensus-body">
+      <p>市民の投稿が積み重なるにつれ、AIがその総意を分析し、Civic Visionの内容を動的に更新します。</p>
+      <div class="vision-live-text" id="visionLiveText">
+        読み込み中…
+      </div>
+      <div class="vision-live-illust" id="visionLiveIllust">
+        🌱
+      </div>
+      <div class="vision-cta">
+        <p>市民の意見の総意を反映した 駅前公共施設のあり方です</p>
+        <button class="big-button success" onclick="loadLiveCivicVision()">
+          🔄 最新アップデートの Civic Vision を見る
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── なぜ大事か ── -->
+  <div class="card">
+    <h2>なぜ Civic Compass が重要なのか</h2>
+    <div class="why-grid">
+      <div class="why-card old-way">
+        <h4>❌ これまでの公共施設のあり方</h4>
+        <ul>
+          <li>維持費がかかる「コスト」として管理</li>
+          <li>行政が一方的に用途を決める</li>
+          <li>市民参加の機会が少ない</li>
+          <li>市民の声が政策に届きにくい</li>
+        </ul>
+      </div>
+      <div class="why-card new-way">
+        <h4>✅ Civic Compassが目指す姿</h4>
+        <ul>
+          <li>市民のウェルビーイングを生む「投資」として運営</li>
+          <li>市民と行政がともに施設を育てる</li>
+          <li>小さなアイデアが街全体の価値へ</li>
+          <li>デジタルと市民参加で継続的に進化</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+</main>
+
+<script>
+// ======================= 設定 =======================
+const GAS_URL = "https://script.google.com/macros/s/AKfycbymx19ORq63wrfnsScaM_Ma380eSNrTjRc1maCCtwDQdeOSKXESuh8iRcAKFm1D78LBpQ/exec";
+const OTHER_LABEL = "その他";
+
+// ★ MAIN_CATEGORIES から「DAO型住民自治投票」を削除済み
+const MAIN_CATEGORIES = [
+  { key:"①", icon:"🏫", label:"芦屋市の価値向上（ブランド・移住促進）", keyword:"価値向上",
+    subs:[ {label:"次世代教育ブランドの確立"}, {label:"街の魅力化・景観美化"}, {label:"市民協働"} ] },
+  { key:"②", icon:"❤️", label:"市民へのベネフィット（ウェルビーイング）", keyword:"ベネフィット",
+    subs:[ {label:"多世代交流・サードプレイス"}, {label:"知的探究・スキルアップ"} ] },
+  { key:"③", icon:"💰", label:"財政的持続可能性", keyword:"財政的",
+    subs:[ {label:"施設の収益化"}, {label:"寄付・ふるさと納税"} ] },
+  { key:"④", icon:"🏛", label:"施設の戦略性", keyword:"戦略性",
+    subs:[ {label:"知のゲートウェイ化"}, {label:"イノベーション・起業支援"} ] },
+  { key:"⑤", icon:"🛡", label:"都市の強靭性とガバナンス", keyword:"強靭性",
+    // ★ 「DAO型住民自治投票」を削除。「デュアルユース」のみ残す
+    subs:[ {label:"デュアルユース"} ] }
+];
+
+function findMain(text) {
+  if (!text) return MAIN_CATEGORIES[0];
+  for (const m of MAIN_CATEGORIES) {
+    if (text.includes(m.keyword) || text.includes(m.label)) return m;
+  }
+  for (const m of MAIN_CATEGORIES) {
+    if (text.includes(m.key)) return m;
+  }
+  return MAIN_CATEGORIES[0];
+}
+
+// ======================= 状態管理 =======================
+let currentIdeaText = "";
+let currentAIResult = "";
+let currentSummary200 = "";
+let currentTitle = "";
+let currentMain = "";
+let currentSub = "";
+let cachedRows = [];
+
+// ★ 最後に投稿したタイトルを追跡
+let lastPostedTitle = "";
+let lastPostedMain  = "";
+let lastPostedSub   = "";
+
+// ======================= ページ切り替え =======================
+function showPage(pageId) {
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  const target = document.getElementById(pageId);
+  if (target) target.classList.add("active");
+  window.scrollTo({ top:0, behavior:"smooth" });
+
+  if (pageId === "pullrequest") loadPRList();
+  if (pageId === "tree")        { initTreeBoards(); loadTreeData(); }
+  if (pageId === "analysis")    loadAnalysisData();
+  if (pageId === "vision")      loadLiveCivicVision();
+}
+
+// ======================= 分析ページ データ読み込み =======================
+async function loadAnalysisData() {
+  const totalEl  = document.getElementById("analysisTotalCount");
+  const mergedEl = document.getElementById("analysisMergedCount");
+  const topEl    = document.getElementById("analysisTopTheme");
+  const barsArea = document.getElementById("analysisBarsArea");
+  const alignArea= document.getElementById("alignmentBarsArea");
+
+  try {
+    if (cachedRows.length === 0) {
+      const res = await fetch(GAS_URL + "?mode=list");
+      const data = await res.json();
+      if (Array.isArray(data)) cachedRows = data;
+    }
+    const rows   = cachedRows;
+    const total  = rows.length;
+    const merged = rows.filter(r => r.status === "統合" || r.status === "新分類統合").length;
+
+    const counts = {};
+    MAIN_CATEGORIES.forEach(m => counts[m.label] = 0);
+    rows.forEach(r => {
+      const m = findMain(r.main || r.category);
+      counts[m.label] = (counts[m.label] || 0) + 1;
+    });
+    const topEntry = Object.entries(counts).sort((a,b) => b[1]-a[1])[0];
+
+    if (totalEl)  totalEl.innerHTML  = total  + '<span style="font-size:14px; font-weight:400; color:#64748b;">件</span>';
+    if (mergedEl) mergedEl.innerHTML = merged + '<span style="font-size:14px; font-weight:400; color:#64748b;">件</span>';
+    if (topEl)    topEl.textContent  = topEntry ? topEntry[0].split("（")[0] : "―";
+
+    // 大分類別バー
+    if (barsArea && total > 0) {
+      barsArea.innerHTML = "<h3 style='margin-bottom:12px;'>大分類別の投稿割合</h3>";
+      MAIN_CATEGORIES.forEach(m => {
+        const cnt = counts[m.label] || 0;
+        const pct = Math.round(cnt / total * 100);
+        barsArea.innerHTML +=
+          '<div class="analysis-bar-row">' +
+          '<div class="analysis-bar-label">' + m.icon + " " + m.label.split("（")[0] + '</div>' +
+          '<div class="analysis-bar-bg"><div class="analysis-bar-fill" style="width:' + pct + '%;"></div></div>' +
+          '<div class="analysis-bar-pct">' + pct + '%（' + cnt + '件）</div>' +
+          '</div>';
+      });
+    }
+
+    // 整合性評価バー（模擬アルゴリズム：投稿比率をVision比率と比較）
+    if (alignArea) {
+      const visionIdeal = [20, 25, 20, 20, 15]; // Vision想定の理想配分（%）
+      alignArea.innerHTML = "";
+      MAIN_CATEGORIES.forEach((m, i) => {
+        const actual  = total > 0 ? Math.round((counts[m.label] || 0) / total * 100) : 0;
+        const ideal   = visionIdeal[i];
+        const align   = ideal > 0 ? Math.min(100, Math.round(actual / ideal * 100)) : 0;
+        const barColor = align >= 80 ? "#10b981" : align >= 50 ? "#f59e0b" : "#ef4444";
+        alignArea.innerHTML +=
+          '<div class="alignment-bar-row">' +
+          '<div class="alignment-bar-label">' + m.icon + " " + m.label.split("（")[0] + '</div>' +
+          '<div class="alignment-bar-bg"><div class="alignment-bar-fill" style="width:' + align + '%; background:' + barColor + ';"></div></div>' +
+          '<div class="alignment-pct">' + align + '%</div>' +
+          '</div>';
+      });
+    }
+  } catch(e) {
+    console.error("分析データ読み込み失敗", e);
+  }
+}
+
+// ======================= Civic Vision ライブテキスト =======================
+async function loadLiveCivicVision() {
+  const liveText   = document.getElementById("visionLiveText");
+  const liveIllust = document.getElementById("visionLiveIllust");
+  if (!liveText) return;
+
+  liveText.textContent = "市民の投稿を分析中…";
+
+  try {
+    if (cachedRows.length === 0) {
+      const res = await fetch(GAS_URL + "?mode=list");
+      const data = await res.json();
+      if (Array.isArray(data)) cachedRows = data;
+    }
+    const rows = cachedRows;
+
+    // 統合済みの記事から上位の要約を集める
+    const mergedRows = rows.filter(r => r.status === "統合" || r.status === "新分類統合");
+    const total = rows.length;
+
+    if (total === 0) {
+      liveText.textContent = "まだ投稿がありません。最初の一歩を投稿してください！";
+      if (liveIllust) liveIllust.innerHTML = "🌱";
+      return;
+    }
+
+    // 投稿の多い大分類を反映したダイナミックな文章を生成
+    const counts = {};
+    MAIN_CATEGORIES.forEach(m => counts[m.label] = 0);
+    rows.forEach(r => {
+      const m = findMain(r.main || r.category);
+      counts[m.label] = (counts[m.label] || 0) + 1;
+    });
+    const sorted = Object.entries(counts).sort((a,b) => b[1]-a[1]);
+    const top1 = sorted[0] ? sorted[0][0].split("（")[0] : "";
+    const top2 = sorted[1] ? sorted[1][0].split("（")[0] : "";
+
+    // 市民の総意を反映したダイナミックテキスト
+    const liveVisionText =
+      `市民の声（計${total}件）から見えてくる芦屋の姿：` +
+      `特に「${top1}」と「${top2}」に関する期待が高く、` +
+      `駅前公共施設を学び・挑戦・交流の場として育てていきたいという市民の願いが浮かび上がっています。` +
+      `投稿が積み重なるほど、このメッセージはより豊かになっていきます。`;
+
+    liveText.textContent = liveVisionText;
+    if (liveIllust) liveIllust.innerHTML = sorted[0] ?
+      MAIN_CATEGORIES.find(m => m.label.includes(top1.substring(0,4)))?.icon || "🌳" : "🌳";
+
+  } catch(e) {
+    if (liveText) liveText.textContent = "データの読み込みに失敗しました。しばらくしてから再試行してください。";
+  }
+}
+
+// =====================================================================
+// LOGIC TREE
+// =====================================================================
+function initTreeBoards() {
+  const area = document.getElementById("treeMainBoards");
+  if (!area) return;
+  area.innerHTML = "";
+  MAIN_CATEGORIES.forEach((m, idx) => {
+    const board = document.createElement("div");
+    board.className = "tree-board";
+    board.id = "treeBoard_" + idx;
+    board.title = "クリックして詳細を見る";
+    board.innerHTML =
+      '<div class="tree-board-icon">' + m.icon + '</div>' +
+      '<div class="tree-board-key">' + m.key + '</div>' +
+      '<div class="tree-board-label">' + m.label + '</div>' +
+      '<span class="tree-board-count" id="treeBoardCount_' + idx + '">0</span>';
+    board.onclick = () => showTreeDetail(idx);
+    area.appendChild(board);
+  });
+}
+
+async function loadTreeData() {
+  try {
+    const res = await fetch(GAS_URL + "?mode=list");
+    const data = await res.json();
+    if (Array.isArray(data)) cachedRows = data;
+  } catch(e) { console.error("ツリーデータ取得失敗", e); }
+
+  MAIN_CATEGORIES.forEach((m, idx) => {
+    const cnt = cachedRows.filter(r => findMain(r.main || r.category).key === m.key).length;
+    const badge = document.getElementById("treeBoardCount_" + idx);
+    if (badge) badge.textContent = cnt;
+  });
+}
+
+function showTreeDetail(mainIndex) {
+  document.querySelectorAll(".tree-board").forEach((b, i) =>
+    b.classList.toggle("active", i === mainIndex));
+
+  const m    = MAIN_CATEGORIES[mainIndex];
+  const area = document.getElementById("treeDetailArea");
+  if (!area) return;
+  area.style.display = "block";
+
+  const mainPosts = cachedRows.filter(r => findMain(r.main || r.category).key === m.key);
+
+  area.innerHTML =
+    '<div class="tree-detail-title">' + m.icon + ' ' + m.key + ' ' + m.label +
+    ' <span style="font-size:13px;font-weight:400;color:#64748b;margin-left:8px;">計' + mainPosts.length + '件の投稿</span></div>';
+
+  const allSubs = new Set([...m.subs.map(s => s.label), OTHER_LABEL]);
+  mainPosts.forEach(r => { if (r.sub) allSubs.add(r.sub); });
+
+  allSubs.forEach(subLabel => {
+    const subPosts = mainPosts.filter(r => (r.sub || OTHER_LABEL) === subLabel);
+
+    const block  = document.createElement("div");
+    block.className = "tree-sub-block";
+
+    const header = document.createElement("div");
+    header.className = "tree-sub-header";
+    header.innerHTML =
+      '<span>' + subLabel + '</span>' +
+      '<span>' +
+      '<span style="background:#dbeafe;color:#1d4ed8;padding:2px 8px;border-radius:999px;font-size:12px;margin-right:8px;">' + subPosts.length + '件</span>' +
+      '<span class="tree-acc-arrow">▼</span>' +
+      '</span>';
+
+    const body = document.createElement("div");
+    body.className = "tree-item-list";
+    body.style.display = "none";
+
+    if (!subPosts.length) {
+      body.innerHTML = '<p style="font-size:13px;color:#94a3b8;padding:8px 0;">まだ投稿がありません</p>';
+    } else {
+      subPosts.forEach(r => {
+        const borderColor = r.status === "統合" ? "#2563eb"
+          : r.status === "新分類統合" ? "#8b5cf6"
+          : r.status === "統合済み" ? "#94a3b8" : "#dc2626";
+        const statusLabel = r.status === "統合" ? "🔵 統合済み"
+          : r.status === "新分類統合" ? "🟣 新分類"
+          : r.status === "統合済み" ? "⚫ 処理済み" : "🔴 未統合";
+
+        const chip = document.createElement("div");
+        chip.style.cssText =
+          "margin-bottom:8px;padding:10px 14px;background:#fff;border-radius:10px;" +
+          "border-left:4px solid " + borderColor + ";font-size:13px;cursor:pointer;" +
+          "box-shadow:0 2px 8px rgba(0,0,0,.06);transition:.15s;";
+
+        const titleRow = document.createElement("div");
+        titleRow.style.cssText = "display:flex;justify-content:space-between;align-items:center;";
+        titleRow.innerHTML =
+          '<strong>' + (r.title || "(無題)") + '</strong>' +
+          '<span style="font-size:11px;font-weight:700;color:' + borderColor + ';">' + statusLabel + '</span>';
+
+        // ★ 要約展開（クリックで表示、もう一度クリックで閉じる）
+        const sumDiv = document.createElement("div");
+        sumDiv.style.cssText =
+          "display:none;margin-top:10px;padding:12px 14px;background:#f8fafc;" +
+          "border-radius:8px;font-size:14px;color:#334155;line-height:1.8;border:1px solid #e2e8f0;";
+        sumDiv.textContent = r.summary200 || "(要約なし)";
+        if (r.mergedInto) {
+          const note = document.createElement("div");
+          note.style.cssText = "margin-top:8px;padding:8px 12px;background:#eff6ff;border-radius:6px;font-size:13px;color:#1d4ed8;border-left:3px solid #3b82f6;";
+          note.innerHTML = "📎 この投稿は「<strong>" + r.mergedInto + "</strong>」に統合されました";
+          sumDiv.appendChild(note);
+        }
+
+        chip.appendChild(titleRow);
+        chip.appendChild(sumDiv);
+        // ★ クリックするたびに開閉、他は閉じない（独立動作）
+        let isOpen = false;
+        chip.onclick = () => {
+          isOpen = !isOpen;
+          sumDiv.style.display = isOpen ? "block" : "none";
+        };
+        body.appendChild(chip);
+      });
+    }
+
+    header.onclick = () => {
+      const open = body.style.display === "block";
+      body.style.display = open ? "none" : "block";
+      header.querySelector(".tree-acc-arrow").textContent = open ? "▼" : "▲";
+    };
+
+    block.appendChild(header);
+    block.appendChild(body);
+    area.appendChild(block);
+  });
+
+  setTimeout(() => {
+    area.scrollIntoView({ behavior:"smooth", block:"start" });
+  }, 50);
+}
+
+// =====================================================================
+// PR PAGE
+// =====================================================================
+async function loadPRList() {
+  const prList = document.getElementById("prList");
+  if (!prList) return;
+  prList.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b;">読み込み中…</div>';
+
+  try {
+    const res = await fetch(GAS_URL + "?mode=list");
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const rows = await res.json();
+    if (rows.error) throw new Error(rows.error);
+    cachedRows = Array.isArray(rows) ? rows : [];
+    renderPRList(cachedRows);
+
+    // ★ 投稿追跡バナーの更新
+    if (lastPostedTitle) showTrackBanner();
+  } catch(e) {
+    prList.innerHTML = '<div style="padding:24px;color:#dc2626;">取得に失敗しました（' + e.message + '）</div>';
+  }
+}
+
+// ★ 投稿追跡バナー表示
+function showTrackBanner() {
+  const banner = document.getElementById("prTrackBanner");
+  const text   = document.getElementById("prTrackText");
+  if (!banner || !text) return;
+
+  const mainObj = findMain(lastPostedMain);
+  text.innerHTML =
+    '「<strong>' + lastPostedTitle + '</strong>」を <strong>' +
+    mainObj.label.split("（")[0] + '</strong> › <strong>' + lastPostedSub + '</strong> に投稿しました。' +
+    ' 下のリストでご確認いただけます。';
+  banner.style.display = "flex";
+}
+
+// ★ 自分の投稿にスクロール
+function scrollToMyPost() {
+  if (!lastPostedTitle) return;
+  // 大分類アコーデオンを開く
+  const mainObj = findMain(lastPostedMain);
+  const mainBoards = document.querySelectorAll(".pr-main-board");
+  mainBoards.forEach(board => {
+    const titleEl = board.querySelector(".pr-main-title");
+    if (titleEl && titleEl.textContent.includes(mainObj.label.split("（")[0])) {
+      const subArea = board.querySelector(".pr-sub-area");
+      if (subArea && subArea.style.display !== "block") {
+        const arrow = board.querySelector(".pr-accordion-arrow");
+        subArea.style.display = "block";
+        if (arrow) arrow.classList.add("open");
+      }
+      board.scrollIntoView({ behavior:"smooth", block:"start" });
+    }
+  });
+}
+
+function renderPRList(rows) {
+  const prList = document.getElementById("prList");
+  prList.innerHTML = "";
+
+  // ★ 表示件数と保存件数の差異を表示
+  const activeCount   = rows.filter(r => r.status !== "統合済み" && r.status !== "新分類統合").length;
+  const totalCount    = rows.length;
+  if (totalCount !== activeCount) {
+    const notice = document.createElement("div");
+    notice.style.cssText = "background:#fefce8;border-radius:12px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#713f12;border:1px solid #fde68a;";
+    notice.innerHTML =
+      '📊 総保存件数：<strong>' + totalCount + '件</strong>（うち統合処理済み ' + (totalCount - activeCount) + ' 件は元投稿として保持。' +
+      '表示中の代表記事：<strong>' + activeCount + '件</strong>）';
+    prList.appendChild(notice);
+  }
+
+  MAIN_CATEGORIES.forEach(m => {
+    const mainPosts = rows.filter(r => findMain(r.main || r.category).key === m.key);
+    const displayCount = mainPosts.length;
+
+    const mainBoard  = document.createElement("div");
+    mainBoard.className = "pr-main-board";
+
+    const mainHeader = document.createElement("div");
+    mainHeader.className = "pr-main-header";
+    mainHeader.innerHTML =
+      '<span class="pr-main-title">' + m.icon + ' ' + m.key + ' ' + m.label + '</span>' +
+      '<span class="pr-main-meta"><span class="count-badge">' + displayCount + '件</span><span class="pr-accordion-arrow">▼</span></span>';
+
+    const subArea = document.createElement("div");
+    subArea.className = "pr-sub-area";
+    const subGrid = document.createElement("div");
+    subGrid.className = "pr-sub-grid";
+
+    const allSubs = new Set([...m.subs.map(s => s.label), OTHER_LABEL]);
+    mainPosts.forEach(r => { if (r.sub) allSubs.add(r.sub); });
+
+    allSubs.forEach(subLabel => {
+      const subPosts = mainPosts.filter(r => (r.sub || OTHER_LABEL) === subLabel);
+
+      const subBoard = document.createElement("div");
+      subBoard.className = "pr-sub-board" + (subPosts.length ? " has-posts" : "");
+
+      const subInner = document.createElement("div");
+      subInner.className = "pr-sub-header-inner";
+      subInner.innerHTML =
+        '<span class="pr-sub-name">' + subLabel + '</span>' +
+        '<span class="count-badge ' + (subPosts.length ? "" : "zero") + '">' + subPosts.length + '</span>';
+
+      const subHint = document.createElement("div");
+      subHint.className = "pr-sub-hint";
+      subHint.textContent = subPosts.length ? "クリックして投稿一覧を見る ▼" : "まだ投稿がありません";
+
+      // ★ タイトル一覧エリア（横長カード）
+      const titleListArea = document.createElement("div");
+      titleListArea.className = "pr-title-list-area";
+      titleListArea.style.cssText = "display:none; padding:8px 12px;";
+
+      // ★ 要約表示エリア（フル幅）
+      const summaryPanel = document.createElement("div");
+      summaryPanel.className = "pr-summary-panel";
+      summaryPanel.style.display = "none";
+
+      // ★ 統合関係の表示（元/統合先の明示）
+      const mergedRows   = subPosts.filter(r => r.status === "統合");
+      const sourceRows   = subPosts.filter(r => r.status === "統合済み" || r.status === "新分類統合");
+      const unmergedRows = subPosts.filter(r => r.status !== "統合" && r.status !== "統合済み" && r.status !== "新分類統合");
+
+      // 表示順: 統合結果 → 未統合 → 元投稿（処理済み）
+      const displayOrder = [...mergedRows, ...unmergedRows, ...sourceRows];
+
+      displayOrder.forEach(row => {
+        const isMergedResult = row.status === "統合";
+        const isMergedSource = row.status === "統合済み" || row.status === "新分類統合";
+        const borderColor = isMergedResult ? "#2563eb" : isMergedSource ? "#94a3b8" : "#dc2626";
+        const statusLabel = isMergedResult ? "🔵 統合記事" : isMergedSource ? "⚫ 元の投稿" : "🔴 未統合";
+
+        const titleBtn = document.createElement("div");
+        titleBtn.className = "pr-title-btn";
+        titleBtn.style.borderLeftColor = borderColor;
+        titleBtn.innerHTML =
+          '<span class="pr-title-btn-text">' + (row.title || "(無題)") + '</span>' +
+          '<span class="pr-title-btn-status" style="color:' + borderColor + ';">' + statusLabel + '</span>';
+
+        titleBtn.onclick = (ev) => {
+          ev.stopPropagation();
+
+          let html = '<div class="pr-summary-close" onclick="this.closest(\'.pr-summary-panel\').style.display=\'none\'">✕ 閉じる</div>';
+          html += '<h3 class="pr-summary-title">' + (row.title || "(無題)") + '</h3>';
+
+          // ★ ステータスラベル表示
+          html += '<div style="margin-bottom:10px;">' +
+            '<span style="font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;background:' +
+            (isMergedResult ? '#dbeafe' : isMergedSource ? '#e2e8f0' : '#fee2e2') + ';color:' +
+            (isMergedResult ? '#1e40af' : isMergedSource ? '#64748b' : '#dc2626') + ';">' +
+            statusLabel + '</span></div>';
+
+          html += '<div class="pr-summary-body">' + (row.summary200 || "（要約なし）") + '</div>';
+
+          // ★ 統合の詳細情報（元の投稿・統合先・何をどう統合したか）
+          if (isMergedResult) {
+            // 統合記事：元の投稿を探して表示
+            const originalTitle = row.fullText && row.fullText.includes("【統合記録】")
+              ? row.fullText : "";
+            html += '<div class="pr-merge-detail">' +
+              '<div class="pr-merge-detail-header">🔗 この記事は複数の投稿を統合しています</div>' +
+              '<div class="pr-merge-detail-body">';
+            if (originalTitle) {
+              // 統合記録を解析して表示
+              const recordText = row.fullText.replace("【統合記録】", "");
+              html += '<div class="pr-merge-row"><span class="pr-merge-label">統合記録</span><span class="pr-merge-text">' + recordText + '</span></div>';
+            }
+            // 元の投稿を探す
+            const origPosts = subPosts.filter(r2 => r2.mergedInto && r2.mergedInto === row.title);
+            if (origPosts.length > 0) {
+              origPosts.forEach(op => {
+                html += '<div class="pr-merge-row">' +
+                  '<span class="pr-merge-label">元の投稿</span>' +
+                  '<span class="pr-merge-text">「' + (op.title || "(無題)") + '」</span></div>';
+              });
+            }
+            html += '</div></div>';
+          } else if (isMergedSource && row.mergedInto) {
+            html += '<div class="pr-merged-note">📎 この投稿は「<strong>' + row.mergedInto + '</strong>」に統合されました</div>';
+          }
+
+          summaryPanel.innerHTML = html;
+          summaryPanel.style.display = "block";
+
+          // アクティブ表示
+          titleListArea.querySelectorAll(".pr-title-btn").forEach(b => b.classList.remove("active"));
+          titleBtn.classList.add("active");
+
+          // 要約パネルへスクロール
+          setTimeout(() => summaryPanel.scrollIntoView({ behavior:"smooth", block:"nearest" }), 50);
+        };
+
+        titleListArea.appendChild(titleBtn);
+      });
+
+      titleListArea.appendChild(summaryPanel);
+
+      subBoard.onclick = (ev) => {
+        if (!subPosts.length) return;
+        const open = titleListArea.style.display === "block";
+        titleListArea.style.display = open ? "none" : "block";
+        if (open) summaryPanel.style.display = "none";
+        subHint.textContent = open ? "クリックして投稿一覧を見る ▼" : "閉じる ▲";
+        subBoard.classList.toggle("active", !open);
+      };
+
+      subBoard.appendChild(subInner);
+      subBoard.appendChild(subHint);
+      subBoard.appendChild(titleListArea);
+      subGrid.appendChild(subBoard);
+    });
+
+    subArea.appendChild(subGrid);
+
+    mainHeader.onclick = () => {
+      const open = subArea.style.display === "block";
+      subArea.style.display = open ? "none" : "block";
+      const arrow = mainHeader.querySelector(".pr-accordion-arrow");
+      if (arrow) arrow.classList.toggle("open", !open);
+    };
+
+    mainBoard.appendChild(mainHeader);
+    mainBoard.appendChild(subArea);
+    prList.appendChild(mainBoard);
+  });
+}
+
+// =====================================================================
+// AI壁打ち
+// =====================================================================
+async function runAI() {
+  const textarea = document.getElementById("userInput");
+  const aiResult = document.getElementById("aiResult");
+  const summarizeBtnBox = document.getElementById("summarizeBtnBox");
+  const summaryArea = document.getElementById("summaryArea");
+  const deepDiveArea = document.getElementById("deepDiveArea");
+
+  if (!textarea) return;
+  const text = textarea.value.trim();
+  if (!text) { alert("意見を入力してください"); return; }
+
+  currentIdeaText = text;
+  aiResult.innerHTML = '<p style="color:#2563eb;">🤖 AIが分析中...</p>';
+  if (summarizeBtnBox) summarizeBtnBox.style.display = "none";
+  if (summaryArea) summaryArea.style.display = "none";
+  if (deepDiveArea) deepDiveArea.style.display = "none";
+
+  try {
+    const res = await fetch(GAS_URL, {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({ mode:"analyze", text })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+
+    const parsed = JSON.parse(data.content);
+    currentAIResult = data.content;
+    currentMain = parsed.main || "";
+    currentSub  = parsed.sub  || OTHER_LABEL;
+
+    aiResult.innerHTML = '<p class="ai-result-summary">' + (parsed.analysis || "（分析結果なし）") + '</p>';
+
+    if (deepDiveArea) {
+      deepDiveArea.style.display = "block";
+      deepDiveArea.innerHTML =
+        '<div class="deep-item"><div class="deep-label">💡 核心・本当の願い</div><div class="deep-body">' + (parsed.core || "") + '</div></div>' +
+        '<div class="deep-item"><div class="deep-label">🌱 実現した場合の変化</div><div class="deep-body">' + (parsed.impact || "") + '</div></div>' +
+        '<div class="deep-item"><div class="deep-label">🌍 国内外の成功事例</div><div class="deep-body">' + (parsed.example || "") + '</div></div>' +
+        '<div class="deep-item"><div class="deep-label">⚠️ 懸念点と乗り越え方</div><div class="deep-body">' + (parsed.concern || "") + '</div></div>' +
+        '<div class="deep-item deep-next"><div class="deep-label">🚀 さらに発展させるための問い</div><div class="deep-body">' + (parsed.nextStep || "") + '</div></div>';
+    }
+
+    if (summarizeBtnBox) summarizeBtnBox.style.display = "block";
+
+  } catch(e) {
+    aiResult.innerHTML = '<p style="color:#dc2626;">エラー: ' + e.message + '</p>';
+  }
+}
+
+async function confirmSummary() {
+  const summaryArea = document.getElementById("summaryArea");
+  const summaryBox  = document.getElementById("summaryBox");
+  const titleBox    = document.getElementById("titleBox");
+  const categoryResult = document.getElementById("categoryResult");
+  const postDecision   = document.getElementById("postDecision");
+
+  if (!summaryArea) return;
+  summaryArea.style.display = "block";
+  if (summaryBox) summaryBox.textContent = "要約中...";
+
+  try {
+    const res = await fetch(GAS_URL, {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({ mode:"summarize", text:currentIdeaText, analysis:currentAIResult })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    const parsed = JSON.parse(data.content);
+    currentSummary200 = parsed.summary200 || "";
+    currentTitle      = parsed.title || "";
+
+    if (summaryBox)      summaryBox.textContent = currentSummary200;
+    if (titleBox)        titleBox.textContent   = currentTitle;
+    if (categoryResult)  categoryResult.innerHTML =
+      "大分類：<strong>" + currentMain + "</strong><br>中分類：<strong>" + currentSub + "</strong>";
+    if (postDecision)    postDecision.style.display = "block";
+  } catch(e) {
+    if (summaryBox) summaryBox.textContent = "エラー: " + e.message;
+  }
+}
+
+async function postToPR() {
+  const btn = document.querySelector("#postDecision .big-button.success");
+  if (btn) { btn.disabled = true; btn.textContent = "投稿中..."; }
+
+  try {
+    const res = await fetch(GAS_URL, {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        mode:"save",
+        title:currentTitle, summary200:currentSummary200,
+        fullText:currentIdeaText, main:currentMain, sub:currentSub
+      })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+
+    // ★ 投稿追跡情報を記録
+    lastPostedTitle = currentTitle;
+    lastPostedMain  = currentMain;
+    lastPostedSub   = currentSub;
+
+    // ★ PR ページに移動して追跡バナーを表示
+    cachedRows = []; // キャッシュをクリアして最新データ再取得
+    showPage("pullrequest");
+  } catch(e) {
+    alert("投稿エラー: " + e.message);
+    if (btn) { btn.disabled = false; btn.textContent = "✅ PRページへ投稿する"; }
+  }
+}
+
+function continueEditing() {
+  const summaryArea  = document.getElementById("summaryArea");
+  const postDecision = document.getElementById("postDecision");
+  if (summaryArea) summaryArea.style.display = "none";
+  if (postDecision) postDecision.style.display = "none";
+}
+
+// ======================= 初期化 =======================
+window.addEventListener("DOMContentLoaded", () => {
+  showPage("intro");
+});
+</script>
+</body>
+</html>
