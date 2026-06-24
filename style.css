@@ -574,3 +574,158 @@ textarea:focus{
   box-shadow: 0 2px 6px rgba(0,0,0,0.06);
 }
 
+/* ==========================================
+   分析ページ・統合ダッシュボード用スタイル
+   ========================================== */
+.analysis-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 15px 0;
+}
+
+.analysis-card {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  border-left: 5px solid #007bff;
+}
+
+.progress-bar-bg {
+  background: #e9ecef;
+  border-radius: 4px;
+  height: 8px;
+  width: 100%;
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  background: #28a745;
+  height: 100%;
+  transition: width 0.5s ease-in-out;
+}
+
+/* 統合時の「採用・不採用の理由」表示ログ */
+.integration-log-box {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  padding: 12px 15px;
+  margin-top: 10px;
+  font-size: 0.9em;
+  color: #495057;
+}
+
+/* ==========================================
+   PRページ：縦長解消のための横長（グリッド）表示スタイル
+   ========================================== */
+.pr-posts-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: flex-start;
+  padding: 15px 0;
+}
+
+.pr-post-card {
+  flex: 1 1 calc(33.333% - 20px); /* 1行に3枚横並び配置 */
+  min-width: 300px; /* 画面が狭いときは自動でレスポンシブに折り返す */
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 18px;
+  box-sizing: border-box;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.pr-post-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+/* ==========================================
+   投稿追跡バナー ＆ 投稿ハイライト表示
+   ========================================== */
+#tracking-banner {
+  position: fixed;
+  top: -100px; /* 初期状態は画面外 */
+  left: 0;
+  width: 100%;
+  background: #fff3cd; /* 優しい警告・通知色 */
+  color: #856404;
+  border-bottom: 2px solid #ffeeba;
+  padding: 15px 20px;
+  box-sizing: border-box;
+  z-index: 9999;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: top 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#tracking-banner.active {
+  top: 0; /* アクティブ時に上からスライドイン */
+}
+
+.tracking-banner-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+}
+
+.close-banner-btn {
+  background: #856404;
+  color: #ffffff;
+  border: none;
+  padding: 5px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85em;
+}
+
+/* 自分の投稿が選択された際のハイライトエフェクト */
+.highlighted-post {
+  border: 3px solid #ffc107 !important;
+  background: #fffdf5 !important;
+  animation: pulse-highlight 2s infinite alternate;
+}
+
+@keyframes pulse-highlight {
+  0% { box-shadow: 0 0 4px rgba(255, 193, 7, 0.4); }
+  100% { box-shadow: 0 0 16px rgba(255, 193, 7, 0.8); }
+}
+
+/* ==========================================
+   ロジックツリーの開閉アニメーション
+   ========================================== */
+.tree-children {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+  opacity: 0;
+  list-style: none;
+  padding-left: 20px;
+}
+
+.tree-children.open {
+  max-height: 1000px; /* 十分な高さを確保 */
+  opacity: 1;
+  transition: max-height 0.5s ease-in, opacity 0.3s ease-in;
+}
+
+.tree-toggle-icon {
+  cursor: pointer;
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.tree-toggle-icon.expanded {
+  transform: rotate(90deg); /* 展開時に矢印を90度回転 */
+}
