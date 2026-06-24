@@ -1,9 +1,8 @@
 // ======================= 設定 =======================
-const GAS_URL = "https://script.google.com/macros/s/AKfycbzQQTJfYwWc0OEuWNGHv5QOS0XFSh2XiS9xRvGlng_tpLq-VwcEqziZZ8jpVroJ3x-_lg/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbymx19ORq63wrfnsScaM_Ma380eSNrTjRc1maCCtwDQdeOSKXESuh8iRcAKFm1D78LBpQ/exec";
 
 const OTHER_LABEL = "その他";
 
-// ★ 修正: 「DAO型住民自治投票」を完全に削除
 const MAIN_CATEGORIES = [
   { key:"①", icon:"🏫", label:"芦屋市の価値向上（ブランド・移住促進）",   keyword:"価値向上",
     subs:[ {label:"次世代教育ブランドの確立"}, {label:"街の魅力化・景観美化"}, {label:"市民協働"} ] },
@@ -14,7 +13,7 @@ const MAIN_CATEGORIES = [
   { key:"④", icon:"🏛", label:"施設の戦略性",                              keyword:"戦略性",
     subs:[ {label:"知のゲートウェイ化"}, {label:"イノベーション・起業支援"} ] },
   { key:"⑤", icon:"🛡", label:"都市の強靭性とガバナンス",                  keyword:"強靭性",
-    subs:[ {label:"デュアルユース"} ] } // 「DAO型住民自治投票」を削除
+    subs:[ {label:"デュアルユース"}, {label:"DAO型住民自治投票"} ] }
 ];
 
 function findMain(text) {
@@ -37,10 +36,6 @@ let currentMain      = "";
 let currentSub       = "";
 let cachedRows       = [];
 
-// 件数管理用グローバル変数
-let totalSavedCount = 0;
-let totalDisplayedCount = 0;
-
 // ======================= ★ページ切り替え（常にトップへ） =======================
 function showPage(pageId) {
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
@@ -55,7 +50,7 @@ function showPage(pageId) {
   if (pageId === "rules")       loadRulesSummary();
 }
 
-// ======================= 分析ページ サマリー ＆ 表示件数差分バナー =======================
+// ======================= 分析ページ サマリー =======================
 async function loadRulesSummary() {
   const totalEl  = document.getElementById("summaryTotal");
   const mergedEl = document.getElementById("summaryMerged");
@@ -70,15 +65,6 @@ async function loadRulesSummary() {
       if (Array.isArray(data)) cachedRows = data;
     }
     const rows   = cachedRows;
-    
-    // 件数差分ロジックの統合
-    totalSavedCount = rows.length; // スプレッドシート上の総保存数
-    const activePosts = rows.filter(item => item.status === "未統合" || item.status === "統合");
-    totalDisplayedCount = activePosts.length;
-
-    // 件数表示追跡バナーの更新
-    updateCountBanner(totalSavedCount, totalDisplayedCount);
-
     const total  = rows.length;
     const merged = rows.filter(r => r.status === "統合" || r.status === "新分類統合").length;
 
@@ -110,20 +96,8 @@ async function loadRulesSummary() {
   } catch(e) { console.error("サマリー読み込み失敗", e); }
 }
 
-// 保存/表示件数の差分を表示する追跡バナー更新関数
-function updateCountBanner(saved, displayed) {
-  const bannerCountEl = document.getElementById("banner-count-info");
-  if (bannerCountEl) {
-    bannerCountEl.innerHTML = `
-      システム保存総数: <strong>${saved}件</strong> / 
-      表示中の集約提案: <strong>${displayed}件</strong> 
-      <span class="count-diff-badge">(AIが ${saved - displayed} 件の重複・類似意見を統合しました)</span>
-    `;
-  }
-}
-
 // =====================================================================
-//    LOGIC TREE — ★ボードクリックで詳細展開
+//   LOGIC TREE — ★ボードクリックで詳細展開（スクロール修正）
 // =====================================================================
 function initTreeBoards() {
   const area = document.getElementById("treeMainBoards");
@@ -160,24 +134,8 @@ async function loadTreeData() {
   });
 }
 
-// ★ 修正: フォルダ展開・開閉時の安定化ロジックの導入
-function toggleTreeFolder(element) {
-  const parentLi = element.closest("li") || element.parentElement;
-  if (!parentLi) return;
-
-  const childUl = parentLi.querySelector(".tree-children");
-  if (childUl) {
-    if (childUl.classList.contains("open")) {
-      childUl.classList.remove("open");
-      element.classList.remove("expanded");
-    } else {
-      childUl.classList.add("open");
-      element.classList.add("expanded");
-    }
-  }
-}
-
 function showTreeDetail(mainIndex) {
+  // ボードのアクティブ表示
   document.querySelectorAll(".tree-board").forEach((b, i) =>
     b.classList.toggle("active", i === mainIndex));
 
@@ -192,6 +150,7 @@ function showTreeDetail(mainIndex) {
     '<div class="tree-detail-title">' + m.icon + ' ' + m.key + ' ' + m.label +
     ' <span style="font-size:13px;font-weight:400;color:#64748b;margin-left:8px;">計' + mainPosts.length + '件の投稿</span></div>';
 
+  // 中分類リスト（固定 + 動的）
   const allSubs = new Set([...m.subs.map(s => s.label), OTHER_LABEL]);
   mainPosts.forEach(r => { if (r.sub) allSubs.add(r.sub); });
 
@@ -237,6 +196,7 @@ function showTreeDetail(mainIndex) {
           '<strong>' + (r.title || "(無題)") + '</strong>' +
           '<span style="font-size:11px;font-weight:700;color:' + borderColor + ';">' + statusLabel + '</span>';
 
+        // ★ 要約はクリックで広いボックスに展開
         const sumDiv = document.createElement("div");
         sumDiv.style.cssText =
           "display:none;margin-top:10px;padding:12px 14px;background:#f8fafc;" +
@@ -264,7 +224,6 @@ function showTreeDetail(mainIndex) {
       const open = body.style.display === "block";
       body.style.display = open ? "none" : "block";
       header.querySelector(".tree-acc-arrow").textContent = open ? "▼" : "▲";
-      toggleTreeFolder(header); // スムーズな開閉連動クラスの追加調整
     };
 
     block.appendChild(header);
@@ -272,14 +231,14 @@ function showTreeDetail(mainIndex) {
     area.appendChild(block);
   });
 
-  // ★ treeDetailArea のトップへスクロール
+  // ★ treeDetailArea のトップへスクロール（ページトップではなく詳細エリアの先頭）
   setTimeout(() => {
     area.scrollIntoView({ behavior: "smooth", block: "start" });
   }, 50);
 }
 
 // =====================================================================
-//    PR PAGE — 中分類クリック→タイトル一覧、タイトルクリック→広い要約
+//   PR PAGE — 中分類クリック→タイトル一覧、タイトルクリック→広い要約
 // =====================================================================
 async function loadPRList() {
   const prList = document.getElementById("prList");
@@ -293,9 +252,6 @@ async function loadPRList() {
     if (rows.error) throw new Error(rows.error);
     cachedRows = Array.isArray(rows) ? rows : [];
     renderPRList(cachedRows);
-    
-    // データロード後にPR追跡URLパラメータのチェック
-    checkAndShowTrackingBanner();
   } catch(e) {
     prList.innerHTML = '<div style="padding:24px;color:#dc2626;">取得に失敗しました（' + e.message + '）</div>';
   }
@@ -321,7 +277,7 @@ function renderPRList(rows) {
     const subArea = document.createElement("div");
     subArea.className = "pr-sub-area";
     const subGrid = document.createElement("div");
-    subGrid.className = "pr-sub-grid pr-posts-grid"; // CSS追加クラスと連動
+    subGrid.className = "pr-sub-grid";
 
     const allSubs = new Set([...m.subs.map(s => s.label), OTHER_LABEL]);
     mainPosts.forEach(r => { if (r.sub) allSubs.add(r.sub); });
@@ -330,7 +286,7 @@ function renderPRList(rows) {
       const subPosts = mainPosts.filter(r => (r.sub || OTHER_LABEL) === subLabel);
 
       const subBoard = document.createElement("div");
-      subBoard.className = "pr-sub-board pr-post-card" + (subPosts.length ? " has-posts" : ""); // 新規スタイルクラス追加
+      subBoard.className = "pr-sub-board" + (subPosts.length ? " has-posts" : "");
 
       const subInner = document.createElement("div");
       subInner.className = "pr-sub-header-inner";
@@ -342,13 +298,16 @@ function renderPRList(rows) {
       subHint.className = "pr-sub-hint";
       subHint.textContent = subPosts.length ? "クリックして投稿一覧を見る ▼" : "まだ投稿がありません";
 
+      // ★ タイトル一覧エリア（中分類クリックで展開）
       const titleListArea = document.createElement("div");
       titleListArea.style.display = "none";
 
+      // ★ 要約表示エリア（タイトルクリックで展開・フル幅）
       const summaryPanel = document.createElement("div");
       summaryPanel.className = "pr-summary-panel";
       summaryPanel.style.display = "none";
 
+      // タイトルボタンを生成
       subPosts.forEach(row => {
         const isMergedSource = row.status === "統合済み" || row.status === "新分類統合";
         const isMergedResult = row.status === "統合";
@@ -357,7 +316,6 @@ function renderPRList(rows) {
 
         const titleBtn = document.createElement("div");
         titleBtn.className = "pr-title-btn";
-        titleBtn.id = `post-card-${row.id}`; // 追跡時のスクロールターゲッティング用ID付与
         titleBtn.style.borderLeftColor = borderColor;
         titleBtn.innerHTML =
           '<span class="pr-title-btn-text">' + (row.title || "(無題)") + '</span>' +
@@ -365,6 +323,7 @@ function renderPRList(rows) {
 
         titleBtn.onclick = (ev) => {
           ev.stopPropagation();
+          // ★ 要約パネルに内容を表示
           let html = '<div class="pr-summary-close" onclick="this.parentElement.style.display=\'none\'">✕ 閉じる</div>';
           html += '<h3 class="pr-summary-title">' + (row.title || "(無題)") + '</h3>';
           html += '<div class="pr-summary-body">' + (row.summary200 || "（要約なし）") + '</div>';
@@ -373,6 +332,7 @@ function renderPRList(rows) {
           }
           summaryPanel.innerHTML = html;
           summaryPanel.style.display = "block";
+          // アクティブ表示
           titleListArea.querySelectorAll(".pr-title-btn").forEach(b => b.classList.remove("active"));
           titleBtn.classList.add("active");
         };
@@ -412,103 +372,7 @@ function renderPRList(rows) {
 }
 
 // =====================================================================
-//    ★ 新機能: PRページでの新規投稿追跡バナー処理 
-// =====================================================================
-function checkAndShowTrackingBanner() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const highlightId = urlParams.get("highlight");
-  const trackingBanner = document.getElementById("tracking-banner");
-
-  if (highlightId && trackingBanner) {
-    trackingBanner.classList.add("active");
-    trackingBanner.innerHTML = `
-      <div class="tracking-banner-content">
-        <span>📍 あなたの投稿（ID: ${highlightId}）の分類・統合先を自動追跡中。下部にハイライト表示されています。</span>
-        <button onclick="dismissTrackingBanner()" class="close-banner-btn">閉じる</button>
-      </div>
-    `;
-
-    setTimeout(() => {
-      const targetCard = document.getElementById(`post-card-${highlightId}`);
-      if (targetCard) {
-        // 親ツリーや大分類アコーディオンが開いていない場合に対応して、まず上の要素を展開
-        const closestSubArea = targetCard.closest(".pr-sub-area");
-        if (closestSubArea) closestSubArea.style.display = "block";
-        const closestTitleList = targetCard.parentElement;
-        if (closestTitleList) closestTitleList.style.display = "block";
-
-        targetCard.scrollIntoView({ behavior: "smooth", block: "center" });
-        targetCard.classList.add("highlighted-post");
-        targetCard.click(); // 自動展開クリックシミュレート
-      }
-    }, 800);
-  }
-}
-
-function dismissTrackingBanner() {
-  const trackingBanner = document.getElementById("tracking-banner");
-  if (trackingBanner) trackingBanner.classList.remove("active");
-}
-
-// =====================================================================
-//    ★ 新機能: 駅前公共施設最終案（300字）のアップデート処理
-// =====================================================================
-async function handleFinalPlanUpdate() {
-  const btn = document.getElementById("update-final-plan-btn");
-  const textOutput = document.getElementById("final-plan-text-target");
-  const visualOutput = document.getElementById("final-plan-visual-target");
-
-  if (btn) {
-    btn.disabled = true;
-    btn.innerText = "同期・再集計中...";
-  }
-  if (textOutput) textOutput.innerHTML = "<p class='loading-text'>最新の市民意見から施設ビジョン(300字)を再構築中...</p>";
-
-  try {
-    const response =await fetch(GAS_URL, {
-  method: "POST",
-  body: JSON.stringify(payload),
-  headers: {
-    "Content-Type": "text/plain;charset=utf-8"
-  }
-});
-    const result = await response.json();
-
-    if (result && result.finalPlan) {
-      if (textOutput) {
-        textOutput.innerHTML = `
-          <div class="final-plan-result-box" style="background:#f0fdf4; border-left:5px solid #16a34a; padding:15px; border-radius:8px;">
-            <h4 style="margin-top:0; color:#166534;">🚉 駅前公共施設（1000㎡）市民最終提案案</h4>
-            <p style="line-height:1.7; font-size:14px; margin-bottom:0;">${result.finalPlan}</p>
-          </div>
-        `;
-      }
-      if (visualOutput && result.visualPrompt) {
-        visualOutput.innerHTML = `
-          <div class="visual-concept-card" style="margin-top:15px; background:#fff; border:1px solid #e2e8f0; padding:15px; border-radius:8px;">
-            <h5 style="margin-top:0; color:#475569;">🎨 反映された空間デザイン・ビジュアル構成</h5>
-            <p style="font-size:12px; color:#64748b; background:#f8fafc; padding:10px; border-radius:6px; border:1px dashed #cbd5e1;">
-              <strong>最新の空間モデリングプロンプト:</strong><br>${result.visualPrompt}
-            </p>
-          </div>
-        `;
-      }
-    } else {
-      if (textOutput) textOutput.innerHTML = "<p class='error-text'>最終案の生成に失敗しました。最新の統合ステータスデータをご確認ください。</p>";
-    }
-  } catch (error) {
-    console.error("最終案アップデートエラー:", error);
-    if (textOutput) textOutput.innerHTML = "<p class='error-text'>サーバー通信中にエラーが発生しました。</p>";
-  } finally {
-    if (btn) {
-      btn.disabled = false;
-      btn.innerText = "駅前公共施設の最終案をアップデート";
-    }
-  }
-}
-
-// =====================================================================
-//    AI壁打ち — ★カテゴリーボタン廃止・AIが自動分類
+//   AI壁打ち — ★カテゴリーボタン廃止・AIが自動分類
 // =====================================================================
 async function runAI() {
   const textarea    = document.getElementById("userInput");
@@ -528,6 +392,7 @@ async function runAI() {
   if (deepDiveArea)    deepDiveArea.style.display    = "none";
 
   try {
+    // ★ category を送らない（AIが全文から自動分類）
     const res = await fetch(GAS_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
@@ -539,8 +404,8 @@ async function runAI() {
 
     const content = typeof data.content === "string" ? JSON.parse(data.content) : data.content;
     currentAIResult = content.analysis || "";
-    currentMain      = content.main || "";
-    currentSub       = content.sub  || "";
+    currentMain     = content.main || "";
+    currentSub      = content.sub  || "";
 
     aiResult.innerHTML = '<div class="ai-result-summary">' + (content.analysis || "") + '</div>';
 
@@ -672,17 +537,4 @@ function switchTab(group, panel) {
 // ======================= 初期化 =======================
 window.onload = function() {
   showPage("intro");
-  
-  // アップデートボタンのイベントバインド（HTML側にボタンが存在する場合）
-  const updateBtn = document.getElementById("update-final-plan-btn");
-  if (updateBtn) {
-    updateBtn.addEventListener("click", handleFinalPlanUpdate);
-  }
 };
-// app.js内のfetch部分
-const response = await fetch(GAS_URL, {
-  method: "POST",
-  // mode: 'cors' を明示せず、ヘッダーを text/plain のみに絞る
-  headers: { "Content-Type": "text/plain" }, 
-  body: JSON.stringify({ mode: "analyze", text })
-});
