@@ -621,12 +621,12 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
   <div class="logo">🏛 市民提案AIプラットフォーム</div>
   <nav>
     <button onclick="showPage('intro')">ホーム</button>
-    <button onclick="showPage('tree')">アイデアの地図</button>
+    <button onclick="showPage('tree')">Policy Logic Tree</button>
     <button onclick="showPage('assistant')">AI壁打ち</button>
     <button onclick="showPage('merge')">統合</button>
     <button onclick="showPage('analysis')">📊 分析</button>
-    <button onclick="showPage('pullrequest')">提案箱(PR)</button>
-    <button onclick="showPage('vision')">🧭 みんなの未来図</button>
+    <button onclick="showPage('pullrequest')">PULL REQUEST</button>
+    <button onclick="showPage('vision')">🧭 Civic Vision</button>
   </nav>
 </header>
 
@@ -655,7 +655,7 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
   </div>
   <div class="card">
     <h2>投稿の流れ</h2>
-    <p>自由に投稿する → AIが整理する → アイデアの地図にまとまる → みんなで眺められる</p>
+    <p>自由に投稿する → AIが整理する → Policy Logic Treeにまとまる → みんなで眺められる</p>
     <div style="margin-top:16px;">
       <button class="big-button" onclick="showPage('tree')">🌳 Policy Logic Treeを見る</button>
     </div>
@@ -664,19 +664,14 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
 
 <!-- ================= POLICY LOGIC TREE ================= -->
 <section id="tree" class="page">
-
-  <div class="card">
-    <h1>アイデアの地図</h1>
-    <p>アイデアの地図とは、多くの市民の方の投稿を整理して構造化し、みやすくしたものです。</p>
-    <p style="margin-top:10px;">あなたの投稿もAIが公正な手法で整理してくれて、誰もが閲覧できる形に残します。</p>
-  </div>
   <div class="tree-page-wrap">
     <div class="tree-vision-card">
-      <h2>🌳 みんなの未来図　不変の羅針盤</h2>
+      <h2>🌳 Policy Logic Tree</h2>
       <p>コストセンターからプロフィットセンターへ：市民のウェルビーイングと知財の集積による投資型都市経営の実現</p>
-       </div>
+      <p style="font-size:12px; color:#64748b; margin-top:8px;">中分類・小分類は市民の投稿によって動的に追加されます。</p>
+    </div>
     <div style="padding:0; margin-bottom:20px;">
-      <img src="/ashiya-platform/images/ideaMap.jpg" alt="アイデアマップ" style="width:100%; border-radius:14px; margin-bottom:16px;">
+      <img src="/ashiya-platform/images/log.tree4.jpg" alt="ロジツリー" style="width:100%; border-radius:14px; margin-bottom:16px;">
       <!-- 5つの大分類ボード -->
       <div id="treeMainBoards" class="tree-main-boards">
         <!-- JS で描画 -->
@@ -699,7 +694,7 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
     <div class="card">
       <h2>あなたの考えを聞かせてください</h2>
       <p style="font-size:13px; color:#64748b; margin-bottom:12px;">思っていることを自由に書いてください。AIが内容を読んで自動的に分類します。</p>
-      <textarea id="userInput" rows="12" placeholder="芦屋市の公共施設について思っていることを自由に書いてください..."></textarea>
+      <textarea id="userInput" rows="12" placeholder="芦屋市について思っていることを自由に書いてください..."></textarea>
       <div style="margin-top:14px;">
         <button class="big-button" onclick="runAI()">🤖 AI壁打ちを実行する</button>
       </div>
@@ -745,15 +740,15 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
     <div style="margin-top:24px; display:grid; grid-template-columns:1fr; gap:12px;">
       <div style="background:linear-gradient(135deg,#eff6ff,#dbeafe); border-radius:16px; padding:20px 22px; border-left:5px solid #2563eb;">
         <div style="font-size:20px; margin-bottom:8px;">✅ あなたの投稿は、ちゃんと届いています</div>
-        <p style="font-size:15px; color:#1e40af; margin:0; line-height:1.8;">投稿された意見は、AIが内容を読み取り、テーマに合ったカテゴリに自動で整理されます。提案箱（PR）ページを見ると、あなたの意見がしっかり反映されているのが確認できます。</p>
+        <p style="font-size:15px; color:#1e40af; margin:0; line-height:1.8;">書いた意見は、AIが内容を読み取り、テーマに合ったカテゴリに自動で整理されます。PRページを見ると、あなたの意見がしっかり反映されているのが確認できます。</p>
       </div>
       <div style="background:linear-gradient(135deg,#f0fdf4,#dcfce7); border-radius:16px; padding:20px 22px; border-left:5px solid #16a34a;">
         <div style="font-size:20px; margin-bottom:8px;">🤝 似た意見は、いっしょに育っていきます</div>
         <p style="font-size:15px; color:#15803d; margin:0; line-height:1.8;">同じテーマの投稿が集まると、AIがそれらをまとめて「ひとつの提案」として整理します。あなたの意見は、他の市民の声と合わさって、より力強い提案へと成長していきます。</p>
       </div>
       <div style="background:linear-gradient(135deg,#fefce8,#fef9c3); border-radius:16px; padding:20px 22px; border-left:5px solid #d97706;">
-        <div style="font-size:20px; margin-bottom:8px;">🌳 どんな意見も、アイデアの地図に残ります</div>
-        <p style="font-size:15px; color:#92400e; margin:0; line-height:1.8;">投稿された意見はすべて、このプラットフォームの「アイデアの地図」に記録されます。小さな一言も、まちの未来を考える大切なデータです。どうぞ遠慮なく投稿してください。</p>
+        <div style="font-size:20px; margin-bottom:8px;">🌳 どんな意見も、Policy Logic Treeに残ります</div>
+        <p style="font-size:15px; color:#92400e; margin:0; line-height:1.8;">投稿された意見はすべて、このプラットフォームの「Policy Logic Tree」に記録されます。小さな一言も、まちの未来を考える大切なデータです。どうぞ遠慮なく投稿してください。</p>
       </div>
     </div>
   </div>
@@ -774,17 +769,124 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
       <div style="text-align:center; padding:20px 16px; background:linear-gradient(135deg,#fefce8,#fef9c3); border-radius:16px;">
         <div style="font-size:36px; margin-bottom:8px;">📋</div>
         <div style="font-weight:700; margin-bottom:6px; font-size:15px;">STEP 3</div>
-        <div style="font-size:13px; color:#92400e;">投稿箱(PR)ページに掲載<br>みんなが見られる形に</div>
+        <div style="font-size:13px; color:#92400e;">PRページに掲載<br>みんなが見られる形に</div>
       </div>
     </div>
   </div>
 </section>
 
+
+  <!-- ★ 詳しい仕組みはこちら — 一般向け・専門家向け説明パネル -->
+  <div style="margin-top:20px;">
+    <button class="merge-detail-toggle-btn" id="mergeDetailBtn" onclick="toggleMergeDetail()">
+      🔍 詳しい仕組みはこちら <span class="toggle-arrow" id="mergeDetailArrow">▼</span>
+    </button>
+
+    <div class="merge-detail-panel" id="mergeDetailPanel">
+
+      <!-- タブ切替：一般向け / 専門家向け -->
+      <div style="display:flex; gap:10px; margin-bottom:20px;">
+        <button class="rules-tab-btn active" id="tabGeneral" onclick="switchMergeTab('general')">👥 一般の方向け</button>
+        <button class="rules-tab-btn" id="tabExpert" onclick="switchMergeTab('expert')">🔬 専門家・研究者向け</button>
+      </div>
+
+      <!-- 一般向け -->
+      <div id="mergeTabGeneral" class="rules-panel active">
+        <h3 style="margin-bottom:14px; color:#1e293b;">投稿がどのように整理されるか</h3>
+        <div class="merge-flow-grid">
+          <div class="merge-flow-step">
+            <div class="merge-flow-num">1</div>
+            <div class="merge-flow-title">あなたが投稿する</div>
+            <div class="merge-flow-desc">思っていることを自由に書くだけ。難しい言葉や正確な分類は不要です。</div>
+          </div>
+          <div class="merge-flow-step">
+            <div class="merge-flow-num">2</div>
+            <div class="merge-flow-title">AIが内容を読む</div>
+            <div class="merge-flow-desc">AIがテーマを読み取り、5つの大分類のどこに当てはまるかを判断します。</div>
+          </div>
+          <div class="merge-flow-step">
+            <div class="merge-flow-num">3</div>
+            <div class="merge-flow-title">似た意見とまとまる</div>
+            <div class="merge-flow-desc">同じテーマの投稿が来ると、AIが2つを統合して1つの強い提案にまとめます。</div>
+          </div>
+        </div>
+        <div class="status-legend">
+          <div class="status-legend-item"><div class="status-dot" style="background:#2563eb;"></div><strong>🔵 統合記事</strong>：複数の投稿がAIで1つにまとまった記事</div>
+          <div class="status-legend-item"><div class="status-dot" style="background:#94a3b8;"></div><strong>⚫ 元の投稿</strong>：統合の元になった投稿（内容は保存済み）</div>
+          <div class="status-legend-item"><div class="status-dot" style="background:#dc2626;"></div><strong>🔴 未統合</strong>：まだ単独の投稿（次の類似投稿が来ると統合されます）</div>
+        </div>
+        <div style="margin-top:16px; padding:16px; background:#f0fdf4; border-radius:12px; border-left:4px solid #16a34a;">
+          <p style="font-size:14px; color:#15803d; line-height:1.8; margin:0;">
+            ✅ <strong>あなたの声は必ず残ります。</strong><br>
+            統合されても、元の投稿は「⚫ 元の投稿」としてPRページに保存されています。消えることはありません。
+          </p>
+        </div>
+      </div>
+
+      <!-- 専門家向け -->
+      <div id="mergeTabExpert" class="rules-panel">
+        <h3 style="margin-bottom:14px; color:#1e293b;">統合アルゴリズムの設計思想</h3>
+
+        <div style="background:#f8fafc; border-radius:14px; padding:20px; border:1.5px solid #e2e8f0; margin-bottom:16px;">
+          <h4 style="color:#1e40af; margin-bottom:10px;">① 分類ロジック</h4>
+          <p style="font-size:14px; color:#334155; line-height:1.8;">
+            投稿テキストをGroq（LLM）に送信し、5つの大分類（Civic Visionの大分類）のいずれかに分類させます。
+            分類はキーワードマッチングではなく、意味的文脈（Semantic Context）で判断されます。
+            大分類の判定精度を上げるため、各分類にはキーワードリストも補助的に使用します。
+          </p>
+        </div>
+
+        <div style="background:#f8fafc; border-radius:14px; padding:20px; border:1.5px solid #e2e8f0; margin-bottom:16px;">
+          <h4 style="color:#7c3aed; margin-bottom:10px;">② 統合ロジック（即時統合）</h4>
+          <p style="font-size:14px; color:#334155; line-height:1.8;">
+            新規投稿が保存される際、同じ「大分類 × 中分類」の組み合わせに既存の統合記事または未統合投稿が存在する場合、
+            即時にAIが2つの内容を統合します。<br><br>
+            統合プロンプトは「重複を排除し、新しい視点を加え、矛盾点は市民に有益な内容を優先せよ」という指示で構成されています。
+            統合記録（採用した要素・理由）はスプレッドシートのfullTextフィールドに保存されます。
+          </p>
+        </div>
+
+        <div style="background:#f8fafc; border-radius:14px; padding:20px; border:1.5px solid #e2e8f0; margin-bottom:16px;">
+          <h4 style="color:#059669; margin-bottom:10px;">③ 新中分類の自動生成</h4>
+          <p style="font-size:14px; color:#334155; line-height:1.8;">
+            「その他」に分類された投稿が10件を超えた大分類では、AIがそれらの投稿を分析し、
+            共通テーマに基づいた新しい中分類名と統合要約を自動生成します。
+            これにより、市民の新しい関心領域をPolicy Logic Treeに動的に追加できます（vTaiwan / Pol.is的な設計）。
+          </p>
+        </div>
+
+        <div style="background:#fefce8; border-radius:14px; padding:20px; border:1.5px solid #fde68a; margin-bottom:16px;">
+          <h4 style="color:#92400e; margin-bottom:10px;">④ Civic Vision更新ロジック（月次）</h4>
+          <p style="font-size:14px; color:#78350f; line-height:1.8;">
+            月次バッチで投稿データを集計し、<strong>設計ウェイト（50%）× 投稿比率（50%）</strong>の調整スコアを算出します。
+            多数決的なポピュリスト分析を避けるため、投稿比率のみで判断せず、
+            Civic Compassの設計意図を常に半分のウェイトで反映させます。<br><br>
+            調整スコア + 直近30件の統合投稿要約 + 現行Vision本文 をAIに入力し、
+            300字以内の更新Visionと変化の理由を生成します。
+            参考設計：vTaiwan（Pol.is）、Decidim（バルセロナ）、Polis（コロンビア）
+          </p>
+        </div>
+
+        <div style="background:#f5f3ff; border-radius:14px; padding:20px; border:1.5px solid #ddd6fe;">
+          <h4 style="color:#6d28d9; margin-bottom:10px;">⑤ データ透明性の設計</h4>
+          <p style="font-size:14px; color:#4c1d95; line-height:1.8;">
+            すべての投稿・統合記録・分類判断はGoogle Sheetsに保存され、管理者が常に確認できます。
+            統合された元の投稿も削除せず「統合済み」ステータスで保持します。
+            PRページでは統合の過程（元の投稿・採用理由）を一般市民も閲覧できます。
+            これはアルゴリズムによる意思決定の透明性（Algorithmic Transparency）を確保するための設計です。
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</section>
+
 <!-- ================= ANALYSIS（新設） ================= -->
 <section id="analysis" class="page">
   <h1>📊 分析</h1>
- <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px;">
-    <img src="images/cityCompass.jpg" alt="city compass">
+
   <!-- AI分析サマリー（リアルタイム） -->
   <div class="card">
     <h2>📊 現在の市民の声 — AI分析サマリー</h2>
@@ -816,11 +918,11 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
     </div>
   </div>
 
-  <!-- 初期ビジョンとの整合性評価 -->
+  <!-- Civic Visionとの整合性評価 -->
   <div class="card">
-    <h2>🎯 初期ビジョンとの整合性評価</h2>
+    <h2>🎯 Civic Visionとの整合性評価</h2>
     <p style="font-size:14px; color:#475569; line-height:1.8; margin-bottom:16px;">
-      最初に設定した「ビジョン（大分類）」と、市民投稿の総意の整合性を大分類ごとに評価します。
+      最初に設定した「Civic Vision（大分類）」と、市民投稿の総意の整合性を大分類ごとに評価します。
     </p>
 
     <div class="alignment-bar-section" id="alignmentBarsArea">
@@ -842,7 +944,7 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
     <div class="analysis-significance">
       <h3>そもそも、この分析は何のためにあるのか</h3>
       <p>
-        このプラットフォームの最初に設定した「ビジョン（大分類）」と、市民の投稿意見の総意のズレや一致をどのように捉えるか——それがこの分析の核心です。
+        このプラットフォームの最初に設定した「Civic Vision（大分類）」と、市民の投稿意見の総意のズレや一致をどのように捉えるか——それがこの分析の核心です。
       </p>
       <p>
         <strong>投稿数の多さに引きずられると、ポピュリスト的な分析結果になりかねません。</strong>
@@ -876,9 +978,8 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
 
 <!-- ================= PULL REQUEST ================= -->
 <section id="pullrequest" class="page">
-  <h1>📋 提案箱</h1>
-    <div style="padding:0; margin-bottom:20px;">
-      <img src="/ashiya-platform/images/bib.jpg" alt="bib" style="width:100%; border-radius:14px; margin-bottom:16px;">
+  <h1>📋 PULL REQUEST</h1>
+
   <!-- ★ 投稿追跡バナー -->
   <div class="pr-track-banner" id="prTrackBanner" style="display:none;">
     <div class="pr-track-icon">📍</div>
@@ -904,10 +1005,7 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
 
 <!-- ================= CIVIC VISION ================= -->
 <section id="vision" class="page">
- <h1>みんなの未来図・CIVIC COMPASS</h1>
- <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px;">
-    <img src="images/future5.jpg" alt="future">
-  
+
   <!-- ── Civic Compass（理念） ── -->
   <div class="compass-hero">
     <div class="compass-ring">
@@ -925,7 +1023,30 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
     </div>
   </div>
 
-  
+  <!-- ── 構造図（3層） ── -->
+  <div class="card">
+    <h2>🏗 プラットフォームの3層構造</h2>
+    <p style="font-size:14px; color:#475569; margin-bottom:16px;">このプラットフォームは、理念から実際の議論まで3つの層で構成されています。</p>
+    <div class="three-layer">
+      <div class="layer-box layer-top">
+        <div class="layer-label">LAYER 1 — 不変の理念</div>
+        <div class="layer-title">🧭 Civic Compass</div>
+        <div class="layer-desc">コストセンターからプロフィットセンターへ（固定・変更なし）</div>
+      </div>
+      <div style="text-align:center;"><div class="layer-arrow-line" style="margin:0 auto;"></div></div>
+      <div class="layer-box layer-mid">
+        <div class="layer-label">LAYER 2 — 不変の大分類</div>
+        <div class="layer-title">🎯 Civic Vision</div>
+        <div class="layer-desc">5つの大分類（固定）。市民投稿の総意を反映してアップデートされる文章</div>
+      </div>
+      <div style="text-align:center;"><div class="layer-arrow-line" style="margin:0 auto;"></div></div>
+      <div class="layer-box layer-bot">
+        <div class="layer-label">LAYER 3 — 動的な議論</div>
+        <div class="layer-title">🌳 Policy Logic Tree</div>
+        <div class="layer-desc">中分類・小分類。市民の投稿により動的に追加・更新される</div>
+      </div>
+    </div>
+  </div>
 
   <!-- ── Civic Vision（大分類）メインビジュアル ── -->
   <div class="vision-main-block">
@@ -988,41 +1109,27 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
         </ul>
       </div>
     </div>
-    <!-- ── 構造図（3層） ── -->
-  <div class="card">
-    <h2>🏗 プラットフォームの3層構造</h2>
-    <p style="font-size:14px; color:#475569; margin-bottom:16px;">このプラットフォームは、理念から実際の議論まで3つの層で構成されています。</p>
-    <div class="three-layer">
-      <div class="layer-box layer-top">
-        <div class="layer-label">LAYER 1 — 不変の理念</div>
-        <div class="layer-title">🧭 Civic Compass</div>
-        <div class="layer-desc">コストセンターからプロフィットセンターへ（固定・変更なし）</div>
-      </div>
-      <div style="text-align:center;"><div class="layer-arrow-line" style="margin:0 auto;"></div></div>
-      <div class="layer-box layer-mid">
-        <div class="layer-label">LAYER 2 — 不変の大分類</div>
-        <div class="layer-title">🎯 Civic Vision</div>
-        <div class="layer-desc">5つの大分類（固定）。市民投稿の総意を反映してアップデートされる文章</div>
-      </div>
-      <div style="text-align:center;"><div class="layer-arrow-line" style="margin:0 auto;"></div></div>
-      <div class="layer-box layer-bot">
-        <div class="layer-label">LAYER 3 — 動的な議論</div>
-        <div class="layer-title">🌳 Policy Logic Tree</div>
-        <div class="layer-desc">中分類・小分類。市民の投稿により動的に追加・更新される</div>
-      </div>
-    </div>
-  </div>
   </div>
 
 </section>
+
 </main>
 
 <script>
-// ======================= 設定 =======================
+// =====================================================================
+// app_complete.js — 完全版
+// 修正点：
+//   1. GAS_URL を最新の再デプロイ後URLに更新してください（下記★）
+//   2. fetchGAS() ヘルパーで CORS 対策（no-cors / redirect対応）
+//   3. loadLiveCivicVision() → visionHistory から AI生成Visionを表示
+//   4. PRページ統合過程の表示を強化
+// =====================================================================
+
+// ★ GASを再デプロイしたら、新しいURLに必ず書き換えてください
 const GAS_URL = "https://script.google.com/macros/s/AKfycbymx19ORq63wrfnsScaM_Ma380eSNrTjRc1maCCtwDQdeOSKXESuh8iRcAKFm1D78LBpQ/exec";
+
 const OTHER_LABEL = "その他";
 
-// ★ MAIN_CATEGORIES から「DAO型住民自治投票」を削除済み
 const MAIN_CATEGORIES = [
   { key:"①", icon:"🏫", label:"芦屋市の価値向上（ブランド・移住促進）", keyword:"価値向上",
     subs:[ {label:"次世代教育ブランドの確立"}, {label:"街の魅力化・景観美化"}, {label:"市民協働"} ] },
@@ -1033,7 +1140,6 @@ const MAIN_CATEGORIES = [
   { key:"④", icon:"🏛", label:"施設の戦略性", keyword:"戦略性",
     subs:[ {label:"知のゲートウェイ化"}, {label:"イノベーション・起業支援"} ] },
   { key:"⑤", icon:"🛡", label:"都市の強靭性とガバナンス", keyword:"強靭性",
-    // ★ 「DAO型住民自治投票」を削除。「デュアルユース」のみ残す
     subs:[ {label:"デュアルユース"} ] }
 ];
 
@@ -1048,21 +1154,83 @@ function findMain(text) {
   return MAIN_CATEGORIES[0];
 }
 
-// ======================= 状態管理 =======================
-let currentIdeaText = "";
-let currentAIResult = "";
+// =====================================================================
+// ★ fetchGAS — GET / POST 共通ヘルパー
+//   GASはPOSTでCORSプリフライトが通らないため
+//   POST も URLパラメータ付きGETで回避する方式を採用
+// =====================================================================
+// =====================================================================
+// ★ GAS通信 — JSONP方式（CORSを完全回避）
+//   fetchはGASへのリクエストでCORSエラーが発生する。
+//   JSONPはscriptタグを動的生成するためCORSが起きない。
+//   GAS側でcallbackパラメータを受け取り callback(JSON) 形式で返す。
+// =====================================================================
+let _gasCallbackId = 0;
+
+function callGAS(mode, dataObj) {
+  return new Promise((resolve, reject) => {
+    const cbName = "_gasCb" + (++_gasCallbackId);
+
+    const timer = setTimeout(() => {
+      delete window[cbName];
+      const s = document.getElementById(cbName);
+      if (s) s.remove();
+      reject(new Error("タイムアウト（30秒）"));
+    }, 30000);
+
+    window[cbName] = (data) => {
+      clearTimeout(timer);
+      delete window[cbName];
+      const s = document.getElementById(cbName);
+      if (s) s.remove();
+      resolve(data);
+    };
+
+    let url = GAS_URL
+      + "?callback=" + encodeURIComponent(cbName)
+      + "&mode="     + encodeURIComponent(mode || "");
+    if (dataObj) {
+      url += "&data=" + encodeURIComponent(JSON.stringify(dataObj));
+    }
+
+    const script = document.createElement("script");
+    script.id    = cbName;
+    script.src   = url;
+    script.onerror = () => {
+      clearTimeout(timer);
+      delete window[cbName];
+      script.remove();
+      reject(new Error("スクリプト読み込みエラー。GASのURLを確認してください。"));
+    };
+    document.head.appendChild(script);
+  });
+}
+
+// 後方互換ラッパー
+async function fetchGAS(params) {
+  return callGAS(params.mode);
+}
+async function postGAS(payload) {
+  return callGAS(payload.mode, payload);
+}
+
+// =====================================================================
+// 状態管理
+// =====================================================================
+let currentIdeaText   = "";
+let currentAIResult   = "";
 let currentSummary200 = "";
-let currentTitle = "";
-let currentMain = "";
-let currentSub = "";
-let cachedRows = [];
+let currentTitle      = "";
+let currentMain       = "";
+let currentSub        = "";
+let cachedRows        = [];
+let lastPostedTitle   = "";
+let lastPostedMain    = "";
+let lastPostedSub     = "";
 
-// ★ 最後に投稿したタイトルを追跡
-let lastPostedTitle = "";
-let lastPostedMain  = "";
-let lastPostedSub   = "";
-
-// ======================= ページ切り替え =======================
+// =====================================================================
+// ページ切り替え
+// =====================================================================
 function showPage(pageId) {
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
   const target = document.getElementById(pageId);
@@ -1075,18 +1243,19 @@ function showPage(pageId) {
   if (pageId === "vision")      loadLiveCivicVision();
 }
 
-// ======================= 分析ページ データ読み込み =======================
+// =====================================================================
+// 分析ページ
+// =====================================================================
 async function loadAnalysisData() {
-  const totalEl  = document.getElementById("analysisTotalCount");
-  const mergedEl = document.getElementById("analysisMergedCount");
-  const topEl    = document.getElementById("analysisTopTheme");
-  const barsArea = document.getElementById("analysisBarsArea");
-  const alignArea= document.getElementById("alignmentBarsArea");
+  const totalEl   = document.getElementById("analysisTotalCount");
+  const mergedEl  = document.getElementById("analysisMergedCount");
+  const topEl     = document.getElementById("analysisTopTheme");
+  const barsArea  = document.getElementById("analysisBarsArea");
+  const alignArea = document.getElementById("alignmentBarsArea");
 
   try {
     if (cachedRows.length === 0) {
-      const res = await fetch(GAS_URL + "?mode=list");
-      const data = await res.json();
+      const data = await fetchGAS({ mode:"list" });
       if (Array.isArray(data)) cachedRows = data;
     }
     const rows   = cachedRows;
@@ -1101,102 +1270,143 @@ async function loadAnalysisData() {
     });
     const topEntry = Object.entries(counts).sort((a,b) => b[1]-a[1])[0];
 
-    if (totalEl)  totalEl.innerHTML  = total  + '<span style="font-size:14px; font-weight:400; color:#64748b;">件</span>';
-    if (mergedEl) mergedEl.innerHTML = merged + '<span style="font-size:14px; font-weight:400; color:#64748b;">件</span>';
+    if (totalEl)  totalEl.innerHTML  = total  + '<span style="font-size:14px;font-weight:400;color:#64748b;">件</span>';
+    if (mergedEl) mergedEl.innerHTML = merged + '<span style="font-size:14px;font-weight:400;color:#64748b;">件</span>';
     if (topEl)    topEl.textContent  = topEntry ? topEntry[0].split("（")[0] : "―";
 
-    // 大分類別バー
-    if (barsArea && total > 0) {
-      barsArea.innerHTML = "<h3 style='margin-bottom:12px;'>大分類別の投稿割合</h3>";
-      MAIN_CATEGORIES.forEach(m => {
-        const cnt = counts[m.label] || 0;
-        const pct = Math.round(cnt / total * 100);
-        barsArea.innerHTML +=
-          '<div class="analysis-bar-row">' +
-          '<div class="analysis-bar-label">' + m.icon + " " + m.label.split("（")[0] + '</div>' +
-          '<div class="analysis-bar-bg"><div class="analysis-bar-fill" style="width:' + pct + '%;"></div></div>' +
-          '<div class="analysis-bar-pct">' + pct + '%（' + cnt + '件）</div>' +
-          '</div>';
-      });
+    if (barsArea) {
+      if (total === 0) {
+        barsArea.innerHTML = '<p style="color:#94a3b8;text-align:center;padding:20px;">まだ投稿がありません</p>';
+      } else {
+        barsArea.innerHTML = '<h3 style="margin-bottom:12px;">大分類別の投稿割合</h3>';
+        MAIN_CATEGORIES.forEach(m => {
+          const cnt = counts[m.label] || 0;
+          const pct = Math.round(cnt / total * 100);
+          barsArea.innerHTML +=
+            '<div class="analysis-bar-row">' +
+            '<div class="analysis-bar-label">' + m.icon + ' ' + m.label.split("（")[0] + '</div>' +
+            '<div class="analysis-bar-bg"><div class="analysis-bar-fill" style="width:' + pct + '%;"></div></div>' +
+            '<div class="analysis-bar-pct">' + pct + '%（' + cnt + '件）</div></div>';
+        });
+      }
     }
 
-    // 整合性評価バー（模擬アルゴリズム：投稿比率をVision比率と比較）
+    const visionIdeal = [20, 25, 20, 20, 15];
     if (alignArea) {
-      const visionIdeal = [20, 25, 20, 20, 15]; // Vision想定の理想配分（%）
       alignArea.innerHTML = "";
       MAIN_CATEGORIES.forEach((m, i) => {
-        const actual  = total > 0 ? Math.round((counts[m.label] || 0) / total * 100) : 0;
-        const ideal   = visionIdeal[i];
-        const align   = ideal > 0 ? Math.min(100, Math.round(actual / ideal * 100)) : 0;
-        const barColor = align >= 80 ? "#10b981" : align >= 50 ? "#f59e0b" : "#ef4444";
+        const actual   = total > 0 ? Math.round((counts[m.label] || 0) / total * 100) : 0;
+        const ideal    = visionIdeal[i];
+        const alignPct = ideal > 0 ? Math.min(100, Math.round(actual / ideal * 100)) : 0;
+        const barColor = alignPct >= 80 ? "#10b981" : alignPct >= 50 ? "#f59e0b" : "#ef4444";
         alignArea.innerHTML +=
           '<div class="alignment-bar-row">' +
-          '<div class="alignment-bar-label">' + m.icon + " " + m.label.split("（")[0] + '</div>' +
-          '<div class="alignment-bar-bg"><div class="alignment-bar-fill" style="width:' + align + '%; background:' + barColor + ';"></div></div>' +
-          '<div class="alignment-pct">' + align + '%</div>' +
-          '</div>';
+          '<div class="alignment-bar-label">' + m.icon + ' ' + m.label.split("（")[0] + '</div>' +
+          '<div class="analysis-bar-bg"><div class="analysis-bar-fill" style="width:' + alignPct + '%;background:' + barColor + ';"></div></div>' +
+          '<div class="alignment-pct">' + alignPct + '%</div></div>';
       });
     }
   } catch(e) {
     console.error("分析データ読み込み失敗", e);
-  }
-}
-
-// ======================= Civic Vision ライブテキスト =======================
-async function loadLiveCivicVision() {
-  const liveText   = document.getElementById("visionLiveText");
-  const liveIllust = document.getElementById("visionLiveIllust");
-  if (!liveText) return;
-
-  liveText.textContent = "市民の投稿を分析中…";
-
-  try {
-    if (cachedRows.length === 0) {
-      const res = await fetch(GAS_URL + "?mode=list");
-      const data = await res.json();
-      if (Array.isArray(data)) cachedRows = data;
-    }
-    const rows = cachedRows;
-
-    // 統合済みの記事から上位の要約を集める
-    const mergedRows = rows.filter(r => r.status === "統合" || r.status === "新分類統合");
-    const total = rows.length;
-
-    if (total === 0) {
-      liveText.textContent = "まだ投稿がありません。最初の一歩を投稿してください！";
-      if (liveIllust) liveIllust.innerHTML = "🌱";
-      return;
-    }
-
-    // 投稿の多い大分類を反映したダイナミックな文章を生成
-    const counts = {};
-    MAIN_CATEGORIES.forEach(m => counts[m.label] = 0);
-    rows.forEach(r => {
-      const m = findMain(r.main || r.category);
-      counts[m.label] = (counts[m.label] || 0) + 1;
-    });
-    const sorted = Object.entries(counts).sort((a,b) => b[1]-a[1]);
-    const top1 = sorted[0] ? sorted[0][0].split("（")[0] : "";
-    const top2 = sorted[1] ? sorted[1][0].split("（")[0] : "";
-
-    // 市民の総意を反映したダイナミックテキスト
-    const liveVisionText =
-      `市民の声（計${total}件）から見えてくる芦屋の姿：` +
-      `特に「${top1}」と「${top2}」に関する期待が高く、` +
-      `駅前公共施設を学び・挑戦・交流の場として育てていきたいという市民の願いが浮かび上がっています。` +
-      `投稿が積み重なるほど、このメッセージはより豊かになっていきます。`;
-
-    liveText.textContent = liveVisionText;
-    if (liveIllust) liveIllust.innerHTML = sorted[0] ?
-      MAIN_CATEGORIES.find(m => m.label.includes(top1.substring(0,4)))?.icon || "🌳" : "🌳";
-
-  } catch(e) {
-    if (liveText) liveText.textContent = "データの読み込みに失敗しました。しばらくしてから再試行してください。";
+    if (barsArea)  barsArea.innerHTML  = '<p style="color:#dc2626;">データ取得失敗: ' + e.message + '</p>';
+    if (alignArea) alignArea.innerHTML = "";
   }
 }
 
 // =====================================================================
-// LOGIC TREE
+// ★ Civic Vision ライブ表示
+//   visionHistory から AIが生成した最新Visionを取得して表示
+//   投稿数の多数決ではなく、設計ウェイト×投稿比率×AI質的判断の結果を使う
+// =====================================================================
+async function loadLiveCivicVision() {
+  const liveText    = document.getElementById("visionLiveText");
+  const liveIllust  = document.getElementById("visionLiveIllust");
+  const versionEl   = document.getElementById("visionLiveVersion");
+  const compareEl   = document.getElementById("visionCompareArea");
+
+  if (!liveText) return;
+  liveText.innerHTML = '<span style="color:#64748b;">読み込み中…</span>';
+
+  try {
+    const data = await fetchGAS({ mode:"visionHistory" });
+
+    if (!Array.isArray(data) || data.length === 0) {
+      liveText.innerHTML =
+        '<span style="color:#94a3b8;">まだVisionの更新履歴がありません。' +
+        '月末に初回更新が行われます。</span>';
+      if (liveIllust) liveIllust.innerHTML = "🌱";
+      return;
+    }
+
+    const latest = data[0];  // 最新（reverse済みで先頭が最新）
+    const prev   = data[1];  // 一つ前
+
+    // ★ AIが生成したVision本文をそのまま表示（投稿数カウントで動的生成しない）
+    liveText.innerHTML =
+      '<div style="font-size:15px;line-height:1.9;color:#1e293b;margin-bottom:14px;">' +
+        latest.visionText +
+      '</div>' +
+      (latest.reason
+        ? '<div style="font-size:13px;color:#059669;background:#dcfce7;border-radius:8px;' +
+          'padding:10px 14px;border-left:3px solid #16a34a;line-height:1.7;">' +
+          '📝 <strong>このVisionになった理由：</strong>' + latest.reason + '</div>'
+        : '');
+
+    if (versionEl) {
+      versionEl.innerHTML =
+        '<span style="background:#dcfce7;color:#15803d;padding:2px 10px;border-radius:999px;' +
+        'font-size:12px;font-weight:700;margin-right:8px;">' + latest.version + '</span>' +
+        '<span style="font-size:12px;color:#64748b;">' + latest.timestamp +
+        ' 更新　投稿総数 ' + latest.totalPosts + ' 件をもとに生成</span>';
+    }
+
+    // before/after 比較（前バージョンがある場合のみ）
+    if (compareEl && prev) {
+      compareEl.style.display = "block";
+      compareEl.innerHTML =
+        '<h4 style="font-size:14px;font-weight:700;color:#1e293b;margin-bottom:12px;">' +
+        '📊 前回（' + prev.version + '）との比較</h4>' +
+        '<div class="vision-compare">' +
+          '<div class="vision-compare-box before">' +
+            '<div class="vision-compare-label">▼ 前回 ' + prev.version + '（' + prev.timestamp + '）</div>' +
+            '<div class="vision-compare-text">' + prev.visionText + '</div>' +
+          '</div>' +
+          '<div class="vision-compare-box after">' +
+            '<div class="vision-compare-label">✅ 最新 ' + latest.version + '（' + latest.timestamp + '）</div>' +
+            '<div class="vision-compare-text">' + latest.visionText + '</div>' +
+          '</div>' +
+        '</div>';
+    } else if (compareEl) {
+      compareEl.style.display = "none";
+    }
+
+    if (liveIllust) liveIllust.innerHTML = "🌳";
+
+  } catch(e) {
+    if (liveText) liveText.innerHTML =
+      '<span style="color:#dc2626;">データの読み込みに失敗しました（' + e.message + '）</span>';
+    console.error("loadLiveCivicVision エラー:", e);
+  }
+}
+
+// 管理者用：手動でCivic Visionを今すぐ更新
+async function adminUpdateVision() {
+  const btn = document.getElementById("btnAdminUpdate");
+  if (btn) { btn.disabled = true; btn.textContent = "更新中…"; }
+  try {
+    const data = await postGAS({ mode:"updateVision" });
+    alert(data.message || "Civic Visionを更新しました");
+    cachedRows = [];
+    await loadLiveCivicVision();
+  } catch(e) {
+    alert("更新失敗: " + e.message);
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = "🔄 今すぐVisionを更新（管理者）"; }
+  }
+}
+
+// =====================================================================
+// Policy Logic Tree
 // =====================================================================
 function initTreeBoards() {
   const area = document.getElementById("treeMainBoards");
@@ -1206,7 +1416,6 @@ function initTreeBoards() {
     const board = document.createElement("div");
     board.className = "tree-board";
     board.id = "treeBoard_" + idx;
-    board.title = "クリックして詳細を見る";
     board.innerHTML =
       '<div class="tree-board-icon">' + m.icon + '</div>' +
       '<div class="tree-board-key">' + m.key + '</div>' +
@@ -1219,13 +1428,12 @@ function initTreeBoards() {
 
 async function loadTreeData() {
   try {
-    const res = await fetch(GAS_URL + "?mode=list");
-    const data = await res.json();
+    const data = await fetchGAS({ mode:"list" });
     if (Array.isArray(data)) cachedRows = data;
   } catch(e) { console.error("ツリーデータ取得失敗", e); }
 
   MAIN_CATEGORIES.forEach((m, idx) => {
-    const cnt = cachedRows.filter(r => findMain(r.main || r.category).key === m.key).length;
+    const cnt   = cachedRows.filter(r => findMain(r.main || r.category).key === m.key).length;
     const badge = document.getElementById("treeBoardCount_" + idx);
     if (badge) badge.textContent = cnt;
   });
@@ -1244,25 +1452,22 @@ function showTreeDetail(mainIndex) {
 
   area.innerHTML =
     '<div class="tree-detail-title">' + m.icon + ' ' + m.key + ' ' + m.label +
-    ' <span style="font-size:13px;font-weight:400;color:#64748b;margin-left:8px;">計' + mainPosts.length + '件の投稿</span></div>';
+    ' <span style="font-size:13px;font-weight:400;color:#64748b;margin-left:8px;">計' + mainPosts.length + '件</span></div>';
 
   const allSubs = new Set([...m.subs.map(s => s.label), OTHER_LABEL]);
   mainPosts.forEach(r => { if (r.sub) allSubs.add(r.sub); });
 
   allSubs.forEach(subLabel => {
     const subPosts = mainPosts.filter(r => (r.sub || OTHER_LABEL) === subLabel);
-
-    const block  = document.createElement("div");
+    const block    = document.createElement("div");
     block.className = "tree-sub-block";
 
     const header = document.createElement("div");
     header.className = "tree-sub-header";
     header.innerHTML =
       '<span>' + subLabel + '</span>' +
-      '<span>' +
-      '<span style="background:#dbeafe;color:#1d4ed8;padding:2px 8px;border-radius:999px;font-size:12px;margin-right:8px;">' + subPosts.length + '件</span>' +
-      '<span class="tree-acc-arrow">▼</span>' +
-      '</span>';
+      '<span><span style="background:#dbeafe;color:#1d4ed8;padding:2px 8px;border-radius:999px;font-size:12px;margin-right:8px;">' +
+      subPosts.length + '件</span><span class="tree-acc-arrow">▼</span></span>';
 
     const body = document.createElement("div");
     body.className = "tree-item-list";
@@ -1274,16 +1479,14 @@ function showTreeDetail(mainIndex) {
       subPosts.forEach(r => {
         const borderColor = r.status === "統合" ? "#2563eb"
           : r.status === "新分類統合" ? "#8b5cf6"
-          : r.status === "統合済み" ? "#94a3b8" : "#dc2626";
+          : r.status === "統合済み"   ? "#94a3b8" : "#dc2626";
         const statusLabel = r.status === "統合" ? "🔵 統合済み"
           : r.status === "新分類統合" ? "🟣 新分類"
-          : r.status === "統合済み" ? "⚫ 処理済み" : "🔴 未統合";
+          : r.status === "統合済み"   ? "⚫ 処理済み" : "🔴 未統合";
 
         const chip = document.createElement("div");
-        chip.style.cssText =
-          "margin-bottom:8px;padding:10px 14px;background:#fff;border-radius:10px;" +
-          "border-left:4px solid " + borderColor + ";font-size:13px;cursor:pointer;" +
-          "box-shadow:0 2px 8px rgba(0,0,0,.06);transition:.15s;";
+        chip.className = "tree-post-chip";
+        chip.style.borderLeftColor = borderColor;
 
         const titleRow = document.createElement("div");
         titleRow.style.cssText = "display:flex;justify-content:space-between;align-items:center;";
@@ -1291,26 +1494,23 @@ function showTreeDetail(mainIndex) {
           '<strong>' + (r.title || "(無題)") + '</strong>' +
           '<span style="font-size:11px;font-weight:700;color:' + borderColor + ';">' + statusLabel + '</span>';
 
-        // ★ 要約展開（クリックで表示、もう一度クリックで閉じる）
         const sumDiv = document.createElement("div");
-        sumDiv.style.cssText =
-          "display:none;margin-top:10px;padding:12px 14px;background:#f8fafc;" +
-          "border-radius:8px;font-size:14px;color:#334155;line-height:1.8;border:1px solid #e2e8f0;";
+        sumDiv.className = "tree-post-summary";
         sumDiv.textContent = r.summary200 || "(要約なし)";
         if (r.mergedInto) {
           const note = document.createElement("div");
-          note.style.cssText = "margin-top:8px;padding:8px 12px;background:#eff6ff;border-radius:6px;font-size:13px;color:#1d4ed8;border-left:3px solid #3b82f6;";
+          note.className = "tree-merged-note";
           note.innerHTML = "📎 この投稿は「<strong>" + r.mergedInto + "</strong>」に統合されました";
           sumDiv.appendChild(note);
         }
 
         chip.appendChild(titleRow);
         chip.appendChild(sumDiv);
-        // ★ クリックするたびに開閉、他は閉じない（独立動作）
         let isOpen = false;
         chip.onclick = () => {
           isOpen = !isOpen;
           sumDiv.style.display = isOpen ? "block" : "none";
+          chip.classList.toggle("open", isOpen);
         };
         body.appendChild(chip);
       });
@@ -1321,15 +1521,12 @@ function showTreeDetail(mainIndex) {
       body.style.display = open ? "none" : "block";
       header.querySelector(".tree-acc-arrow").textContent = open ? "▼" : "▲";
     };
-
     block.appendChild(header);
     block.appendChild(body);
     area.appendChild(block);
   });
 
-  setTimeout(() => {
-    area.scrollIntoView({ behavior:"smooth", block:"start" });
-  }, 50);
+  setTimeout(() => area.scrollIntoView({ behavior:"smooth", block:"start" }), 50);
 }
 
 // =====================================================================
@@ -1338,50 +1535,41 @@ function showTreeDetail(mainIndex) {
 async function loadPRList() {
   const prList = document.getElementById("prList");
   if (!prList) return;
-  prList.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b;">読み込み中…</div>';
+  prList.innerHTML = '<div class="pr-loading">読み込み中…</div>';
 
   try {
-    const res = await fetch(GAS_URL + "?mode=list");
-    if (!res.ok) throw new Error("HTTP " + res.status);
-    const rows = await res.json();
+    const rows = await fetchGAS({ mode:"list" });
     if (rows.error) throw new Error(rows.error);
     cachedRows = Array.isArray(rows) ? rows : [];
     renderPRList(cachedRows);
-
-    // ★ 投稿追跡バナーの更新
     if (lastPostedTitle) showTrackBanner();
   } catch(e) {
-    prList.innerHTML = '<div style="padding:24px;color:#dc2626;">取得に失敗しました（' + e.message + '）</div>';
+    prList.innerHTML = '<div class="pr-error">取得に失敗しました（' + e.message + '）<br>' +
+      '<strong>GASを再デプロイして新しいURLをGAS_URLに設定してください。</strong></div>';
   }
 }
 
-// ★ 投稿追跡バナー表示
 function showTrackBanner() {
   const banner = document.getElementById("prTrackBanner");
   const text   = document.getElementById("prTrackText");
   if (!banner || !text) return;
-
   const mainObj = findMain(lastPostedMain);
   text.innerHTML =
     '「<strong>' + lastPostedTitle + '</strong>」を <strong>' +
-    mainObj.label.split("（")[0] + '</strong> › <strong>' + lastPostedSub + '</strong> に投稿しました。' +
-    ' 下のリストでご確認いただけます。';
+    mainObj.label.split("（")[0] + '</strong> › <strong>' + lastPostedSub + '</strong> に投稿しました。';
   banner.style.display = "flex";
 }
 
-// ★ 自分の投稿にスクロール
 function scrollToMyPost() {
   if (!lastPostedTitle) return;
-  // 大分類アコーデオンを開く
   const mainObj = findMain(lastPostedMain);
-  const mainBoards = document.querySelectorAll(".pr-main-board");
-  mainBoards.forEach(board => {
+  document.querySelectorAll(".pr-main-board").forEach(board => {
     const titleEl = board.querySelector(".pr-main-title");
     if (titleEl && titleEl.textContent.includes(mainObj.label.split("（")[0])) {
       const subArea = board.querySelector(".pr-sub-area");
       if (subArea && subArea.style.display !== "block") {
-        const arrow = board.querySelector(".pr-accordion-arrow");
         subArea.style.display = "block";
+        const arrow = board.querySelector(".pr-accordion-arrow");
         if (arrow) arrow.classList.add("open");
       }
       board.scrollIntoView({ behavior:"smooth", block:"start" });
@@ -1393,22 +1581,19 @@ function renderPRList(rows) {
   const prList = document.getElementById("prList");
   prList.innerHTML = "";
 
-  // ★ 表示件数と保存件数の差異を表示
-  const activeCount   = rows.filter(r => r.status !== "統合済み" && r.status !== "新分類統合").length;
-  const totalCount    = rows.length;
-  if (totalCount !== activeCount) {
+  const processed  = rows.filter(r => r.status === "統合済み" || r.status === "新分類統合").length;
+  const totalCount = rows.length;
+  if (processed > 0) {
     const notice = document.createElement("div");
-    notice.style.cssText = "background:#fefce8;border-radius:12px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#713f12;border:1px solid #fde68a;";
+    notice.className = "pr-count-notice";
     notice.innerHTML =
-      '📊 総保存件数：<strong>' + totalCount + '件</strong>（うち統合処理済み ' + (totalCount - activeCount) + ' 件は元投稿として保持。' +
-      '表示中の代表記事：<strong>' + activeCount + '件</strong>）';
+      '📊 総保存件数：<strong>' + totalCount + '件</strong>（うち元投稿として保持 ' +
+      processed + ' 件。統合・未統合の代表記事：<strong>' + (totalCount - processed) + '件</strong>）';
     prList.appendChild(notice);
   }
 
   MAIN_CATEGORIES.forEach(m => {
-    const mainPosts = rows.filter(r => findMain(r.main || r.category).key === m.key);
-    const displayCount = mainPosts.length;
-
+    const mainPosts  = rows.filter(r => findMain(r.main || r.category).key === m.key);
     const mainBoard  = document.createElement("div");
     mainBoard.className = "pr-main-board";
 
@@ -1416,7 +1601,8 @@ function renderPRList(rows) {
     mainHeader.className = "pr-main-header";
     mainHeader.innerHTML =
       '<span class="pr-main-title">' + m.icon + ' ' + m.key + ' ' + m.label + '</span>' +
-      '<span class="pr-main-meta"><span class="count-badge">' + displayCount + '件</span><span class="pr-accordion-arrow">▼</span></span>';
+      '<span class="pr-main-meta"><span class="count-badge">' + mainPosts.length +
+      '件</span><span class="pr-accordion-arrow">▼</span></span>';
 
     const subArea = document.createElement("div");
     subArea.className = "pr-sub-area";
@@ -1428,7 +1614,6 @@ function renderPRList(rows) {
 
     allSubs.forEach(subLabel => {
       const subPosts = mainPosts.filter(r => (r.sub || OTHER_LABEL) === subLabel);
-
       const subBoard = document.createElement("div");
       subBoard.className = "pr-sub-board" + (subPosts.length ? " has-posts" : "");
 
@@ -1442,29 +1627,25 @@ function renderPRList(rows) {
       subHint.className = "pr-sub-hint";
       subHint.textContent = subPosts.length ? "クリックして投稿一覧を見る ▼" : "まだ投稿がありません";
 
-      // ★ タイトル一覧エリア（横長カード）
       const titleListArea = document.createElement("div");
       titleListArea.className = "pr-title-list-area";
-      titleListArea.style.cssText = "display:none; padding:8px 12px;";
+      titleListArea.style.display = "none";
 
-      // ★ 要約表示エリア（フル幅）
       const summaryPanel = document.createElement("div");
       summaryPanel.className = "pr-summary-panel";
       summaryPanel.style.display = "none";
 
-      // ★ 統合関係の表示（元/統合先の明示）
+      // 表示順：統合記事 → 未統合 → 元投稿
       const mergedRows   = subPosts.filter(r => r.status === "統合");
-      const sourceRows   = subPosts.filter(r => r.status === "統合済み" || r.status === "新分類統合");
       const unmergedRows = subPosts.filter(r => r.status !== "統合" && r.status !== "統合済み" && r.status !== "新分類統合");
-
-      // 表示順: 統合結果 → 未統合 → 元投稿（処理済み）
+      const sourceRows   = subPosts.filter(r => r.status === "統合済み" || r.status === "新分類統合");
       const displayOrder = [...mergedRows, ...unmergedRows, ...sourceRows];
 
       displayOrder.forEach(row => {
         const isMergedResult = row.status === "統合";
         const isMergedSource = row.status === "統合済み" || row.status === "新分類統合";
-        const borderColor = isMergedResult ? "#2563eb" : isMergedSource ? "#94a3b8" : "#dc2626";
-        const statusLabel = isMergedResult ? "🔵 統合記事" : isMergedSource ? "⚫ 元の投稿" : "🔴 未統合";
+        const borderColor    = isMergedResult ? "#2563eb" : isMergedSource ? "#94a3b8" : "#dc2626";
+        const statusLabel    = isMergedResult ? "🔵 統合記事" : isMergedSource ? "⚫ 元の投稿" : "🔴 未統合";
 
         const titleBtn = document.createElement("div");
         titleBtn.className = "pr-title-btn";
@@ -1476,53 +1657,73 @@ function renderPRList(rows) {
         titleBtn.onclick = (ev) => {
           ev.stopPropagation();
 
-          let html = '<div class="pr-summary-close" onclick="this.closest(\'.pr-summary-panel\').style.display=\'none\'">✕ 閉じる</div>';
-          html += '<h3 class="pr-summary-title">' + (row.title || "(無題)") + '</h3>';
+          const badgeBg = isMergedResult ? "#dbeafe" : isMergedSource ? "#e2e8f0" : "#fee2e2";
+          const badgeFg = isMergedResult ? "#1e40af" : isMergedSource ? "#64748b" : "#dc2626";
 
-          // ★ ステータスラベル表示
-          html += '<div style="margin-bottom:10px;">' +
-            '<span style="font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;background:' +
-            (isMergedResult ? '#dbeafe' : isMergedSource ? '#e2e8f0' : '#fee2e2') + ';color:' +
-            (isMergedResult ? '#1e40af' : isMergedSource ? '#64748b' : '#dc2626') + ';">' +
-            statusLabel + '</span></div>';
+          let html =
+            '<div class="pr-summary-close" onclick="this.closest(\'.pr-summary-panel\').style.display=\'none\'">✕ 閉じる</div>' +
+            '<h3 class="pr-summary-title">' + (row.title || "(無題)") + '</h3>' +
+            '<div style="margin-bottom:10px;"><span style="font-size:12px;font-weight:700;padding:3px 10px;' +
+            'border-radius:999px;background:' + badgeBg + ';color:' + badgeFg + ';">' + statusLabel + '</span></div>' +
+            '<div class="pr-summary-body">' + (row.summary200 || "（要約なし）") + '</div>';
 
-          html += '<div class="pr-summary-body">' + (row.summary200 || "（要約なし）") + '</div>';
-
-          // ★ 統合の詳細情報（元の投稿・統合先・何をどう統合したか）
+          // ★ 統合記事：統合過程を詳細表示
           if (isMergedResult) {
-            // 統合記事：元の投稿を探して表示
-            const originalTitle = row.fullText && row.fullText.includes("【統合記録】")
-              ? row.fullText : "";
-            html += '<div class="pr-merge-detail">' +
-              '<div class="pr-merge-detail-header">🔗 この記事は複数の投稿を統合しています</div>' +
-              '<div class="pr-merge-detail-body">';
-            if (originalTitle) {
-              // 統合記録を解析して表示
-              const recordText = row.fullText.replace("【統合記録】", "");
-              html += '<div class="pr-merge-row"><span class="pr-merge-label">統合記録</span><span class="pr-merge-text">' + recordText + '</span></div>';
+            const origPosts = subPosts.filter(r2 => r2.mergedInto === row.title);
+            // fullTextに統合記録が入っている場合
+            const hasRecord = row.fullText && row.fullText.includes("【統合記録】");
+
+            if (origPosts.length > 0 || hasRecord) {
+              html +=
+                '<div class="pr-merge-detail">' +
+                '<div class="pr-merge-detail-header">🔗 統合の過程</div>' +
+                '<div class="pr-merge-detail-body">';
+
+              // 元の投稿を列挙
+              if (origPosts.length > 0) {
+                html += '<div style="font-size:12px;font-weight:700;color:#1e40af;margin-bottom:6px;">統合された元の投稿：</div>';
+                origPosts.forEach((op, idx) => {
+                  html +=
+                    '<div class="pr-merge-row">' +
+                    '<span class="pr-merge-label">元の投稿 ' + (idx+1) + '</span>' +
+                    '<span class="pr-merge-text">「' + (op.title || "(無題)") + '」<br>' +
+                    '<span style="font-size:12px;color:#64748b;">' + (op.summary200 || "") + '</span></span>' +
+                    '</div>';
+                });
+              }
+
+              // 統合記録（採用理由）
+              if (hasRecord) {
+                const record = row.fullText.replace("【統合記録】", "").trim();
+                html +=
+                  '<div class="pr-merge-row" style="margin-top:8px;">' +
+                  '<span class="pr-merge-label">統合の根拠</span>' +
+                  '<span class="pr-merge-text">' + record + '</span>' +
+                  '</div>';
+              }
+
+              html += '</div></div>';
+            } else {
+              // 元投稿が見つからない場合でも説明を表示
+              html +=
+                '<div class="pr-merged-note" style="background:#dbeafe;border-left-color:#2563eb;color:#1e40af;">' +
+                '🔵 この記事は複数の投稿をAIが統合したものです。' +
+                '元の投稿は「⚫ 元の投稿」として同じ分類内に保存されています。</div>';
             }
-            // 元の投稿を探す
-            const origPosts = subPosts.filter(r2 => r2.mergedInto && r2.mergedInto === row.title);
-            if (origPosts.length > 0) {
-              origPosts.forEach(op => {
-                html += '<div class="pr-merge-row">' +
-                  '<span class="pr-merge-label">元の投稿</span>' +
-                  '<span class="pr-merge-text">「' + (op.title || "(無題)") + '」</span></div>';
-              });
-            }
-            html += '</div></div>';
-          } else if (isMergedSource && row.mergedInto) {
-            html += '<div class="pr-merged-note">📎 この投稿は「<strong>' + row.mergedInto + '</strong>」に統合されました</div>';
+          }
+
+          // 元の投稿：統合先を表示
+          if (isMergedSource && row.mergedInto) {
+            html +=
+              '<div class="pr-merged-note">📎 この投稿は「<strong>' + row.mergedInto +
+              '</strong>」に統合されました</div>';
           }
 
           summaryPanel.innerHTML = html;
           summaryPanel.style.display = "block";
 
-          // アクティブ表示
           titleListArea.querySelectorAll(".pr-title-btn").forEach(b => b.classList.remove("active"));
           titleBtn.classList.add("active");
-
-          // 要約パネルへスクロール
           setTimeout(() => summaryPanel.scrollIntoView({ behavior:"smooth", block:"nearest" }), 50);
         };
 
@@ -1549,7 +1750,7 @@ function renderPRList(rows) {
     subArea.appendChild(subGrid);
 
     mainHeader.onclick = () => {
-      const open = subArea.style.display === "block";
+      const open  = subArea.style.display === "block";
       subArea.style.display = open ? "none" : "block";
       const arrow = mainHeader.querySelector(".pr-accordion-arrow");
       if (arrow) arrow.classList.toggle("open", !open);
@@ -1565,10 +1766,10 @@ function renderPRList(rows) {
 // AI壁打ち
 // =====================================================================
 async function runAI() {
-  const textarea = document.getElementById("userInput");
-  const aiResult = document.getElementById("aiResult");
-  const summarizeBtnBox = document.getElementById("summarizeBtnBox");
-  const summaryArea = document.getElementById("summaryArea");
+  const textarea     = document.getElementById("userInput");
+  const aiResult     = document.getElementById("aiResult");
+  const summarizeBtn = document.getElementById("summarizeBtnBox");
+  const summaryArea  = document.getElementById("summaryArea");
   const deepDiveArea = document.getElementById("deepDiveArea");
 
   if (!textarea) return;
@@ -1576,38 +1777,32 @@ async function runAI() {
   if (!text) { alert("意見を入力してください"); return; }
 
   currentIdeaText = text;
-  aiResult.innerHTML = '<p style="color:#2563eb;">🤖 AIが分析中...</p>';
-  if (summarizeBtnBox) summarizeBtnBox.style.display = "none";
-  if (summaryArea) summaryArea.style.display = "none";
-  if (deepDiveArea) deepDiveArea.style.display = "none";
+  aiResult.innerHTML = '<p style="color:#2563eb;">🤖 AIが分析中…</p>';
+  if (summarizeBtn)  summarizeBtn.style.display  = "none";
+  if (summaryArea)   summaryArea.style.display   = "none";
+  if (deepDiveArea)  deepDiveArea.style.display  = "none";
 
   try {
-    const res = await fetch(GAS_URL, {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({ mode:"analyze", text })
-    });
-    const data = await res.json();
+    const data = await postGAS({ mode:"analyze", text });
     if (data.error) throw new Error(data.error);
 
-    const parsed = JSON.parse(data.content);
+    const parsed    = JSON.parse(data.content);
     currentAIResult = data.content;
-    currentMain = parsed.main || "";
-    currentSub  = parsed.sub  || OTHER_LABEL;
+    currentMain     = parsed.main || "";
+    currentSub      = parsed.sub  || OTHER_LABEL;
 
     aiResult.innerHTML = '<p class="ai-result-summary">' + (parsed.analysis || "（分析結果なし）") + '</p>';
 
     if (deepDiveArea) {
       deepDiveArea.style.display = "block";
       deepDiveArea.innerHTML =
-        '<div class="deep-item"><div class="deep-label">💡 核心・本当の願い</div><div class="deep-body">' + (parsed.core || "") + '</div></div>' +
-        '<div class="deep-item"><div class="deep-label">🌱 実現した場合の変化</div><div class="deep-body">' + (parsed.impact || "") + '</div></div>' +
-        '<div class="deep-item"><div class="deep-label">🌍 国内外の成功事例</div><div class="deep-body">' + (parsed.example || "") + '</div></div>' +
-        '<div class="deep-item"><div class="deep-label">⚠️ 懸念点と乗り越え方</div><div class="deep-body">' + (parsed.concern || "") + '</div></div>' +
+        '<div class="deep-item"><div class="deep-label">💡 核心・本当の願い</div><div class="deep-body">' + (parsed.core     || "") + '</div></div>' +
+        '<div class="deep-item"><div class="deep-label">🌱 実現した場合の変化</div><div class="deep-body">' + (parsed.impact   || "") + '</div></div>' +
+        '<div class="deep-item"><div class="deep-label">🌍 国内外の成功事例</div><div class="deep-body">' + (parsed.example  || "") + '</div></div>' +
+        '<div class="deep-item"><div class="deep-label">⚠️ 懸念点と乗り越え方</div><div class="deep-body">' + (parsed.concern  || "") + '</div></div>' +
         '<div class="deep-item deep-next"><div class="deep-label">🚀 さらに発展させるための問い</div><div class="deep-body">' + (parsed.nextStep || "") + '</div></div>';
     }
-
-    if (summarizeBtnBox) summarizeBtnBox.style.display = "block";
+    if (summarizeBtn) summarizeBtn.style.display = "block";
 
   } catch(e) {
     aiResult.innerHTML = '<p style="color:#dc2626;">エラー: ' + e.message + '</p>';
@@ -1615,33 +1810,28 @@ async function runAI() {
 }
 
 async function confirmSummary() {
-  const summaryArea = document.getElementById("summaryArea");
-  const summaryBox  = document.getElementById("summaryBox");
-  const titleBox    = document.getElementById("titleBox");
+  const summaryArea    = document.getElementById("summaryArea");
+  const summaryBox     = document.getElementById("summaryBox");
+  const titleBox       = document.getElementById("titleBox");
   const categoryResult = document.getElementById("categoryResult");
   const postDecision   = document.getElementById("postDecision");
 
   if (!summaryArea) return;
   summaryArea.style.display = "block";
-  if (summaryBox) summaryBox.textContent = "要約中...";
+  if (summaryBox) summaryBox.textContent = "要約中…";
 
   try {
-    const res = await fetch(GAS_URL, {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({ mode:"summarize", text:currentIdeaText, analysis:currentAIResult })
-    });
-    const data = await res.json();
+    const data = await postGAS({ mode:"summarize", text:currentIdeaText, analysis:currentAIResult });
     if (data.error) throw new Error(data.error);
     const parsed = JSON.parse(data.content);
     currentSummary200 = parsed.summary200 || "";
-    currentTitle      = parsed.title || "";
+    currentTitle      = parsed.title      || "";
 
-    if (summaryBox)      summaryBox.textContent = currentSummary200;
-    if (titleBox)        titleBox.textContent   = currentTitle;
-    if (categoryResult)  categoryResult.innerHTML =
+    if (summaryBox)     summaryBox.textContent   = currentSummary200;
+    if (titleBox)       titleBox.textContent      = currentTitle;
+    if (categoryResult) categoryResult.innerHTML  =
       "大分類：<strong>" + currentMain + "</strong><br>中分類：<strong>" + currentSub + "</strong>";
-    if (postDecision)    postDecision.style.display = "block";
+    if (postDecision)   postDecision.style.display = "block";
   } catch(e) {
     if (summaryBox) summaryBox.textContent = "エラー: " + e.message;
   }
@@ -1649,29 +1839,22 @@ async function confirmSummary() {
 
 async function postToPR() {
   const btn = document.querySelector("#postDecision .big-button.success");
-  if (btn) { btn.disabled = true; btn.textContent = "投稿中..."; }
+  if (btn) { btn.disabled = true; btn.textContent = "投稿中…"; }
 
   try {
-    const res = await fetch(GAS_URL, {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        mode:"save",
-        title:currentTitle, summary200:currentSummary200,
-        fullText:currentIdeaText, main:currentMain, sub:currentSub
-      })
+    const data = await postGAS({
+      mode:"save",
+      title:currentTitle, summary200:currentSummary200,
+      fullText:currentIdeaText, main:currentMain, sub:currentSub
     });
-    const data = await res.json();
     if (data.error) throw new Error(data.error);
 
-    // ★ 投稿追跡情報を記録
     lastPostedTitle = currentTitle;
     lastPostedMain  = currentMain;
     lastPostedSub   = currentSub;
-
-    // ★ PR ページに移動して追跡バナーを表示
-    cachedRows = []; // キャッシュをクリアして最新データ再取得
+    cachedRows = [];
     showPage("pullrequest");
+
   } catch(e) {
     alert("投稿エラー: " + e.message);
     if (btn) { btn.disabled = false; btn.textContent = "✅ PRページへ投稿する"; }
@@ -1681,14 +1864,36 @@ async function postToPR() {
 function continueEditing() {
   const summaryArea  = document.getElementById("summaryArea");
   const postDecision = document.getElementById("postDecision");
-  if (summaryArea) summaryArea.style.display = "none";
+  if (summaryArea)  summaryArea.style.display  = "none";
   if (postDecision) postDecision.style.display = "none";
 }
 
-// ======================= 初期化 =======================
+// =====================================================================
+// 初期化
+// =====================================================================
 window.addEventListener("DOMContentLoaded", () => {
   showPage("intro");
 });
+
+
+// 統合ページタブ切替
+function toggleMergeDetail() {
+  const panel = document.getElementById('mergeDetailPanel');
+  const arrow = document.getElementById('mergeDetailArrow');
+  const btn   = document.getElementById('mergeDetailBtn');
+  if (!panel) return;
+  const open = panel.classList.contains('show');
+  panel.classList.toggle('show', !open);
+  btn.classList.toggle('open', !open);
+  if (arrow) arrow.textContent = open ? '▼' : '▲';
+}
+
+function switchMergeTab(tab) {
+  document.getElementById('mergeTabGeneral').classList.toggle('active', tab === 'general');
+  document.getElementById('mergeTabExpert').classList.toggle('active', tab === 'expert');
+  document.getElementById('tabGeneral').classList.toggle('active', tab === 'general');
+  document.getElementById('tabExpert').classList.toggle('active', tab === 'expert');
+}
 </script>
 </body>
 </html>
