@@ -1712,12 +1712,14 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
     </div>
     <div class="vision-consensus-body">
       <p>市民の投稿が積み重なるにつれ、AIがその総意を分析し、Civic Visionの内容を動的に更新します。</p>
-      <div class="vision-live-text" id="visionLiveText">
-        読み込み中…
-      </div>
-      <div class="vision-live-illust" id="visionLiveIllust">
-        🌱
-      </div>
+      <div id="visionLiveVersion" style="margin-bottom:10px;min-height:22px;"></div>
+<div class="vision-live-text" id="visionLiveText">
+  読み込み中…
+</div>
+<div id="visionCompareArea" style="display:none;margin-top:16px;"></div>
+<div class="vision-live-illust" id="visionLiveIllust">
+  🌱
+</div>
       <div class="vision-cta">
         <p>市民の意見の総意を反映した 駅前公共施設のあり方です</p>
         <button class="big-button success" onclick="loadLiveCivicVision()">
