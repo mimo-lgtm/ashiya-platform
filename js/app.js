@@ -8,7 +8,7 @@
 // =====================================================================
 
 // ★ GASを再デプロイしたら、新しいURLに必ず書き換えてください
-const GAS_URL = "https://script.google.com/macros/s/AKfycbyIs9qvuIE3hDhvW893UB4dakgNeg5B10K85JL9gd1W9gkfTkUHroXwksYieFBGJPZu/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbx2FjfOBBFfzKdKaYHOrmdkp9pypd6BxFIYKuszFAyoaz1x6TE5yjDcYtFwAr-zOEO8BA/exec";
 
 const OTHER_LABEL = "その他";
 
@@ -51,14 +51,14 @@ async function fetchGAS(params) {
   return await res.json();
 }
 
-// POSTが必要な場合（analyze, summarize, save, updateVision）
+// ★ POSTをやめてGETに統一（GASのCORS制約を回避）
+// データはURLパラメータ経由で送信（GASはGETのみCORSが通る）
 async function postGAS(payload) {
-  const res = await fetch(GAS_URL, {
-    method : "POST",
-    headers: { "Content-Type": "text/plain" }, // ★ application/jsonだとプリフライト発生→text/plainで回避
-    body   : JSON.stringify(payload),
-    redirect: "follow"
-  });
+  // dataパラメータにJSONをエンコードして送る
+  const url = GAS_URL
+    + "?mode=" + encodeURIComponent(payload.mode || "")
+    + "&data=" + encodeURIComponent(JSON.stringify(payload));
+  const res = await fetch(url);
   if (!res.ok) throw new Error("HTTP " + res.status);
   return await res.json();
 }
