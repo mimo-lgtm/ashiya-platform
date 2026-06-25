@@ -1403,8 +1403,8 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
       </div>
     </div>
   </div>
-</section>
 
+  <!-- ★ 詳しい仕組みはこちら — 一般向け・専門家向け説明パネル -->
 
   <!-- ★ 詳しい仕組みはこちら — 一般向け・専門家向け説明パネル -->
   <div style="margin-top:20px;">
@@ -1510,6 +1510,8 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
 
     </div>
   </div>
+
+</section>
 
 </section>
 
@@ -1955,15 +1957,54 @@ async function loadLiveCivicVision() {
   const compareEl   = document.getElementById("visionCompareArea");
 
   if (!liveText) return;
-  liveText.innerHTML = '<span style="color:#64748b;">読み込み中…</span>';
+  liveText.innerHTML = '<span style="color:#64748b;">市民の投稿データを読み込み中…</span>';
+  if (versionEl) versionEl.innerHTML = "";
 
   try {
-    const data = await fetchGAS({ mode:"visionHistory" });
+    // まず投稿一覧を取得（キャッシュ優先）
+    if (cachedRows.length === 0) {
+      const listData = await callGAS("list");
+      if (Array.isArray(listData)) cachedRows = listData;
+    }
+
+    // visionHistoryを取得
+    let visionData = [];
+    try {
+      visionData = await callGAS("visionHistory");
+      if (!Array.isArray(visionData)) visionData = [];
+    } catch(e) {
+      console.warn("visionHistory取得失敗、フォールバックモードで表示:", e.message);
+    }
+
+    const data = visionData;
 
     if (!Array.isArray(data) || data.length === 0) {
+      // visionHistoryがまだない場合 → 初期Visionと投稿状況を表示
+      const total = cachedRows.length;
+      const counts = {};
+      MAIN_CATEGORIES.forEach(m => counts[m.label] = 0);
+      cachedRows.forEach(r => {
+        const m = findMain(r.main || r.category);
+        counts[m.label] = (counts[m.label] || 0) + 1;
+      });
+      const sorted = Object.entries(counts).sort((a,b) => b[1]-a[1]);
+
       liveText.innerHTML =
-        '<span style="color:#94a3b8;">まだVisionの更新履歴がありません。' +
-        '月末に初回更新が行われます。</span>';
+        '<div style="font-size:15px;line-height:1.9;color:#1e293b;margin-bottom:14px;">' +
+        "駅前公共施設を、単なる利用の場ではなく、市民の学び・挑戦・交流が自然に芽生え、広がり、街の魅力を育てていく\"成長する拠点\"へと転換する。" +
+        "ここでは、子どもから大人まで、多様な人が自分の興味や得意を持ち寄り、新しい活動やつながりが生まれる。" +
+        "市民とともに育て、芦屋の価値が静かに、しかし確実に積み上がっていく\"まちの育ち場\"として再構築する。" +
+        '</div>' +
+        '<div style="font-size:13px;color:#059669;background:#dcfce7;border-radius:8px;padding:10px 14px;border-left:3px solid #16a34a;">' +
+        '📝 <strong>現在の状況：</strong>' +
+        (total > 0
+          ? `市民の投稿 ${total}件を受けて分析中。月末に最初のVision更新が行われます。`
+          : "まだ投稿がありません。月末更新まで初期Visionを表示しています。") +
+        '</div>';
+
+      if (versionEl) versionEl.innerHTML =
+        '<span style="background:#fef9c3;color:#92400e;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:700;margin-right:8px;">v0（初期）</span>' +
+        '<span style="font-size:12px;color:#64748b;">プラットフォーム開設時のCivic Vision</span>';
       if (liveIllust) liveIllust.innerHTML = "🌱";
       return;
     }
@@ -2185,9 +2226,63 @@ function showTrackBanner() {
   if (!banner || !text) return;
   const mainObj = findMain(lastPostedMain);
   text.innerHTML =
-    '「<strong>' + lastPostedTitle + '</strong>」を <strong>' +
-    mainObj.label.split("（")[0] + '</strong> › <strong>' + lastPostedSub + '</strong> に投稿しました。';
+    '「<strong>' + lastPostedTitle + '</strong>」を投稿しました。' +
+    '<br><span style="font-size:12px;color:#93c5fd;">' +
+    mainObj.label.split("（")[0] + ' › ' + lastPostedSub + '</span>';
   banner.style.display = "flex";
+  // ★ 自動的に該当箇所を展開してスクロール
+  setTimeout(() => autoExpandMyPost(), 600);
+}
+
+// ★ 投稿後に自動で該当大分類・中分類を展開してハイライト
+function autoExpandMyPost() {
+  if (!lastPostedTitle) return;
+  const mainObj = findMain(lastPostedMain);
+
+  document.querySelectorAll(".pr-main-board").forEach(board => {
+    const titleEl = board.querySelector(".pr-main-title");
+    if (!titleEl || !titleEl.textContent.includes(mainObj.label.split("（")[0])) return;
+
+    // 大分類を展開
+    const subArea = board.querySelector(".pr-sub-area");
+    const arrow   = board.querySelector(".pr-accordion-arrow");
+    if (subArea) { subArea.style.display = "block"; }
+    if (arrow)   { arrow.classList.add("open"); }
+
+    // 中分類を展開
+    board.querySelectorAll(".pr-sub-board").forEach(subBoard => {
+      const nameEl = subBoard.querySelector(".pr-sub-name");
+      if (!nameEl) return;
+      const subName = nameEl.textContent.trim();
+      if (subName !== lastPostedSub && subName !== "その他") return;
+
+      const titleListArea = subBoard.querySelector(".pr-title-list-area");
+      const subHint       = subBoard.querySelector(".pr-sub-hint");
+      if (titleListArea) { titleListArea.style.display = "block"; }
+      if (subHint)       { subHint.textContent = "閉じる ▲"; }
+      subBoard.classList.add("active");
+
+      // ★ 自分の投稿タイトルを見つけてハイライト
+      if (titleListArea) {
+        titleListArea.querySelectorAll(".pr-title-btn").forEach(btn => {
+          const txtEl = btn.querySelector(".pr-title-btn-text");
+          if (!txtEl) return;
+          if (txtEl.textContent.includes(lastPostedTitle) ||
+              lastPostedTitle.includes(txtEl.textContent.trim())) {
+            // ハイライト
+            btn.style.background = "#fefce8";
+            btn.style.borderLeftColor = "#f59e0b";
+            btn.style.boxShadow = "0 0 0 2px #f59e0b";
+            // 自動的にクリックして要約を開く
+            setTimeout(() => { btn.click(); }, 300);
+          }
+        });
+      }
+
+      // スクロール
+      setTimeout(() => subBoard.scrollIntoView({ behavior:"smooth", block:"center" }), 400);
+    });
+  });
 }
 
 function scrollToMyPost() {
