@@ -1529,14 +1529,15 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
 
 <!-- ================= ANALYSIS（新設） ================= -->
 <section id="analysis" class="page">
-  <h1>📊 分析</h1>
-
-  <!-- AI分析サマリー（リアルタイム） -->
-  <div class="card">
-    <h2>📊 現在の市民の声 — AI分析サマリー</h2>
-    <p style="font-size:13px; color:#64748b; margin-bottom:4px;">
-      投稿データをリアルタイムに集計しています。
-    </p>
+  <div class="tree-page-wrap">
+    <div class="tree-vision-card">
+     <h2>📊 現在の市民の声 — AI分析サマリー</h2>
+     <p>このページは、今まで市民の方が投稿されてきた内容を分析しているページです。初期に設定したビジョンとの乖離、その理由を統計的にAIが分析しています。</p>
+    </div>
+      <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px;">
+    <img src="images/bib.jpg" alt="統合" style="border-radius:14px;"> </div>
+   </div>
+  
     <div class="analysis-grid">
       <div class="analysis-card">
         <h4>総投稿数</h4>
@@ -1622,7 +1623,14 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
 
 <!-- ================= PULL REQUEST ================= -->
 <section id="pullrequest" class="page">
-  <h1>📋 PULL REQUEST</h1>
+    <div class="tree-page-wrap">
+    <div class="tree-vision-card">
+     <h2>提案箱 (Pull Request)</h2>
+     <p>このページでは、みなさんの投稿、そして統合された投稿を見ることが出来ます。</p>
+    </div>
+      <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px;">
+    <img src="images/cityCompass.jpg" alt="統合" style="border-radius:14px;"> </div>
+   </div>
 
   <!-- ★ 投稿追跡バナー -->
   <div class="pr-track-banner" id="prTrackBanner" style="display:none;">
@@ -1649,13 +1657,21 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
 
 <!-- ================= CIVIC VISION ================= -->
 <section id="vision" class="page">
+ <div class="tree-page-wrap">
+    <div class="tree-vision-card">
+     <h2>みんなの未来図</h2>
+     <p>このページでは、みなさんの投稿によって初期のビジョンが変遷していく過程をみることができます</p>
+      <p>このプラットフォームのクライマックスです。AIが市民のみんなの投稿と膨大なデータをバランスよく分析して答えを導き出します。</p>
+    </div>
+      <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px;">
+    <img src="images/future5.jpg" alt="統合" style="border-radius:14px;"> </div>
+   </div>
 
+  
   <!-- ── Civic Compass（理念） ── -->
   <div class="compass-hero">
     <div class="compass-ring">
-      <div class="compass-ring-inner">🧭</div>
-    </div>
-    <div class="compass-badge">CIVIC COMPASS — 不変の理念</div>
+     <div class="compass-badge">CIVIC COMPASS — 不変の理念</div>
     <h2>芦屋市の公共施設を、<br>コストから投資へ</h2>
     <p class="compass-sub">
       芦屋市の公共施設を、維持費がかかる「コスト」としてではなく、市民のウェルビーイング・知・経済価値を生み出す投資型の都市拠点として再定義する。市民の自由なアイデアと最先端テクノロジーが交わり、街全体の価値を上げ続ける場所。
@@ -1673,20 +1689,20 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
     <p style="font-size:14px; color:#475569; margin-bottom:16px;">このプラットフォームは、理念から実際の議論まで3つの層で構成されています。</p>
     <div class="three-layer">
       <div class="layer-box layer-top">
-        <div class="layer-label">LAYER 1 — 不変の理念</div>
+        <div class="layer-label">LAYER 1 — 羅針盤・不変の理念</div>
         <div class="layer-title">🧭 Civic Compass</div>
         <div class="layer-desc">コストセンターからプロフィットセンターへ（固定・変更なし）</div>
       </div>
       <div style="text-align:center;"><div class="layer-arrow-line" style="margin:0 auto;"></div></div>
       <div class="layer-box layer-mid">
-        <div class="layer-label">LAYER 2 — 不変の大分類</div>
+        <div class="layer-label">LAYER 2 — ビジョン・不変の大分類</div>
         <div class="layer-title">🎯 Civic Vision</div>
         <div class="layer-desc">5つの大分類（固定）。市民投稿の総意を反映してアップデートされる文章</div>
       </div>
       <div style="text-align:center;"><div class="layer-arrow-line" style="margin:0 auto;"></div></div>
       <div class="layer-box layer-bot">
         <div class="layer-label">LAYER 3 — 動的な議論</div>
-        <div class="layer-title">🌳 Policy Logic Tree</div>
+        <div class="layer-title">🌳 アイデアの地図</div>
         <div class="layer-desc">中分類・小分類。市民の投稿により動的に追加・更新される</div>
       </div>
     </div>
@@ -1695,7 +1711,7 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
   <!-- ── Civic Vision（大分類）メインビジュアル ── -->
   <div class="vision-main-block">
     <div class="vision-main-header">
-      <h3>🎯 CIVIC VISION — 大分類（不変）</h3>
+      <h3>🎯 CIVIC VISION（ビジョン） — 大分類（不変）</h3>
       <p style="color:#93c5fd; font-size:14px; margin:0;">芦屋駅前公共施設に関する5つの大分類の根幹となるビジョン</p>
     </div>
     <div class="vision-main-text">
@@ -1732,7 +1748,7 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
 
   <!-- ── なぜ大事か ── -->
   <div class="card">
-    <h2>なぜ Civic Compass が重要なのか</h2>
+    <h2>なぜ Civic Compass （羅針盤・理念）が重要なのか</h2>
     <div class="why-grid">
       <div class="why-card old-way">
         <h4>❌ これまでの公共施設のあり方</h4>
