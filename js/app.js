@@ -212,39 +212,38 @@ async function loadLiveCivicVision() {
  
   if (!liveText) return;
  
-  // ★ ボタンを押してもスクロールしない。その場でコンテンツを更新するだけ
-  liveText.innerHTML =
-    '<span style="color:var(--color-text-secondary,#64748b);font-size:14px;">市民の投稿データを読み込み中…</span>';
+  liveText.innerHTML = '<span style="color:#64748b;font-size:14px;">市民の投稿データを読み込み中…</span>';
   if (versionEl) versionEl.innerHTML = "";
  
-  // ★ デモデータ（VisionHistoryシートがまだ空の間に表示するサンプル）
-  //    実データが取得できたらそちらを優先します
+  // デモデータ（GASのVisionHistoryがまだ空の間に表示するサンプル）
   const DEMO_HISTORY = [
     {
-      version   : "v1（最新）",
-      timestamp : "2025年6月末",
+      version: "v1（最新）",
+      timestamp: "2025年6月末",
       totalPosts: 12,
       visionText:
-        "駅前公共施設を、単なる利用の場ではなく、市民の学び・挑戦・交流が自然に芽生え育っていく"成長する拠点"へ転換する。" +
-        "特に子育て世代からの声が多く集まっており、子どもから高齢者まで多世代が気軽に立ち寄れるサードプレイスとしての機能が期待されている。" +
+        "駅前公共施設を、単なる利用の場ではなく、市民の学び・挑戦・交流が自然に芽生え育っていく" +
+        "\u201c成長する拠点\u201dへ転換する。特に子育て世代からの声が多く集まっており、" +
+        "子どもから高齢者まで多世代が気軽に立ち寄れるサードプレイスとしての機能が期待されている。" +
         "市民とともに育て、芦屋の価値を静かに、しかし確実に積み上げていく。",
       reason:
         "投稿12件のうち、ウェルビーイング分野（多世代交流・サードプレイス）への関心が最も高く、" +
         "設計ウェイトとのバランスを考慮してこの部分を強調する形でVisionを更新しました。"
     },
     {
-      version   : "v0（初期）",
-      timestamp : "プラットフォーム開設時",
+      version: "v0（初期）",
+      timestamp: "プラットフォーム開設時",
       totalPosts: 0,
       visionText:
-        "駅前公共施設を、単なる利用の場ではなく、市民の学び・挑戦・交流が自然に芽生え、広がり、街の魅力を育てていく"成長する拠点"へと転換する。" +
-        "行政が一方的に提供する施設ではなく、市民とともに育て、市民の力が循環し、芦屋の価値が静かに、しかし確実に積み上がっていく"まちの育ち場"として再構築する。",
+        "駅前公共施設を、単なる利用の場ではなく、市民の学び・挑戦・交流が自然に芽生え、広がり、" +
+        "街の魅力を育てていく\u201c成長する拠点\u201dへと転換する。行政が一方的に提供する施設ではなく、" +
+        "市民とともに育て、市民の力が循環し、芦屋の価値が静かに、しかし確実に積み上がっていく" +
+        "\u201cまちの育ち場\u201dとして再構築する。",
       reason: "初期設定のCivic Vision（プラットフォーム開設時）"
     }
   ];
  
   try {
-    // visionHistoryをGASから取得。失敗したらデモデータにフォールバック
     let data = [];
     try {
       data = await callGAS("visionHistory");
@@ -254,13 +253,12 @@ async function loadLiveCivicVision() {
       data = DEMO_HISTORY;
     }
  
-    const latest  = data[0];
-    const prev    = data.length > 1 ? data[1] : null;
-    const isDemo  = (data === DEMO_HISTORY);
+    const latest = data[0];
+    const prev   = data.length > 1 ? data[1] : null;
+    const isDemo = (data === DEMO_HISTORY);
  
-    // Vision本文と変化の理由を表示
     liveText.innerHTML =
-      '<div style="font-size:15px;line-height:1.9;color:var(--color-text-primary,#1e293b);margin-bottom:14px;">' +
+      '<div style="font-size:15px;line-height:1.9;color:#1e293b;margin-bottom:14px;">' +
         latest.visionText +
       '</div>' +
       (latest.reason
@@ -269,19 +267,15 @@ async function loadLiveCivicVision() {
           '<strong>このVisionになった理由：</strong><br>' + latest.reason + '</div>'
         : '');
  
-    // バージョン・更新日・投稿数
     if (versionEl) {
       versionEl.innerHTML =
         '<span style="background:#dcfce7;color:#15803d;padding:2px 10px;border-radius:999px;' +
         'font-size:12px;font-weight:700;margin-right:8px;">' + latest.version + '</span>' +
         '<span style="font-size:12px;color:#64748b;">' +
         latest.timestamp + '　投稿総数 ' + latest.totalPosts + ' 件をもとに生成</span>' +
-        (isDemo
-          ? '<span style="font-size:11px;color:#d97706;margin-left:8px;">（デモ表示）</span>'
-          : '');
+        (isDemo ? '<span style="font-size:11px;color:#d97706;margin-left:8px;">（デモ表示）</span>' : '');
     }
  
-    // before/after 比較（前バージョンがある場合のみ表示）
     if (compareEl && prev) {
       compareEl.style.display = "block";
       compareEl.innerHTML =
@@ -289,16 +283,16 @@ async function loadLiveCivicVision() {
         '前回（' + prev.version + '）との比較</h4>' +
         '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">' +
           '<div style="border-radius:12px;padding:14px;background:#f8fafc;border:.5px solid #e2e8f0;">' +
-            '<div style="font-size:11px;font-weight:700;color:#64748b;margin-bottom:8px;">▼ 前回 ' + prev.version + '</div>' +
+            '<div style="font-size:11px;font-weight:700;color:#64748b;margin-bottom:8px;">' +
+            '▼ 前回 ' + prev.version + '</div>' +
             '<div style="font-size:13px;line-height:1.8;color:#64748b;">' +
-              prev.visionText.substring(0, 80) + '…' +
-            '</div>' +
+            prev.visionText.substring(0,80) + '…</div>' +
           '</div>' +
           '<div style="border-radius:12px;padding:14px;background:#f0fdf4;border:.5px solid #bbf7d0;">' +
-            '<div style="font-size:11px;font-weight:700;color:#15803d;margin-bottom:8px;">✅ 最新 ' + latest.version + '</div>' +
+            '<div style="font-size:11px;font-weight:700;color:#15803d;margin-bottom:8px;">' +
+            '✅ 最新 ' + latest.version + '</div>' +
             '<div style="font-size:13px;line-height:1.8;color:#1e293b;">' +
-              latest.visionText.substring(0, 80) + '…' +
-            '</div>' +
+            latest.visionText.substring(0,80) + '…</div>' +
           '</div>' +
         '</div>';
     } else if (compareEl) {
@@ -313,6 +307,19 @@ async function loadLiveCivicVision() {
     console.error("loadLiveCivicVision エラー:", e);
   }
 }
+─────────────────────────────────────────
+ 
+=================================================================
+【確認方法】
+ブラウザのコンソール（F12）を開いて
+「最新アップデートの Civic Vision を見る」ボタンを押したとき
+ 
+✅ 正常なら → "visionHistory取得失敗。デモデータで表示します" と表示
+   （デモデータが表示される）
+ 
+❌ まだエラーなら → エラーメッセージをお知らせください
+=================================================================
+ 
  
 
     const latest = data[0];  // 最新（reverse済みで先頭が最新）
