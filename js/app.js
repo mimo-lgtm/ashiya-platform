@@ -8,7 +8,7 @@
 // =====================================================================
 
 // ★ GASを再デプロイしたら、新しいURLに必ず書き換えてください
-const GAS_URL = "https://script.google.com/macros/s/AKfycbzl7gVPNctXbgZF52jsyyE8M94-p2vIc_lp2NjuVPHxjRTkmR2SC3lDQtX5WoET_iS07A/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbz9BYdtfuoqz9rBBGtap-W8RBxOvuP9xwrfCzu6CP2d7mCdOmbSjztT_M5FxboN9spTng/exec";
 
 const OTHER_LABEL = "その他";
 
