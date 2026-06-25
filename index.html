@@ -621,12 +621,12 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
   <div class="logo">🏛 市民提案AIプラットフォーム</div>
   <nav>
     <button onclick="showPage('intro')">ホーム</button>
-    <button onclick="showPage('tree')">Policy Logic Tree</button>
+    <button onclick="showPage('tree')">アイデアの地図</button>
     <button onclick="showPage('assistant')">AI壁打ち</button>
     <button onclick="showPage('merge')">統合</button>
     <button onclick="showPage('analysis')">📊 分析</button>
-    <button onclick="showPage('pullrequest')">PULL REQUEST</button>
-    <button onclick="showPage('vision')">🧭 Civic Vision</button>
+    <button onclick="showPage('pullrequest')">提案箱(PR)</button>
+    <button onclick="showPage('vision')">🧭 みんなの未来図</button>
   </nav>
 </header>
 
@@ -666,10 +666,9 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
 <section id="tree" class="page">
   <div class="tree-page-wrap">
     <div class="tree-vision-card">
-      <h2>🌳 Policy Logic Tree</h2>
+      <h2>🌳 みんなの未来図</h2>
       <p>コストセンターからプロフィットセンターへ：市民のウェルビーイングと知財の集積による投資型都市経営の実現</p>
-      <p style="font-size:12px; color:#64748b; margin-top:8px;">中分類・小分類は市民の投稿によって動的に追加されます。</p>
-    </div>
+       </div>
     <div style="padding:0; margin-bottom:20px;">
       <img src="/ashiya-platform/images/log.tree4.jpg" alt="ロジツリー" style="width:100%; border-radius:14px; margin-bottom:16px;">
       <!-- 5つの大分類ボード -->
@@ -694,7 +693,7 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
     <div class="card">
       <h2>あなたの考えを聞かせてください</h2>
       <p style="font-size:13px; color:#64748b; margin-bottom:12px;">思っていることを自由に書いてください。AIが内容を読んで自動的に分類します。</p>
-      <textarea id="userInput" rows="12" placeholder="芦屋市について思っていることを自由に書いてください..."></textarea>
+      <textarea id="userInput" rows="12" placeholder="芦屋市の公共施設について思っていることを自由に書いてください..."></textarea>
       <div style="margin-top:14px;">
         <button class="big-button" onclick="runAI()">🤖 AI壁打ちを実行する</button>
       </div>
@@ -740,15 +739,15 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
     <div style="margin-top:24px; display:grid; grid-template-columns:1fr; gap:12px;">
       <div style="background:linear-gradient(135deg,#eff6ff,#dbeafe); border-radius:16px; padding:20px 22px; border-left:5px solid #2563eb;">
         <div style="font-size:20px; margin-bottom:8px;">✅ あなたの投稿は、ちゃんと届いています</div>
-        <p style="font-size:15px; color:#1e40af; margin:0; line-height:1.8;">書いた意見は、AIが内容を読み取り、テーマに合ったカテゴリに自動で整理されます。PRページを見ると、あなたの意見がしっかり反映されているのが確認できます。</p>
+        <p style="font-size:15px; color:#1e40af; margin:0; line-height:1.8;">投稿された意見は、AIが内容を読み取り、テーマに合ったカテゴリに自動で整理されます。提案箱（PR）ページを見ると、あなたの意見がしっかり反映されているのが確認できます。</p>
       </div>
       <div style="background:linear-gradient(135deg,#f0fdf4,#dcfce7); border-radius:16px; padding:20px 22px; border-left:5px solid #16a34a;">
         <div style="font-size:20px; margin-bottom:8px;">🤝 似た意見は、いっしょに育っていきます</div>
         <p style="font-size:15px; color:#15803d; margin:0; line-height:1.8;">同じテーマの投稿が集まると、AIがそれらをまとめて「ひとつの提案」として整理します。あなたの意見は、他の市民の声と合わさって、より力強い提案へと成長していきます。</p>
       </div>
       <div style="background:linear-gradient(135deg,#fefce8,#fef9c3); border-radius:16px; padding:20px 22px; border-left:5px solid #d97706;">
-        <div style="font-size:20px; margin-bottom:8px;">🌳 どんな意見も、Policy Logic Treeに残ります</div>
-        <p style="font-size:15px; color:#92400e; margin:0; line-height:1.8;">投稿された意見はすべて、このプラットフォームの「Policy Logic Tree」に記録されます。小さな一言も、まちの未来を考える大切なデータです。どうぞ遠慮なく投稿してください。</p>
+        <div style="font-size:20px; margin-bottom:8px;">🌳 どんな意見も、アイデアの地図に残ります</div>
+        <p style="font-size:15px; color:#92400e; margin:0; line-height:1.8;">投稿された意見はすべて、このプラットフォームの「アイデアの地図」に記録されます。小さな一言も、まちの未来を考える大切なデータです。どうぞ遠慮なく投稿してください。</p>
       </div>
     </div>
   </div>
@@ -769,7 +768,7 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
       <div style="text-align:center; padding:20px 16px; background:linear-gradient(135deg,#fefce8,#fef9c3); border-radius:16px;">
         <div style="font-size:36px; margin-bottom:8px;">📋</div>
         <div style="font-weight:700; margin-bottom:6px; font-size:15px;">STEP 3</div>
-        <div style="font-size:13px; color:#92400e;">PRページに掲載<br>みんなが見られる形に</div>
+        <div style="font-size:13px; color:#92400e;">投稿箱(PR)ページに掲載<br>みんなが見られる形に</div>
       </div>
     </div>
   </div>
@@ -810,11 +809,11 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
     </div>
   </div>
 
-  <!-- Civic Visionとの整合性評価 -->
+  <!-- 初期ビジョンとの整合性評価 -->
   <div class="card">
-    <h2>🎯 Civic Visionとの整合性評価</h2>
+    <h2>🎯 初期ビジョンとの整合性評価</h2>
     <p style="font-size:14px; color:#475569; line-height:1.8; margin-bottom:16px;">
-      最初に設定した「Civic Vision（大分類）」と、市民投稿の総意の整合性を大分類ごとに評価します。
+      最初に設定した「ビジョン（大分類）」と、市民投稿の総意の整合性を大分類ごとに評価します。
     </p>
 
     <div class="alignment-bar-section" id="alignmentBarsArea">
@@ -836,7 +835,7 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
     <div class="analysis-significance">
       <h3>そもそも、この分析は何のためにあるのか</h3>
       <p>
-        このプラットフォームの最初に設定した「Civic Vision（大分類）」と、市民の投稿意見の総意のズレや一致をどのように捉えるか——それがこの分析の核心です。
+        このプラットフォームの最初に設定した「ビジョン（大分類）」と、市民の投稿意見の総意のズレや一致をどのように捉えるか——それがこの分析の核心です。
       </p>
       <p>
         <strong>投稿数の多さに引きずられると、ポピュリスト的な分析結果になりかねません。</strong>
@@ -870,7 +869,7 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
 
 <!-- ================= PULL REQUEST ================= -->
 <section id="pullrequest" class="page">
-  <h1>📋 PULL REQUEST</h1>
+  <h1>📋 提案箱</h1>
 
   <!-- ★ 投稿追跡バナー -->
   <div class="pr-track-banner" id="prTrackBanner" style="display:none;">
@@ -903,7 +902,7 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
     <div class="compass-ring">
       <div class="compass-ring-inner">🧭</div>
     </div>
-    <div class="compass-badge">CIVIC COMPASS — 不変の理念</div>
+    <div class="compass-badge">羅針盤 — 不変の理念</div>
     <h2>芦屋市の公共施設を、<br>コストから投資へ</h2>
     <p class="compass-sub">
       芦屋市の公共施設を、維持費がかかる「コスト」としてではなく、市民のウェルビーイング・知・経済価値を生み出す投資型の都市拠点として再定義する。市民の自由なアイデアと最先端テクノロジーが交わり、街全体の価値を上げ続ける場所。
@@ -921,20 +920,20 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
     <p style="font-size:14px; color:#475569; margin-bottom:16px;">このプラットフォームは、理念から実際の議論まで3つの層で構成されています。</p>
     <div class="three-layer">
       <div class="layer-box layer-top">
-        <div class="layer-label">LAYER 1 — 不変の理念</div>
+        <div class="layer-label">LAYER 1 — 羅針盤　不変の理念</div>
         <div class="layer-title">🧭 Civic Compass</div>
         <div class="layer-desc">コストセンターからプロフィットセンターへ（固定・変更なし）</div>
       </div>
       <div style="text-align:center;"><div class="layer-arrow-line" style="margin:0 auto;"></div></div>
       <div class="layer-box layer-mid">
-        <div class="layer-label">LAYER 2 — 不変の大分類</div>
+        <div class="layer-label">LAYER 2 — ビジョン　不変の大分類</div>
         <div class="layer-title">🎯 Civic Vision</div>
         <div class="layer-desc">5つの大分類（固定）。市民投稿の総意を反映してアップデートされる文章</div>
       </div>
       <div style="text-align:center;"><div class="layer-arrow-line" style="margin:0 auto;"></div></div>
       <div class="layer-box layer-bot">
         <div class="layer-label">LAYER 3 — 動的な議論</div>
-        <div class="layer-title">🌳 Policy Logic Tree</div>
+        <div class="layer-title">🌳 アイデアの地図</div>
         <div class="layer-desc">中分類・小分類。市民の投稿により動的に追加・更新される</div>
       </div>
     </div>
@@ -943,7 +942,7 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
   <!-- ── Civic Vision（大分類）メインビジュアル ── -->
   <div class="vision-main-block">
     <div class="vision-main-header">
-      <h3>🎯 CIVIC VISION — 大分類（不変）</h3>
+      <h3>🎯 ビジョン — 大分類（不変）</h3>
       <p style="color:#93c5fd; font-size:14px; margin:0;">芦屋駅前公共施設に関する5つの大分類の根幹となるビジョン</p>
     </div>
     <div class="vision-main-text">
@@ -980,7 +979,7 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
 
   <!-- ── なぜ大事か ── -->
   <div class="card">
-    <h2>なぜ Civic Compass が重要なのか</h2>
+    <h2>なぜ 羅針盤、ビジョンが重要なのか</h2>
     <div class="why-grid">
       <div class="why-card old-way">
         <h4>❌ これまでの公共施設のあり方</h4>
