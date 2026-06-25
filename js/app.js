@@ -8,7 +8,7 @@
 // =====================================================================
 
 // ★ GASを再デプロイしたら、新しいURLに必ず書き換えてください
-const GAS_URL = "https://script.google.com/macros/s/AKfycbx2FjfOBBFfzKdKaYHOrmdkp9pypd6BxFIYKuszFAyoaz1x6TE5yjDcYtFwAr-zOEO8BA/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbzlZY9AMrL4VpC4erC_gA3biHQ2a8bE4mrzhDTHpBMajPzVQPfJekYc5Zc7v2neBeDliw/exec";
 
 const OTHER_LABEL = "その他";
 
@@ -41,26 +41,59 @@ function findMain(text) {
 //   GASはPOSTでCORSプリフライトが通らないため
 //   POST も URLパラメータ付きGETで回避する方式を採用
 // =====================================================================
-async function fetchGAS(params) {
-  // GASはGETのURLパラメータでしか確実にCORSが通らない
-  // POSTデータはJSONをエンコードしてクエリに乗せる
-  const url = GAS_URL + "?mode=" + encodeURIComponent(params.mode || "") +
-    (params.payload ? "&data=" + encodeURIComponent(JSON.stringify(params.payload)) : "");
-  const res = await fetch(url);
-  if (!res.ok) throw new Error("HTTP " + res.status);
-  return await res.json();
+// =====================================================================
+// ★ GAS通信 — JSONP方式（CORSを完全回避）
+//   fetchはGASへのリクエストでCORSエラーが発生する。
+//   JSONPはscriptタグを動的生成するためCORSが起きない。
+//   GAS側でcallbackパラメータを受け取り callback(JSON) 形式で返す。
+// =====================================================================
+let _gasCallbackId = 0;
+
+function callGAS(mode, dataObj) {
+  return new Promise((resolve, reject) => {
+    const cbName = "_gasCb" + (++_gasCallbackId);
+
+    const timer = setTimeout(() => {
+      delete window[cbName];
+      const s = document.getElementById(cbName);
+      if (s) s.remove();
+      reject(new Error("タイムアウト（30秒）"));
+    }, 30000);
+
+    window[cbName] = (data) => {
+      clearTimeout(timer);
+      delete window[cbName];
+      const s = document.getElementById(cbName);
+      if (s) s.remove();
+      resolve(data);
+    };
+
+    let url = GAS_URL
+      + "?callback=" + encodeURIComponent(cbName)
+      + "&mode="     + encodeURIComponent(mode || "");
+    if (dataObj) {
+      url += "&data=" + encodeURIComponent(JSON.stringify(dataObj));
+    }
+
+    const script = document.createElement("script");
+    script.id    = cbName;
+    script.src   = url;
+    script.onerror = () => {
+      clearTimeout(timer);
+      delete window[cbName];
+      script.remove();
+      reject(new Error("スクリプト読み込みエラー。GASのURLを確認してください。"));
+    };
+    document.head.appendChild(script);
+  });
 }
 
-// ★ POSTをやめてGETに統一（GASのCORS制約を回避）
-// データはURLパラメータ経由で送信（GASはGETのみCORSが通る）
+// 後方互換ラッパー
+async function fetchGAS(params) {
+  return callGAS(params.mode);
+}
 async function postGAS(payload) {
-  // dataパラメータにJSONをエンコードして送る
-  const url = GAS_URL
-    + "?mode=" + encodeURIComponent(payload.mode || "")
-    + "&data=" + encodeURIComponent(JSON.stringify(payload));
-  const res = await fetch(url);
-  if (!res.ok) throw new Error("HTTP " + res.status);
-  return await res.json();
+  return callGAS(payload.mode, payload);
 }
 
 // =====================================================================
