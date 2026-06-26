@@ -1251,12 +1251,12 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
   <div class="logo">🏛 市民提案AIプラットフォーム</div>
   <nav>
     <button onclick="showPage('intro')">ホーム</button>
-    <button onclick="showPage('tree')">アイデアの地図</button>
+    <button onclick="showPage('tree')">Policy Logic Tree</button>
     <button onclick="showPage('assistant')">AI壁打ち</button>
-    <button onclick="showPage('merge')">統合のルール</button>
-    <button onclick="showPage('analysis')">📊 AI分析サマリー</button>
-    <button onclick="showPage('pullrequest')">提案箱(PR)</button>
-    <button onclick="showPage('vision')">🧭 みんなの未来図</button>
+    <button onclick="showPage('merge')">統合</button>
+    <button onclick="showPage('analysis')">📊 分析</button>
+    <button onclick="showPage('pullrequest')">PULL REQUEST</button>
+    <button onclick="showPage('vision')">🧭 Civic Vision</button>
   </nav>
 </header>
 
@@ -1264,14 +1264,13 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
 
 <!-- ================= INTRO ================= -->
 <section id="intro" class="page active">
-  <div class="tree-page-wrap">
-    <div class="tree-vision-card">
-     <h2>駅前公共施設について皆で考えよう</h2>
-     <p>このプラットフォームは、駅前の公共施設について、みなさんの声を自由に投稿できる場所です。投稿された意見は、AIが公平に整理し、誰もが見える形にしていきます。</p>
+  <div class="card">
+    <h1>駅前公共施設について皆で考えよう</h1>
+    <h2>このプラットフォームについて</h2>
+    <p>このプラットフォームは、駅前の公共施設について、みなさんの声を自由に投稿できる場所です。投稿された意見は、AIが公平に整理し、誰もが見える形にしていきます。</p>
     <p style="margin-top:10px;">設問はありません。自由に書いた声を、AIが公正な手法で整理し、誰もが確認できる形に残します。</p>
-    </div>
-   </div>
-   <div class="card" style="padding:0;overflow:hidden;">
+  </div>
+  <div class="card" style="padding:0;overflow:hidden;">
     <img src="images/intro.jpg" alt="市民政策AIプラットフォーム">
   </div>
   <div class="card">
@@ -1288,7 +1287,7 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
     <h2>投稿の流れ</h2>
     <p>自由に投稿する → AIが整理する → Policy Logic Treeにまとまる → みんなで眺められる</p>
     <div style="margin-top:16px;">
-      <button class="big-button" onclick="showPage('tree')">🌳 アイデアの地図を見る</button>
+      <button class="big-button" onclick="showPage('tree')">🌳 Policy Logic Treeを見る</button>
     </div>
   </div>
 </section>
@@ -1297,15 +1296,23 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
 <section id="tree" class="page">
   <div class="tree-page-wrap">
     <div class="tree-vision-card">
-      <h2>🌳 アイデアの地図</h2>
+      <h2>🌳 Policy Logic Tree</h2>
       <p>コストセンターからプロフィットセンターへ：市民のウェルビーイングと知財の集積による投資型都市経営の実現</p>
-      <p style="font-size:12px; color:FFFFFF; margin-top:8px;">市民の皆様の投稿を見てみよう！</p>
+      <p style="font-size:12px; color:#64748b; margin-top:8px;">中分類・小分類は市民の投稿によって動的に追加されます。</p>
     </div>
     <div style="padding:0; margin-bottom:20px;">
-      <img src="/ashiya-platform/images/ideaMap.jpg" alt="idea map" style="width:100%; border-radius:14px; margin-bottom:16px;">
+      <img src="/ashiya-platform/images/log.tree4.jpg" alt="ロジツリー" style="width:100%; border-radius:14px; margin-bottom:16px;">
       <!-- 5つの大分類ボード -->
       <div id="treeMainBoards" class="tree-main-boards">
         <!-- JS で描画 -->
+      </div>
+      <!-- ★ AI壁打ちへの誘導 -->
+      <div style="margin:14px 0;padding:16px 20px;background:linear-gradient(135deg,#0f2442,#1e3a5f);border-radius:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+        <div>
+          <p style="color:#93c5fd;font-size:13px;font-weight:700;margin-bottom:3px;">あなたの投稿をお待ちしています</p>
+          <p style="color:#cbd5e1;font-size:12px;margin:0;line-height:1.5;">思ったことを自由に書くだけ。AIが整理してこの地図に追加します。</p>
+        </div>
+        <button onclick="showPage('assistant')" style="background:linear-gradient(135deg,#2563eb,#06b6d4);color:#fff;border:none;padding:10px 18px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;">🤖 AI壁打ちをやってみる</button>
       </div>
       <!-- 中分類・小分類アコーデオン詳細 -->
       <div id="treeDetailArea" class="tree-detail-area" style="display:none;">
@@ -1317,13 +1324,7 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
 
 <!-- ================= ASSISTANT ================= -->
 <section id="assistant" class="page">
-  <div class="tree-page-wrap">
-    <div class="tree-vision-card">
-     <h2>🤖 AI壁打ち</h2>
-     <p>このページは、駅前の公共施設について、みなさんの声を自由に投稿できる場所です。</p>
-    </div>
-   </div>
- 
+  <h1>🤖 AI壁打ち</h1>
   <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px;">
     <img src="images/aiWall.jpg" alt="AI壁打ち">
   </div>
@@ -1364,16 +1365,11 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
 
 <!-- ================= MERGE（旧：統合分析ページ → 統合ページ） ================= -->
 <section id="merge" class="page">
-  <div class="tree-page-wrap">
-    <div class="tree-vision-card">
-     <h2>🔗 統合</h2>
-     <p>このページは、みなさんの投稿がどのように統合されるかの仕組みを解説してます</p>
-    </div>
-      <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px;">
-    <img src="images/ai-labo.jpg" alt="統合" style="border-radius:14px;"> </div>
-   </div>
+  <h1>🔗 統合</h1>
+  <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px;">
+    <img src="images/ai-labo.jpg" alt="統合" style="border-radius:14px;">
+  </div>
 
- 
   <div class="card">
     <h2>まずはこの4コマをどうぞ！</h2>
     <p style="margin-bottom:16px; color:#475569;">「私の意見、ちゃんと届いてるの？」という疑問にお答えします。</p>
@@ -1389,8 +1385,8 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
         <p style="font-size:15px; color:#15803d; margin:0; line-height:1.8;">同じテーマの投稿が集まると、AIがそれらをまとめて「ひとつの提案」として整理します。あなたの意見は、他の市民の声と合わさって、より力強い提案へと成長していきます。</p>
       </div>
       <div style="background:linear-gradient(135deg,#fefce8,#fef9c3); border-radius:16px; padding:20px 22px; border-left:5px solid #d97706;">
-        <div style="font-size:20px; margin-bottom:8px;">🌳 どんな意見も、投稿箱に残ります</div>
-        <p style="font-size:15px; color:#92400e; margin:0; line-height:1.8;">投稿された意見はすべて、このプラットフォームの「アイデアの地図」に記録されます。小さな一言も、まちの未来を考える大切なデータです。どうぞ遠慮なく投稿してください。</p>
+        <div style="font-size:20px; margin-bottom:8px;">🌳 どんな意見も、Policy Logic Treeに残ります</div>
+        <p style="font-size:15px; color:#92400e; margin:0; line-height:1.8;">投稿された意見はすべて、このプラットフォームの「Policy Logic Tree」に記録されます。小さな一言も、まちの未来を考える大切なデータです。どうぞ遠慮なく投稿してください。</p>
       </div>
     </div>
   </div>
@@ -1529,15 +1525,14 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
 
 <!-- ================= ANALYSIS（新設） ================= -->
 <section id="analysis" class="page">
-  <div class="tree-page-wrap">
-    <div class="tree-vision-card">
-     <h2>📊 現在の市民の声 — AI分析サマリー</h2>
-     <p>このページは、今まで市民の方が投稿されてきた内容を分析しているページです。初期に設定したビジョンとの乖離、その理由を統計的にAIが分析しています。</p>
-    </div>
-      <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px;">
-    <img src="images/bib.jpg" alt="統合" style="border-radius:14px;"> </div>
-   </div>
-  
+  <h1>📊 分析</h1>
+
+  <!-- AI分析サマリー（リアルタイム） -->
+  <div class="card">
+    <h2>📊 現在の市民の声 — AI分析サマリー</h2>
+    <p style="font-size:13px; color:#64748b; margin-bottom:4px;">
+      投稿データをリアルタイムに集計しています。
+    </p>
     <div class="analysis-grid">
       <div class="analysis-card">
         <h4>総投稿数</h4>
@@ -1623,14 +1618,7 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
 
 <!-- ================= PULL REQUEST ================= -->
 <section id="pullrequest" class="page">
-    <div class="tree-page-wrap">
-    <div class="tree-vision-card">
-     <h2>提案箱 (Pull Request)</h2>
-     <p>このページでは、みなさんの投稿、そして統合された投稿を見ることが出来ます。</p>
-    </div>
-      <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px;">
-    <img src="images/cityCompass.jpg" alt="統合" style="border-radius:14px;"> </div>
-   </div>
+  <h1>📋 PULL REQUEST</h1>
 
   <!-- ★ 投稿追跡バナー -->
   <div class="pr-track-banner" id="prTrackBanner" style="display:none;">
@@ -1657,42 +1645,53 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
 
 <!-- ================= CIVIC VISION ================= -->
 <section id="vision" class="page">
- <div class="tree-page-wrap">
-    <div class="tree-vision-card">
-     <h2>みんなの未来図</h2>
-     <p>このページでは、みなさんの投稿によって初期のビジョンが変遷していく過程をみることができます</p>
-      <p>このプラットフォームのクライマックスです。AIが市民のみんなの投稿と膨大なデータをバランスよく分析して答えを導き出します。</p>
-    </div>
-      <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px;">
-    <img src="images/futue5.jpg" alt="未来図" style="border-radius:14px;"> </div>
-   </div>
 
-  <div style="margin-top:24px; display:grid; grid-template-columns:1fr; gap:12px;">
-      <div style="background:linear-gradient(135deg,#eff6ff,#dbeafe); border-radius:16px; padding:20px 22px; border-left:5px solid #2563eb;">
-        <div style="font-size:20px; margin-bottom:8px;">✅ CIVIC COMPASS 羅針盤— 不変の理念</div>
-        <p style="font-size:15px; color:#1e40af; margin:0; line-height:1.8;">芦屋市の公共施設をコストから投資へ</p>
-      </div>
-      <div style="background:linear-gradient(135deg,#f0fdf4,#dcfce7); border-radius:16px; padding:20px 22px; border-left:5px solid #16a34a;">
-        <div style="font-size:20px; margin-bottom:8px;">🤝 もう少し、具体的に表現するとーー</div>
-        <p style="font-size:15px; color:#15803d; margin:0; line-height:1.8;">芦屋市の公共施設を、維持費がかかる「コスト」としてではなく、市民のウェルビーイング・知・経済価値を生み出す投資型の都市拠点として再定義する。市民の自由なアイデアと最先端テクノロジーが交わり、街全体の価値を上げ続ける場所。
-</p>
-      </div>
-      <div style="background:linear-gradient(135deg,#fefce8,#fef9c3); border-radius:16px; padding:20px 22px; border-left:5px solid #d97706;">
-        <div style="font-size:20px; margin-bottom:8px;">🌳 キャッチフレーズは３つ</div>
-    <p> <span class="compass-pillar" style="background:rgba(245,158,11,.2);">コストセンターからプロフィットセンターへ</span>
+  <!-- ── Civic Compass（理念） ── -->
+  <div class="compass-hero">
+    <div class="compass-ring">
+      <div class="compass-ring-inner">🧭</div>
+    </div>
+    <div class="compass-badge">CIVIC COMPASS — 不変の理念</div>
+    <h2>芦屋市の公共施設を、<br>コストから投資へ</h2>
+    <p class="compass-sub">
+      芦屋市の公共施設を、維持費がかかる「コスト」としてではなく、市民のウェルビーイング・知・経済価値を生み出す投資型の都市拠点として再定義する。市民の自由なアイデアと最先端テクノロジーが交わり、街全体の価値を上げ続ける場所。
+    </p>
+    <div class="compass-pillars">
+      <span class="compass-pillar" style="background:rgba(37,99,235,.2);">コストセンターからプロフィットセンターへ</span>
       <span class="compass-pillar" style="background:rgba(16,185,129,.2);">市民のウェルビーイングと知財の集積</span>
       <span class="compass-pillar" style="background:rgba(245,158,11,.2);">投資型都市経営の実現</span>
-</p>
+    </div>
+  </div>
+
+  <!-- ── 構造図（3層） ── -->
+  <div class="card">
+    <h2>🏗 プラットフォームの3層構造</h2>
+    <p style="font-size:14px; color:#475569; margin-bottom:16px;">このプラットフォームは、理念から実際の議論まで3つの層で構成されています。</p>
+    <div class="three-layer">
+      <div class="layer-box layer-top">
+        <div class="layer-label">LAYER 1 — 不変の理念</div>
+        <div class="layer-title">🧭 Civic Compass</div>
+        <div class="layer-desc">コストセンターからプロフィットセンターへ（固定・変更なし）</div>
+      </div>
+      <div style="text-align:center;"><div class="layer-arrow-line" style="margin:0 auto;"></div></div>
+      <div class="layer-box layer-mid">
+        <div class="layer-label">LAYER 2 — 不変の大分類</div>
+        <div class="layer-title">🎯 Civic Vision</div>
+        <div class="layer-desc">5つの大分類（固定）。市民投稿の総意を反映してアップデートされる文章</div>
+      </div>
+      <div style="text-align:center;"><div class="layer-arrow-line" style="margin:0 auto;"></div></div>
+      <div class="layer-box layer-bot">
+        <div class="layer-label">LAYER 3 — 動的な議論</div>
+        <div class="layer-title">🌳 Policy Logic Tree</div>
+        <div class="layer-desc">中分類・小分類。市民の投稿により動的に追加・更新される</div>
       </div>
     </div>
- 
-
-  
+  </div>
 
   <!-- ── Civic Vision（大分類）メインビジュアル ── -->
   <div class="vision-main-block">
     <div class="vision-main-header">
-      <h3>🎯 CIVIC VISION（ビジョン） — 大分類（不変）</h3>
+      <h3>🎯 CIVIC VISION — 大分類（不変）</h3>
       <p style="color:#93c5fd; font-size:14px; margin:0;">芦屋駅前公共施設に関する5つの大分類の根幹となるビジョン</p>
     </div>
     <div class="vision-main-text">
@@ -1712,18 +1711,57 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
     </div>
     <div class="vision-consensus-body">
       <p>市民の投稿が積み重なるにつれ、AIがその総意を分析し、Civic Visionの内容を動的に更新します。</p>
-      <div id="visionLiveVersion" style="margin-bottom:10px;min-height:22px;"></div>
 
-      <div id="visionLiveVersion" style="margin-bottom:10px;min-height:22px;"></div>
-      <div class="vision-live-text" id="visionLiveText">
-  読み込み中…
-</div>
-<div id="visionCompareArea" style="display:none;margin-top:16px;"></div>
+      <!-- ★ 5分野ウェイト調整パネル -->
+      <div style="background:#f8fafc;border-radius:14px;padding:16px 18px;margin-bottom:14px;border:1px solid #e2e8f0;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;gap:8px;flex-wrap:wrap;">
+          <div>
+            <p style="font-size:13px;font-weight:700;color:#0f172a;margin:0 0 3px;">📐 5分野の設計ウェイト調整</p>
+            <p style="font-size:11px;color:#64748b;margin:0;line-height:1.5;">管理者のみが調整できる唯一のパラメータです。合計が100になるよう設定してください。</p>
+          </div>
+          <span style="font-size:12px;background:#dbeafe;color:#1e40af;padding:3px 10px;border-radius:999px;font-weight:700;white-space:nowrap;">合計：<span id="weightTotal">100</span>pt</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:12px;">
+          <div style="text-align:center;">
+            <div style="font-size:10px;color:#64748b;margin-bottom:4px;line-height:1.4;">①<br>価値向上</div>
+            <input type="number" id="w1" value="20" min="0" max="100" oninput="updateWeightTotal()" style="width:100%;text-align:center;font-size:14px;font-weight:700;padding:6px 2px;border:1.5px solid #bfdbfe;border-radius:8px;background:#eff6ff;color:#1e40af;">
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:10px;color:#64748b;margin-bottom:4px;line-height:1.4;">②<br>ウェルビーイング</div>
+            <input type="number" id="w2" value="25" min="0" max="100" oninput="updateWeightTotal()" style="width:100%;text-align:center;font-size:14px;font-weight:700;padding:6px 2px;border:1.5px solid #bfdbfe;border-radius:8px;background:#eff6ff;color:#1e40af;">
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:10px;color:#64748b;margin-bottom:4px;line-height:1.4;">③<br>財政的持続</div>
+            <input type="number" id="w3" value="20" min="0" max="100" oninput="updateWeightTotal()" style="width:100%;text-align:center;font-size:14px;font-weight:700;padding:6px 2px;border:1.5px solid #bfdbfe;border-radius:8px;background:#eff6ff;color:#1e40af;">
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:10px;color:#64748b;margin-bottom:4px;line-height:1.4;">④<br>施設の戦略</div>
+            <input type="number" id="w4" value="20" min="0" max="100" oninput="updateWeightTotal()" style="width:100%;text-align:center;font-size:14px;font-weight:700;padding:6px 2px;border:1.5px solid #bfdbfe;border-radius:8px;background:#eff6ff;color:#1e40af;">
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:10px;color:#64748b;margin-bottom:4px;line-height:1.4;">⑤<br>都市ガバナンス</div>
+            <input type="number" id="w5" value="15" min="0" max="100" oninput="updateWeightTotal()" style="width:100%;text-align:center;font-size:14px;font-weight:700;padding:6px 2px;border:1.5px solid #bfdbfe;border-radius:8px;background:#eff6ff;color:#1e40af;">
+          </div>
+        </div>
+        <div style="font-size:11px;color:#92400e;background:#fefce8;border-radius:8px;padding:8px 12px;border-left:3px solid #d97706;line-height:1.6;">
+          💡 <strong>この機能について：</strong>ウェイトを変更して下のボタンを押すと、新しい比率がAIのVision生成に反映されます。投稿数の多数決を防ぎ、行政の設計意図を保持するための唯一の調整手段です。
+        </div>
+      </div>
 
-<div id="visionCompareArea" style="display:none;margin-top:16px;"></div>      
-<div class="vision-live-illust" id="visionLiveIllust">
-  🌱
-</div>
+      <!-- ★ 注意文 -->
+      <div style="background:#fefce8;border-radius:10px;padding:10px 14px;margin-bottom:16px;border-left:3px solid #d97706;font-size:12px;color:#92400e;line-height:1.7;">
+        ⚠️ <strong>ご注意：</strong>Civic Visionの更新内容に明確な変化が現れるためには、目安として<strong>50件程度の統合投稿</strong>が必要です。投稿数が少ない段階では、初期Visionとほぼ同じ内容が表示される場合があります。
+      </div>
+
+      <!-- バージョン表示（ボタン押下後に表示） -->
+      <div id="visionLiveVersion" style="margin-bottom:10px;min-height:0;display:none;"></div>
+      <!-- Vision本文（ボタン押下前は非表示） -->
+      <div class="vision-live-text" id="visionLiveText" style="display:none;"></div>
+      <!-- before/after 比較エリア -->
+      <div id="visionCompareArea" style="display:none;margin-top:16px;"></div>
+      <!-- イラスト（ボタン押下後に表示） -->
+      <div class="vision-live-illust" id="visionLiveIllust" style="display:none;">🌳</div>
+
       <div class="vision-cta">
         <p>市民の意見の総意を反映した 駅前公共施設のあり方です</p>
         <button class="big-button success" onclick="loadLiveCivicVision()">
@@ -1735,7 +1773,7 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
 
   <!-- ── なぜ大事か ── -->
   <div class="card">
-    <h2>なぜ Civic Compass （羅針盤・理念）が重要なのか</h2>
+    <h2>なぜ Civic Compass が重要なのか</h2>
     <div class="why-grid">
       <div class="why-card old-way">
         <h4>❌ これまでの公共施設のあり方</h4>
@@ -1756,30 +1794,6 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
         </ul>
       </div>
     </div>
-    <!-- ── 構造図（3層） ── -->
-  <div class="card">
-    <h2>🏗 プラットフォームの3層構造</h2>
-    <p style="font-size:14px; color:#475569; margin-bottom:16px;">このプラットフォームは、理念から実際の議論まで3つの層で構成されています。</p>
-    <div class="three-layer">
-      <div class="layer-box layer-top">
-        <div class="layer-label">LAYER 1 — 羅針盤・不変の理念</div>
-        <div class="layer-title">🧭 Civic Compass</div>
-        <div class="layer-desc">コストセンターからプロフィットセンターへ（固定・変更なし）</div>
-      </div>
-      <div style="text-align:center;"><div class="layer-arrow-line" style="margin:0 auto;"></div></div>
-      <div class="layer-box layer-mid">
-        <div class="layer-label">LAYER 2 — ビジョン・不変の大分類</div>
-        <div class="layer-title">🎯 Civic Vision</div>
-        <div class="layer-desc">5つの大分類（固定）。市民投稿の総意を反映してアップデートされる文章</div>
-      </div>
-      <div style="text-align:center;"><div class="layer-arrow-line" style="margin:0 auto;"></div></div>
-      <div class="layer-box layer-bot">
-        <div class="layer-label">LAYER 3 — 動的な議論</div>
-        <div class="layer-title">🌳 アイデアの地図</div>
-        <div class="layer-desc">中分類・小分類。市民の投稿により動的に追加・更新される</div>
-      </div>
-    </div>
-  </div>
   </div>
 
 </section>
@@ -1990,100 +2004,113 @@ async function loadAnalysisData() {
 //   投稿数の多数決ではなく、設計ウェイト×投稿比率×AI質的判断の結果を使う
 // =====================================================================
 async function loadLiveCivicVision() {
-  const liveText    = document.getElementById("visionLiveText");
-  const liveIllust  = document.getElementById("visionLiveIllust");
-  const versionEl   = document.getElementById("visionLiveVersion");
-  const compareEl   = document.getElementById("visionCompareArea");
+  const liveText   = document.getElementById("visionLiveText");
+  const liveIllust = document.getElementById("visionLiveIllust");
+  const versionEl  = document.getElementById("visionLiveVersion");
+  const compareEl  = document.getElementById("visionCompareArea");
 
   if (!liveText) return;
-  liveText.innerHTML = '<span style="color:#64748b;">市民の投稿データを読み込み中…</span>';
+
+  // ★ スクロールしない：in-placeで表示を更新するだけ
+  liveText.innerHTML = '<span style="color:var(--color-text-secondary);font-size:14px;">市民の投稿データを読み込み中…</span>';
   if (versionEl) versionEl.innerHTML = "";
 
+  // ★ デモデータ（VisionHistoryが空の場合に表示するサンプル）
+  const DEMO_HISTORY = [
+    {
+      version   : "v1（最新）",
+      timestamp : "2025年6月末",
+      totalPosts: 12,
+      visionText:
+        "駅前公共施設を、単なる利用の場ではなく、市民の学び・挑戦・交流が自然に芽生え育っていく"成長する拠点"へ転換する。特に子育て世代からの声が多く集まっており、子どもから高齢者まで多世代が気軽に立ち寄れるサードプレイスとしての機能が期待されている。市民とともに育て、芦屋の価値を静かに、しかし確実に積み上げていく。",
+      reason    :
+        "投稿12件のうち、ウェルビーイング分野（多世代交流・サードプレイス）への関心が最も高く、設計ウェイトとのバランスを考慮してこの部分を強調する形でVisionを更新しました。"
+    },
+    {
+      version   : "v0（初期）",
+      timestamp : "プラットフォーム開設時",
+      totalPosts: 0,
+      visionText:
+        "駅前公共施設を、単なる利用の場ではなく、市民の学び・挑戦・交流が自然に芽生え、広がり、街の魅力を育てていく"成長する拠点"へと転換する。行政が一方的に提供する施設ではなく、市民とともに育て、市民の力が循環し、芦屋の価値が静かに、しかし確実に積み上がっていく"まちの育ち場"として再構築する。",
+      reason    : "初期設定のCivic Vision（プラットフォーム開設時）"
+    }
+  ];
+
   try {
-    // まず投稿一覧を取得（キャッシュ優先）
-    if (cachedRows.length === 0) {
-      const listData = await callGAS("list");
-      if (Array.isArray(listData)) cachedRows = listData;
-    }
-
-    // visionHistoryを取得
-    let visionData = [];
-    try {
-      visionData = await callGAS("visionHistory");
-      if (!Array.isArray(visionData)) visionData = [];
-    } catch(e) {
-      console.warn("visionHistory取得失敗、フォールバックモードで表示:", e.message);
-    }
-
-    const data = visionData;
-
-    if (!Array.isArray(data) || data.length === 0) {
-      // visionHistoryがまだない場合 → 初期Visionと投稿状況を表示
-      const total = cachedRows.length;
-      const counts = {};
-      MAIN_CATEGORIES.forEach(m => counts[m.label] = 0);
-      cachedRows.forEach(r => {
-        const m = findMain(r.main || r.category);
-        counts[m.label] = (counts[m.label] || 0) + 1;
-      });
-      const sorted = Object.entries(counts).sort((a,b) => b[1]-a[1]);
-
-      liveText.innerHTML =
-        '<div style="font-size:15px;line-height:1.9;color:#1e293b;margin-bottom:14px;">' +
-        "駅前公共施設を、単なる利用の場ではなく、市民の学び・挑戦・交流が自然に芽生え、広がり、街の魅力を育てていく\"成長する拠点\"へと転換する。" +
-        "ここでは、子どもから大人まで、多様な人が自分の興味や得意を持ち寄り、新しい活動やつながりが生まれる。" +
-        "市民とともに育て、芦屋の価値が静かに、しかし確実に積み上がっていく\"まちの育ち場\"として再構築する。" +
-        '</div>' +
-        '<div style="font-size:13px;color:#059669;background:#dcfce7;border-radius:8px;padding:10px 14px;border-left:3px solid #16a34a;">' +
-        '📝 <strong>現在の状況：</strong>' +
-        (total > 0
-          ? `市民の投稿 ${total}件を受けて分析中。月末に最初のVision更新が行われます。`
-          : "まだ投稿がありません。月末更新まで初期Visionを表示しています。") +
-        '</div>';
-
-      if (versionEl) versionEl.innerHTML =
-        '<span style="background:#fef9c3;color:#92400e;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:700;margin-right:8px;">v0（初期）</span>' +
-        '<span style="font-size:12px;color:#64748b;">プラットフォーム開設時のCivic Vision</span>';
-      if (liveIllust) liveIllust.innerHTML = "🌱";
+    // visionHistoryを取得（失敗してもデモにフォールバック）
+    // ★ 画面のウェイト入力値を取得してVision生成に反映
+    const customWeights = {
+      "①": parseInt(document.getElementById("w1")?.value) || 20,
+      "②": parseInt(document.getElementById("w2")?.value) || 25,
+      "③": parseInt(document.getElementById("w3")?.value) || 20,
+      "④": parseInt(document.getElementById("w4")?.value) || 20,
+      "⑤": parseInt(document.getElementById("w5")?.value) || 15,
+    };
+    const weightTotal = Object.values(customWeights).reduce((a,b)=>a+b,0);
+    if (weightTotal !== 100) {
+      if (liveText) {
+        liveText.style.display = "block";
+        liveText.innerHTML = '<div style="color:#dc2626;background:#fee2e2;border-radius:8px;padding:12px 14px;font-size:14px;">⚠️ ウェイトの合計が ' + weightTotal + ' pt です。合計が100になるよう調整してください。</div>';
+      }
       return;
     }
 
-    const latest = data[0];  // 最新（reverse済みで先頭が最新）
-    const prev   = data[1];  // 一つ前
+    let data = [];
+    try {
+      data = await callGAS("visionHistory");
+      if (!Array.isArray(data) || data.length === 0) throw new Error("empty");
+    } catch(e) {
+      console.warn("visionHistory取得失敗。デモデータで表示します:", e.message);
+      data = DEMO_HISTORY;
+    }
 
-    // ★ AIが生成したVision本文をそのまま表示（投稿数カウントで動的生成しない）
+    const latest = data[0];
+    const prev   = data.length > 1 ? data[1] : null;
+
+    // ★ ボタン押下後にコンテンツエリアを表示
+    liveText.style.display = "block";
+    if (liveIllust) liveIllust.style.display = "flex";
+    if (versionEl) { versionEl.style.display = "block"; versionEl.style.minHeight = "22px"; }
+
+    // ★ Vision本文を表示（デモか実データかに関わらず同じ処理）
     liveText.innerHTML =
-      '<div style="font-size:15px;line-height:1.9;color:#1e293b;margin-bottom:14px;">' +
+      '<div style="font-size:15px;line-height:1.9;color:var(--color-text-primary);margin-bottom:14px;">' +
         latest.visionText +
       '</div>' +
       (latest.reason
-        ? '<div style="font-size:13px;color:#059669;background:#dcfce7;border-radius:8px;' +
-          'padding:10px 14px;border-left:3px solid #16a34a;line-height:1.7;">' +
-          '📝 <strong>このVisionになった理由：</strong>' + latest.reason + '</div>'
+        ? '<div style="font-size:13px;background:var(--color-background-success);border-radius:8px;' +
+          'padding:10px 14px;border-left:3px solid var(--color-border-success);line-height:1.7;color:var(--color-text-success);">' +
+          '<strong>このVisionになった理由：</strong><br>' + latest.reason + '</div>'
         : '');
 
+    // バージョン・更新日・投稿数
     if (versionEl) {
+      const isDemolatest = (latest === DEMO_HISTORY[0] && data === DEMO_HISTORY);
       versionEl.innerHTML =
-        '<span style="background:#dcfce7;color:#15803d;padding:2px 10px;border-radius:999px;' +
-        'font-size:12px;font-weight:700;margin-right:8px;">' + latest.version + '</span>' +
-        '<span style="font-size:12px;color:#64748b;">' + latest.timestamp +
-        ' 更新　投稿総数 ' + latest.totalPosts + ' 件をもとに生成</span>';
+        '<span style="background:var(--color-background-success);color:var(--color-text-success);' +
+        'padding:2px 10px;border-radius:999px;font-size:12px;font-weight:500;margin-right:8px;">' +
+        latest.version + '</span>' +
+        '<span style="font-size:12px;color:var(--color-text-secondary);">' +
+        latest.timestamp + '　投稿総数 ' + latest.totalPosts + ' 件をもとに生成</span>' +
+        (isDemolatest
+          ? '<span style="font-size:11px;color:var(--color-text-warning);margin-left:8px;">（デモ表示）</span>'
+          : '');
     }
 
-    // before/after 比較（前バージョンがある場合のみ）
+    // before/after 比較（前バージョンがある場合）
     if (compareEl && prev) {
       compareEl.style.display = "block";
       compareEl.innerHTML =
-        '<h4 style="font-size:14px;font-weight:700;color:#1e293b;margin-bottom:12px;">' +
-        '📊 前回（' + prev.version + '）との比較</h4>' +
-        '<div class="vision-compare">' +
-          '<div class="vision-compare-box before">' +
-            '<div class="vision-compare-label">▼ 前回 ' + prev.version + '（' + prev.timestamp + '）</div>' +
-            '<div class="vision-compare-text">' + prev.visionText + '</div>' +
+        '<h4 style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:12px;">' +
+        '前回（' + prev.version + '）との比較</h4>' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">' +
+          '<div style="border-radius:12px;padding:14px;background:var(--color-background-secondary);border:.5px solid var(--color-border-tertiary);">' +
+            '<div style="font-size:11px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;">▼ 前回 ' + prev.version + '</div>' +
+            '<div style="font-size:13px;line-height:1.8;color:var(--color-text-secondary);">' + prev.visionText.substring(0,80) + '…</div>' +
           '</div>' +
-          '<div class="vision-compare-box after">' +
-            '<div class="vision-compare-label">✅ 最新 ' + latest.version + '（' + latest.timestamp + '）</div>' +
-            '<div class="vision-compare-text">' + latest.visionText + '</div>' +
+          '<div style="border-radius:12px;padding:14px;background:var(--color-background-success);border:.5px solid var(--color-border-success);">' +
+            '<div style="font-size:11px;font-weight:500;color:var(--color-text-success);margin-bottom:8px;">✅ 最新 ' + latest.version + '</div>' +
+            '<div style="font-size:13px;line-height:1.8;color:var(--color-text-primary);">' + latest.visionText.substring(0,80) + '…</div>' +
           '</div>' +
         '</div>';
     } else if (compareEl) {
@@ -2094,7 +2121,7 @@ async function loadLiveCivicVision() {
 
   } catch(e) {
     if (liveText) liveText.innerHTML =
-      '<span style="color:#dc2626;">データの読み込みに失敗しました（' + e.message + '）</span>';
+      '<span style="color:var(--color-text-danger);">データの読み込みに失敗しました（' + e.message + '）</span>';
     console.error("loadLiveCivicVision エラー:", e);
   }
 }
@@ -2635,6 +2662,26 @@ function continueEditing() {
 // =====================================================================
 // 初期化
 // =====================================================================
+// =====================================================================
+// ウェイト合計の表示更新
+// =====================================================================
+function updateWeightTotal() {
+  const ids = ["w1","w2","w3","w4","w5"];
+  const total = ids.reduce((sum, id) => {
+    const el = document.getElementById(id);
+    return sum + (el ? parseInt(el.value) || 0 : 0);
+  }, 0);
+  const el = document.getElementById("weightTotal");
+  if (el) {
+    el.textContent = total;
+    const badge = el.closest("span");
+    if (badge) {
+      badge.style.background = total === 100 ? "#dcfce7" : "#fee2e2";
+      badge.style.color      = total === 100 ? "#15803d" : "#dc2626";
+    }
+  }
+}
+
 window.addEventListener("DOMContentLoaded", () => {
   showPage("intro");
 });
@@ -2661,8 +2708,3 @@ function switchMergeTab(tab) {
 </script>
 </body>
 </html>
-
- 
-Leave a comment
-Footer
-© 2026 GitHub, Inc.
