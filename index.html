@@ -1844,52 +1844,51 @@ function startVoiceInput() {
       <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px;">
     <img src="images/minnna.jpg" alt="未来図" style="border-radius:14px;"> </div>
    </div>
-<div class="card" style="background:linear-gradient(135deg,#0f172a,#1e1b4b);color:#fff;border:none;overflow:hidden;position:relative;">
-  <div style="position:absolute;top:-20px;right:-20px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(139,92,246,.2) 0%,transparent 70%);pointer-events:none;"></div>
+    <!-- ── 市民の総意（リアルタイム更新） ── -->
+ <div style="background:linear-gradient(135deg,#0a1628 0%,#0f2442 60%,#1a1a3e 100%);border-radius:20px;padding:30px 26px;margin-bottom:24px;position:relative;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.25);">
+  <!-- 背景装飾 -->
+  <div style="position:absolute;top:-40px;right:-40px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.15) 0%,transparent 70%);pointer-events:none;"></div>
+  <div style="position:absolute;bottom:-30px;left:-30px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(16,185,129,.12) 0%,transparent 70%);pointer-events:none;"></div>
  
-  <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
-    <div style="width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#7c3aed,#6d28d9);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;box-shadow:0 4px 14px rgba(109,40,217,.4);">🌏</div>
-    <div>
-      <div style="font-size:12px;font-weight:700;letter-spacing:.08em;color:#a78bfa;margin-bottom:3px;">STEP 4 — このプロジェクトのメインイベント</div>
-      <h2 style="color:#f0f9ff;font-size:20px;font-weight:900;margin:0;">みんなの投稿による未来図をつくる</h2>
-    </div>
+  <!-- 世界初バッジ -->
+  <div style="margin-bottom:14px;">
+    <span style="display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;font-size:12px;font-weight:800;padding:5px 16px;border-radius:999px;letter-spacing:.05em;box-shadow:0 2px 8px rgba(245,158,11,.4);">🌏 世界初の試み</span>
   </div>
  
-  <p style="color:#cbd5e1;font-size:15px;line-height:1.9;margin-bottom:20px;">
-    市民の投稿が構造化・統合され、その総和が新しい<strong style="color:#c4b5fd;">Civic Vision（ビジョン）</strong>として、300文字の文章で出力されます。
+  <h3 style="color:#f0f9ff;font-size:20px;font-weight:800;margin-bottom:14px;line-height:1.4;">このページで体験できること</h3>
+ 
+  <p style="color:#cbd5e1;font-size:15px;line-height:1.9;margin-bottom:22px;">
+    開設時に設定したCivic Visionは、AIが膨大なデータを多角的に分析して導き出した芦屋駅前公共施設に関する理念です。このページでは、その初期Visionが<strong style="color:#93c5fd;">市民の皆さんの投稿によってどのように育ち、変化していくか</strong>をリアルタイムでご確認いただけます。
   </p>
  
-  <!-- 4つの特徴 -->
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
-    <div style="background:rgba(255,255,255,.07);border-radius:12px;padding:14px 16px;border:1px solid rgba(255,255,255,.1);">
-      <div style="font-size:18px;margin-bottom:6px;">📄</div>
-      <div style="color:#c4b5fd;font-size:13px;font-weight:700;margin-bottom:4px;">300字のVision文章</div>
-      <div style="color:#94a3b8;font-size:12px;line-height:1.6;">市民の投稿の総和をAIが分析し、新しいCivic Visionとして生成します。</div>
+  <!-- 3ポイント -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:22px;">
+    <div style="background:rgba(255,255,255,.07);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,.1);">
+      <div style="font-size:24px;margin-bottom:8px;">🧭</div>
+      <div style="color:#93c5fd;font-size:13px;font-weight:700;margin-bottom:5px;">初期Civic Vision</div>
+      <div style="color:#94a3b8;font-size:12px;line-height:1.6;">AIが多角的分析によって導き出した芦屋駅前の理念。出発点として設定されています。</div>
     </div>
-    <div style="background:rgba(255,255,255,.07);border-radius:12px;padding:14px 16px;border:1px solid rgba(255,255,255,.1);">
-      <div style="font-size:18px;margin-bottom:6px;">💬</div>
-      <div style="color:#6ee7b7;font-size:13px;font-weight:700;margin-bottom:4px;">変化の理由を説明</div>
-      <div style="color:#94a3b8;font-size:12px;line-height:1.6;">「このVisionになった理由」が緑のボックスで表示されます。</div>
+    <div style="background:rgba(255,255,255,.07);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,.1);">
+      <div style="font-size:24px;margin-bottom:8px;">📝</div>
+      <div style="color:#6ee7b7;font-size:13px;font-weight:700;margin-bottom:5px;">市民の投稿で育つ</div>
+      <div style="color:#94a3b8;font-size:12px;line-height:1.6;">投稿が積み重なるほど、Visionは市民の声を反映して動的に更新されていきます。</div>
     </div>
-    <div style="background:rgba(255,255,255,.07);border-radius:12px;padding:14px 16px;border:1px solid rgba(255,255,255,.1);">
-      <div style="font-size:18px;margin-bottom:6px;">📊</div>
-      <div style="color:#fcd34d;font-size:13px;font-weight:700;margin-bottom:4px;">前回との比較表示</div>
-      <div style="color:#94a3b8;font-size:12px;line-height:1.6;">v0（初期）とv1（最新）を左右に並べてbefore/after比較できます。</div>
-    </div>
-    <div style="background:rgba(255,255,255,.07);border-radius:12px;padding:14px 16px;border:1px solid rgba(255,255,255,.1);">
-      <div style="font-size:18px;margin-bottom:6px;">🎨</div>
-      <div style="color:#67e8f9;font-size:13px;font-weight:700;margin-bottom:4px;">イラスト自動生成</div>
-      <div style="color:#94a3b8;font-size:12px;line-height:1.6;">DALL-E 3がVisionの文章からイラストを自動生成します（初回5〜10秒）。</div>
+    <div style="background:rgba(255,255,255,.07);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,.1);">
+      <div style="font-size:24px;margin-bottom:8px;">⚡</div>
+      <div style="color:#fcd34d;font-size:13px;font-weight:700;margin-bottom:5px;">即座に反映</div>
+      <div style="color:#94a3b8;font-size:12px;line-height:1.6;">ボタンを押すだけで、今この瞬間の市民の総意を反映した最新Visionが表示されます。</div>
     </div>
   </div>
  
-  <div style="background:rgba(245,158,11,.15);border-radius:12px;padding:14px 18px;border:1px solid rgba(245,158,11,.3);">
-    <p style="color:#fbbf24;font-size:13px;line-height:1.7;margin:0;">
-      ⚙️ <strong>「✨ イラストを生成」ボタン</strong>は実装済みです。OpenAI APIキーの設定が完了すると、Visionの内容を視覚的なイラストとして瞬時に生成できます。
+  <!-- CTAテキスト -->
+  <div style="background:rgba(16,185,129,.15);border-radius:12px;padding:14px 18px;border:1px solid rgba(16,185,129,.3);display:flex;align-items:center;gap:12px;">
+    <span style="font-size:22px;flex-shrink:0;">👇</span>
+    <p style="color:#6ee7b7;font-size:14px;line-height:1.7;margin:0;">
+      下の「<strong>最新アップデートのCivic Visionを見る</strong>」ボタンを押すと、現在の市民の総意を反映した最新Visionが即座に表示されます。ビジョンが生きた形で進化し続けるこの仕組みは、<strong>世界初の試みです。</strong>
     </p>
   </div>
 </div>
- 
+
 
   <!-- ── Civic Vision（大分類）メインビジュアル ── -->
   <div class="vision-main-block">
@@ -1946,50 +1945,52 @@ function startVoiceInput() {
     
   </div>
 
-  <!-- ── 市民の総意（リアルタイム更新） ── -->
- <div style="background:linear-gradient(135deg,#0a1628 0%,#0f2442 60%,#1a1a3e 100%);border-radius:20px;padding:30px 26px;margin-bottom:24px;position:relative;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.25);">
-  <!-- 背景装飾 -->
-  <div style="position:absolute;top:-40px;right:-40px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.15) 0%,transparent 70%);pointer-events:none;"></div>
-  <div style="position:absolute;bottom:-30px;left:-30px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(16,185,129,.12) 0%,transparent 70%);pointer-events:none;"></div>
+<div class="card" style="background:linear-gradient(135deg,#0f172a,#1e1b4b);color:#fff;border:none;overflow:hidden;position:relative;">
+  <div style="position:absolute;top:-20px;right:-20px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(139,92,246,.2) 0%,transparent 70%);pointer-events:none;"></div>
  
-  <!-- 世界初バッジ -->
-  <div style="margin-bottom:14px;">
-    <span style="display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;font-size:12px;font-weight:800;padding:5px 16px;border-radius:999px;letter-spacing:.05em;box-shadow:0 2px 8px rgba(245,158,11,.4);">🌏 世界初の試み</span>
+  <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
+    <div style="width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#7c3aed,#6d28d9);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;box-shadow:0 4px 14px rgba(109,40,217,.4);">🌏</div>
+    <div>
+      <div style="font-size:12px;font-weight:700;letter-spacing:.08em;color:#a78bfa;margin-bottom:3px;">STEP 4 — このプロジェクトのメインイベント</div>
+      <h2 style="color:#f0f9ff;font-size:20px;font-weight:900;margin:0;">みんなの投稿による未来図をつくる</h2>
+    </div>
   </div>
  
-  <h3 style="color:#f0f9ff;font-size:20px;font-weight:800;margin-bottom:14px;line-height:1.4;">このページで体験できること</h3>
- 
-  <p style="color:#cbd5e1;font-size:15px;line-height:1.9;margin-bottom:22px;">
-    開設時に設定したCivic Visionは、AIが膨大なデータを多角的に分析して導き出した芦屋駅前公共施設に関する理念です。このページでは、その初期Visionが<strong style="color:#93c5fd;">市民の皆さんの投稿によってどのように育ち、変化していくか</strong>をリアルタイムでご確認いただけます。
+  <p style="color:#cbd5e1;font-size:15px;line-height:1.9;margin-bottom:20px;">
+    市民の投稿が構造化・統合され、その総和が新しい<strong style="color:#c4b5fd;">Civic Vision（ビジョン）</strong>として、300文字の文章で出力されます。
   </p>
  
-  <!-- 3ポイント -->
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:22px;">
-    <div style="background:rgba(255,255,255,.07);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,.1);">
-      <div style="font-size:24px;margin-bottom:8px;">🧭</div>
-      <div style="color:#93c5fd;font-size:13px;font-weight:700;margin-bottom:5px;">初期Civic Vision</div>
-      <div style="color:#94a3b8;font-size:12px;line-height:1.6;">AIが多角的分析によって導き出した芦屋駅前の理念。出発点として設定されています。</div>
+  <!-- 4つの特徴 -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
+    <div style="background:rgba(255,255,255,.07);border-radius:12px;padding:14px 16px;border:1px solid rgba(255,255,255,.1);">
+      <div style="font-size:18px;margin-bottom:6px;">📄</div>
+      <div style="color:#c4b5fd;font-size:13px;font-weight:700;margin-bottom:4px;">300字のVision文章</div>
+      <div style="color:#94a3b8;font-size:12px;line-height:1.6;">市民の投稿の総和をAIが分析し、新しいCivic Visionとして生成します。</div>
     </div>
-    <div style="background:rgba(255,255,255,.07);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,.1);">
-      <div style="font-size:24px;margin-bottom:8px;">📝</div>
-      <div style="color:#6ee7b7;font-size:13px;font-weight:700;margin-bottom:5px;">市民の投稿で育つ</div>
-      <div style="color:#94a3b8;font-size:12px;line-height:1.6;">投稿が積み重なるほど、Visionは市民の声を反映して動的に更新されていきます。</div>
+    <div style="background:rgba(255,255,255,.07);border-radius:12px;padding:14px 16px;border:1px solid rgba(255,255,255,.1);">
+      <div style="font-size:18px;margin-bottom:6px;">💬</div>
+      <div style="color:#6ee7b7;font-size:13px;font-weight:700;margin-bottom:4px;">変化の理由を説明</div>
+      <div style="color:#94a3b8;font-size:12px;line-height:1.6;">「このVisionになった理由」が緑のボックスで表示されます。</div>
     </div>
-    <div style="background:rgba(255,255,255,.07);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,.1);">
-      <div style="font-size:24px;margin-bottom:8px;">⚡</div>
-      <div style="color:#fcd34d;font-size:13px;font-weight:700;margin-bottom:5px;">即座に反映</div>
-      <div style="color:#94a3b8;font-size:12px;line-height:1.6;">ボタンを押すだけで、今この瞬間の市民の総意を反映した最新Visionが表示されます。</div>
+    <div style="background:rgba(255,255,255,.07);border-radius:12px;padding:14px 16px;border:1px solid rgba(255,255,255,.1);">
+      <div style="font-size:18px;margin-bottom:6px;">📊</div>
+      <div style="color:#fcd34d;font-size:13px;font-weight:700;margin-bottom:4px;">前回との比較表示</div>
+      <div style="color:#94a3b8;font-size:12px;line-height:1.6;">v0（初期）とv1（最新）を左右に並べてbefore/after比較できます。</div>
+    </div>
+    <div style="background:rgba(255,255,255,.07);border-radius:12px;padding:14px 16px;border:1px solid rgba(255,255,255,.1);">
+      <div style="font-size:18px;margin-bottom:6px;">🎨</div>
+      <div style="color:#67e8f9;font-size:13px;font-weight:700;margin-bottom:4px;">イラスト自動生成</div>
+      <div style="color:#94a3b8;font-size:12px;line-height:1.6;">DALL-E 3がVisionの文章からイラストを自動生成します（初回5〜10秒）。</div>
     </div>
   </div>
  
-  <!-- CTAテキスト -->
-  <div style="background:rgba(16,185,129,.15);border-radius:12px;padding:14px 18px;border:1px solid rgba(16,185,129,.3);display:flex;align-items:center;gap:12px;">
-    <span style="font-size:22px;flex-shrink:0;">👇</span>
-    <p style="color:#6ee7b7;font-size:14px;line-height:1.7;margin:0;">
-      下の「<strong>最新アップデートのCivic Visionを見る</strong>」ボタンを押すと、現在の市民の総意を反映した最新Visionが即座に表示されます。ビジョンが生きた形で進化し続けるこの仕組みは、<strong>世界初の試みです。</strong>
+  <div style="background:rgba(245,158,11,.15);border-radius:12px;padding:14px 18px;border:1px solid rgba(245,158,11,.3);">
+    <p style="color:#fbbf24;font-size:13px;line-height:1.7;margin:0;">
+      ⚙️ <strong>「✨ イラストを生成」ボタン</strong>は実装済みです。OpenAI APIキーの設定が完了すると、Visionの内容を視覚的なイラストとして瞬時に生成できます。
     </p>
   </div>
 </div>
+ 
   
 
 </section>
