@@ -1740,6 +1740,7 @@ function startVoiceInput() {
      <h2>みんなの未来図</h2>
       <p>開設時に設定したCivic Vision（理念）は、AIが膨大なデータを多角的に分析して導き出したものです。</p>
      <p>このページでは、みなさんの投稿によって初期のビジョンが変遷していく過程をみることができます</p>
+     <p> 今この瞬間の市民の総意を反映した最新Visionが即座に表示されます。</p>
       <p>このプラットフォームのクライマックスです。</p>
       <p>「最新アップデートのCivic Visionを見る」ボタンを押すだけで、AIが市民のみんなの投稿と膨大なデータをバランスよく分析して答えを導き出します。</p>
       <p>ビジョンが生きた形で進化し続けるこの仕組みは、世界初の試みです。</p>
@@ -1792,10 +1793,7 @@ function startVoiceInput() {
     </p>
   </div>
 </div>
-
-  このページでは、その初期Visionが市民の皆さんの投稿によってどのように育ち、変化していくかをリアルタイムでご確認いただけます。
-  、今この瞬間の市民の総意を反映した最新Visionが即座に表示されます。
-  
+ 
 
   <!-- ── Civic Vision（大分類）メインビジュアル ── -->
   <div class="vision-main-block">
@@ -1812,7 +1810,42 @@ function startVoiceInput() {
     onerror="this.style.display='none';document.getElementById('visionPlaceholder').style.display='flex';">
   <div id="visionPlaceholder" style="display:none;width:100%;height:260px;background:linear-gradient(135deg,#dbeafe,#e0f2fe);align-items:center;justify-content:center;font-size:64px;color:#93c5fd;">🏛</div>
 </div>
- 
+ <div class="vision-consensus-body">
+      <p>市民の投稿が積み重なるにつれ、AIがその総意を分析し、Civic Visionの内容を動的に更新します。</p>
+      <div id="visionLiveVersion" style="margin-bottom:10px;min-height:22px;"></div>
+
+      <div id="visionLiveVersion" style="margin-bottom:10px;min-height:22px;"></div>
+      <div class="vision-live-text" id="visionLiveText">
+  読み込み中…
+</div>
+<div id="visionCompareArea" style="display:none;margin-top:16px;"></div>
+
+<div id="visionCompareArea" style="display:none;margin-top:16px;"></div>      
+<!-- イラストエリア（DALL-E生成画像 or フォールバック） -->
+      <div id="visionLiveIllust" style="display:none;margin:16px 0;text-align:center;">
+        <div id="visionImageArea" style="width:100%;max-width:600px;margin:0 auto;border-radius:14px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.12);"></div>
+      </div>
+
+      <!-- 画像生成ボタン（Vision表示後に出現） -->
+      <div id="imageGenArea" style="display:none;margin-bottom:16px;background:#f0f9ff;border-radius:12px;padding:14px 18px;border:1px solid #bae6fd;">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+          <div>
+            <p style="font-size:13px;font-weight:700;color:#0369a1;margin:0 0 3px;">🎨 このVisionのイラストを生成する</p>
+            <p style="font-size:11px;color:#0284c7;margin:0;line-height:1.5;">DALL-E 3がVisionの文章からイラストを自動生成します。（初回5〜10秒）</p>
+          </div>
+          <button onclick="generateVisionIllust()" id="btnGenImage" style="background:linear-gradient(135deg,#0369a1,#0284c7);color:#fff;border:none;padding:10px 18px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;">✨ イラストを生成</button>
+        </div>
+        <div id="imageGenStatus" style="margin-top:10px;font-size:12px;color:#0369a1;display:none;"></div>
+      </div>
+
+      <div class="vision-cta">
+        <p>市民の意見の総意を反映した 駅前公共施設のあり方です</p>
+        <button class="big-button success" onclick="loadLiveCivicVision()">
+          🔄 最新アップデートの Civic Vision を見る
+        </button>
+      </div>
+    </div>
+  </div>
       
     
   </div>
@@ -1933,42 +1966,7 @@ function startVoiceInput() {
   </div>
 </div>
  
-    <div class="vision-consensus-body">
-      <p>市民の投稿が積み重なるにつれ、AIがその総意を分析し、Civic Visionの内容を動的に更新します。</p>
-      <div id="visionLiveVersion" style="margin-bottom:10px;min-height:22px;"></div>
-
-      <div id="visionLiveVersion" style="margin-bottom:10px;min-height:22px;"></div>
-      <div class="vision-live-text" id="visionLiveText">
-  読み込み中…
-</div>
-<div id="visionCompareArea" style="display:none;margin-top:16px;"></div>
-
-<div id="visionCompareArea" style="display:none;margin-top:16px;"></div>      
-<!-- イラストエリア（DALL-E生成画像 or フォールバック） -->
-      <div id="visionLiveIllust" style="display:none;margin:16px 0;text-align:center;">
-        <div id="visionImageArea" style="width:100%;max-width:600px;margin:0 auto;border-radius:14px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.12);"></div>
-      </div>
-
-      <!-- 画像生成ボタン（Vision表示後に出現） -->
-      <div id="imageGenArea" style="display:none;margin-bottom:16px;background:#f0f9ff;border-radius:12px;padding:14px 18px;border:1px solid #bae6fd;">
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
-          <div>
-            <p style="font-size:13px;font-weight:700;color:#0369a1;margin:0 0 3px;">🎨 このVisionのイラストを生成する</p>
-            <p style="font-size:11px;color:#0284c7;margin:0;line-height:1.5;">DALL-E 3がVisionの文章からイラストを自動生成します。（初回5〜10秒）</p>
-          </div>
-          <button onclick="generateVisionIllust()" id="btnGenImage" style="background:linear-gradient(135deg,#0369a1,#0284c7);color:#fff;border:none;padding:10px 18px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;">✨ イラストを生成</button>
-        </div>
-        <div id="imageGenStatus" style="margin-top:10px;font-size:12px;color:#0369a1;display:none;"></div>
-      </div>
-
-      <div class="vision-cta">
-        <p>市民の意見の総意を反映した 駅前公共施設のあり方です</p>
-        <button class="big-button success" onclick="loadLiveCivicVision()">
-          🔄 最新アップデートの Civic Vision を見る
-        </button>
-      </div>
-    </div>
-  </div>
+    
 
   <!-- ── なぜ大事か ── -->
   <div class="card">
