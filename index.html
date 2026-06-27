@@ -1341,7 +1341,61 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
     <div class="card">
       <h2>あなたの考えを聞かせてください</h2>
       <p style="font-size:13px; color:#64748b; margin-bottom:12px;">思っていることを自由に書いてください。AIが内容を読んで自動的に分類します。</p>
-      <textarea id="userInput" rows="12" placeholder="芦屋市について思っていることを自由に書いてください..."></textarea>
+      <div style="position:relative;">
+  <textarea id="userInput" rows="12" placeholder="芦屋市について思っていることを自由に書いてください...&#10;&#10;💡 右下のマイクボタンで音声入力もできます"></textarea>
+  <button onclick="startVoiceInput()" id="voiceBtn" title="音声入力"
+    style="position:absolute;bottom:12px;right:12px;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#06b6d4);border:none;color:#fff;font-size:20px;cursor:pointer;box-shadow:0 4px 12px rgba(37,99,235,.4);transition:.2s;display:flex;align-items:center;justify-content:center;"
+    onmouseover="this.style.transform='scale(1.1)'"
+    onmouseout="this.style.transform='scale(1)'">🎤</button>
+</div>
+<p id="voiceStatus" style="font-size:12px;color:#64748b;margin-top:4px;min-height:18px;"></p>
+ 
+<!-- 音声入力JS（scriptタグ内の末尾に追加） -->
+<!--
+function startVoiceInput() {
+  const btn = document.getElementById('voiceBtn');
+  const status = document.getElementById('voiceStatus');
+  const textarea = document.getElementById('userInput');
+ 
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    status.textContent = '⚠️ このブラウザは音声入力に対応していません（Chromeをお試しください）';
+    return;
+  }
+ 
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const recognition = new SR();
+  recognition.lang = 'ja-JP';
+  recognition.continuous = false;
+  recognition.interimResults = true;
+ 
+  btn.style.background = 'linear-gradient(135deg,#dc2626,#b91c1c)';
+  btn.textContent = '⏹';
+  status.textContent = '🎤 話しかけてください…';
+ 
+  recognition.onresult = (e) => {
+    let interim = '';
+    let final = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      if (e.results[i].isFinal) final += e.results[i][0].transcript;
+      else interim += e.results[i][0].transcript;
+    }
+    textarea.value += final;
+    status.textContent = interim ? '認識中: ' + interim : '✅ 入力完了';
+  };
+ 
+  recognition.onerror = (e) => {
+    status.textContent = '❌ エラー: ' + e.error;
+  };
+ 
+  recognition.onend = () => {
+    btn.style.background = 'linear-gradient(135deg,#2563eb,#06b6d4)';
+    btn.textContent = '🎤';
+    if (!status.textContent.includes('❌')) status.textContent = '✅ 音声入力が完了しました';
+  };
+ 
+  recognition.start();
+}
+-->
       <div style="margin-top:14px;">
         <button class="big-button" onclick="runAI()">🤖 AI壁打ちを実行する</button>
       </div>
@@ -1428,7 +1482,52 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
 
 
 
-  <!-- ★ 詳しい仕組みはこちら — 一般向け・専門家向け説明パネル -->
+<div class="card" style="background:linear-gradient(135deg,#0f172a,#1e1b4b);color:#fff;border:none;overflow:hidden;position:relative;">
+  <div style="position:absolute;top:-20px;right:-20px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(139,92,246,.2) 0%,transparent 70%);pointer-events:none;"></div>
+ 
+  <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
+    <div style="width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#7c3aed,#6d28d9);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;box-shadow:0 4px 14px rgba(109,40,217,.4);">🌏</div>
+    <div>
+      <div style="font-size:12px;font-weight:700;letter-spacing:.08em;color:#a78bfa;margin-bottom:3px;">STEP 4 — このプロジェクトのメインイベント</div>
+      <h2 style="color:#f0f9ff;font-size:20px;font-weight:900;margin:0;">みんなの投稿による未来図をつくる</h2>
+    </div>
+  </div>
+ 
+  <p style="color:#cbd5e1;font-size:15px;line-height:1.9;margin-bottom:20px;">
+    市民の投稿が構造化・統合され、その総和が新しい<strong style="color:#c4b5fd;">Civic Vision（ビジョン）</strong>として、300文字の文章で出力されます。
+  </p>
+ 
+  <!-- 4つの特徴 -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
+    <div style="background:rgba(255,255,255,.07);border-radius:12px;padding:14px 16px;border:1px solid rgba(255,255,255,.1);">
+      <div style="font-size:18px;margin-bottom:6px;">📄</div>
+      <div style="color:#c4b5fd;font-size:13px;font-weight:700;margin-bottom:4px;">300字のVision文章</div>
+      <div style="color:#94a3b8;font-size:12px;line-height:1.6;">市民の投稿の総和をAIが分析し、新しいCivic Visionとして生成します。</div>
+    </div>
+    <div style="background:rgba(255,255,255,.07);border-radius:12px;padding:14px 16px;border:1px solid rgba(255,255,255,.1);">
+      <div style="font-size:18px;margin-bottom:6px;">💬</div>
+      <div style="color:#6ee7b7;font-size:13px;font-weight:700;margin-bottom:4px;">変化の理由を説明</div>
+      <div style="color:#94a3b8;font-size:12px;line-height:1.6;">「このVisionになった理由」が緑のボックスで表示されます。</div>
+    </div>
+    <div style="background:rgba(255,255,255,.07);border-radius:12px;padding:14px 16px;border:1px solid rgba(255,255,255,.1);">
+      <div style="font-size:18px;margin-bottom:6px;">📊</div>
+      <div style="color:#fcd34d;font-size:13px;font-weight:700;margin-bottom:4px;">前回との比較表示</div>
+      <div style="color:#94a3b8;font-size:12px;line-height:1.6;">v0（初期）とv1（最新）を左右に並べてbefore/after比較できます。</div>
+    </div>
+    <div style="background:rgba(255,255,255,.07);border-radius:12px;padding:14px 16px;border:1px solid rgba(255,255,255,.1);">
+      <div style="font-size:18px;margin-bottom:6px;">🎨</div>
+      <div style="color:#67e8f9;font-size:13px;font-weight:700;margin-bottom:4px;">イラスト自動生成</div>
+      <div style="color:#94a3b8;font-size:12px;line-height:1.6;">DALL-E 3がVisionの文章からイラストを自動生成します（初回5〜10秒）。</div>
+    </div>
+  </div>
+ 
+  <div style="background:rgba(245,158,11,.15);border-radius:12px;padding:14px 18px;border:1px solid rgba(245,158,11,.3);">
+    <p style="color:#fbbf24;font-size:13px;line-height:1.7;margin:0;">
+      ⚙️ <strong>「✨ イラストを生成」ボタン</strong>は実装済みです。OpenAI APIキーの設定が完了すると、Visionの内容を視覚的なイラストとして瞬時に生成できます。
+    </p>
+  </div>
+</div>
+ 
 
   <!-- ★ 詳しい仕組みはこちら — 一般向け・専門家向け説明パネル -->
   <div style="margin-top:20px;">
@@ -1595,42 +1694,56 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
   </div>
 
   <!-- 分析の意義 -->
-  <div class="card">
-    <h2>💡 分析の意義と考え方</h2>
-
-    <div class="analysis-significance">
-      <h3>そもそも、この分析は何のためにあるのか</h3>
-      <p>
-        このプラットフォームの最初に設定した「Civic Vision（大分類）」と、市民の投稿意見の総意のズレや一致をどのように捉えるか——それがこの分析の核心です。
+  <div class="card" style="padding:0;overflow:hidden;border:none;background:none;box-shadow:none;">
+  <!-- ヘッダー帯 -->
+  <div style="background:linear-gradient(135deg,#1e1b4b,#312e81,#1e1b4b);border-radius:20px 20px 0 0;padding:28px 28px 20px;">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px;">
+      <span style="font-size:28px;">💡</span>
+      <h2 style="color:#e0e7ff;font-size:24px;font-weight:900;margin:0;">分析の意義と考え方</h2>
+    </div>
+    <p style="color:#a5b4fc;font-size:14px;margin:0;line-height:1.7;">このプラットフォームが大切にしている「公正な分析」の原則</p>
+  </div>
+ 
+  <!-- 本文 -->
+  <div style="background:#fff;border-radius:0 0 20px 20px;padding:28px;box-shadow:0 8px 28px rgba(0,0,0,.08);border:1px solid rgba(255,255,255,.6);border-top:none;">
+ 
+    <div style="background:linear-gradient(135deg,#fffbeb,#fef9c3);border-radius:16px;padding:24px 26px;margin-bottom:20px;border-left:6px solid #d97706;position:relative;overflow:hidden;">
+      <div style="position:absolute;right:-10px;top:-10px;font-size:80px;opacity:.06;">⚖️</div>
+      <h3 style="color:#92400e;font-size:18px;font-weight:800;margin-bottom:12px;">そもそも、この分析は何のためにあるのか</h3>
+      <p style="font-size:15px;color:#78350f;line-height:1.9;margin-bottom:12px;">
+        プラットフォーム開設時に設定した「Civic Vision（ビジョン）」と、市民の投稿意見の総意のズレや一致をどのように捉えるか——それがこの分析の核心です。
       </p>
-      <p>
+      <p style="font-size:15px;color:#78350f;line-height:1.9;margin-bottom:12px;">
         <strong>投稿数の多さに引きずられると、ポピュリスト的な分析結果になりかねません。</strong>
-        一方で、AIのアルゴリズムだけで判断するなら、市民の投稿そのものが無意味になってしまいます。
+        一方でAIのアルゴリズムだけで判断するなら、市民の投稿そのものが無意味になってしまいます。
       </p>
-      <p>
+      <p style="font-size:15px;color:#78350f;line-height:1.9;margin:0;">
         そのバランスをうまく調整した分析を目指します。現時点では試行錯誤の段階ですが、海外の市民参加型プラットフォームの事例（vTaiwan、Decidim、Pol.isなど）を参考にしながら、より良い分析手法を模索していきます。
       </p>
     </div>
-
-    <div style="margin-top:16px; display:grid; grid-template-columns:1fr 1fr; gap:14px;">
-      <div class="why-card old-way">
-        <h4>⚠️ 避けたいアプローチ</h4>
-        <ul>
-          <li>投稿数だけで多数決的に決める</li>
-          <li>AIアルゴリズムのブラックボックス化</li>
-          <li>市民の声を数値に還元しすぎる</li>
+ 
+    <!-- 避けたい / 目指す の比較 -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div style="background:#fef2f2;border-radius:14px;padding:20px;border-left:5px solid #dc2626;">
+        <h4 style="color:#991b1b;font-size:15px;font-weight:800;margin-bottom:12px;">⚠️ 避けたいアプローチ</h4>
+        <ul style="list-style:none;padding:0;font-size:13px;color:#7f1d1d;line-height:2.2;">
+          <li>📌 投稿数だけで多数決的に決める</li>
+          <li>📌 AIアルゴリズムのブラックボックス化</li>
+          <li>📌 市民の声を数値に還元しすぎる</li>
         </ul>
       </div>
-      <div class="why-card new-way">
-        <h4>✅ 目指すアプローチ</h4>
-        <ul>
-          <li>質と量のバランスある評価</li>
-          <li>分析プロセスの透明な開示</li>
-          <li>海外事例を参考にした継続的改善</li>
+      <div style="background:#f0fdf4;border-radius:14px;padding:20px;border-left:5px solid #16a34a;">
+        <h4 style="color:#14532d;font-size:15px;font-weight:800;margin-bottom:12px;">✅ 目指すアプローチ</h4>
+        <ul style="list-style:none;padding:0;font-size:13px;color:#14532d;line-height:2.2;">
+          <li>📌 質と量のバランスある評価</li>
+          <li>📌 分析プロセスの透明な開示</li>
+          <li>📌 海外事例を参考にした継続的改善</li>
         </ul>
       </div>
     </div>
   </div>
+</div>
+ 
 </section>
 
 <!-- ================= PULL REQUEST ================= -->
@@ -1693,20 +1806,133 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
     <div class="vision-main-text">
       駅前公共施設を、単なる利用の場ではなく、市民の学び・挑戦・交流が自然に芽生え、広がり、街の魅力を育てていく"成長する拠点"へと転換する。ここでは、子どもから大人まで、多様な人が自分の興味や得意を持ち寄り、新しい活動やつながりが生まれる。小さなアイデアが形になり、誰かの挑戦が次の挑戦を呼び、街全体の活力へとつながっていく。行政が一方的に提供する施設ではなく、市民とともに育て、市民の力が循環し、芦屋の価値が静かに、しかし確実に積み上がっていく"まちの育ち場"として再構築する。
     </div>
-    <div class="vision-illust-area">
-      <div class="vision-illust-placeholder">🏛</div>
-    <img src="images/vision.jpg" alt="vision" style="border-radius:14px;"> </div>
-   </div>
+    <div class="vision-illust-area" style="padding:0;overflow:hidden;">
+  <img src="images/vision.jpg" alt="芦屋駅前公共施設 Civic Vision"
+    style="width:100%;height:auto;display:block;border-radius:0;"
+    onerror="this.style.display='none';document.getElementById('visionPlaceholder').style.display='flex';">
+  <div id="visionPlaceholder" style="display:none;width:100%;height:260px;background:linear-gradient(135deg,#dbeafe,#e0f2fe);align-items:center;justify-content:center;font-size:64px;color:#93c5fd;">🏛</div>
+</div>
+ 
       
     
   </div>
 
   <!-- ── 市民の総意（リアルタイム更新） ── -->
+ <div style="background:linear-gradient(135deg,#0a1628 0%,#0f2442 60%,#1a1a3e 100%);border-radius:20px;padding:30px 26px;margin-bottom:24px;position:relative;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.25);">
+  <!-- 背景装飾 -->
+  <div style="position:absolute;top:-40px;right:-40px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.15) 0%,transparent 70%);pointer-events:none;"></div>
+  <div style="position:absolute;bottom:-30px;left:-30px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(16,185,129,.12) 0%,transparent 70%);pointer-events:none;"></div>
+ 
+  <!-- 世界初バッジ -->
+  <div style="margin-bottom:14px;">
+    <span style="display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;font-size:12px;font-weight:800;padding:5px 16px;border-radius:999px;letter-spacing:.05em;box-shadow:0 2px 8px rgba(245,158,11,.4);">🌏 世界初の試み</span>
+  </div>
+ 
+  <h3 style="color:#f0f9ff;font-size:20px;font-weight:800;margin-bottom:14px;line-height:1.4;">このページで体験できること</h3>
+ 
+  <p style="color:#cbd5e1;font-size:15px;line-height:1.9;margin-bottom:22px;">
+    開設時に設定したCivic Visionは、AIが膨大なデータを多角的に分析して導き出した芦屋駅前公共施設に関する理念です。このページでは、その初期Visionが<strong style="color:#93c5fd;">市民の皆さんの投稿によってどのように育ち、変化していくか</strong>をリアルタイムでご確認いただけます。
+  </p>
+ 
+  <!-- 3ポイント -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:22px;">
+    <div style="background:rgba(255,255,255,.07);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,.1);">
+      <div style="font-size:24px;margin-bottom:8px;">🧭</div>
+      <div style="color:#93c5fd;font-size:13px;font-weight:700;margin-bottom:5px;">初期Civic Vision</div>
+      <div style="color:#94a3b8;font-size:12px;line-height:1.6;">AIが多角的分析によって導き出した芦屋駅前の理念。出発点として設定されています。</div>
+    </div>
+    <div style="background:rgba(255,255,255,.07);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,.1);">
+      <div style="font-size:24px;margin-bottom:8px;">📝</div>
+      <div style="color:#6ee7b7;font-size:13px;font-weight:700;margin-bottom:5px;">市民の投稿で育つ</div>
+      <div style="color:#94a3b8;font-size:12px;line-height:1.6;">投稿が積み重なるほど、Visionは市民の声を反映して動的に更新されていきます。</div>
+    </div>
+    <div style="background:rgba(255,255,255,.07);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,.1);">
+      <div style="font-size:24px;margin-bottom:8px;">⚡</div>
+      <div style="color:#fcd34d;font-size:13px;font-weight:700;margin-bottom:5px;">即座に反映</div>
+      <div style="color:#94a3b8;font-size:12px;line-height:1.6;">ボタンを押すだけで、今この瞬間の市民の総意を反映した最新Visionが表示されます。</div>
+    </div>
+  </div>
+ 
+  <!-- CTAテキスト -->
+  <div style="background:rgba(16,185,129,.15);border-radius:12px;padding:14px 18px;border:1px solid rgba(16,185,129,.3);display:flex;align-items:center;gap:12px;">
+    <span style="font-size:22px;flex-shrink:0;">👇</span>
+    <p style="color:#6ee7b7;font-size:14px;line-height:1.7;margin:0;">
+      下の「<strong>最新アップデートのCivic Visionを見る</strong>」ボタンを押すと、現在の市民の総意を反映した最新Visionが即座に表示されます。ビジョンが生きた形で進化し続けるこの仕組みは、<strong>世界初の試みです。</strong>
+    </p>
+  </div>
+</div>
   <div class="vision-consensus-block">
     <div class="vision-consensus-header">
-      <span class="live-dot"></span>
-      <h3>市民の投稿総意を反映した 駅前公共施設のあり方</h3>
+  <span class="live-dot"></span>
+  <h3 style="font-size:17px;margin:0;color:#ffffff;font-weight:700;letter-spacing:.02em;">
+    市民の投稿総意を反映した<br style="display:none">駅前公共施設のあり方
+  </h3>
+</div>
+ 
+ 
+<!-- ★ 変更3：みんなの未来図 — 3層構造を見やすく改善
+ 
+探す文字列（h2タグ含むcard全体）：
+  <h2>🏗 プラットフォームの3層構造</h2>
+ 
+このcardブロック（<div class="card"> から閉じ </div> まで）を以下に置き換え：
+-->
+<div class="card">
+  <h2 style="font-size:22px;font-weight:800;margin-bottom:6px;">🏗 プラットフォームの3層構造</h2>
+  <p style="font-size:14px;color:#64748b;margin-bottom:20px;">理念から実際の議論まで3層で構成。上位ほど不変で、下位ほど市民の投稿で育ちます。</p>
+ 
+  <!-- Layer 1 -->
+  <div style="border-radius:16px;overflow:hidden;margin-bottom:10px;box-shadow:0 4px 16px rgba(0,0,0,.14);">
+    <div style="background:linear-gradient(135deg,#0a1628,#0f2442);padding:20px 24px;display:flex;align-items:center;gap:16px;">
+      <div style="width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;">🧭</div>
+      <div style="flex:1;">
+        <div style="font-size:11px;font-weight:700;letter-spacing:.1em;color:#64748b;margin-bottom:4px;">LAYER 1 — 不変の理念</div>
+        <div style="font-size:18px;font-weight:800;color:#f0f9ff;margin-bottom:5px;">Civic Compass（羅針盤）</div>
+        <div style="font-size:13px;color:#93c5fd;line-height:1.7;">コストセンターからプロフィットセンターへ<br>市民のウェルビーイングと知財の集積による投資型都市経営</div>
+      </div>
+      <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:5px 12px;font-size:11px;color:#94a3b8;font-weight:700;flex-shrink:0;white-space:nowrap;">固定・不変</div>
     </div>
+  </div>
+ 
+  <div style="text-align:center;margin:4px 0;font-size:22px;color:#94a3b8;line-height:1.2;">↓</div>
+ 
+  <!-- Layer 2 -->
+  <div style="border-radius:16px;overflow:hidden;margin-bottom:10px;box-shadow:0 4px 16px rgba(0,0,0,.12);">
+    <div style="background:linear-gradient(135deg,#1e3a5f,#1e40af);padding:20px 24px;display:flex;align-items:center;gap:16px;">
+      <div style="width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;">🎯</div>
+      <div style="flex:1;">
+        <div style="font-size:11px;font-weight:700;letter-spacing:.1em;color:#93c5fd;margin-bottom:4px;">LAYER 2 — 管理者が設計ウェイトを調整可能</div>
+        <div style="font-size:18px;font-weight:800;color:#f0f9ff;margin-bottom:5px;">Civic Vision（ビジョン）</div>
+        <div style="font-size:13px;color:#bae6fd;line-height:1.7;">5つの大分類 × 設計ウェイト。市民投稿の総意をもとにAIが月次更新。<br>ウェイトを変えると即座に新しいVisionが生成されます。</div>
+      </div>
+      <div style="background:rgba(6,182,212,.2);border:1px solid rgba(6,182,212,.4);border-radius:8px;padding:5px 12px;font-size:11px;color:#67e8f9;font-weight:700;flex-shrink:0;white-space:nowrap;">月次更新</div>
+    </div>
+    <!-- 5分類バー -->
+    <div style="background:#0c1e3a;padding:10px 24px;display:grid;grid-template-columns:repeat(5,1fr);gap:6px;">
+      <div style="text-align:center;"><div style="font-size:9px;color:#475569;margin-bottom:3px;">① 価値向上</div><div style="height:5px;background:#2563eb;border-radius:999px;margin-bottom:3px;"></div><div style="font-size:11px;color:#60a5fa;font-weight:700;">20%</div></div>
+      <div style="text-align:center;"><div style="font-size:9px;color:#475569;margin-bottom:3px;">② ウェルビーイング</div><div style="height:5px;background:#06b6d4;border-radius:999px;margin-bottom:3px;"></div><div style="font-size:11px;color:#22d3ee;font-weight:700;">25%</div></div>
+      <div style="text-align:center;"><div style="font-size:9px;color:#475569;margin-bottom:3px;">③ 財政的持続</div><div style="height:5px;background:#10b981;border-radius:999px;margin-bottom:3px;"></div><div style="font-size:11px;color:#34d399;font-weight:700;">20%</div></div>
+      <div style="text-align:center;"><div style="font-size:9px;color:#475569;margin-bottom:3px;">④ 施設の戦略</div><div style="height:5px;background:#8b5cf6;border-radius:999px;margin-bottom:3px;"></div><div style="font-size:11px;color:#a78bfa;font-weight:700;">20%</div></div>
+      <div style="text-align:center;"><div style="font-size:9px;color:#475569;margin-bottom:3px;">⑤ ガバナンス</div><div style="height:5px;background:#f59e0b;border-radius:999px;margin-bottom:3px;"></div><div style="font-size:11px;color:#fbbf24;font-weight:700;">15%</div></div>
+    </div>
+  </div>
+ 
+  <div style="text-align:center;margin:4px 0;font-size:22px;color:#94a3b8;line-height:1.2;">↓</div>
+ 
+  <!-- Layer 3 -->
+  <div style="border-radius:16px;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,.1);">
+    <div style="background:linear-gradient(135deg,#052e16,#064e3b);padding:20px 24px;display:flex;align-items:center;gap:16px;">
+      <div style="width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;">🗺</div>
+      <div style="flex:1;">
+        <div style="font-size:11px;font-weight:700;letter-spacing:.1em;color:#6ee7b7;margin-bottom:4px;">LAYER 3 — 市民の投稿で動的に育つ</div>
+        <div style="font-size:18px;font-weight:800;color:#f0fdf4;margin-bottom:5px;">アイデアの地図</div>
+        <div style="font-size:13px;color:#a7f3d0;line-height:1.7;">中分類・小分類は市民の投稿で自動追加。<br>「その他」が10件超えると新中分類が自動生成されます。</div>
+      </div>
+      <div style="background:rgba(16,185,129,.2);border:1px solid rgba(16,185,129,.4);border-radius:8px;padding:5px 12px;font-size:11px;color:#6ee7b7;font-weight:700;flex-shrink:0;white-space:nowrap;">リアルタイム</div>
+    </div>
+  </div>
+</div>
+ 
     <div class="vision-consensus-body">
       <p>市民の投稿が積み重なるにつれ、AIがその総意を分析し、Civic Visionの内容を動的に更新します。</p>
       <div id="visionLiveVersion" style="margin-bottom:10px;min-height:22px;"></div>
