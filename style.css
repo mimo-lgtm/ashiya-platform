@@ -1196,3 +1196,38 @@ textarea:focus{
   .analysis-bar-label,
   .alignment-bar-label { font-size: 11px; }
 }
+/* =====================================================
+   style_fix.css — 既存style.cssの末尾に追加
+   修正内容：
+   1. スマホの左右スクロール揺れを防止
+   2. tree-page-wrapの最大幅を削除してフル幅に
+===================================================== */
+
+/* ★ スマホの左右揺れ防止 */
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* ★ 黒枠（tree-vision-card）をフル幅に */
+.tree-page-wrap {
+  max-width: 100%;
+  margin: auto;
+}
+
+.tree-vision-card {
+  border-radius: 16px;
+  margin-bottom: 16px;
+}
+
+/* ★ みんなの未来図 A/B対比レイアウト — スマホ対応 */
+@media (max-width: 640px) {
+  /* A/B対比を縦積みに */
+  section#vision .ab-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
