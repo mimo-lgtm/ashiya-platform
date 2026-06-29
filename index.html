@@ -1243,7 +1243,7 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
   .analysis-bar-label,
   .alignment-bar-label { font-size: 11px; }
 }
-  /* =====================================================
+ /* =====================================================
    style_fix.css — 既存style.cssの末尾に追加
    修正内容：
    1. スマホの左右スクロール揺れを防止
@@ -1279,6 +1279,73 @@ html, body {
   }
 }
 
+
+/* ★ ナビバー マルチカラーグラデーション背景 */
+.topbar {
+  background: linear-gradient(
+    135deg,
+    #1e3a5f 0%,
+    #1e3a5f 20%,
+    #0f4c2a 40%,
+    #1e3a5f 60%,
+    #2a1e5f 80%,
+    #1e3a5f 100%
+  ) !important;
+  position: relative;
+}
+
+/* レインボーの下線ライン */
+.topbar::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    #ef4444,
+    #f97316,
+    #eab308,
+    #22c55e,
+    #06b6d4,
+    #2563eb,
+    #8b5cf6,
+    #ec4899
+  );
+  background-size: 200% 100%;
+  animation: rainbowSlide 4s linear infinite;
+}
+
+@keyframes rainbowSlide {
+  0%   { background-position: 0% 0%; }
+  100% { background-position: 200% 0%; }
+}
+
+/* ★ スマホスクロール 左右揺れ防止（強化版） */
+html {
+  overflow-x: hidden;
+}
+body {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
+main {
+  overflow-x: hidden;
+}
+
+/* ★ Civic Vision 比較表示 スマホ対応 */
+#visionCompareArea > div {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
+}
+
+/* ★ みんなの未来図 A/B対比 スマホで縦積み */
+@media (max-width: 640px) {
+  section#vision > div[style*="grid-template-columns:1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+}
 </style>
 </head>
 <body>
