@@ -1243,7 +1243,7 @@ img{ max-width:100%; height:auto; display:block; border-radius:14px; }
   .analysis-bar-label,
   .alignment-bar-label { font-size: 11px; }
 }
- /* =====================================================
+  /* =====================================================
    style_fix.css — 既存style.cssの末尾に追加
    修正内容：
    1. スマホの左右スクロール揺れを防止
@@ -1279,73 +1279,6 @@ html, body {
   }
 }
 
-
-/* ★ ナビバー マルチカラーグラデーション背景 */
-.topbar {
-  background: linear-gradient(
-    135deg,
-    #1e3a5f 0%,
-    #1e3a5f 20%,
-    #0f4c2a 40%,
-    #1e3a5f 60%,
-    #2a1e5f 80%,
-    #1e3a5f 100%
-  ) !important;
-  position: relative;
-}
-
-/* レインボーの下線ライン */
-.topbar::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 3px;
-  background: linear-gradient(
-    90deg,
-    #ef4444,
-    #f97316,
-    #eab308,
-    #22c55e,
-    #06b6d4,
-    #2563eb,
-    #8b5cf6,
-    #ec4899
-  );
-  background-size: 200% 100%;
-  animation: rainbowSlide 4s linear infinite;
-}
-
-@keyframes rainbowSlide {
-  0%   { background-position: 0% 0%; }
-  100% { background-position: 200% 0%; }
-}
-
-/* ★ スマホスクロール 左右揺れ防止（強化版） */
-html {
-  overflow-x: hidden;
-}
-body {
-  overflow-x: hidden;
-  width: 100%;
-  max-width: 100vw;
-}
-main {
-  overflow-x: hidden;
-}
-
-/* ★ Civic Vision 比較表示 スマホ対応 */
-#visionCompareArea > div {
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
-}
-
-/* ★ みんなの未来図 A/B対比 スマホで縦積み */
-@media (max-width: 640px) {
-  section#vision > div[style*="grid-template-columns:1fr 1fr"] {
-    grid-template-columns: 1fr !important;
-  }
-}
 </style>
 </head>
 <body>
@@ -1976,7 +1909,7 @@ main {
 // =====================================================================
 
 // ★ GASを再デプロイしたら、新しいURLに必ず書き換えてください
-const GAS_URL = "https://script.google.com/macros/s/AKfycbwbbC1awQh14oYuush6kwtQq4Fl2TrI9M8eNptq8nDGBVaU97BDzmLW8sQ4ZfB1OQqqww/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbxH4jE2lWyxAry1wi6i7bKuCID5CFZC2NakcFXUJOlNTJA8e3vAcHHXSMhvbBvdIwE2/exec";
 
 const OTHER_LABEL = "その他";
 
@@ -2010,30 +1943,14 @@ function findMain(text) {
 //   POST も URLパラメータ付きGETで回避する方式を採用
 // =====================================================================
 // =====================================================================
-// ★ GAS通信 — 根本解決版
-//
-// 問題の原因：
-//   analyze/summarize/saveはリクエストデータが長く、
-//   JSONPのGETパラメータに乗せるとURLが2000文字超えてGASがエラーを返す
-//
-// 解決策：
-//   短いリクエスト（list, visionHistory）→ JSONP（CORSなし）
-//   長いリクエスト（analyze, summarize, save）→ fetch POST text/plain
-//   ※ Content-Type: text/plain はプリフライトが発生しないのでCORSを回避できる
-//   ※ JSONPが失敗した場合もPOSTにフォールバック
+// ★ GAS通信 — JSONP方式（CORSを完全回避）
+//   fetchはGASへのリクエストでCORSエラーが発生する。
+//   JSONPはscriptタグを動的生成するためCORSが起きない。
+//   GAS側でcallbackパラメータを受け取り callback(JSON) 形式で返す。
 // =====================================================================
-
 let _gasCallbackId = 0;
 
-// 短いGETリクエスト用（list, visionHistory）→ JSONP
 function callGAS(mode, dataObj) {
-  const dataStr = dataObj ? JSON.stringify(dataObj) : "";
-
-  // ★ データが長い場合は即POSTへ
-  if (dataStr.length > 500) {
-    return postGAS(dataObj || { mode });
-  }
-
   return new Promise((resolve, reject) => {
     const cbName = "_gasCb" + (++_gasCallbackId);
 
@@ -2055,56 +1972,29 @@ function callGAS(mode, dataObj) {
     let url = GAS_URL
       + "?callback=" + encodeURIComponent(cbName)
       + "&mode="     + encodeURIComponent(mode || "");
-    if (dataStr) {
-      url += "&data=" + encodeURIComponent(dataStr);
+    if (dataObj) {
+      url += "&data=" + encodeURIComponent(JSON.stringify(dataObj));
     }
 
-    const script    = document.createElement("script");
-    script.id       = cbName;
-    script.src      = url;
-    script.onerror  = () => {
+    const script = document.createElement("script");
+    script.id    = cbName;
+    script.src   = url;
+    script.onerror = () => {
       clearTimeout(timer);
       delete window[cbName];
       script.remove();
-      // ★ JSONPが失敗したらPOSTにフォールバック（根本解決）
-      console.warn("JSONP失敗 → POSTにフォールバック:", mode);
-      postGAS(dataObj || { mode }).then(resolve).catch(reject);
+      reject(new Error("スクリプト読み込みエラー。GASのURLを確認してください。"));
     };
     document.head.appendChild(script);
   });
 }
 
-// ★ 長いリクエスト用（analyze, summarize, save）→ fetch POST text/plain
-// Content-Type: text/plain はCORSプリフライトが発生しないため確実に通る
-async function postGAS(payload) {
-  try {
-    const res = await fetch(GAS_URL, {
-      method  : "POST",
-      headers : { "Content-Type": "text/plain;charset=utf-8" },
-      body    : JSON.stringify(payload),
-      redirect: "follow"
-    });
-
-    if (!res.ok) throw new Error("HTTP " + res.status);
-
-    const text = await res.text();
-    if (!text || text.trim() === "") throw new Error("空のレスポンス");
-
-    // HTMLが返ってきた場合（GASのリダイレクトエラー）を検出
-    if (text.trim().startsWith("<!")) {
-      throw new Error("GASがHTMLを返しました。再デプロイを確認してください。");
-    }
-
-    return JSON.parse(text);
-  } catch(e) {
-    console.error("postGASエラー:", e.message);
-    throw e;
-  }
-}
-
 // 後方互換ラッパー
 async function fetchGAS(params) {
   return callGAS(params.mode);
+}
+async function postGAS(payload) {
+  return callGAS(payload.mode, payload);
 }
 
 // =====================================================================
@@ -2230,7 +2120,7 @@ async function loadLiveCivicVision() {
       timestamp : "2025年6月末",
       totalPosts: 12,
       visionText:
-        "駅前公共施設を、単なる利用の場ではなく、市民の学び・挑戦・交流が自然に芽生え育っていく"成長する拠点"へ転換する。特に子育て世代からの声が多く集まっており、子どもから高齢者まで多世代が気軽に立ち寄れるサードプレイスとしての機能が期待されている。市民とともに育て、芦屋の価値を静かに、しかし確実に積み上げていく。",
+        "駅前公共施設を、単なる利用の場ではなく、市民の学び・挑戦・交流が自然に芽生え育っていく成長する拠点へ転換する。特に子育て世代からの声が多く集まっており、子どもから高齢者まで多世代が気軽に立ち寄れるサードプレイスとしての機能が期待されている。市民とともに育て、芦屋の価値を静かに、しかし確実に積み上げていく。",
       reason    :
         "投稿12件のうち、ウェルビーイング分野（多世代交流・サードプレイス）への関心が最も高く、設計ウェイトとのバランスを考慮してこの部分を強調する形でVisionを更新しました。"
     },
@@ -2239,7 +2129,7 @@ async function loadLiveCivicVision() {
       timestamp : "プラットフォーム開設時",
       totalPosts: 0,
       visionText:
-        "駅前公共施設を、単なる利用の場ではなく、市民の学び・挑戦・交流が自然に芽生え、広がり、街の魅力を育てていく"成長する拠点"へと転換する。行政が一方的に提供する施設ではなく、市民とともに育て、市民の力が循環し、芦屋の価値が静かに、しかし確実に積み上がっていく"まちの育ち場"として再構築する。",
+        "駅前公共施設を、単なる利用の場ではなく、市民の学び・挑戦・交流が自然に芽生え、広がり、街の魅力を育てていく成長する拠点へと転換する。行政が一方的に提供する施設ではなく、市民とともに育て、市民の力が循環し、芦屋の価値が静かに、しかし確実に積み上がっていくまちの育ち場として再構築する。",
       reason    : "初期設定のCivic Vision（プラットフォーム開設時）"
     }
   ];
@@ -2277,7 +2167,6 @@ async function loadLiveCivicVision() {
 
     // ★ ボタン押下後にコンテンツエリアを表示
     liveText.style.display = "block";
-    if (liveIllust) liveIllust.style.display = "flex";
     if (versionEl) { versionEl.style.display = "block"; versionEl.style.minHeight = "22px"; }
 
     // ★ Vision本文を表示（デモか実データかに関わらず同じ処理）
@@ -2311,7 +2200,7 @@ async function loadLiveCivicVision() {
       compareEl.innerHTML =
         '<h4 style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:12px;">' +
         '前回（' + prev.version + '）との比較</h4>' +
-        '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;">' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">' +
           '<div style="border-radius:12px;padding:14px;background:var(--color-background-secondary);border:.5px solid var(--color-border-tertiary);">' +
             '<div style="font-size:11px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;">▼ 前回 ' + prev.version + '</div>' +
             '<div style="font-size:13px;line-height:1.8;color:var(--color-text-secondary);">' + prev.visionText.substring(0,80) + '…</div>' +
@@ -2325,7 +2214,28 @@ async function loadLiveCivicVision() {
       compareEl.style.display = "none";
     }
 
-    if (liveIllust) liveIllust.innerHTML = "🌳";
+    // ★ 画像URL処理
+    const imageArea  = document.getElementById("visionImageArea");
+    const imageGenArea = document.getElementById("imageGenArea");
+    const liveIllustEl = document.getElementById("visionLiveIllust");
+
+    if (latest.imageUrl && imageArea) {
+      // 保存済み画像URLがあれば表示
+      imageArea.innerHTML =
+        '<img src="' + latest.imageUrl + '" alt="Civic Vision イラスト" ' +
+        'style="width:100%;display:block;" ' +
+        'onerror="this.parentElement.innerHTML=\"<div style=padding:20px;text-align:center>画像の読み込みに失敗しました</div>\";">';
+      if (liveIllustEl) liveIllustEl.style.display = "block";
+    } else {
+      // 画像なし → SVGフォールバック
+      if (liveIllustEl) {
+        liveIllustEl.style.display = "flex";
+        if (imageArea) imageArea.innerHTML = '<div style="height:120px;display:flex;align-items:center;justify-content:center;font-size:60px;background:linear-gradient(135deg,#dbeafe,#e0f2fe);border-radius:14px;">🌳</div>';
+      }
+    }
+
+    // ★ 画像生成ボタンを常に表示（再生成も可能）
+    if (imageGenArea) imageGenArea.style.display = "block";
 
   } catch(e) {
     if (liveText) liveText.innerHTML =
@@ -2873,6 +2783,52 @@ function continueEditing() {
 // =====================================================================
 // ウェイト合計の表示更新
 // =====================================================================
+// =====================================================================
+// ★ Civic Vision イラスト生成（DALL-E 3）— ボタン押下で実行
+// =====================================================================
+async function generateVisionIllust() {
+  const btn       = document.getElementById("btnGenImage");
+  const status    = document.getElementById("imageGenStatus");
+  const imageArea = document.getElementById("visionImageArea");
+  const liveIllustEl = document.getElementById("visionLiveIllust");
+
+  if (btn) { btn.disabled = true; btn.textContent = "生成中…"; }
+  if (status) { status.style.display = "block"; status.textContent = "🎨 DALL-E 3がイラストを生成中です（10〜20秒かかります）…"; }
+
+  try {
+    const result = await callGAS("generateImage");
+
+    if (result.error) {
+      if (status) status.textContent = "❌ エラー：" + result.error;
+      return;
+    }
+
+    const imageUrl = result.imageUrl;
+    if (!imageUrl) {
+      if (status) status.textContent = "❌ 画像URLが取得できませんでした";
+      return;
+    }
+
+    // 画像を表示
+    if (imageArea) {
+      imageArea.innerHTML =
+        '<img src="' + imageUrl + '" alt="Civic Vision" id="visionGenImg" ' +
+        'style="width:100%;display:block;border-radius:14px;">',
+        '';
+      // 画像ロード後の処理はsetTimeoutで
+    }
+    if (liveIllustEl) liveIllustEl.style.display = "block";
+    if (status) status.textContent = "✅ イラストを生成しました。スプレッドシートのVisionHistoryシートG列に保存されました。";
+    if (btn) btn.textContent = "🔄 再生成する";
+
+  } catch(e) {
+    if (status) status.textContent = "❌ 通信エラー：" + e.message;
+    console.error("generateVisionIllust エラー:", e);
+  } finally {
+    if (btn) btn.disabled = false;
+  }
+}
+
 function updateWeightTotal() {
   const ids = ["w1","w2","w3","w4","w5"];
   const total = ids.reduce((sum, id) => {
@@ -2913,6 +2869,80 @@ function switchMergeTab(tab) {
   document.getElementById('tabGeneral').classList.toggle('active', tab === 'general');
   document.getElementById('tabExpert').classList.toggle('active', tab === 'expert');
 }
+
+// =====================================================
+// script_addition.js — 既存scriptタグ末尾に追加
+// 修正内容：
+// 1. toggleConsensus — 折り畳みボタン
+// 2. startVoiceInput — 音声入力（コメント外に移動）
+// =====================================================
+
+// ★ 折り畳みボタン（ホームページの「市民の投稿総意」）
+function toggleConsensus() {
+  const content = document.getElementById('consensusContent');
+  const arrow   = document.getElementById('consensusArrow');
+  if (!content) return;
+  const isOpen = content.style.display === 'block';
+  content.style.display = isOpen ? 'none' : 'block';
+  if (arrow) arrow.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+}
+
+// ★ 音声入力（Chrome / スマホChrome対応）
+// ── 設定・拡張機能は一切不要。Chromeブラウザだけで動作します ──
+function startVoiceInput() {
+  const btn      = document.getElementById('voiceBtn');
+  const status   = document.getElementById('voiceStatus');
+  const textarea = document.getElementById('userInput');
+
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    if (status) status.textContent = '⚠️ Chrome（PC・スマホ）でご利用ください';
+    return;
+  }
+
+  const SR          = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const recognition = new SR();
+  recognition.lang            = 'ja-JP';
+  recognition.continuous      = false;
+  recognition.interimResults  = true;
+
+  if (btn) {
+    btn.style.background = 'linear-gradient(135deg,#dc2626,#b91c1c)';
+    btn.textContent      = '⏹';
+  }
+  if (status) status.textContent = '🎤 話しかけてください…';
+
+  recognition.onresult = (e) => {
+    let interim = '';
+    let final   = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      if (e.results[i].isFinal) final   += e.results[i][0].transcript;
+      else                       interim += e.results[i][0].transcript;
+    }
+    if (textarea) textarea.value += final;
+    if (status)   status.textContent = interim ? '認識中: ' + interim : '✅ 入力完了';
+  };
+
+  recognition.onerror = (e) => {
+    if (status) status.textContent = '❌ エラー: ' + e.error;
+    if (btn) {
+      btn.style.background = 'linear-gradient(135deg,#2563eb,#06b6d4)';
+      btn.textContent      = '🎤';
+    }
+  };
+
+  recognition.onend = () => {
+    if (btn) {
+      btn.style.background = 'linear-gradient(135deg,#2563eb,#06b6d4)';
+      btn.textContent      = '🎤';
+    }
+    if (status && !status.textContent.includes('❌')) {
+      status.textContent = '✅ 音声入力が完了しました';
+    }
+  };
+
+  recognition.start();
+}
+  
 </script>
 
 </body>
