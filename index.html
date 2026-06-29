@@ -18,7 +18,14 @@ body{
   position:sticky; top:0; z-index:999;
   display:flex; justify-content:space-between; align-items:center;
   padding:14px 24px;
-  background:rgba(15,23,42,.95); backdrop-filter:blur(12px);
+  background: linear-gradient(
+  to right,
+  #ff4fa8 0%,
+  #ffa36c 25%,
+  #ffffff 50%,
+  #5ab0ff 75%,
+  #004b9f 100%
+);
   box-shadow:0 4px 20px rgba(0,0,0,.15);
 }
 .topbar::after{
@@ -30,7 +37,7 @@ nav{ display:flex; gap:8px; flex-wrap:wrap; }
 nav button{
   border:none; padding:9px 14px; border-radius:10px;
   font-weight:700; cursor:pointer; background:rgba(255,255,255,.15);
-  color:#fff; font-size:13px; transition:.2s;
+  color:#0f172a; font-size:13px; transition:.2s;
 }
 nav button:hover{ background:rgba(255,255,255,.3); transform:translateY(-1px); }
 
