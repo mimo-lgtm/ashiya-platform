@@ -2075,10 +2075,19 @@ function findMain(text) {
 // =====================================================================
 let _gasCallbackId = 0;
 
+// ★ 根本解決版：modeで明確に振り分け（文字数判定をやめる）
 function callGAS(mode, dataObj) {
+  const SHORT_MODES = ["list", "visionHistory"];
+  if (SHORT_MODES.includes(mode)) {
+    return jsonpGAS(mode, dataObj);
+  }
+  // analyze, summarize, save, updateVision, generateImage は常にPOST
+  return postGAS(dataObj || { mode });
+}
+
+function jsonpGAS(mode, dataObj) {
   return new Promise((resolve, reject) => {
     const cbName = "_gasCb" + (++_gasCallbackId);
-
     const timer = setTimeout(() => {
       delete window[cbName];
       const s = document.getElementById(cbName);
@@ -2094,32 +2103,41 @@ function callGAS(mode, dataObj) {
       resolve(data);
     };
 
-    let url = GAS_URL
-      + "?callback=" + encodeURIComponent(cbName)
-      + "&mode="     + encodeURIComponent(mode || "");
-    if (dataObj) {
-      url += "&data=" + encodeURIComponent(JSON.stringify(dataObj));
-    }
-
+    let url = GAS_URL + "?callback=" + encodeURIComponent(cbName) + "&mode=" + encodeURIComponent(mode || "");
     const script = document.createElement("script");
-    script.id    = cbName;
-    script.src   = url;
+    script.id = cbName;
+    script.src = url;
     script.onerror = () => {
       clearTimeout(timer);
       delete window[cbName];
       script.remove();
-      reject(new Error("スクリプト読み込みエラー。GASのURLを確認してください。"));
+      reject(new Error("通信エラー"));
     };
     document.head.appendChild(script);
   });
 }
 
-// 後方互換ラッパー
+async function postGAS(payload) {
+  try {
+    const res = await fetch(GAS_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload),
+      redirect: "follow"
+    });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const text = await res.text();
+    if (!text || text.trim() === "") throw new Error("空のレスポンス");
+    if (text.trim().startsWith("<!")) throw new Error("GASがHTMLを返しました。再デプロイを確認してください。");
+    return JSON.parse(text);
+  } catch(e) {
+    console.error("postGASエラー:", e.message);
+    throw e;
+  }
+}
+
 async function fetchGAS(params) {
   return callGAS(params.mode);
-}
-async function postGAS(payload) {
-  return callGAS(payload.mode, payload);
 }
 
 // =====================================================================
